@@ -1,0 +1,132 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Color Palette */
+:root {
+  /* Primary Colors */
+  --color-primary: #1675F2;     /* Dark blue - main brand color */
+  --color-primary-dark: #3084F2; /* Medium blue for hover states */
+
+  /* Secondary Colors */
+  --color-secondary: #566873;   /* Gray-blue - for secondary elements */
+  --color-secondary-dark: #3D4A55; /* Darker gray-blue for hover states */
+
+  /* Accent Colors */
+  --color-accent: #F2E96D;      /* Yellow - warm accent for highlights */
+  --color-accent-dark: #E5D44A; /* Darker yellow for hover states */
+
+  /* Status Colors */
+  --color-success: #10B981;     /* Emerald - for success states */
+  --color-warning: #F97316;     /* Orange - for warnings */
+  --color-error: #EF4444;       /* Red - for errors */
+  --color-info: #1675F2;        /* Same as primary for info */
+
+  /* Neutral Colors */
+  --color-neutral: #566873;     /* Gray-blue for primary text */
+  --color-neutral-light: #6B7280; /* Medium gray for muted text */
+  --color-neutral-lighter: #9CA3AF; /* Light gray for very muted text */
+
+  /* Background Colors */
+  --color-base-100: #F1F2F0;    /* Very light gray background */
+  --color-base-200: #E8E9E7;    /* Light gray for cards */
+  --color-base-300: #D1D2D0;    /* Medium gray for borders */
+}
+
+@layer base {
+  body {
+    font-family: 'Inter', 'DM Sans', system-ui, sans-serif;
+    color: var(--color-neutral);
+  }
+
+  h1, h2, h3, h4, h5, h6,
+  .btn, .navbar, .card-title, .stat-title, .stat-value {
+    font-family: 'DM Sans', system-ui, sans-serif;
+  }
+}
+
+@layer components {
+  /* Muted modern design enhancements */
+  .btn {
+    transition: all 0.2s ease;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    color: white;
+    border: none;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+
+  .btn-primary:hover {
+    background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary) 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(22, 117, 242, 0.3);
+  }
+
+  .btn-primary:focus {
+    background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary) 100%);
+    box-shadow: 0 0 0 2px rgba(22, 117, 242, 0.2);
+  }
+
+  /* Ensure proper button sizing and padding */
+  .btn {
+    padding: 0.75rem 1.5rem;
+    min-height: 3rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Override small button sizing for better readability */
+  .btn-sm {
+    padding: 0.5rem 1rem;
+    min-height: 2.5rem;
+    font-size: 0.875rem;
+  }
+
+  /* Increase border radius for more rounded buttons */
+  .btn {
+    border-radius: 0.75rem;
+  }
+
+  /* Make all badges use the accent color */
+  .badge {
+    background-color: var(--color-accent) !important;
+    color: #1F2937 !important;
+    border-color: var(--color-accent) !important;
+  }
+
+  .badge:hover {
+    background-color: var(--color-accent-dark) !important;
+    border-color: var(--color-accent-dark) !important;
+  }
+
+  .btn-ghost {
+    color: var(--color-neutral);
+    border-color: var(--color-neutral-light);
+  }
+
+  .btn-ghost:hover {
+    background-color: var(--color-base-200);
+    color: var(--color-neutral);
+  }
+
+  .card {
+    transition: all 0.3s ease;
+  }
+
+  .stat {
+    background: transparent;
+  }
+
+  /* Milkglass navbar effect */
+  .navbar {
+    backdrop-filter: blur(16px) saturate(150%);
+    -webkit-backdrop-filter: blur(16px) saturate(150%);
+    background: rgba(241, 242, 239, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  }
+}
+
