@@ -1,32 +1,18 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import LogoCarousel from '../components/LogoCarousel.astro';
 ---
 
 <Layout title="DTF Transfer Print - Professionelle Drucklösungen">
-	<!-- Navbar -->
-	<div class="navbar bg-base-100/20 backdrop-blur-xl backdrop-saturate-150 border border-white/20 shadow-lg sticky top-6 z-50 rounded-2xl mx-4 px-6 py-3 max-w-7xl xl:mx-auto">
-		<div class="navbar-start">
-			<a class="btn btn-ghost text-xl font-semibold text-neutral hover:bg-white/10">DTF Transfer Print</a>
-		</div>
-		<div class="navbar-center hidden lg:flex">
-			<ul class="menu menu-horizontal px-1 gap-4">
-				<li><a href="#services" class="text-neutral/80 hover:text-neutral hover:bg-white/10 px-4 py-2 rounded-lg transition-all duration-200">Leistungen</a></li>
-				<li><a href="#features" class="text-neutral/80 hover:text-neutral hover:bg-white/10 px-4 py-2 rounded-lg transition-all duration-200">Eigenschaften</a></li>
-				<li><a href="#about" class="text-neutral/80 hover:text-neutral hover:bg-white/10 px-4 py-2 rounded-lg transition-all duration-200">Über uns</a></li>
-				<li><a href="#contact" class="text-neutral/80 hover:text-neutral hover:bg-white/10 px-4 py-2 rounded-lg transition-all duration-200">Kontakt</a></li>
-			</ul>
-		</div>
-		<div class="navbar-end">
-			<a class="btn btn-primary btn-sm shadow-sm hover:shadow-md transition-all duration-200">Angebot anfordern</a>
-		</div>
-	</div>
+	<Navbar />
 
 	<!-- Hero Section -->
-	<section class="hero min-h-[85vh] bg-gradient-to-br from-primary/10 via-base-100 to-secondary/10">
-		<div class="hero-content text-center">
-			<div class="max-w-2xl">
-				<h1 class="mb-6 text-5xl md:text-6xl font-bold text-neutral leading-tight">Professionelle Drucklösungen</h1>
-				<p class="mb-8 text-xl text-neutral/70 leading-relaxed">
+	<section class="hero min-h-[85vh] bg-gradient-to-br from-primary/10 via-base-100 to-secondary/10 px-4 sm:px-6 lg:px-8">
+		<div class="hero-content text-center w-full max-w-7xl mx-auto">
+			<div class="max-w-2xl mx-auto px-4">
+				<h1 class="mb-6 text-4xl sm:text-5xl md:text-6xl font-bold text-neutral leading-tight">Professionelle Drucklösungen</h1>
+				<p class="mb-8 text-lg sm:text-xl text-neutral/70 leading-relaxed">
 					Hochwertige DTF-Transfers, individueller Druck und schnelle Bearbeitungszeiten.
 					Ihre Vision, unsere Expertise.
 				</p>
@@ -38,9 +24,12 @@ import Layout from '../layouts/Layout.astro';
 		</div>
 	</section>
 
+	<!-- Logo Carousel -->
+	<LogoCarousel />
+
 	<!-- Stats Section -->
 	<section class="py-24 bg-base-100">
-		<div class="container mx-auto px-4 max-w-6xl">
+		<div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
 			<div class="stats stats-vertical lg:stats-horizontal shadow-sm bg-base-200/50 w-full border border-base-300/30">
 				<div class="stat">
 					<div class="stat-figure text-primary">
@@ -93,7 +82,7 @@ import Layout from '../layouts/Layout.astro';
 
 	<!-- Services Section -->
 	<section id="services" class="py-24 bg-base-100">
-		<div class="container mx-auto px-4 max-w-7xl">
+		<div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
 			<div class="text-center mb-16">
 				<h2 class="text-4xl md:text-5xl font-bold mb-4 text-neutral">Unsere Leistungen</h2>
 				<p class="text-lg text-neutral/60 max-w-2xl mx-auto">Umfassende Drucklösungen für all Ihre Bedürfnisse</p>
@@ -101,69 +90,99 @@ import Layout from '../layouts/Layout.astro';
 			
 			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
 				<!-- Service Card 1 -->
-				<div class="card bg-base-200/50 shadow-sm border border-base-300/30 hover:shadow-md transition-shadow">
-					<figure class="px-10 pt-10">
-						<div class="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center">
-							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 text-primary">
-								<path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
-							</svg>
-						</div>
-					</figure>
-					<div class="card-body items-center text-center">
-						<h2 class="card-title text-neutral">DTF-Transfers</h2>
-						<p class="text-neutral/70">Hochwertige Direct-to-Film-Transfers für lebendige, langlebige Drucke auf jedem Stoff.</p>
-						<div class="card-actions mt-4">
-							<span class="badge badge-primary badge-sm">Schnelle Bearbeitung</span>
-							<span class="badge badge-success badge-sm">Qualität garantiert</span>
-						</div>
-						<div class="card-actions mt-6">
-							<button class="btn btn-primary shadow-sm">Mehr erfahren</button>
+				<div class="hover-3d">
+					<div class="card bg-base-200/50 shadow-sm border border-base-300/30 hover:shadow-md transition-shadow">
+						<figure class="px-10 pt-10">
+							<div class="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center">
+								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 text-primary">
+									<path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
+								</svg>
+							</div>
+						</figure>
+						<div class="card-body items-center text-center">
+							<h2 class="card-title text-neutral">DTF-Transfers</h2>
+							<p class="text-neutral/70">Hochwertige Direct-to-Film-Transfers für lebendige, langlebige Drucke auf jedem Stoff.</p>
+							<div class="card-actions mt-4">
+								<span class="badge badge-primary badge-sm">Schnelle Bearbeitung</span>
+								<span class="badge badge-success badge-sm">Qualität garantiert</span>
+							</div>
+							<div class="card-actions mt-6">
+								<button class="btn btn-primary shadow-sm">Mehr erfahren</button>
+							</div>
 						</div>
 					</div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
 				</div>
 
 				<!-- Service Card 2 -->
-				<div class="card bg-base-200/50 shadow-sm border border-base-300/30 hover:shadow-md transition-shadow">
-					<figure class="px-10 pt-10">
-						<div class="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center">
-							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 text-primary">
-								<path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" />
-							</svg>
-						</div>
-					</figure>
-					<div class="card-body items-center text-center">
-						<h2 class="card-title text-neutral">Individueller Druck</h2>
-						<p class="text-neutral/70">Personalisierte Drucke für T-Shirts, Hoodies und maßgeschneiderte Bekleidung mit Ihren Designs.</p>
-						<div class="card-actions mt-4">
-							<span class="badge badge-secondary badge-sm">Individuelle Designs</span>
-							<span class="badge badge-info badge-sm">Großaufträge</span>
-						</div>
-						<div class="card-actions mt-6">
-							<button class="btn btn-primary shadow-sm">Mehr erfahren</button>
+				<div class="hover-3d">
+					<div class="card bg-base-200/50 shadow-sm border border-base-300/30 hover:shadow-md transition-shadow">
+						<figure class="px-10 pt-10">
+							<div class="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center">
+								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 text-primary">
+									<path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" />
+								</svg>
+							</div>
+						</figure>
+						<div class="card-body items-center text-center">
+							<h2 class="card-title text-neutral">Individueller Druck</h2>
+							<p class="text-neutral/70">Personalisierte Drucke für T-Shirts, Hoodies und maßgeschneiderte Bekleidung mit Ihren Designs.</p>
+							<div class="card-actions mt-4">
+								<span class="badge badge-secondary badge-sm">Individuelle Designs</span>
+								<span class="badge badge-info badge-sm">Großaufträge</span>
+							</div>
+							<div class="card-actions mt-6">
+								<button class="btn btn-primary shadow-sm">Mehr erfahren</button>
+							</div>
 						</div>
 					</div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
 				</div>
 
 				<!-- Service Card 3 -->
-				<div class="card bg-base-200/50 shadow-sm border border-base-300/30 hover:shadow-md transition-shadow">
-					<figure class="px-10 pt-10">
-						<div class="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center">
-							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 text-primary">
-								<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
-							</svg>
-						</div>
-					</figure>
-					<div class="card-body items-center text-center">
-						<h2 class="card-title text-neutral">Eilaufträge</h2>
-						<p class="text-neutral/70">Brauchen Sie es schnell? Wir bieten beschleunigte Druckdienstleistungen für dringende Termine.</p>
-						<div class="card-actions mt-4">
-							<span class="badge badge-accent badge-sm">24-48 Std</span>
-							<span class="badge badge-warning badge-sm">Eilauftrag möglich</span>
-						</div>
-						<div class="card-actions mt-6">
-							<button class="btn btn-primary shadow-sm">Mehr erfahren</button>
+				<div class="hover-3d">
+					<div class="card bg-base-200/50 shadow-sm border border-base-300/30 hover:shadow-md transition-shadow">
+						<figure class="px-10 pt-10">
+							<div class="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center">
+								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 text-primary">
+									<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+								</svg>
+							</div>
+						</figure>
+						<div class="card-body items-center text-center">
+							<h2 class="card-title text-neutral">Eilaufträge</h2>
+							<p class="text-neutral/70">Brauchen Sie es schnell? Wir bieten beschleunigte Druckdienstleistungen für dringende Termine.</p>
+							<div class="card-actions mt-4">
+								<span class="badge badge-accent badge-sm">24-48 Std</span>
+								<span class="badge badge-warning badge-sm">Eilauftrag möglich</span>
+							</div>
+							<div class="card-actions mt-6">
+								<button class="btn btn-primary shadow-sm">Mehr erfahren</button>
+							</div>
 						</div>
 					</div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
 				</div>
 			</div>
 		</div>
@@ -173,7 +192,7 @@ import Layout from '../layouts/Layout.astro';
 
 	<!-- Features Section -->
 	<section id="features" class="py-20 bg-base-200">
-		<div class="container mx-auto px-4">
+		<div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
 			<div class="text-center mb-12">
 				<h2 class="text-4xl font-bold mb-4">Warum uns wählen</h2>
 				<p class="text-lg text-base-content/70">Was uns von der Konkurrenz abhebt</p>
@@ -207,25 +226,348 @@ import Layout from '../layouts/Layout.astro';
 		</div>
 	</section>
 
-	<!-- Footer -->
-	<footer class="footer footer-center sm:footer-horizontal p-12 bg-base-200/50 border-t border-base-300/30 text-neutral/70">
-		<nav class="grid grid-flow-col gap-4">
-			<a class="link link-hover" href="#services">Leistungen</a>
-			<a class="link link-hover" href="#features">Eigenschaften</a>
-			<a class="link link-hover" href="#about">Über uns</a>
-			<a class="link link-hover" href="#contact">Kontakt</a>
-		</nav>
-		<nav>
-			<div class="grid grid-flow-col gap-4">
-				<a class="link link-hover">Nutzungsbedingungen</a>
-				<a class="link link-hover">Datenschutzrichtlinie</a>
-				<a class="link link-hover">Cookie-Richtlinie</a>
+	<div class="divider"></div>
+
+	<!-- FAQ Section -->
+	<section id="faq" class="py-24 bg-base-100">
+		<div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
+			<div class="text-center mb-16">
+				<h2 class="text-4xl md:text-5xl font-bold mb-4 text-neutral">Häufig gestellte Fragen zum DTF-Druckverfahren</h2>
+				<p class="text-lg text-neutral/70 max-w-2xl mx-auto">
+					Hier finden Sie umfassende Antworten zu häufig gestellten Fragen über das DTF-Druckverfahren, unsere Produkte und Dienstleistungen. 
+					Unser Ziel ist es, Ihnen ein exzellentes Kundenerlebnis zu bieten und alle notwendigen Informationen bereitzustellen, 
+					damit Sie unsere DTF-Transfer-Produkte optimal nutzen können. Falls Sie Ihre Frage hier nicht finden, kontaktieren Sie uns gerne.
+				</p>
 			</div>
-		</nav>
-		<aside>
-			<p class="font-bold text-lg text-neutral">DTF Transfer Print</p>
-			<p class="text-neutral/60">Professionelle Drucklösungen seit 2009</p>
-			<p class="text-neutral/50 text-sm">Copyright © 2024 - Alle Rechte vorbehalten</p>
-		</aside>
-	</footer>
+
+			<div class="space-y-3">
+				<!-- FAQ Item 1 -->
+				<div class="faq-item group border border-base-300/30 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-primary/30 overflow-hidden">
+					<input type="checkbox" id="faq-1" class="faq-toggle" checked="checked" />
+					<label for="faq-1" class="faq-label flex items-center justify-between cursor-pointer p-6 bg-base-200/50 transition-all duration-300">
+						<span class="text-xl font-semibold text-neutral pr-4">Was ist DTF-Druck und wie funktioniert das Direct-to-Film-Verfahren?</span>
+						<div class="faq-icon flex-shrink-0 w-6 h-6 relative">
+							<svg class="faq-icon-plus absolute inset-0 w-full h-full transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+							</svg>
+							<svg class="faq-icon-minus absolute inset-0 w-full h-full transition-all duration-300 opacity-0 scale-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4" />
+							</svg>
+						</div>
+					</label>
+					<div class="faq-content overflow-hidden transition-all duration-300">
+						<div class="px-6 pb-6 pt-2">
+							<p class="text-neutral/80 leading-relaxed">
+								DTF steht für "Direct-to-Film" und bezeichnet ein innovatives Druckverfahren im Textildruck. 
+								Beim DTF-Druck werden Designs zunächst auf eine spezielle Transferfolie gedruckt und anschließend 
+								mit Hitze und Druck auf das Textil übertragen. Dieses moderne Druckverfahren ermöglicht hochwertige, 
+								lebendige Drucke auf nahezu allen Textilien.
+							</p>
+						</div>
+					</div>
+				</div>
+
+				<!-- FAQ Item 2 -->
+				<div class="faq-item group border border-base-300/30 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-primary/30 overflow-hidden">
+					<input type="checkbox" id="faq-2" class="faq-toggle" />
+					<label for="faq-2" class="faq-label flex items-center justify-between cursor-pointer p-6 bg-base-200/50 transition-all duration-300">
+						<span class="text-xl font-semibold text-neutral pr-4">Welche Vorteile bietet der DTF-Druck gegenüber anderen Druckverfahren?</span>
+						<div class="faq-icon flex-shrink-0 w-6 h-6 relative">
+							<svg class="faq-icon-plus absolute inset-0 w-full h-full transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+							</svg>
+							<svg class="faq-icon-minus absolute inset-0 w-full h-full transition-all duration-300 opacity-0 scale-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4" />
+							</svg>
+						</div>
+					</label>
+					<div class="faq-content overflow-hidden transition-all duration-300">
+						<div class="px-6 pb-6 pt-2">
+							<div class="text-neutral/80 leading-relaxed space-y-3">
+								<p><strong class="text-neutral">Schnelle Bearbeitung:</strong> Druck und Versand erfolgen bei uns in der Regel innerhalb von 24-48 Stunden nach Bestell- und Zahlungseingang.</p>
+								<p><strong class="text-neutral">Kosteneffizient:</strong> Preiswerte Lösung für Einzelstücke und Kleinserien. Ideal für individuelle Designs, Merchandising-Artikel und limitierte Auflagen.</p>
+								<p><strong class="text-neutral">Vielseitige Anwendung:</strong> Haftet auf nahezu allen Textilien, wie Baumwolle, Polyester, Mischgewebe, Leder, Canvas und sogar einige empfindliche Materialien wie Softshell.</p>
+								<p><strong class="text-neutral">Hervorragende Druckqualität:</strong> Hochwertiger Druck mit leuchtenden Farben und gestochen scharfen Details für professionelle Ergebnisse.</p>
+								<p><strong class="text-neutral">Langlebigkeit:</strong> Waschbeständig und dauerhaft. Hält bis zu 40°C Waschtemperatur und zahlreiche Wäschen aus.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- FAQ Item 3 -->
+				<div class="faq-item group border border-base-300/30 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-primary/30 overflow-hidden">
+					<input type="checkbox" id="faq-3" class="faq-toggle" />
+					<label for="faq-3" class="faq-label flex items-center justify-between cursor-pointer p-6 bg-base-200/50 transition-all duration-300">
+						<span class="text-xl font-semibold text-neutral pr-4">Welche Textilien können mit DTF-Druck bedruckt werden?</span>
+						<div class="faq-icon flex-shrink-0 w-6 h-6 relative">
+							<svg class="faq-icon-plus absolute inset-0 w-full h-full transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+							</svg>
+							<svg class="faq-icon-minus absolute inset-0 w-full h-full transition-all duration-300 opacity-0 scale-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4" />
+							</svg>
+						</div>
+					</label>
+					<div class="faq-content overflow-hidden transition-all duration-300">
+						<div class="px-6 pb-6 pt-2">
+							<p class="text-neutral/80 leading-relaxed">
+								DTF-Transfers haften auf nahezu allen Textilien, ob Baumwolle, Polyester, Mischgewebe, Leder oder sogar Canvas. 
+								Beachten Sie jedoch, dass einige Materialien wie wasserabweisende Stoffe, stark strukturierte Textilien oder sehr grobe Stoffe 
+								die Haftung des Drucks beeinträchtigen können. Für optimale Ergebnisse empfehlen wir glatte bis leicht strukturierte Textilien.
+							</p>
+						</div>
+					</div>
+				</div>
+
+				<!-- FAQ Item 4 -->
+				<div class="faq-item group border border-base-300/30 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-primary/30 overflow-hidden">
+					<input type="checkbox" id="faq-4" class="faq-toggle" />
+					<label for="faq-4" class="faq-label flex items-center justify-between cursor-pointer p-6 bg-base-200/50 transition-all duration-300">
+						<span class="text-xl font-semibold text-neutral pr-4">Welche Dateiformate und Anforderungen gelten für DTF-Druckdateien?</span>
+						<div class="faq-icon flex-shrink-0 w-6 h-6 relative">
+							<svg class="faq-icon-plus absolute inset-0 w-full h-full transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+							</svg>
+							<svg class="faq-icon-minus absolute inset-0 w-full h-full transition-all duration-300 opacity-0 scale-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4" />
+							</svg>
+						</div>
+					</label>
+					<div class="faq-content overflow-hidden transition-all duration-300">
+						<div class="px-6 pb-6 pt-2">
+							<p class="text-neutral/80 leading-relaxed mb-3">
+								Wir benötigen druckfertige Designs im Format PNG oder PDF mit einer Auflösung von mindestens 300 dpi für optimale Druckqualität. 
+								Wichtige Anforderungen für Ihre Druckdateien:
+							</p>
+							<ul class="list-disc list-inside text-neutral/80 space-y-2 ml-4">
+								<li>Alle Schriften müssen in Pfade oder Kurven konvertiert sein</li>
+								<li>Die Strichstärke sollte mindestens 0,6 mm betragen</li>
+								<li>Farbmodus: CMYK für beste Druckergebnisse</li>
+								<li>Hochauflösende Grafiken (mindestens 300 dpi)</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+
+				<!-- FAQ Item 5 -->
+				<div class="faq-item group border border-base-300/30 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-primary/30 overflow-hidden">
+					<input type="checkbox" id="faq-5" class="faq-toggle" />
+					<label for="faq-5" class="faq-label flex items-center justify-between cursor-pointer p-6 bg-base-200/50 transition-all duration-300">
+						<span class="text-xl font-semibold text-neutral pr-4">Wie funktioniert der DTF-Druckprozess im Detail?</span>
+						<div class="faq-icon flex-shrink-0 w-6 h-6 relative">
+							<svg class="faq-icon-plus absolute inset-0 w-full h-full transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+							</svg>
+							<svg class="faq-icon-minus absolute inset-0 w-full h-full transition-all duration-300 opacity-0 scale-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4" />
+							</svg>
+						</div>
+					</label>
+					<div class="faq-content overflow-hidden transition-all duration-300">
+						<div class="px-6 pb-6 pt-2">
+							<div class="text-neutral/80 leading-relaxed space-y-3">
+								<p><strong class="text-neutral">1. Druck auf Folie:</strong> Das Design wird 4-farbig (CMYK) auf eine spezielle Trägerfolie gedruckt.</p>
+								<p><strong class="text-neutral">2. Weißdruck:</strong> Um einen deckenden Druck auf allen Textilien zu gewährleisten, wird eine weiße Farbschicht aufgebracht. So wird sichergestellt, dass Ihre Designs auch auf dunklen Textilien und farbigen Untergründen perfekt zur Geltung kommen.</p>
+								<p><strong class="text-neutral">3. Trocknung:</strong> Die Folie wird getrocknet, um die Farben zu fixieren.</p>
+								<p><strong class="text-neutral">4. Transfer:</strong> Die Folie wird mit Hitze und Druck auf das Textil übertragen. Der Transferprozess erfolgt mithilfe einer Transferpresse, die den Druck und die Temperatur exakt regelt. Falls Sie keine Transferpresse haben, kann auch ein Bügeleisen genutzt werden.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- FAQ Item 6 -->
+				<div class="faq-item group border border-base-300/30 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-primary/30 overflow-hidden">
+					<input type="checkbox" id="faq-6" class="faq-toggle" />
+					<label for="faq-6" class="faq-label flex items-center justify-between cursor-pointer p-6 bg-base-200/50 transition-all duration-300">
+						<span class="text-xl font-semibold text-neutral pr-4">Wie lange hält ein DTF-Druck und welche Faktoren beeinflussen die Haltbarkeit?</span>
+						<div class="faq-icon flex-shrink-0 w-6 h-6 relative">
+							<svg class="faq-icon-plus absolute inset-0 w-full h-full transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+							</svg>
+							<svg class="faq-icon-minus absolute inset-0 w-full h-full transition-all duration-300 opacity-0 scale-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4" />
+							</svg>
+						</div>
+					</label>
+					<div class="faq-content overflow-hidden transition-all duration-300">
+						<div class="px-6 pb-6 pt-2">
+							<div class="text-neutral/80 leading-relaxed space-y-4">
+								<p>
+									Die Haltbarkeit von DTF-Drucken ist ein wichtiges Thema für alle, die diese innovative Drucktechnik in Betracht ziehen. 
+									Die gute Nachricht ist, dass DTF-Drucke sehr langlebig sind und bis zu 40°C Waschtemperatur problemlos überstehen können.
+								</p>
+								<p><strong class="text-neutral">Faktoren, die die Haltbarkeit beeinflussen:</strong></p>
+								<ul class="list-disc list-inside space-y-2 ml-4">
+									<li><strong>Qualität des Textils:</strong> Hochwertige Textilien wie Baumwolle oder Polyester bieten die beste Grundlage für langlebige Drucke.</li>
+									<li><strong>Pflege des Textils:</strong> Die richtige Pflege ist entscheidend, um die Lebensdauer des Drucks zu verlängern.</li>
+									<li><strong>Einwirkung von Chemikalien:</strong> Vermeiden Sie den Kontakt des Drucks mit Chemikalien wie Chlorbleiche oder Fleckenentfernern.</li>
+									<li><strong>Mechanische Beanspruchung:</strong> Starke Reibung oder Kratzer können den Druck beschädigen.</li>
+									<li><strong>UV-Strahlung:</strong> Direkte Sonneneinstrahlung kann den Druck über die Zeit ausbleichen.</li>
+								</ul>
+								<p><strong class="text-neutral">Pflegetipps für maximale Haltbarkeit:</strong></p>
+								<ul class="list-disc list-inside space-y-2 ml-4">
+									<li>Waschen Sie das Textil auf links</li>
+									<li>Verwenden Sie ein mildes Waschmittel ohne Bleichmittel</li>
+									<li>Waschen Sie das Textil nicht heißer als 40°C</li>
+									<li>Trocknen Sie das Textil an der Luft oder im Trockner auf niedriger Stufe</li>
+									<li>Bügeln Sie den Druck nicht direkt</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- FAQ Item 7 -->
+				<div class="faq-item group border border-base-300/30 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-primary/30 overflow-hidden">
+					<input type="checkbox" id="faq-7" class="faq-toggle" />
+					<label for="faq-7" class="faq-label flex items-center justify-between cursor-pointer p-6 bg-base-200/50 transition-all duration-300">
+						<span class="text-xl font-semibold text-neutral pr-4">Was bedeutet "Freigröße" bei DTF-Transfers und welche Vorteile bietet sie?</span>
+						<div class="faq-icon flex-shrink-0 w-6 h-6 relative">
+							<svg class="faq-icon-plus absolute inset-0 w-full h-full transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+							</svg>
+							<svg class="faq-icon-minus absolute inset-0 w-full h-full transition-all duration-300 opacity-0 scale-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4" />
+							</svg>
+						</div>
+					</label>
+					<div class="faq-content overflow-hidden transition-all duration-300">
+						<div class="px-6 pb-6 pt-2">
+							<p class="text-neutral/80 leading-relaxed">
+								Freigröße bietet maximale Flexibilität, da die einzelnen Motive nicht manuell verschachtelt werden müssen. 
+								Sie können Ihre Designs in beliebiger Größe und Anordnung platzieren, was besonders bei individuellen Aufträgen 
+								und kreativen Projekten von Vorteil ist. Zudem ist Freigröße kosteneffizienter, da nur die tatsächlich bedruckte Fläche berechnet wird.
+							</p>
+						</div>
+					</div>
+				</div>
+
+				<!-- FAQ Item 8 -->
+				<div class="faq-item group border border-base-300/30 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-primary/30 overflow-hidden">
+					<input type="checkbox" id="faq-8" class="faq-toggle" />
+					<label for="faq-8" class="faq-label flex items-center justify-between cursor-pointer p-6 bg-base-200/50 transition-all duration-300">
+						<span class="text-xl font-semibold text-neutral pr-4">Warum ist Freigröße günstiger als feste Größen?</span>
+						<div class="faq-icon flex-shrink-0 w-6 h-6 relative">
+							<svg class="faq-icon-plus absolute inset-0 w-full h-full transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+							</svg>
+							<svg class="faq-icon-minus absolute inset-0 w-full h-full transition-all duration-300 opacity-0 scale-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4" />
+							</svg>
+						</div>
+					</label>
+					<div class="faq-content overflow-hidden transition-all duration-300">
+						<div class="px-6 pb-6 pt-2">
+							<p class="text-neutral/80 leading-relaxed">
+								Freigröße ist kosteneffizienter, da nur die tatsächlich bedruckte Fläche berechnet wird. 
+								Im Gegensatz zu festen Größen zahlen Sie nicht für ungenutzten Platz, was besonders bei kleineren Designs 
+								oder individuellen Anordnungen erhebliche Kosteneinsparungen ermöglicht.
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="text-center mt-12">
+				<p class="text-neutral/70 mb-6">
+					Haben Sie weitere Fragen? Wir helfen Ihnen gerne weiter.
+				</p>
+				<a href="#contact" class="btn btn-primary shadow-sm">Kontakt aufnehmen</a>
+			</div>
+		</div>
+
+		<!-- Accordion Behavior Script -->
+		<script is:inline>
+			// Make FAQ work as accordion (only one open at a time)
+			document.addEventListener('DOMContentLoaded', function() {
+				const faqToggles = document.querySelectorAll('.faq-toggle');
+				
+				faqToggles.forEach(function(toggle) {
+					toggle.addEventListener('change', function() {
+						const currentToggle = this;
+						if (currentToggle.checked) {
+							// Uncheck all other FAQ items
+							faqToggles.forEach(function(otherToggle) {
+								if (otherToggle !== currentToggle) {
+									otherToggle.checked = false;
+								}
+							});
+						}
+					});
+				});
+			});
+		</script>
+
+		<!-- Schema.org FAQPage Structured Data for SEO -->
+		<script type="application/ld+json" set:html={JSON.stringify({
+			"@context": "https://schema.org",
+			"@type": "FAQPage",
+			"mainEntity": [
+				{
+					"@type": "Question",
+					"name": "Was ist DTF-Druck und wie funktioniert das Direct-to-Film-Verfahren?",
+					"acceptedAnswer": {
+						"@type": "Answer",
+						"text": "DTF steht für 'Direct-to-Film' und bezeichnet ein innovatives Druckverfahren im Textildruck. Beim DTF-Druck werden Designs zunächst auf eine spezielle Transferfolie gedruckt und anschließend mit Hitze und Druck auf das Textil übertragen. Dieses moderne Druckverfahren ermöglicht hochwertige, lebendige Drucke auf nahezu allen Textilien."
+					}
+				},
+				{
+					"@type": "Question",
+					"name": "Welche Vorteile bietet der DTF-Druck gegenüber anderen Druckverfahren?",
+					"acceptedAnswer": {
+						"@type": "Answer",
+						"text": "DTF-Druck bietet schnelle Bearbeitung (24-48 Stunden), kosteneffiziente Preise für Einzelstücke und Kleinserien, vielseitige Anwendung auf nahezu allen Textilien, hervorragende Druckqualität mit leuchtenden Farben und gestochen scharfen Details, sowie Langlebigkeit mit Waschbeständigkeit bis zu 40°C."
+					}
+				},
+				{
+					"@type": "Question",
+					"name": "Welche Textilien können mit DTF-Druck bedruckt werden?",
+					"acceptedAnswer": {
+						"@type": "Answer",
+						"text": "DTF-Transfers haften auf nahezu allen Textilien, ob Baumwolle, Polyester, Mischgewebe, Leder oder sogar Canvas. Beachten Sie jedoch, dass einige Materialien wie wasserabweisende Stoffe, stark strukturierte Textilien oder sehr grobe Stoffe die Haftung des Drucks beeinträchtigen können."
+					}
+				},
+				{
+					"@type": "Question",
+					"name": "Welche Dateiformate und Anforderungen gelten für DTF-Druckdateien?",
+					"acceptedAnswer": {
+						"@type": "Answer",
+						"text": "Wir benötigen druckfertige Designs im Format PNG oder PDF mit einer Auflösung von mindestens 300 dpi. Alle Schriften müssen in Pfade oder Kurven konvertiert sein und die Strichstärke sollte mindestens 0,6 mm betragen."
+					}
+				},
+				{
+					"@type": "Question",
+					"name": "Wie funktioniert der DTF-Druckprozess im Detail?",
+					"acceptedAnswer": {
+						"@type": "Answer",
+						"text": "Der DTF-Druckprozess umfasst vier Schritte: 1. Druck auf Folie (CMYK), 2. Weißdruck für deckende Ergebnisse auf dunklen Textilien, 3. Trocknung der Folie, 4. Transfer mit Hitze und Druck auf das Textil mittels Transferpresse oder Bügeleisen."
+					}
+				},
+				{
+					"@type": "Question",
+					"name": "Wie lange hält ein DTF-Druck und welche Faktoren beeinflussen die Haltbarkeit?",
+					"acceptedAnswer": {
+						"@type": "Answer",
+						"text": "DTF-Drucke sind sehr langlebig und halten bis zu 40°C Waschtemperatur. Die Haltbarkeit wird beeinflusst durch die Qualität des Textils, die richtige Pflege (Waschen auf links, mildes Waschmittel, max. 40°C), Vermeidung von Chemikalien, mechanischer Beanspruchung und direkter UV-Strahlung."
+					}
+				},
+				{
+					"@type": "Question",
+					"name": "Was bedeutet 'Freigröße' bei DTF-Transfers und welche Vorteile bietet sie?",
+					"acceptedAnswer": {
+						"@type": "Answer",
+						"text": "Freigröße bietet maximale Flexibilität, da die einzelnen Motive nicht manuell verschachtelt werden müssen. Sie können Ihre Designs in beliebiger Größe und Anordnung platzieren. Zudem ist Freigröße kosteneffizienter, da nur die tatsächlich bedruckte Fläche berechnet wird."
+					}
+				},
+				{
+					"@type": "Question",
+					"name": "Warum ist Freigröße günstiger als feste Größen?",
+					"acceptedAnswer": {
+						"@type": "Answer",
+						"text": "Freigröße ist kosteneffizienter, da nur die tatsächlich bedruckte Fläche berechnet wird. Im Gegensatz zu festen Größen zahlen Sie nicht für ungenutzten Platz, was besonders bei kleineren Designs oder individuellen Anordnungen erhebliche Kosteneinsparungen ermöglicht."
+					}
+				}
+			]
+		})} />
+	</section>
 </Layout>

@@ -1,0 +1,147 @@
+---
+import LegalLayout from '../../layouts/LegalLayout.astro';
+
+const title = 'Cookie-Richtlinie';
+---
+
+<LegalLayout title={title}>
+	<h1>{title}</h1>
+	
+	<p class="text-neutral/70 text-sm mb-8">
+		Stand: {new Date().toLocaleDateString('de-DE', { year: 'numeric', month: 'long', day: 'numeric' })}
+	</p>
+
+	<h2>1. Was sind Cookies?</h2>
+	<p>
+		Cookies sind kleine Textdateien, die von Websites auf Ihrem Computer oder mobilen Gerät gespeichert werden, wenn Sie eine Website besuchen. Cookies werden häufig verwendet, um Websites funktionsfähig zu machen oder effizienter zu gestalten, sowie um Berichtsinformationen bereitzustellen.
+	</p>
+	<p>
+		Cookies können von der Website selbst gesetzt werden (sogenannte "First-Party-Cookies") oder von anderen Websites, deren Inhalte auf der besuchten Seite angezeigt werden (sogenannte "Third-Party-Cookies").
+	</p>
+
+	<h2>2. Wie verwenden wir Cookies?</h2>
+	<p>
+		Wir verwenden Cookies, um die Funktionalität unserer Website zu verbessern und Ihre Erfahrung zu optimieren. Im Folgenden finden Sie eine Übersicht über die verschiedenen Arten von Cookies, die wir verwenden:
+	</p>
+
+	<h3>2.1 Notwendige Cookies</h3>
+	<p>
+		Notwendige Cookies sind für das ordnungsgemäße Funktionieren der Website unerlässlich. Diese Cookies ermöglichen grundlegende Funktionen wie Seitennavigation und Zugriff auf sichere Bereiche der Website. Die Website kann ohne diese Cookies nicht ordnungsgemäß funktionieren.
+	</p>
+	<p>
+		<strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse)
+	</p>
+
+	<h3>2.2 Funktionale Cookies</h3>
+	<p>
+		Funktionale Cookies ermöglichen es der Website, erweiterte Funktionalität und Personalisierung bereitzustellen. Sie können von uns oder von Drittanbietern gesetzt werden, deren Dienste wir auf unseren Seiten verwenden.
+	</p>
+	<p>
+		<strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. a DSGVO (Einwilligung)
+	</p>
+
+	<h3>2.3 Analyse-Cookies</h3>
+	<p>
+		Analyse-Cookies helfen uns zu verstehen, wie Besucher mit unserer Website interagieren, indem sie Informationen anonym sammeln und melden. Dies ermöglicht es uns, die Struktur, Navigation und den Inhalt der Website zu verbessern.
+	</p>
+	<p>
+		<strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. a DSGVO (Einwilligung)
+	</p>
+
+	<h3>2.4 Marketing-Cookies</h3>
+	<p>
+		Marketing-Cookies werden verwendet, um Besuchern auf verschiedenen Websites relevante Werbung und Marketingkampagnen zu liefern. Diese Cookies verfolgen Besucher über Websites hinweg und sammeln Informationen, um maßgeschneiderte Werbung bereitzustellen.
+	</p>
+	<p>
+		<strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. a DSGVO (Einwilligung)
+	</p>
+
+	<h2>3. Spezifische Cookies, die wir verwenden</h2>
+
+	<h3>3.1 Session-Cookies</h3>
+	<p>
+		Session-Cookies sind temporäre Cookies, die gelöscht werden, sobald Sie Ihren Browser schließen. Diese Cookies werden verwendet, um Ihre Aktivität während einer Browsing-Session zu verfolgen.
+	</p>
+
+	<h3>3.2 Persistente Cookies</h3>
+	<p>
+		Persistente Cookies bleiben auf Ihrem Gerät gespeichert, auch nachdem Sie Ihren Browser geschlossen haben. Diese Cookies werden verwendet, um Ihre Präferenzen zu speichern und Ihre Erfahrung bei zukünftigen Besuchen zu verbessern.
+	</p>
+
+	<h2>4. Drittanbieter-Cookies</h2>
+	<p>
+		Einige Cookies werden von Drittanbietern gesetzt, die auf unserer Website Dienstleistungen erbringen. Diese Drittanbieter können Informationen über Ihre Nutzung unserer Website sammeln, um ihre eigenen Dienstleistungen zu verbessern oder um Ihnen relevante Werbung zu zeigen.
+	</p>
+	<p>
+		Wir haben keinen direkten Kontrolle über diese Cookies. Bitte besuchen Sie die Websites dieser Drittanbieter, um mehr über deren Cookie-Praktiken zu erfahren.
+	</p>
+
+	<h2>5. Wie können Sie Cookies verwalten?</h2>
+
+	<h3>5.1 Browser-Einstellungen</h3>
+	<p>
+		Die meisten Webbrowser akzeptieren Cookies automatisch. Sie können Ihren Browser jedoch so konfigurieren, dass er Cookies ablehnt oder Sie benachrichtigt, wenn Cookies gesetzt werden. Bitte beachten Sie, dass das Deaktivieren von Cookies die Funktionalität unserer Website beeinträchtigen kann.
+	</p>
+	<p>
+		Anleitungen zum Verwalten von Cookies in gängigen Browsern:
+	</p>
+	<ul>
+		<li><strong>Google Chrome:</strong> Einstellungen > Datenschutz und Sicherheit > Cookies und andere Websitedaten</li>
+		<li><strong>Mozilla Firefox:</strong> Einstellungen > Datenschutz & Sicherheit > Cookies und Website-Daten</li>
+		<li><strong>Microsoft Edge:</strong> Einstellungen > Cookies und Websiteberechtigungen > Cookies und Websitedaten</li>
+		<li><strong>Safari:</strong> Einstellungen > Datenschutz > Cookies und Website-Daten</li>
+	</ul>
+
+	<h3>5.2 Cookie-Einstellungen auf unserer Website</h3>
+	<p>
+		Sie können Ihre Cookie-Präferenzen über unsere Cookie-Einstellungen verwalten. Diese finden Sie in der Cookie-Banner oder in den Datenschutzeinstellungen unserer Website.
+	</p>
+
+	<h3>5.3 Opt-Out für bestimmte Dienste</h3>
+	<p>
+		Für bestimmte Analyse- und Marketing-Dienste bieten die Anbieter spezielle Opt-Out-Mechanismen an. Bitte besuchen Sie die jeweiligen Websites der Anbieter, um mehr über Opt-Out-Optionen zu erfahren.
+	</p>
+
+	<h2>6. Auswirkungen der Cookie-Deaktivierung</h2>
+	<p>
+		Wenn Sie Cookies deaktivieren, kann dies die Funktionalität unserer Website beeinträchtigen. Einige Funktionen der Website können möglicherweise nicht ordnungsgemäß funktionieren, und Ihre Erfahrung kann beeinträchtigt sein.
+	</p>
+	<p>
+		Notwendige Cookies können nicht deaktiviert werden, da sie für das ordnungsgemäße Funktionieren der Website erforderlich sind.
+	</p>
+
+	<h2>7. Aktualisierungen dieser Cookie-Richtlinie</h2>
+	<p>
+		Wir können diese Cookie-Richtlinie von Zeit zu Zeit aktualisieren, um Änderungen in unseren Praktiken oder aus anderen operativen, rechtlichen oder regulatorischen Gründen widerzuspiegeln. Wir empfehlen Ihnen, diese Seite regelmäßig zu überprüfen, um über unsere Cookie-Praktiken informiert zu bleiben.
+	</p>
+	<p>
+		Die aktuelle Version dieser Cookie-Richtlinie finden Sie immer am Anfang dieses Dokuments mit dem Datum der letzten Aktualisierung.
+	</p>
+
+	<h2>8. Weitere Informationen</h2>
+	<p>
+		Weitere Informationen über Cookies und wie sie funktionieren, finden Sie unter:
+	</p>
+	<ul>
+		<li><a href="https://www.allaboutcookies.org" target="_blank" rel="noopener noreferrer">www.allaboutcookies.org</a></li>
+		<li><a href="https://www.youronlinechoices.com/de" target="_blank" rel="noopener noreferrer">www.youronlinechoices.com/de</a></li>
+	</ul>
+
+	<h2>9. Kontakt</h2>
+	<p>
+		Wenn Sie Fragen zu unserer Verwendung von Cookies haben, können Sie uns unter folgenden Kontaktdaten erreichen:
+	</p>
+	<p>
+		DTF Transfer Print<br />
+		Musterstraße 123<br />
+		12345 Musterstadt<br />
+		Deutschland
+	</p>
+	<p>
+		Telefon: +49 (0) 123 456789<br />
+		E-Mail: info@dtf-transferprint.de
+	</p>
+	<p>
+		Weitere Informationen zum Datenschutz finden Sie in unserer <a href="/rechtliches/datenschutz">Datenschutzrichtlinie</a>.
+	</p>
+</LegalLayout>

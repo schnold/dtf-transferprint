@@ -1,0 +1,68 @@
+---
+import type { Product } from '../../data/products';
+import { getRelatedProducts } from '../../data/products';
+
+interface Props {
+	currentSlug: string;
+	limit?: number;
+}
+
+const { currentSlug, limit = 3 } = Astro.props;
+const relatedProducts = getRelatedProducts(currentSlug, limit);
+
+const formatPrice = (price: number) => {
+	return new Intl.NumberFormat('de-DE', {
+		style: 'currency',
+		currency: 'EUR'
+	}).format(price);
+};
+---
+
+{relatedProducts.length > 0 && (
+	<div class="related-products">
+		<h2 class="text-2xl font-bold text-neutral mb-6">Ähnliche Produkte</h2>
+		
+		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+			{relatedProducts.map((product) => (
+				<a 
+					href={`/product/${product.slug}`}
+					class="card bg-base-200/50 shadow-sm border border-base-300/30 hover:shadow-md transition-all duration-200 group"
+				>
+					<figure class="px-6 pt-6">
+						<img 
+							src={product.images[0] || "/images/placeholder.jpg"} 
+							alt={product.name}
+							class="w-full rounded-lg aspect-square object-cover group-hover:scale-105 transition-transform duration-200"
+							loading="lazy"
+						/>
+					</figure>
+					<div class="card-body">
+						<div class="badge badge-sm mb-2">
+							{product.category}
+						</div>
+						<h3 class="card-title text-neutral text-lg group-hover:text-primary transition-colors">
+							{product.name}
+						</h3>
+						<p class="text-neutral/70 text-sm line-clamp-2">
+							{product.shortDescription}
+						</p>
+						<div class="card-actions justify-between items-center mt-4">
+							<span class="text-xl font-bold text-primary">
+								{formatPrice(product.price)}
+							</span>
+							{product.inStock ? (
+								<span class="badge badge-success badge-sm">
+									Auf Lager
+								</span>
+							) : (
+								<span class="badge badge-error badge-sm">
+									Nicht verfügbar
+								</span>
+							)}
+						</div>
+					</div>
+				</a>
+			))}
+		</div>
+	</div>
+)}

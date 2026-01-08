@@ -1,0 +1,101 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import { products } from '../data/products';
+
+const formatPrice = (price: number) => {
+	return new Intl.NumberFormat('de-DE', {
+		style: 'currency',
+		currency: 'EUR'
+	}).format(price);
+};
+
+// Group products by category
+const groupedProducts = products.reduce((acc, product) => {
+	if (!acc[product.category]) {
+		acc[product.category] = [];
+	}
+	acc[product.category].push(product);
+	return acc;
+}, {} as Record<string, typeof products>);
+
+const categoryOrder = ['DTF-Transfers', 'Blockout DTF', 'Druck-Services'];
+---
+
+<Layout title="Produkte - DTF Transfer Print" description="Alle unsere Produkte und Dienstleistungen im Überblick">
+	<Navbar />
+	<!-- Hero Section -->
+	<section class="hero min-h-[30vh] bg-gradient-to-br from-primary/10 via-base-100 to-secondary/10">
+		<div class="hero-content text-center py-8">
+			<div class="max-w-2xl">
+				<h1 class="mb-3 text-3xl md:text-4xl font-bold text-neutral leading-tight">Unsere Produkte</h1>
+				<p class="text-base text-neutral/70 leading-relaxed">
+					Entdecken Sie unsere hochwertigen DTF-Transfers und Druckdienstleistungen
+				</p>
+			</div>
+		</div>
+	</section>
+
+	<!-- Products Grid by Category -->
+	<section class="py-24 bg-base-100">
+		<div class="container mx-auto px-4 max-w-7xl space-y-20">
+			{categoryOrder.map((category) => {
+				const categoryProducts = groupedProducts[category];
+				if (!categoryProducts || categoryProducts.length === 0) return null;
+
+				return (
+					<div>
+						<div class="mb-12 text-center">
+							<h2 class="text-3xl md:text-4xl font-bold text-neutral mb-4">{category}</h2>
+							<div class="divider max-w-xs mx-auto"></div>
+						</div>
+						<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+							{categoryProducts.map((product) => (
+								<a
+									href={`/product/${product.slug}`}
+									class="card bg-base-200/50 shadow-sm border border-base-300/30 hover:shadow-md transition-all duration-200 group"
+								>
+									<figure class="px-6 pt-6">
+										<img
+											src={product.images[0] || "/images/placeholder.jpg"}
+											alt={product.name}
+											class="w-full rounded-lg aspect-square object-cover group-hover:scale-105 transition-transform duration-200"
+											loading="lazy"
+										/>
+									</figure>
+									<div class="card-body">
+										<h2 class="card-title text-neutral group-hover:text-primary transition-colors">
+											{product.name}
+										</h2>
+										<p class="text-neutral/70 line-clamp-2">
+											{product.shortDescription}
+										</p>
+										<div class="card-actions justify-between items-center mt-4">
+											<span class="text-xl font-bold text-primary">
+												{formatPrice(product.price)}
+											</span>
+											{product.inStock ? (
+												<span class="badge badge-success badge-sm">
+													Auf Lager
+												</span>
+											) : (
+												<span class="badge badge-error badge-sm">
+													Nicht verfügbar
+												</span>
+											)}
+										</div>
+										<div class="card-actions mt-4">
+											<button class="btn btn-primary btn-sm w-full">
+												Details ansehen
+											</button>
+										</div>
+									</div>
+								</a>
+							))}
+						</div>
+					</div>
+				);
+			})}
+		</div>
+	</section>
+</Layout>

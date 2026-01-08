@@ -1,0 +1,81 @@
+---
+interface Props {
+	images: string[];
+	name: string;
+}
+
+const { images, name } = Astro.props;
+const mainImage = images[0] || "/images/placeholder.jpg";
+---
+
+<div class="product-gallery space-y-4">
+	<!-- Main Image -->
+	<figure class="relative overflow-hidden rounded-3xl bg-base-200/30">
+		<img
+			src={mainImage}
+			alt={name}
+			class="w-full aspect-square object-cover"
+			loading="eager"
+		/>
+	</figure>
+
+	<!-- Thumbnail Gallery -->
+	{images.length > 1 && (
+		<div class="grid grid-cols-3 gap-3">
+			{images.map((image, index) => (
+				<button
+					class="thumbnail-btn relative overflow-hidden rounded-2xl bg-base-200/30 border-2 border-transparent hover:border-primary/30 transition-all duration-200 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+					data-image-index={index}
+					aria-label={`Ansicht ${index + 1}`}
+				>
+					<img
+						src={image}
+						alt={`${name} - Ansicht ${index + 1}`}
+						class="w-full aspect-square object-cover"
+						loading="lazy"
+					/>
+				</button>
+			))}
+		</div>
+	)}
+</div>
+
+<script>
+	// Simple image gallery functionality
+	document.addEventListener('DOMContentLoaded', () => {
+		const thumbnails = document.querySelectorAll('.thumbnail-btn');
+		const mainImage = document.querySelector('.product-gallery figure img');
+
+		if (!mainImage) return;
+
+		thumbnails.forEach((thumbnail) => {
+			thumbnail.addEventListener('click', () => {
+				const img = thumbnail.querySelector('img');
+				if (img && mainImage) {
+					mainImage.src = img.src;
+					mainImage.alt = img.alt;
+
+					// Update active state
+					thumbnails.forEach(t => {
+						t.classList.remove('border-primary', 'ring-2', 'ring-primary/20');
+						t.classList.add('border-transparent');
+					});
+					thumbnail.classList.remove('border-transparent');
+					thumbnail.classList.add('border-primary', 'ring-2', 'ring-primary/20');
+				}
+			});
+		});
+
+		// Set first thumbnail as active
+		if (thumbnails.length > 0) {
+			thumbnails[0].classList.remove('border-transparent');
+			thumbnails[0].classList.add('border-primary', 'ring-2', 'ring-primary/20');
+		}
+	});
+</script>
+
+<style>
+	.thumbnail-btn {
+		cursor: pointer;
+	}
+</style>

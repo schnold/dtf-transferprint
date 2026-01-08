@@ -1,0 +1,65 @@
+---
+interface Props {
+	name: string;
+	shortDescription: string;
+	price: number;
+	category: string;
+	tags: string[];
+	inStock: boolean;
+}
+
+const { name, shortDescription, price, category, tags, inStock } = Astro.props;
+
+const formatPrice = (price: number) => {
+	return new Intl.NumberFormat('de-DE', {
+		style: 'currency',
+		currency: 'EUR'
+	}).format(price);
+};
+---
+
+<div class="product-info space-y-6">
+	<!-- Category Badge -->
+	<div class="text-primary text-sm font-semibold tracking-wide uppercase">
+		{category}
+	</div>
+
+	<!-- Product Title -->
+	<h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-neutral leading-tight tracking-tight">
+		{name}
+	</h1>
+
+	<!-- Price -->
+	<div class="flex items-baseline gap-2">
+		<span class="text-3xl font-semibold text-neutral">
+			{formatPrice(price)}
+		</span>
+		<span class="text-neutral/50 text-sm">
+			pro Stück
+		</span>
+	</div>
+
+	<!-- Short Description -->
+	<p class="text-xl text-neutral/60 leading-relaxed max-w-2xl">
+		{shortDescription}
+	</p>
+
+	<!-- Stock Status -->
+	<div class="pt-4">
+		{inStock ? (
+			<div class="inline-flex items-center gap-2 text-success text-sm font-medium">
+				<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+				</svg>
+				Auf Lager - Versandfertig
+			</div>
+		) : (
+			<div class="inline-flex items-center gap-2 text-error text-sm font-medium">
+				<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+				</svg>
+				Derzeit nicht verfügbar
+			</div>
+		)}
+	</div>
+</div>

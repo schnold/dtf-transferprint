@@ -1,0 +1,127 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navbar from '../../components/Navbar.astro';
+import ProductGallery from '../../components/product/ProductGallery.astro';
+import ProductInfo from '../../components/product/ProductInfo.astro';
+import ProductSpecs from '../../components/product/ProductSpecs.astro';
+import ProductActions from '../../components/product/ProductActions.astro';
+import ProductReviews from '../../components/product/ProductReviews.astro';
+import RelatedProducts from '../../components/product/RelatedProducts.astro';
+import { getProductBySlug, products } from '../../data/products';
+
+export async function getStaticPaths() {
+	return products.map(product => ({
+		params: { slug: product.slug },
+	}));
+}
+
+interface Props {
+	slug: string;
+}
+
+const { slug } = Astro.params;
+const product = getProductBySlug(slug || '');
+
+if (!product) {
+	return Astro.redirect('/404');
+}
+
+const pageTitle = `${product.name} - DTF Transfer Print`;
+const pageDescription = product.shortDescription;
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+	<Navbar />
+
+	<!-- Breadcrumbs -->
+	<div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl pt-8 pb-6">
+		<nav class="flex items-center gap-2 text-sm text-neutral/60">
+			<a href="/" class="hover:text-primary transition-colors">Startseite</a>
+			<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+			</svg>
+			<a href="/#services" class="hover:text-primary transition-colors">Produkte</a>
+			<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+			</svg>
+			<span class="text-neutral font-medium">{product.name}</span>
+		</nav>
+	</div>
+
+	<!-- Main Product Section -->
+	<div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl pb-32">
+		<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 mb-32">
+			<!-- Left Column: Product Gallery -->
+			<div class="lg:sticky lg:top-24 lg:self-start">
+				<ProductGallery images={product.images} name={product.name} />
+			</div>
+
+			<!-- Right Column: Product Info & Actions -->
+			<div class="space-y-10">
+				<ProductInfo
+					name={product.name}
+					shortDescription={product.shortDescription}
+					price={product.price}
+					category={product.category}
+					tags={product.tags}
+					inStock={product.inStock}
+				/>
+
+				<ProductActions
+					productId={product.id}
+					productName={product.name}
+					price={product.price}
+					inStock={product.inStock}
+				/>
+			</div>
+		</div>
+
+		<!-- Product Description Section -->
+		<section class="mb-32">
+			<div class="max-w-4xl">
+				<h2 class="text-3xl md:text-4xl font-bold text-neutral mb-8">Über dieses Produkt</h2>
+				<p class="text-neutral/70 leading-relaxed text-lg md:text-xl">
+					{product.description}
+				</p>
+			</div>
+		</section>
+
+		<!-- Product Specifications -->
+		<section class="mb-32">
+			<ProductSpecs specifications={product.specifications} />
+		</section>
+
+		<!-- Product Reviews -->
+		<section class="mb-32">
+			<ProductReviews
+				reviews={product.reviews || []}
+				productName={product.name}
+			/>
+		</section>
+
+		<!-- Related Products -->
+		<section>
+			<RelatedProducts currentSlug={product.slug} limit={3} />
+		</section>
+	</div>
+
+	<!-- CTA Section -->
+	<section class="bg-gradient-to-br from-primary/5 via-base-100 to-secondary/5 py-24">
+		<div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl text-center">
+			<h2 class="text-3xl md:text-5xl font-bold text-neutral mb-6">
+				Bereit für Ihre Bestellung?
+			</h2>
+			<p class="text-lg md:text-xl text-neutral/60 mb-12 max-w-2xl mx-auto">
+				Kontaktieren Sie uns für ein individuelles Angebot oder starten Sie direkt mit Ihrer Bestellung.
+			</p>
+			<div class="flex flex-col sm:flex-row gap-4 justify-center">
+				<a href="#contact" class="btn btn-primary btn-lg text-lg px-8">
+					Angebot anfordern
+				</a>
+				<a href="/" class="btn btn-ghost btn-lg text-lg text-neutral px-8">
+					Weitere Produkte
+				</a>
+			</div>
+		</div>
+	</section>
+</Layout>

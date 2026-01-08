@@ -1,0 +1,93 @@
+---
+import type { Review } from '../../data/products';
+
+interface Props {
+	reviews: Review[];
+	productName: string;
+}
+
+const { reviews, productName } = Astro.props;
+
+const averageRating = reviews.length > 0
+	? reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length
+	: 0;
+---
+
+<div class="product-reviews max-w-4xl">
+	<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-10">
+		<h2 class="text-3xl md:text-4xl font-bold text-neutral">Kundenbewertungen</h2>
+		{reviews.length > 0 && (
+			<div class="flex items-center gap-3">
+				<div class="rating rating-md">
+					{Array.from({ length: 5 }).map((_, i) => (
+						<input
+							type="radio"
+							class="mask mask-star-2 bg-accent"
+							checked={i === Math.round(averageRating) - 1}
+							disabled
+						/>
+					))}
+				</div>
+				<span class="text-neutral/60 text-sm font-medium">
+					{averageRating.toFixed(1)} ({reviews.length} {reviews.length === 1 ? 'Bewertung' : 'Bewertungen'})
+				</span>
+			</div>
+		)}
+	</div>
+
+	{reviews.length > 0 ? (
+		<div class="space-y-6">
+			{reviews.map((review) => (
+				<div class="bg-base-200/20 rounded-2xl p-6 md:p-8 border border-base-300/20 hover:border-base-300/40 transition-colors">
+					<div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
+						<div class="flex items-center gap-4">
+							<div class="avatar placeholder">
+								<div class="bg-primary/10 text-primary rounded-full w-12 h-12">
+									<span class="text-lg font-semibold">
+										{review.author.charAt(0).toUpperCase()}
+									</span>
+								</div>
+							</div>
+							<div>
+								<div class="font-semibold text-neutral text-lg flex items-center gap-2">
+									{review.author}
+									{review.verified && (
+										<span class="badge badge-success badge-sm">
+											Verifiziert
+										</span>
+									)}
+								</div>
+								<div class="text-sm text-neutral/50">
+									{new Date(review.date).toLocaleDateString('de-DE', {
+										year: 'numeric',
+										month: 'long',
+										day: 'numeric'
+									})}
+								</div>
+							</div>
+						</div>
+						<div class="rating rating-sm">
+							{Array.from({ length: 5 }).map((_, i) => (
+								<input
+									type="radio"
+									class="mask mask-star-2 bg-accent"
+									checked={i < review.rating}
+									disabled
+								/>
+							))}
+						</div>
+					</div>
+					<p class="text-neutral/70 leading-relaxed text-lg">
+						{review.comment}
+					</p>
+				</div>
+			))}
+		</div>
+	) : (
+		<div class="bg-base-200/20 rounded-2xl p-12 text-center border border-base-300/20">
+			<p class="text-neutral/60 text-lg">
+				Noch keine Bewertungen vorhanden. Seien Sie der Erste, der dieses Produkt bewertet!
+			</p>
+		</div>
+	)}
+</div>

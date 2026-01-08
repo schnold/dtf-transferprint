@@ -1,0 +1,114 @@
+---
+// Infinite scrolling logo carousel component
+---
+
+<div class="logo-carousel-wrapper py-16 bg-base-100 overflow-hidden relative">
+	<div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl relative">
+		<!-- Heading -->
+		<div class="text-center mb-12">
+			<h2 class="text-2xl md:text-3xl font-medium text-neutral/50">Die besten Partner für beste Ergebnisse</h2>
+		</div>
+
+		<div class="logo-carousel relative">
+			<!-- Left gradient -->
+			<div class="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-base-100 via-base-100/90 to-transparent z-10 pointer-events-none"></div>
+
+			<!-- Right gradient -->
+			<div class="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-base-100 via-base-100/90 to-transparent z-10 pointer-events-none"></div>
+		<div class="logo-track">
+			<!-- First set of logos -->
+			<div class="logo-item">
+				<div class="logo-placeholder">LOGO 1</div>
+			</div>
+			<div class="logo-item">
+				<div class="logo-placeholder">LOGO 2</div>
+			</div>
+			<div class="logo-item">
+				<div class="logo-placeholder">LOGO 3</div>
+			</div>
+			<div class="logo-item">
+				<div class="logo-placeholder">LOGO 4</div>
+			</div>
+			<div class="logo-item">
+				<div class="logo-placeholder">LOGO 5</div>
+			</div>
+			<div class="logo-item">
+				<div class="logo-placeholder">LOGO 6</div>
+			</div>
+
+			<!-- Duplicate set for seamless loop -->
+			<div class="logo-item">
+				<div class="logo-placeholder">LOGO 1</div>
+			</div>
+			<div class="logo-item">
+				<div class="logo-placeholder">LOGO 2</div>
+			</div>
+			<div class="logo-item">
+				<div class="logo-placeholder">LOGO 3</div>
+			</div>
+			<div class="logo-item">
+				<div class="logo-placeholder">LOGO 4</div>
+			</div>
+			<div class="logo-item">
+				<div class="logo-placeholder">LOGO 5</div>
+			</div>
+			<div class="logo-item">
+				<div class="logo-placeholder">LOGO 6</div>
+			</div>
+		</div>
+	</div>
+	</div>
+</div>
+
+<style>
+	.logo-carousel-wrapper {
+		position: relative;
+	}
+
+	.logo-carousel {
+		width: 100%;
+		overflow: hidden;
+	}
+
+	.logo-track {
+		display: flex;
+		gap: 4rem;
+		animation: scroll 30s linear infinite;
+		width: fit-content;
+	}
+
+	.logo-item {
+		flex-shrink: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.logo-placeholder {
+		width: 180px;
+		height: 100px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+		border-radius: 12px;
+		font-weight: 700;
+		font-size: 1.25rem;
+		color: white;
+		box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+		transition: transform 0.3s ease;
+	}
+
+	.logo-item:hover .logo-placeholder {
+		transform: scale(1.05);
+	}
+
+	@keyframes scroll {
+		0% {
+			transform: translateX(0);
+		}
+		100% {
+			transform: translateX(-50%);
+		}
+	}
+</style>
