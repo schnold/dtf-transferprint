@@ -1,0 +1,190 @@
+---
+import Layout from './Layout.astro';
+import Navbar from '../components/Navbar.astro';
+
+interface Props {
+	title: string;
+	description?: string;
+}
+
+const { title, description = title } = Astro.props;
+---
+
+<Layout title={`${title} - DTF Transfer Print`} description={description}>
+	<Navbar />
+
+	<!-- Company Content Container -->
+	<main class="min-h-screen bg-base-100">
+		<div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl py-16 md:py-24">
+			<!-- Breadcrumbs -->
+			<nav class="mb-12 flex items-center gap-2 text-sm text-neutral/60">
+				<a href="/" class="hover:text-primary transition-colors">Startseite</a>
+				<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+				</svg>
+				<a href="/unternehmen/" class="hover:text-primary transition-colors">Unternehmen</a>
+				<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+				</svg>
+				<span class="text-neutral font-medium">{title}</span>
+			</nav>
+
+			<!-- Company Content -->
+			<article class="prose prose-lg prose-neutral max-w-none">
+				<slot />
+			</article>
+		</div>
+	</main>
+</Layout>
+
+<style is:global>
+	/* Modern Typography System - Clean & Maintainable */
+	.prose {
+		color: var(--color-neutral);
+		line-height: 1.75;
+	}
+
+	/* Headings */
+	.prose h1 {
+		font-family: 'DM Sans', system-ui, sans-serif;
+		font-size: clamp(2rem, 5vw, 3rem);
+		font-weight: 700;
+		color: var(--color-neutral);
+		margin: 0 0 2rem 0;
+		line-height: 1.2;
+		letter-spacing: -0.02em;
+	}
+
+	.prose h2 {
+		font-family: 'DM Sans', system-ui, sans-serif;
+		font-size: clamp(1.5rem, 4vw, 2.25rem);
+		font-weight: 600;
+		color: var(--color-neutral);
+		margin: 4rem 0 1.5rem 0;
+		padding-top: 2rem;
+		border-top: 1px solid var(--color-base-300);
+		line-height: 1.3;
+		letter-spacing: -0.015em;
+	}
+
+	.prose h2:first-of-type {
+		border-top: none;
+		margin-top: 0;
+		padding-top: 0;
+	}
+
+	.prose h3 {
+		font-family: 'DM Sans', system-ui, sans-serif;
+		font-size: clamp(1.25rem, 3vw, 1.75rem);
+		font-weight: 600;
+		color: var(--color-neutral);
+		margin: 3rem 0 1rem 0;
+		line-height: 1.35;
+		letter-spacing: -0.01em;
+	}
+
+	.prose h4 {
+		font-family: 'DM Sans', system-ui, sans-serif;
+		font-size: clamp(1.125rem, 2.5vw, 1.375rem);
+		font-weight: 600;
+		color: var(--color-neutral);
+		margin: 2rem 0 1rem 0;
+		line-height: 1.4;
+	}
+
+	/* Paragraphs */
+	.prose p {
+		margin: 0 0 1.5rem 0;
+		line-height: 1.75;
+		font-size: 1.0625rem;
+	}
+
+	/* Links */
+	.prose a {
+		color: var(--color-primary);
+		text-decoration: underline;
+		text-decoration-thickness: 2px;
+		text-underline-offset: 3px;
+		font-weight: 500;
+		transition: all 0.2s ease;
+	}
+
+	.prose a:hover {
+		color: var(--color-primary-dark);
+	}
+
+	/* Lists */
+	.prose ul,
+	.prose ol {
+		margin: 1.5rem 0;
+		padding-left: 1.5rem;
+	}
+
+	.prose li {
+		margin-bottom: 0.75rem;
+		line-height: 1.75;
+	}
+
+	.prose ul li {
+		list-style-type: disc;
+	}
+
+	.prose ol li {
+		list-style-type: decimal;
+	}
+
+	/* Strong */
+	.prose strong {
+		font-weight: 600;
+		color: var(--color-neutral);
+	}
+
+	/* Emphasis */
+	.prose em {
+		font-style: italic;
+	}
+
+	/* Metadata */
+	.prose p.text-neutral\/70 {
+		font-size: 0.875rem;
+		margin: 0 0 2rem 0;
+		opacity: 0.7;
+	}
+
+	/* Images */
+	.prose img {
+		margin: 2rem 0;
+		border-radius: 0.5rem;
+		width: 100%;
+		height: auto;
+	}
+
+	/* Responsive adjustments */
+	@media (max-width: 768px) {
+		.prose {
+			font-size: 1rem;
+		}
+
+		.prose h1 {
+			font-size: clamp(1.75rem, 6vw, 2.5rem);
+			margin-bottom: 1.5rem;
+		}
+
+		.prose h2 {
+			font-size: clamp(1.375rem, 5vw, 2rem);
+			margin-top: 3rem;
+			margin-bottom: 1rem;
+		}
+
+		.prose h3 {
+			font-size: clamp(1.125rem, 4vw, 1.5rem);
+			margin-top: 2rem;
+			margin-bottom: 0.75rem;
+		}
+
+		.prose p {
+			font-size: 1rem;
+			margin-bottom: 1.25rem;
+		}
+	}
+</style>

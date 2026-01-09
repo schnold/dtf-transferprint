@@ -1,8 +1,18 @@
+---
+import { SITE_CONFIG } from '../constants/site';
+---
+
 <!-- Navbar -->
 <div class="w-full px-4 sm:px-6 lg:px-8 pt-6">
 	<div class="navbar bg-base-100/20 backdrop-blur-xl backdrop-saturate-150 border border-white/20 shadow-lg sticky top-6 z-50 rounded-2xl px-3 sm:px-4 lg:px-6 py-4 max-w-7xl mx-auto min-h-[4.5rem] overflow-visible">
 		<div class="navbar-start">
-			<a href="/" class="btn btn-ghost text-base sm:text-lg lg:text-xl font-semibold text-neutral hover:bg-white/10 px-2 sm:px-4">DTF Transfer Print</a>
+			<a href="/" class="px-2 sm:px-4 flex items-center no-underline">
+				<img 
+					src={SITE_CONFIG.brand.logo.primary} 
+					alt={SITE_CONFIG.brand.logo.alt}
+					class="h-6 sm:h-8 lg:h-10 w-auto object-contain"
+				/>
+			</a>
 		</div>
 		<div class="navbar-center hidden md:flex flex-1 min-w-0 justify-center">
 			<ul class="flex flex-row flex-wrap gap-0.5 sm:gap-1 px-1 max-w-4xl justify-center md:justify-start mega-menu">
@@ -150,13 +160,9 @@
 										<span class="w-1.5 h-1.5 bg-warning/40 rounded-full group-hover:bg-warning transition-colors"></span>
 										Über Uns
 									</a></li>
-									<li><a href="/team/" class="text-neutral/70 hover:text-primary text-sm py-1.5 transition-colors flex items-center gap-2 group">
-										<span class="w-1.5 h-1.5 bg-warning/40 rounded-full group-hover:bg-warning transition-colors"></span>
-										Unser Team
-									</a></li>
 									<li><a href="/karriere/" class="text-neutral/70 hover:text-primary text-sm py-1.5 transition-colors flex items-center gap-2 group">
 										<span class="w-1.5 h-1.5 bg-warning/40 rounded-full group-hover:bg-warning transition-colors"></span>
-										Karriere
+										Stellenangebote
 									</a></li>
 								</ul>
 							</div>
@@ -223,7 +229,13 @@
 				</li>
 			</ul>
 		</div>
-		<div class="navbar-end flex items-center gap-2">
+		<div class="navbar-end flex items-center gap-4">
+			<!-- Mannequin Icon -->
+			<div class="w-8 h-8 rounded-full border border-neutral/30 flex items-center justify-center hover:border-neutral/50 hover:bg-white/10 transition-all duration-200">
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 text-neutral/80 hover:text-neutral transition-colors">
+					<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+				</svg>
+			</div>
 			<!-- CTA Button -->
 			<a class="btn btn-primary btn-sm shadow-sm hover:shadow-md transition-all duration-200 px-3 sm:px-4">Angebot anfordern</a>
 			<!-- Mobile Menu Dropdown -->

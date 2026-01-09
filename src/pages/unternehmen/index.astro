@@ -1,0 +1,36 @@
+---
+import CompanyLayout from '../../layouts/CompanyLayout.astro';
+
+const title = 'Unternehmen';
+---
+
+<CompanyLayout title={title}>
+	<h1>{title}</h1>
+	
+	<p class="text-neutral/70 text-sm mb-8">
+		Lernen Sie DTF Transfer Print kennen
+	</p>
+
+	<div class="grid grid-cols-1 md:grid-cols-2 gap-8 my-8">
+		<a href="/ueber-uns/" class="group block p-6 bg-base-200 rounded-lg hover:bg-base-300 transition-colors">
+			<h2 class="text-2xl font-semibold mb-3 group-hover:text-primary transition-colors">Über Uns</h2>
+			<p class="text-neutral/70">
+				Erfahren Sie mehr über unsere Geschichte, Mission und Werte.
+			</p>
+		</a>
+
+		<a href="/eigenschaften/" class="group block p-6 bg-base-200 rounded-lg hover:bg-base-300 transition-colors">
+			<h2 class="text-2xl font-semibold mb-3 group-hover:text-primary transition-colors">Eigenschaften</h2>
+			<p class="text-neutral/70">
+				Entdecken Sie, was uns auszeichnet und unsere besonderen Eigenschaften.
+			</p>
+		</a>
+
+		<a href="/karriere/" class="group block p-6 bg-base-200 rounded-lg hover:bg-base-300 transition-colors">
+			<h2 class="text-2xl font-semibold mb-3 group-hover:text-primary transition-colors">Stellenangebote</h2>
+			<p class="text-neutral/70">
+				Werden Sie Teil unseres Teams und gestalten Sie die Zukunft mit.
+			</p>
+		</a>
+	</div>
+</CompanyLayout>
