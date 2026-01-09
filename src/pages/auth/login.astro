@@ -1,0 +1,122 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const session = Astro.locals.session;
+
+// If already logged in, redirect to home
+if (session) {
+  return Astro.redirect('/');
+}
+---
+
+<Layout title="Login - DTF Transfer Print">
+  <div class="min-h-screen flex items-center justify-center bg-base-200 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8">
+      <div>
+        <h2 class="mt-6 text-center text-3xl font-extrabold">
+          Sign in to your account
+        </h2>
+      </div>
+
+      <form id="login-form" class="mt-8 space-y-6">
+        <div class="rounded-md shadow-sm -space-y-px">
+          <div>
+            <label for="email" class="sr-only">Email address</label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              autocomplete="email"
+              required
+              class="input input-bordered w-full rounded-t-md"
+              placeholder="Email address"
+            />
+          </div>
+          <div>
+            <label for="password" class="sr-only">Password</label>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              autocomplete="current-password"
+              required
+              class="input input-bordered w-full rounded-b-md mt-2"
+              placeholder="Password"
+            />
+          </div>
+        </div>
+
+        <div class="flex items-center justify-end">
+          <a href="/auth/forgot-password" class="text-sm link link-primary">
+            Forgot your password?
+          </a>
+        </div>
+
+        <div id="error-message" class="alert alert-error hidden">
+          <span></span>
+        </div>
+
+        <div>
+          <button
+            type="submit"
+            class="btn btn-primary w-full"
+            id="submit-button"
+          >
+            Sign in
+          </button>
+        </div>
+
+        <div class="text-center">
+          <p class="text-sm">
+            Don't have an account?
+            <a href="/auth/signup" class="link link-primary">
+              Sign up
+            </a>
+          </p>
+        </div>
+      </form>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  import { authClient } from '../../lib/auth-client';
+
+  const form = document.getElementById('login-form') as HTMLFormElement;
+  const errorMessage = document.getElementById('error-message') as HTMLDivElement;
+  const submitButton = document.getElementById('submit-button') as HTMLButtonElement;
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    // Hide any previous error messages
+    errorMessage.classList.add('hidden');
+    submitButton.disabled = true;
+    submitButton.textContent = 'Signing in...';
+
+    const formData = new FormData(form);
+    const email = formData.get('email') as string;
+    const password = formData.get('password') as string;
+
+    try {
+      const result = await authClient.signIn.email({
+        email,
+        password,
+      });
+
+      if (result.error) {
+        throw new Error(result.error.message || 'Failed to sign in');
+      }
+
+      // Redirect to home page on success
+      window.location.href = '/';
+    } catch (error) {
+      console.error('Login error:', error);
+      errorMessage.querySelector('span')!.textContent =
+        error instanceof Error ? error.message : 'An error occurred during login';
+      errorMessage.classList.remove('hidden');
+      submitButton.disabled = false;
+      submitButton.textContent = 'Sign in';
+    }
+  });
+</script>

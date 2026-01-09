@@ -18,42 +18,42 @@
 		<div class="logo-track">
 			<!-- First set of logos -->
 			<div class="logo-item">
-				<div class="logo-placeholder">LOGO 1</div>
+				<img src="/icons/fruit-of-the-loom-3.svg" alt="Fruit of the Loom" class="logo-image" />
 			</div>
 			<div class="logo-item">
-				<div class="logo-placeholder">LOGO 2</div>
+				<img src="/icons/russell-athletic-2.svg" alt="Russell Athletic" class="logo-image" />
 			</div>
 			<div class="logo-item">
-				<div class="logo-placeholder">LOGO 3</div>
+				<img src="/icons/fruit-of-the-loom-3.svg" alt="Fruit of the Loom" class="logo-image" />
 			</div>
 			<div class="logo-item">
-				<div class="logo-placeholder">LOGO 4</div>
+				<img src="/icons/russell-athletic-2.svg" alt="Russell Athletic" class="logo-image" />
 			</div>
 			<div class="logo-item">
-				<div class="logo-placeholder">LOGO 5</div>
+				<img src="/icons/fruit-of-the-loom-3.svg" alt="Fruit of the Loom" class="logo-image" />
 			</div>
 			<div class="logo-item">
-				<div class="logo-placeholder">LOGO 6</div>
+				<img src="/icons/russell-athletic-2.svg" alt="Russell Athletic" class="logo-image" />
 			</div>
 
 			<!-- Duplicate set for seamless loop -->
 			<div class="logo-item">
-				<div class="logo-placeholder">LOGO 1</div>
+				<img src="/icons/fruit-of-the-loom-3.svg" alt="Fruit of the Loom" class="logo-image" />
 			</div>
 			<div class="logo-item">
-				<div class="logo-placeholder">LOGO 2</div>
+				<img src="/icons/russell-athletic-2.svg" alt="Russell Athletic" class="logo-image" />
 			</div>
 			<div class="logo-item">
-				<div class="logo-placeholder">LOGO 3</div>
+				<img src="/icons/fruit-of-the-loom-3.svg" alt="Fruit of the Loom" class="logo-image" />
 			</div>
 			<div class="logo-item">
-				<div class="logo-placeholder">LOGO 4</div>
+				<img src="/icons/russell-athletic-2.svg" alt="Russell Athletic" class="logo-image" />
 			</div>
 			<div class="logo-item">
-				<div class="logo-placeholder">LOGO 5</div>
+				<img src="/icons/fruit-of-the-loom-3.svg" alt="Fruit of the Loom" class="logo-image" />
 			</div>
 			<div class="logo-item">
-				<div class="logo-placeholder">LOGO 6</div>
+				<img src="/icons/russell-athletic-2.svg" alt="Russell Athletic" class="logo-image" />
 			</div>
 		</div>
 	</div>
@@ -82,24 +82,20 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
+		background: transparent;
 	}
 
-	.logo-placeholder {
+	.logo-image {
 		width: 180px;
 		height: 100px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-		border-radius: 12px;
-		font-weight: 700;
-		font-size: 1.25rem;
-		color: white;
-		box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-		transition: transform 0.3s ease;
+		object-fit: contain;
+		background: transparent;
+		filter: grayscale(100%) opacity(0.6);
+		transition: all 0.3s ease;
 	}
 
-	.logo-item:hover .logo-placeholder {
+	.logo-item:hover .logo-image {
+		filter: grayscale(0%) opacity(1);
 		transform: scale(1.05);
 	}
 

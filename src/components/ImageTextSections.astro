@@ -1,0 +1,47 @@
+---
+import ImageTextCard from './ImageTextCard.astro';
+
+interface Section {
+	title: string;
+	description: string;
+	image?: string;
+	imageAlt?: string;
+	images?: Array<{
+		src: string;
+		alt: string;
+	}>;
+	features?: Array<{
+		icon: string;
+		text: string;
+	}>;
+	badges?: string[];
+}
+
+interface Props {
+	sections: Section[];
+}
+
+const { sections } = Astro.props;
+---
+
+<section class="py-24 bg-base-100 overflow-x-visible">
+	<div class="container mx-auto px-4 sm:px-6 lg:px-0 max-w-7xl space-y-32 overflow-x-visible">
+		{sections.map((section, index) => {
+			// Automatically alternate: first left, second right, third left, etc.
+			const align = index % 2 === 0 ? 'left' : 'right';
+			
+			return (
+				<ImageTextCard
+					title={section.title}
+					description={section.description}
+					image={section.image}
+					imageAlt={section.imageAlt}
+					images={section.images}
+					features={section.features}
+					badges={section.badges}
+					align={align}
+				/>
+			);
+		})}
+	</div>
+</section>

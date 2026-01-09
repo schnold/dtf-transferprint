@@ -1,0 +1,101 @@
+---
+interface Props {
+	title?: string;
+	subtitle?: string;
+}
+
+const { 
+	title = "Kundenbewertungen, die uns stolz machen",
+	subtitle = "Unsere Bewertungen auf Google und Trustpilot spiegeln wider, was uns antreibt: Service, der überzeugt."
+} = Astro.props;
+
+const testimonials = [
+	{
+		name: "Simon",
+		text: "Ich habe die Meterware bei PrintPunk bestellt und muss sagen, das Preisleistungsverhältnis ist super. Die Produktion erfolgt schnell und auch die Lieferung wird unmittelbar abgewickelt. Ich hatte Kontakt mit dem Kundenservice und meine Fragen und Anliegen wurden sowohl per Telefon, als auch per E-Mail direkt kompetent und unkompliziert beantwortet. Mit der Qualität des Drucks bin ich ebenfalls zufrieden."
+	},
+	{
+		name: "Johanna",
+		text: "Als B2B Kunden sind wir super zufrieden mit PrintPunk! Toller und vor allen Dingen freundlicher Kundenservice. Super schnelle und zuverlässige Lieferung. Die DTF Logos haben eine gute Qualität und die Handhabung der Bestellung ist auch super simpel. Flexible Zahlungsmethoden unterstützen die Leichtigkeit im Bestellprozess. Immer wieder PrintPunk!🫶🏻🥳"
+	},
+	{
+		name: "Michael",
+		text: "Die erste Bestellung ist schief gegangen was zu guter letzt meine Schuld war. Kurzer Anruf genügte und schnell war eine Lösung gefunden. Die neue Lieferung war super. Schnelle Lieferung, super Qualität und preiswert. Mit Sicherheit war das nicht meine letzte Bestellung. Danke"
+	},
+	{
+		name: "Mehmo",
+		text: "Sodele...Ich möchte mich auch unter den mehr als zufriedenen Kunden von PrintPunk einreihen. Aktuell einen Fall gehabt. Kurzer Anruf und alle wieder Top. War aber auch schon davor sehr zufrieden. Weiter so Jungs und Mädels..."
+	},
+	{
+		name: "Robert",
+		text: "Schnelle Lieferzeit,auch ohne Expressbestellung. Eine Bisher immer verlässliche Firma. Die Qualität der DTF Bögen ist konstant,im Gegensatz zu manch anderen Mitbewerbern. (Farbe, Presszeit usw.) Ein breiteres Soriment wär schön,damit ich alles bei einem Anbieter bestellen könnte. (z.B. UV-DTF) 5/5 Sternen (nach ca. 10 Bestellungen)"
+	},
+	{
+		name: "Atlas Lions",
+		text: "Der Geschäftsführer hat mir die DTF-Bögen persönlich nach Darmstadt gebracht nachdem es bei einer Expressbestellung eine kleine Lieferverzögerung gab => ein Beweis für den hervorragenden Service und ein echtes Zeichen von Engagement"
+	}
+];
+---
+
+<section class="py-24 bg-base-200">
+	<div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+		<!-- Header -->
+		<div class="text-center mb-16">
+			<h2 class="text-4xl md:text-5xl font-bold mb-4 text-neutral">{title}</h2>
+			<p class="text-lg text-neutral/70 max-w-2xl mx-auto">{subtitle}</p>
+		</div>
+
+		<!-- Testimonials Grid -->
+		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+			{testimonials.map((testimonial) => (
+				<div class="card bg-base-100 border border-base-300/30 shadow-sm hover:shadow-md transition-all duration-300 hover:border-primary/30 h-full flex flex-col">
+					<div class="card-body flex-grow flex flex-col">
+						<!-- Quote Icon -->
+						<div class="mb-4">
+							<svg class="w-10 h-10 text-primary/30" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+								<path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.996 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.984zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.432.917-3.995 3.638-3.995 5.849h3.983v10h-9.984z"/>
+							</svg>
+						</div>
+
+						<!-- Quote -->
+						<p class="text-neutral/80 leading-relaxed mb-6 flex-grow text-base">
+							{testimonial.text}
+						</p>
+
+						<!-- Author Section -->
+						<div class="flex items-center gap-3 pt-4 border-t border-base-300/30 mt-auto">
+							<div class="avatar placeholder">
+								<div class="bg-gradient-to-br from-primary/20 to-secondary/20 text-primary rounded-full w-12 ring-2 ring-primary/10">
+									<span class="text-lg font-semibold">{testimonial.name.charAt(0)}</span>
+								</div>
+							</div>
+							<div class="flex-1">
+								<div class="font-semibold text-neutral text-base">{testimonial.name}</div>
+								<div class="flex items-center gap-1 mt-1">
+									<div class="flex gap-0.5">
+										<svg class="w-4 h-4 text-accent fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+											<path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+										</svg>
+										<svg class="w-4 h-4 text-accent fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+											<path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+										</svg>
+										<svg class="w-4 h-4 text-accent fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+											<path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+										</svg>
+										<svg class="w-4 h-4 text-accent fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+											<path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+										</svg>
+										<svg class="w-4 h-4 text-accent fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+											<path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+										</svg>
+									</div>
+									<span class="text-xs text-neutral/60 ml-1">Verifizierter Kunde</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			))}
+		</div>
+	</div>
+</section>

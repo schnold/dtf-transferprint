@@ -1,0 +1,113 @@
+---
+interface Props {
+	title: string;
+	description: string;
+	image?: string;
+	imageAlt?: string;
+	images?: Array<{
+		src: string;
+		alt: string;
+	}>;
+	features?: Array<{
+		icon: string;
+		text: string;
+	}>;
+	badges?: string[];
+	align?: 'left' | 'right';
+}
+
+const { 
+	title, 
+	description, 
+	image, 
+	imageAlt, 
+	images = [],
+	features = [], 
+	badges = [],
+	align = 'left' 
+} = Astro.props;
+
+const isLeft = align === 'left';
+const hasGallery = images.length > 0;
+const displayImage = image || (images.length > 0 ? images[0].src : '');
+const displayAlt = imageAlt || (images.length > 0 ? images[0].alt : '');
+---
+
+<div class={`flex flex-col ${isLeft ? 'lg:flex-row' : 'lg:flex-row-reverse'} gap-8 lg:gap-32 items-center overflow-x-visible lg:px-8`}>
+	<!-- Image Section -->
+	<div class={`w-full lg:w-3/5 ${isLeft ? 'lg:-ml-40 lg:mr-0' : 'lg:-mr-40 lg:ml-0'}`}>
+		{hasGallery ? (
+			<!-- Gallery -->
+			<div class="grid grid-cols-2 gap-3">
+				<figure class="relative overflow-hidden rounded-2xl shadow-lg col-span-2">
+					<img 
+						src={images[0].src} 
+						alt={images[0].alt}
+						class="w-full h-full object-cover aspect-[4/3]"
+						loading="eager"
+					/>
+				</figure>
+				{images.slice(1).map((img, index) => (
+					<figure class="relative overflow-hidden rounded-2xl shadow-lg">
+						<img 
+							src={img.src} 
+							alt={img.alt}
+							class="w-full h-full object-cover aspect-square"
+							loading="lazy"
+						/>
+					</figure>
+				))}
+			</div>
+		) : (
+			<!-- Single Image -->
+			<figure class="relative overflow-hidden rounded-2xl shadow-lg">
+				<img 
+					src={displayImage} 
+					alt={displayAlt}
+					class="w-full h-auto object-cover"
+					loading="lazy"
+				/>
+			</figure>
+		)}
+	</div>
+
+	<!-- Content Section -->
+	<div class="w-full lg:w-2/5">
+		<div class="space-y-6">
+			<!-- Title -->
+			<h3 class="text-2xl md:text-3xl font-bold text-neutral leading-tight">
+				{title}
+			</h3>
+
+			<!-- Description -->
+			<p class="text-base text-neutral/80 leading-relaxed">
+				{description}
+			</p>
+
+			<!-- Features List -->
+			{features.length > 0 && (
+				<ul class="space-y-4">
+					{features.map((feature) => (
+						<li class="flex items-start gap-4">
+							<div class="flex-shrink-0 w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+								{feature.icon && (
+									<span class="w-5 h-5 text-primary" set:html={feature.icon} />
+								)}
+							</div>
+							<p class="text-sm text-neutral/80 leading-relaxed pt-1 flex-1">{feature.text}</p>
+						</li>
+					))}
+				</ul>
+			)}
+
+			<!-- Badges -->
+			{badges.length > 0 && (
+				<div class="flex flex-wrap gap-2 pt-4">
+					{badges.map((badge) => (
+						<span class="badge badge-primary badge-lg">{badge}</span>
+					))}
+				</div>
+			)}
+		</div>
+	</div>
+</div>
