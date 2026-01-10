@@ -1,0 +1,535 @@
+---
+import CompanyLayout from '../layouts/CompanyLayout.astro';
+
+const title = 'DTF-Haltbarkeit und Pflege';
+const description = 'Wie lange halten DTF-Transfers? Alles über Waschbeständigkeit, Pflege, Haltbarkeit und wie Sie die Lebensdauer Ihrer DTF-Drucke maximieren.';
+---
+
+<CompanyLayout title={title} description={description}>
+	<h1>{title}</h1>
+
+	<p class="text-neutral/70 text-sm mb-8">
+		Langlebige Drucke durch richtige Pflege – So bleiben Ihre DTF-Transfers brilliant
+	</p>
+
+	<div class="hero bg-gradient-to-r from-primary/10 to-secondary/10 rounded-2xl mb-8">
+		<div class="hero-content text-center py-12">
+			<div class="max-w-3xl">
+				<div class="text-6xl font-bold text-primary mb-4">50+</div>
+				<h2 class="text-3xl font-bold mb-4">Waschzyklen Mindest-Haltbarkeit</h2>
+				<p class="text-lg">
+					Bei richtiger Pflege und Anwendung halten unsere DTF-Transfers problemlos über 50 Wäschen. Viele Kunden berichten von deutlich längerer Lebensdauer – manche Drucke bleiben auch nach 100+ Waschzyklen in hervorragendem Zustand.
+				</p>
+			</div>
+		</div>
+	</div>
+
+	<h2>Faktoren, die die Haltbarkeit beeinflussen</h2>
+
+	<p>
+		Die Lebensdauer eines DTF-Transfers hängt von verschiedenen Faktoren ab. Verstehen Sie diese, um die Haltbarkeit Ihrer Drucke zu maximieren.
+	</p>
+
+	<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 my-8">
+		<div class="card bg-base-200 hover:shadow-xl transition-shadow">
+			<div class="card-body">
+				<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-3">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-primary">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M15.362 5.214A8.252 8.252 0 0112 21 8.25 8.25 0 016.038 7.048 8.287 8.287 0 009 9.6a8.983 8.983 0 013.361-6.867 8.21 8.21 0 003 2.48z" />
+						<path stroke-linecap="round" stroke-linejoin="round" d="M12 18a3.75 3.75 0 00.495-7.467 5.99 5.99 0 00-1.925 3.546 5.974 5.974 0 01-2.133-1A3.75 3.75 0 0012 18z" />
+					</svg>
+				</div>
+				<h3 class="card-title text-lg">Transferqualität</h3>
+				<p class="text-sm">
+					Die korrekte Anwendung des Transfers ist fundamental. Richtige Temperatur (160°C), ausreichender Druck und Presszeit (15 Sek.) gewährleisten optimale Haftung.
+				</p>
+				<div class="badge badge-success mt-2">Wichtigster Faktor</div>
+			</div>
+		</div>
+
+		<div class="card bg-base-200 hover:shadow-xl transition-shadow">
+			<div class="card-body">
+				<div class="w-12 h-12 rounded-full bg-secondary/10 flex items-center justify-center mb-3">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-secondary">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
+					</svg>
+				</div>
+				<h3 class="card-title text-lg">Textilqualität</h3>
+				<p class="text-sm">
+					Hochwertige Textilien mit stabiler Faserstruktur bieten bessere Haftung. Vorgewaschene Stoffe ohne Weichspülerrückstände sind ideal.
+				</p>
+				<div class="badge badge-info mt-2">Materialbasis</div>
+			</div>
+		</div>
+
+		<div class="card bg-base-200 hover:shadow-xl transition-shadow">
+			<div class="card-body">
+				<div class="w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center mb-3">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-accent">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.043-.025a15.994 15.994 0 011.622-3.395m3.42 3.42a15.995 15.995 0 004.764-4.648l3.876-5.814a1.151 1.151 0 00-1.597-1.597L14.146 6.32a15.996 15.996 0 00-4.649 4.763m3.42 3.42a6.776 6.776 0 00-3.42-3.42" />
+					</svg>
+				</div>
+				<h3 class="card-title text-lg">Waschmethode</h3>
+				<p class="text-sm">
+					Schonende Wäsche bei max. 40°C, linksherum gewaschen, ohne aggressive Chemikalien verlängert die Lebensdauer erheblich.
+				</p>
+				<div class="badge badge-warning mt-2">Pflege entscheidend</div>
+			</div>
+		</div>
+
+		<div class="card bg-base-200 hover:shadow-xl transition-shadow">
+			<div class="card-body">
+				<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-3">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-primary">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" />
+					</svg>
+				</div>
+				<h3 class="card-title text-lg">Trocknungsart</h3>
+				<p class="text-sm">
+					Lufttrocknung ist am schonendsten. Trockner nur bei niedriger Temperatur und niemals bei hoher Hitze verwenden.
+				</p>
+				<div class="badge badge-secondary mt-2">Schonend trocknen</div>
+			</div>
+		</div>
+
+		<div class="card bg-base-200 hover:shadow-xl transition-shadow">
+			<div class="card-body">
+				<div class="w-12 h-12 rounded-full bg-warning/10 flex items-center justify-center mb-3">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-warning">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z" />
+					</svg>
+				</div>
+				<h3 class="card-title text-lg">Waschmittel</h3>
+				<p class="text-sm">
+					Milde Vollwaschmittel ohne Bleiche oder optische Aufheller. Weichspüler sollte vermieden werden.
+				</p>
+				<div class="badge badge-accent mt-2">Chemie beachten</div>
+			</div>
+		</div>
+
+		<div class="card bg-base-200 hover:shadow-xl transition-shadow">
+			<div class="card-body">
+				<div class="w-12 h-12 rounded-full bg-success/10 flex items-center justify-center mb-3">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-success">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M6.633 10.5c.806 0 1.533-.446 2.031-1.08a9.041 9.041 0 012.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 00.322-1.672V3a.75.75 0 01.75-.75A2.25 2.25 0 0116.5 4.5c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 01-2.649 7.521c-.388.482-.987.729-1.605.729H13.48c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 00-1.423-.23H5.904M14.25 9h2.25M5.904 18.75c.083.205.173.405.27.602.197.4-.078.898-.523.898h-.908c-.889 0-1.713-.518-1.972-1.368a12 12 0 01-.521-3.507c0-1.553.295-3.036.831-4.398C3.387 10.203 4.167 9.75 5 9.75h1.053c.472 0 .745.556.5.96a8.958 8.958 0 00-1.302 4.665c0 1.194.232 2.333.654 3.375z" />
+					</svg>
+				</div>
+				<h3 class="card-title text-lg">Nutzungshäufigkeit</h3>
+				<p class="text-sm">
+					Häufiges Tragen und Waschen beansprucht den Druck mehr. Rotation mehrerer Kleidungsstücke verlängert die Gesamtlebensdauer.
+				</p>
+				<div class="badge badge-primary mt-2">Belastung</div>
+			</div>
+		</div>
+	</div>
+
+	<h2>Der optimale Pflegeleitfaden</h2>
+
+	<p>
+		Mit diesen Pflegerichtlinien maximieren Sie die Haltbarkeit Ihrer DTF-Drucke und erhalten brillante Farben über viele Jahre.
+	</p>
+
+	<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 my-8">
+		<div class="card bg-success text-success-content">
+			<div class="card-body">
+				<h3 class="card-title flex items-center gap-2">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+					</svg>
+					Das SOLLTEN Sie tun
+				</h3>
+				<ul class="space-y-3">
+					<li class="flex items-start gap-2">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 mt-0.5 flex-shrink-0">
+							<path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
+						</svg>
+						<span><strong>Linksherum waschen</strong> – Schützt die Druckoberfläche vor direkter Reibung</span>
+					</li>
+					<li class="flex items-start gap-2">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 mt-0.5 flex-shrink-0">
+							<path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
+						</svg>
+						<span><strong>Maximal 40°C</strong> – Ideal sind 30°C für optimale Schonung</span>
+					</li>
+					<li class="flex items-start gap-2">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 mt-0.5 flex-shrink-0">
+							<path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
+						</svg>
+						<span><strong>Schonwaschgang</strong> – Reduziert mechanische Belastung</span>
+					</li>
+					<li class="flex items-start gap-2">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 mt-0.5 flex-shrink-0">
+							<path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
+						</svg>
+						<span><strong>Mildes Waschmittel</strong> – Farbschonendes Vollwaschmittel verwenden</span>
+					</li>
+					<li class="flex items-start gap-2">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 mt-0.5 flex-shrink-0">
+							<path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
+						</svg>
+						<span><strong>An der Luft trocknen</strong> – Am schonendsten für Druck und Textil</span>
+					</li>
+					<li class="flex items-start gap-2">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 mt-0.5 flex-shrink-0">
+							<path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
+						</svg>
+						<span><strong>Vorsichtig bügeln</strong> – Nur auf links, niedrige Stufe, nicht direkt auf dem Druck</span>
+					</li>
+					<li class="flex items-start gap-2">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 mt-0.5 flex-shrink-0">
+							<path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
+						</svg>
+						<span><strong>24h warten nach Transfer</strong> – Vor erster Wäsche Klebstoff vollständig aushärten lassen</span>
+					</li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="card bg-error text-error-content">
+			<div class="card-body">
+				<h3 class="card-title flex items-center gap-2">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+					</svg>
+					Das sollten Sie NICHT tun
+				</h3>
+				<ul class="space-y-3">
+					<li class="flex items-start gap-2">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 mt-0.5 flex-shrink-0">
+							<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd" />
+						</svg>
+						<span><strong>Keine Bleiche</strong> – Greift Farben und Klebstoff an</span>
+					</li>
+					<li class="flex items-start gap-2">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 mt-0.5 flex-shrink-0">
+							<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd" />
+						</svg>
+						<span><strong>Kein Weichspüler</strong> – Hinterlässt Film und schwächt die Haftung</span>
+					</li>
+					<li class="flex items-start gap-2">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 mt-0.5 flex-shrink-0">
+							<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd" />
+						</svg>
+						<span><strong>Keine hohen Temperaturen</strong> – Über 60°C können Schäden verursachen</span>
+					</li>
+					<li class="flex items-start gap-2">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 mt-0.5 flex-shrink-0">
+							<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd" />
+						</svg>
+						<span><strong>Nicht direkt bügeln</strong> – Hitze direkt auf dem Druck vermeiden</span>
+					</li>
+					<li class="flex items-start gap-2">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 mt-0.5 flex-shrink-0">
+							<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd" />
+						</svg>
+						<span><strong>Keine chemische Reinigung</strong> – Lösungsmittel können den Transfer auflösen</span>
+					</li>
+					<li class="flex items-start gap-2">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 mt-0.5 flex-shrink-0">
+							<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd" />
+						</svg>
+						<span><strong>Nicht im Trockner bei Hitze</strong> – Nur kalt oder niedrige Temperatur</span>
+					</li>
+					<li class="flex items-start gap-2">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 mt-0.5 flex-shrink-0">
+							<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd" />
+						</svg>
+						<span><strong>Nicht stark reiben</strong> – Beim Waschen und Trocknen sanft behandeln</span>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<h2>Haltbarkeit nach Textilart</h2>
+
+	<p>
+		Je nach Textilmaterial variiert die Haftung und damit auch die Langlebigkeit leicht. Hier unsere Erfahrungswerte:
+	</p>
+
+	<div class="overflow-x-auto my-8">
+		<table class="table table-zebra">
+			<thead>
+				<tr>
+					<th>Material</th>
+					<th>Haftung</th>
+					<th>Erwartete Haltbarkeit</th>
+					<th>Besonderheiten</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><strong>100% Baumwolle</strong></td>
+					<td><span class="badge badge-success">Ausgezeichnet</span></td>
+					<td>70-100+ Waschzyklen</td>
+					<td>Ideales Material, beste Haftung</td>
+				</tr>
+				<tr>
+					<td><strong>Baumwoll-Mischgewebe</strong></td>
+					<td><span class="badge badge-success">Sehr gut</span></td>
+					<td>60-80 Waschzyklen</td>
+					<td>Abhängig vom Mischverhältnis</td>
+				</tr>
+				<tr>
+					<td><strong>100% Polyester</strong></td>
+					<td><span class="badge badge-success">Sehr gut</span></td>
+					<td>50-70 Waschzyklen</td>
+					<td>Blockout-Transfers empfohlen bei hellen Farben</td>
+				</tr>
+				<tr>
+					<td><strong>Polyester-Mischgewebe</strong></td>
+					<td><span class="badge badge-success">Sehr gut</span></td>
+					<td>50-70 Waschzyklen</td>
+					<td>Gute Elastizität erhält</td>
+				</tr>
+				<tr>
+					<td><strong>Nylon/Spandex</strong></td>
+					<td><span class="badge badge-success">Gut</span></td>
+					<td>40-60 Waschzyklen</td>
+					<td>Flexibel, aber etwas niedrigere Presstemp. nötig</td>
+				</tr>
+				<tr>
+					<td><strong>Canvas</strong></td>
+					<td><span class="badge badge-success">Ausgezeichnet</span></td>
+					<td>80-100+ Waschzyklen</td>
+					<td>Sehr robust, exzellente Haftung</td>
+				</tr>
+				<tr>
+					<td><strong>Leder/Kunstleder</strong></td>
+					<td><span class="badge badge-warning">Mittel</span></td>
+					<td>Nicht waschbar</td>
+					<td>Für dekorative Zwecke, Abwischen möglich</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<h2>Waschzyklus-Test: Was Sie erwarten können</h2>
+
+	<p>
+		Wir führen regelmäßig Belastungstests mit unseren DTF-Transfers durch. Hier die Ergebnisse eines typischen Waschzyklus-Tests unter Standardbedingungen (40°C, Schonwaschgang):
+	</p>
+
+	<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 my-8">
+		<div class="stat bg-base-200 rounded-lg shadow">
+			<div class="stat-figure text-success">
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+			</div>
+			<div class="stat-title">Nach 10 Wäschen</div>
+			<div class="stat-value text-success text-2xl">100%</div>
+			<div class="stat-desc">Wie neu, keine sichtbaren Veränderungen</div>
+		</div>
+
+		<div class="stat bg-base-200 rounded-lg shadow">
+			<div class="stat-figure text-success">
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+			</div>
+			<div class="stat-title">Nach 25 Wäschen</div>
+			<div class="stat-value text-success text-2xl">98%</div>
+			<div class="stat-desc">Minimal, kaum wahrnehmbar</div>
+		</div>
+
+		<div class="stat bg-base-200 rounded-lg shadow">
+			<div class="stat-figure text-info">
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+			</div>
+			<div class="stat-title">Nach 50 Wäschen</div>
+			<div class="stat-value text-info text-2xl">90-95%</div>
+			<div class="stat-desc">Leichte Farbabnahme, noch sehr gut</div>
+		</div>
+
+		<div class="stat bg-base-200 rounded-lg shadow">
+			<div class="stat-figure text-warning">
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
+			</div>
+			<div class="stat-title">Nach 100+ Wäschen</div>
+			<div class="stat-value text-warning text-2xl">80-85%</div>
+			<div class="stat-desc">Vintage-Look, noch tragbar</div>
+		</div>
+	</div>
+
+	<div class="alert alert-info my-8">
+		<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+		<div>
+			<h4 class="font-bold">Testbedingungen</h4>
+			<p class="mb-0">Die Werte basieren auf Tests mit 100% Baumwolle, 40°C Schonwäsche, Lufttrocknung. Bei optimaler Pflege (30°C, seltener waschen) können deutlich höhere Werte erreicht werden. Bei intensiverer Nutzung (60°C, Trockner) können die Werte niedriger ausfallen.</p>
+		</div>
+	</div>
+
+	<h2>Häufige Probleme und Lösungen</h2>
+
+	<div class="join join-vertical w-full my-8">
+		<div class="collapse collapse-arrow join-item border border-base-300">
+			<input type="radio" name="problems-accordion" />
+			<div class="collapse-title text-lg font-medium">
+				Der Transfer löst sich an den Ecken
+			</div>
+			<div class="collapse-content">
+				<div class="space-y-3">
+					<p><strong>Ursache:</strong> Unzureichender Druck oder zu kurze Presszeit, besonders an den Rändern.</p>
+					<p><strong>Lösung:</strong></p>
+					<ul class="list-disc list-inside space-y-1">
+						<li>Presse auf gleichmäßigen Druck prüfen</li>
+						<li>Presszeit auf 18-20 Sekunden erhöhen</li>
+						<li>Nach dem Transfer die Ränder nochmals 5 Sekunden nachpressen</li>
+						<li>Sicherstellen, dass die Presse vollständig geschlossen ist</li>
+					</ul>
+					<p><strong>Prävention:</strong> Immer mit einem Teflon-Sheet abdecken für gleichmäßige Druckverteilung.</p>
+				</div>
+			</div>
+		</div>
+
+		<div class="collapse collapse-arrow join-item border border-base-300">
+			<input type="radio" name="problems-accordion" />
+			<div class="collapse-title text-lg font-medium">
+				Farben verblassen schnell
+			</div>
+			<div class="collapse-content">
+				<div class="space-y-3">
+					<p><strong>Ursache:</strong> Zu heißes Waschen, Bleichmittel oder zu viel direkte Sonneneinstrahlung beim Trocknen.</p>
+					<p><strong>Lösung:</strong></p>
+					<ul class="list-disc list-inside space-y-1">
+						<li>Ausschließlich bei max. 40°C waschen (besser 30°C)</li>
+						<li>Farbwaschmittel ohne Bleiche verwenden</li>
+						<li>Linksherum waschen und trocknen</li>
+						<li>Nicht in direkter Sonne trocknen</li>
+					</ul>
+					<p><strong>Hinweis:</strong> Leichtes Verblassen nach vielen Wäschen ist normal und ergibt einen beliebten Vintage-Look.</p>
+				</div>
+			</div>
+		</div>
+
+		<div class="collapse collapse-arrow join-item border border-base-300">
+			<input type="radio" name="problems-accordion" />
+			<div class="collapse-title text-lg font-medium">
+				Transfer fühlt sich steif an
+			</div>
+			<div class="collapse-content">
+				<div class="space-y-3">
+					<p><strong>Ursache:</strong> Zu viel Hotmelt-Pulver oder zu hohe Presstemperatur.</p>
+					<p><strong>Lösung:</strong></p>
+					<ul class="list-disc list-inside space-y-1">
+						<li>Transfer wird nach erster Wäsche weicher</li>
+						<li>Bei zukünftigen Transfers Temperatur auf 155-160°C reduzieren</li>
+						<li>Dünne Textilien benötigen weniger Hitze</li>
+					</ul>
+					<p><strong>Gut zu wissen:</strong> Nach 2-3 Wäschen erreicht der Transfer seine optimale Weichheit.</p>
+				</div>
+			</div>
+		</div>
+
+		<div class="collapse collapse-arrow join-item border border-base-300">
+			<input type="radio" name="problems-accordion" />
+			<div class="collapse-title text-lg font-medium">
+				Risse im Druckbild
+			</div>
+			<div class="collapse-content">
+				<div class="space-y-3">
+					<p><strong>Ursache:</strong> Zu starkes Dehnen des Textils oder zu hohe Trocknerhitze.</p>
+					<p><strong>Lösung:</strong></p>
+					<ul class="list-disc list-inside space-y-1">
+						<li>Bei elastischen Materialien: Nicht über 150°C pressen</li>
+						<li>Textil nicht überdehnen beim An-/Ausziehen</li>
+						<li>Trockner nur auf niedrigster Stufe oder lufttrocknen</li>
+					</ul>
+					<p><strong>Tipp für Sportswear:</strong> Bei sehr dehnbaren Materialien (>15% Elastan) spezielle Flex-Transferfolien in Betracht ziehen.</p>
+				</div>
+			</div>
+		</div>
+
+		<div class="collapse collapse-arrow join-item border border-base-300">
+			<input type="radio" name="problems-accordion" />
+			<div class="collapse-title text-lg font-medium">
+				Weißer Rand um das Motiv
+			</div>
+			<div class="collapse-content">
+				<div class="space-y-3">
+					<p><strong>Ursache:</strong> Dies ist die weiße Unterlegung und normalerweise Teil des Designs bei dunklen Textilien.</p>
+					<p><strong>Erklärung:</strong></p>
+					<ul class="list-disc list-inside space-y-1">
+						<li>Die weiße Schicht sorgt für leuchtende Farben auf dunklen Stoffen</li>
+						<li>Bei maßgeschneiderten Aufträgen: Kontur kann enger an das Motiv angepasst werden</li>
+						<li>Alternative: Randloser Druck möglich, aber mit geringerer Farbbrillanz</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<h2>Maximale Lebensdauer: Unsere Profi-Tipps</h2>
+
+	<div class="grid grid-cols-1 md:grid-cols-3 gap-6 my-8">
+		<div class="card bg-gradient-to-br from-primary/5 to-primary/10 border border-primary/20">
+			<div class="card-body">
+				<div class="text-4xl mb-2">🔄</div>
+				<h4 class="card-title text-base">Rotation</h4>
+				<p class="text-sm">
+					Wenn Sie mehrere bedruckte Kleidungsstücke haben, rotieren Sie diese. Weniger häufiges Waschen pro Teil verlängert die Gesamtlebensdauer erheblich.
+				</p>
+			</div>
+		</div>
+
+		<div class="card bg-gradient-to-br from-secondary/5 to-secondary/10 border border-secondary/20">
+			<div class="card-body">
+				<div class="text-4xl mb-2">⏰</div>
+				<h4 class="card-title text-base">Wartezeit einhalten</h4>
+				<p class="text-sm">
+					Warten Sie nach dem Transfer mindestens 24 Stunden vor der ersten Wäsche. In dieser Zeit härtet der Klebstoff vollständig aus und erreicht maximale Festigkeit.
+				</p>
+			</div>
+		</div>
+
+		<div class="card bg-gradient-to-br from-accent/5 to-accent/10 border border-accent/20">
+			<div class="card-body">
+				<div class="text-4xl mb-2">🌡️</div>
+				<h4 class="card-title text-base">Kalter Abzug</h4>
+				<p class="text-sm">
+					Ziehen Sie die Transferfolie erst ab, wenn das Textil vollständig abgekühlt ist. Das verhindert Verformungen und sorgt für saubere Kanten.
+				</p>
+			</div>
+		</div>
+
+		<div class="card bg-gradient-to-br from-success/5 to-success/10 border border-success/20">
+			<div class="card-body">
+				<div class="text-4xl mb-2">📦</div>
+				<h4 class="card-title text-base">Richtige Lagerung</h4>
+				<p class="text-sm">
+					Lagern Sie bedruckte Textilien gefaltet oder hängend, nicht gerollt. Vermeiden Sie direkte Sonneneinstrahlung und hohe Temperaturen bei der Lagerung.
+				</p>
+			</div>
+		</div>
+
+		<div class="card bg-gradient-to-br from-warning/5 to-warning/10 border border-warning/20">
+			<div class="card-body">
+				<div class="text-4xl mb-2">💧</div>
+				<h4 class="card-title text-base">Fleckenbehandlung</h4>
+				<p class="text-sm">
+					Behandeln Sie Flecken vorsichtig. Tupfen statt reiben, milde Fleckenentferner verwenden. Aggressive Chemikalien nicht direkt auf den Druck auftragen.
+				</p>
+			</div>
+		</div>
+
+		<div class="card bg-gradient-to-br from-info/5 to-info/10 border border-info/20">
+			<div class="card-body">
+				<div class="text-4xl mb-2">🌀</div>
+				<h4 class="card-title text-base">Schonende Schleuder</h4>
+				<p class="text-sm">
+					Reduzieren Sie die Schleuderdrehzahl auf maximal 800-1000 U/min. Das schont nicht nur den Druck, sondern auch das gesamte Kleidungsstück.
+				</p>
+			</div>
+		</div>
+	</div>
+
+	<div class="card bg-gradient-to-br from-primary to-secondary text-primary-content my-12">
+		<div class="card-body">
+			<h2 class="card-title text-2xl">Fragen zur Haltbarkeit?</h2>
+			<p>
+				Unser Support-Team berät Sie gerne zu allen Aspekten der DTF-Pflege und Haltbarkeit. Wir helfen Ihnen, das Maximum aus Ihren Transfers herauszuholen.
+			</p>
+			<div class="card-actions justify-end mt-4">
+				<a href="/support/" class="btn btn-secondary">Support kontaktieren</a>
+				<a href="/faq/" class="btn btn-ghost">Weitere FAQ</a>
+			</div>
+		</div>
+	</div>
+</CompanyLayout>

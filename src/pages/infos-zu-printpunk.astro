@@ -1,0 +1,580 @@
+---
+import CompanyLayout from '../layouts/CompanyLayout.astro';
+
+const title = 'DTF Tipps & Tricks';
+const description = 'Professionelle Tipps und Tricks für perfekte DTF-Transfers: Design-Optimierung, häufige Fehler vermeiden, Kosten sparen und beste Ergebnisse erzielen.';
+---
+
+<CompanyLayout title={title} description={description}>
+	<h1>{title}</h1>
+
+	<p class="text-neutral/70 text-sm mb-8">
+		Insider-Wissen für perfekte DTF-Drucke – Von Profis für Profis und Einsteiger
+	</p>
+
+	<div class="alert alert-success mb-8">
+		<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+		<span>Diese Seite sammelt jahrelange Erfahrung aus Tausenden von DTF-Projekten. Vermeiden Sie häufige Fehler und erzielen Sie von Anfang an professionelle Ergebnisse.</span>
+	</div>
+
+	<h2>Design-Optimierung für DTF</h2>
+
+	<p>
+		Ein gutes Design ist die Grundlage für einen perfekten Transfer. Mit diesen Tipps optimieren Sie Ihre Dateien für bestmögliche Druckqualität.
+	</p>
+
+	<div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
+		<div class="card bg-base-200">
+			<div class="card-body">
+				<h3 class="card-title">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-success">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+					</svg>
+					Das funktioniert hervorragend
+				</h3>
+				<ul class="space-y-2 text-sm">
+					<li class="flex items-start gap-2">
+						<span class="text-success font-bold">✓</span>
+						<span><strong>Vektorgrafiken</strong> - Logos, Icons skalieren perfekt</span>
+					</li>
+					<li class="flex items-start gap-2">
+						<span class="text-success font-bold">✓</span>
+						<span><strong>Hochauflösende Fotos</strong> - Mind. 300 dpi bei Druckgröße</span>
+					</li>
+					<li class="flex items-start gap-2">
+						<span class="text-success font-bold">✓</span>
+						<span><strong>Klare Konturen</strong> - Saubere Schnittkanten</span>
+					</li>
+					<li class="flex items-start gap-2">
+						<span class="text-success font-bold">✓</span>
+						<span><strong>Kontrastreiche Motive</strong> - Knackige Farben</span>
+					</li>
+					<li class="flex items-start gap-2">
+						<span class="text-success font-bold">✓</span>
+						<span><strong>Transparente PNGs</strong> - Für freie Formen</span>
+					</li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="card bg-base-200">
+			<div class="card-body">
+				<h3 class="card-title">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-warning">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+					</svg>
+					Das sollten Sie vermeiden
+				</h3>
+				<ul class="space-y-2 text-sm">
+					<li class="flex items-start gap-2">
+						<span class="text-error font-bold">✗</span>
+						<span><strong>Niedrige Auflösung</strong> - Pixelige Bilder unter 150 dpi</span>
+					</li>
+					<li class="flex items-start gap-2">
+						<span class="text-error font-bold">✗</span>
+						<span><strong>Zu dünne Linien</strong> - Unter 0,5mm können problematisch sein</span>
+					</li>
+					<li class="flex items-start gap-2">
+						<span class="text-error font-bold">✗</span>
+						<span><strong>Zu kleine Schriften</strong> - Unter 6pt schwer lesbar</span>
+					</li>
+					<li class="flex items-start gap-2">
+						<span class="text-error font-bold">✗</span>
+						<span><strong>Verwaschene Farben</strong> - Zu niedrige Sättigung</span>
+					</li>
+					<li class="flex items-start gap-2">
+						<span class="text-error font-bold">✗</span>
+						<span><strong>Screenshots</strong> - Meist zu niedrige Qualität</span>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<div class="card bg-primary text-primary-content my-6">
+		<div class="card-body">
+			<h4 class="card-title">
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+					<path stroke-linecap="round" stroke-linejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 10-7.517 0c.85.493 1.509 1.333 1.509 2.316V18" />
+				</svg>
+				Profi-Tipp: Farbprofile
+			</h4>
+			<p class="mb-0">
+				Arbeiten Sie in RGB, nicht in CMYK. Wir konvertieren Ihre Datei in unser optimiertes CMYK+White Profil. RGB-Dateien bieten einen größeren Farbraum und bessere Ergebnisse.
+			</p>
+		</div>
+	</div>
+
+	<h2>Die häufigsten Fehler und wie Sie sie vermeiden</h2>
+
+	<div class="space-y-4 my-8">
+		<div class="card bg-gradient-to-r from-error/10 to-error/5 border-l-4 border-error">
+			<div class="card-body">
+				<h4 class="card-title text-error">Fehler #1: Falsche Transfertemperatur</h4>
+				<div class="grid md:grid-cols-2 gap-4">
+					<div>
+						<p class="font-bold text-sm mb-2">Problem:</p>
+						<p class="text-sm">Transfer löst sich oder haftet nicht richtig</p>
+						<p class="font-bold text-sm mb-2 mt-3">Ursache:</p>
+						<p class="text-sm">Temperatur zu niedrig (unter 150°C) oder zu hoch (über 180°C)</p>
+					</div>
+					<div>
+						<p class="font-bold text-sm mb-2">Lösung:</p>
+						<ul class="text-sm space-y-1">
+							<li>✓ Presse auf 160-165°C einstellen</li>
+							<li>✓ Mit Infrarot-Thermometer nachmessen</li>
+							<li>✓ Aufheizzeit abwarten (mind. 15 Min.)</li>
+							<li>✓ Bei empfindlichen Materialien 150°C testen</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="card bg-gradient-to-r from-warning/10 to-warning/5 border-l-4 border-warning">
+			<div class="card-body">
+				<h4 class="card-title text-warning">Fehler #2: Zu wenig oder zu viel Druck</h4>
+				<div class="grid md:grid-cols-2 gap-4">
+					<div>
+						<p class="font-bold text-sm mb-2">Problem:</p>
+						<p class="text-sm">Ungleichmäßige Haftung, Blasen oder Dellen</p>
+						<p class="font-bold text-sm mb-2 mt-3">Ursache:</p>
+						<p class="text-sm">Pressendruck nicht optimal eingestellt</p>
+					</div>
+					<div>
+						<p class="font-bold text-sm mb-2">Lösung:</p>
+						<ul class="text-sm space-y-1">
+							<li>✓ Mittlerer bis fester Druck (4-6 bar ideal)</li>
+							<li>✓ Test mit weißem Papier - sollte nicht verrutschen</li>
+							<li>✓ Gleichmäßige Druckverteilung prüfen</li>
+							<li>✓ Teflon-Sheet für bessere Druckübertragung</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="card bg-gradient-to-r from-info/10 to-info/5 border-l-4 border-info">
+			<div class="card-body">
+				<h4 class="card-title text-info">Fehler #3: Heißer Abzug der Folie</h4>
+				<div class="grid md:grid-cols-2 gap-4">
+					<div>
+						<p class="font-bold text-sm mb-2">Problem:</p>
+						<p class="text-sm">Transfer verzieht sich, Tinte bleibt an Folie kleben</p>
+						<p class="font-bold text-sm mb-2 mt-3">Ursache:</p>
+						<p class="text-sm">Folie wird zu früh abgezogen</p>
+					</div>
+					<div>
+						<p class="font-bold text-sm mb-2">Lösung:</p>
+						<ul class="text-sm space-y-1">
+							<li>✓ IMMER komplett abkühlen lassen (kalter Abzug)</li>
+							<li>✓ Mind. 30 Sekunden warten, besser 1-2 Minuten</li>
+							<li>✓ Folie langsam und gleichmäßig abziehen</li>
+							<li>✓ Bei 45°-Winkel abziehen, nicht senkrecht</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="card bg-gradient-to-r from-secondary/10 to-secondary/5 border-l-4 border-secondary">
+			<div class="card-body">
+				<h4 class="card-title text-secondary">Fehler #4: Verschmutztes Textil</h4>
+				<div class="grid md:grid-cols-2 gap-4">
+					<div>
+						<p class="font-bold text-sm mb-2">Problem:</p>
+						<p class="text-sm">Transfer haftet nicht oder löst sich schnell</p>
+						<p class="font-bold text-sm mb-2 mt-3">Ursache:</p>
+						<p class="text-sm">Weichspüler, Staub oder Feuchtigkeit im Textil</p>
+					</div>
+					<div>
+						<p class="font-bold text-sm mb-2">Lösung:</p>
+						<ul class="text-sm space-y-1">
+							<li>✓ Textil vor Transfer waschen (ohne Weichspüler)</li>
+							<li>✓ 5 Sekunden vorpressen um Feuchtigkeit zu entfernen</li>
+							<li>✓ Fusseln mit Flusenrolle entfernen</li>
+							<li>✓ Nie auf feuchte Textilien transferieren</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<h2>Kostensparen leicht gemacht</h2>
+
+	<p>
+		Mit diesen Tricks optimieren Sie Ihre Projekte und sparen Kosten, ohne Kompromisse bei der Qualität einzugehen.
+	</p>
+
+	<div class="grid grid-cols-1 md:grid-cols-3 gap-6 my-8">
+		<div class="card bg-base-200">
+			<div class="card-body">
+				<div class="text-4xl mb-3">📏</div>
+				<h4 class="card-title text-base">Größe optimieren</h4>
+				<p class="text-sm mb-3">
+					Passen Sie die Motivgröße an die Kleidung an. Nicht jedes Design muss XXL sein. Standard-Größen sind oft günstiger.
+				</p>
+				<div class="stats stats-vertical shadow text-xs">
+					<div class="stat py-2 px-3">
+						<div class="stat-title text-xs">Kleine Brust-Logos</div>
+						<div class="stat-value text-sm">8-12 cm</div>
+					</div>
+					<div class="stat py-2 px-3">
+						<div class="stat-title text-xs">Standard Vorder druck</div>
+						<div class="stat-value text-sm">25-30 cm</div>
+					</div>
+					<div class="stat py-2 px-3">
+						<div class="stat-title text-xs">Großflächig</div>
+						<div class="stat-value text-sm">35-40 cm</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="card bg-base-200">
+			<div class="card-body">
+				<div class="text-4xl mb-3">🎨</div>
+				<h4 class="card-title text-base">Weißanteil bedenken</h4>
+				<p class="text-sm mb-3">
+					Auf hellen Textilien können Sie oft auf die weiße Unterlegung verzichten - spart Material und Kosten.
+				</p>
+				<div class="badge badge-success gap-2">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
+						<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" />
+					</svg>
+					Bis zu 30% günstiger
+				</div>
+			</div>
+		</div>
+
+		<div class="card bg-base-200">
+			<div class="card-body">
+				<div class="text-4xl mb-3">📦</div>
+				<h4 class="card-title text-base">Mengenstaffelung nutzen</h4>
+				<p class="text-sm mb-3">
+					Ab gewissen Stückzahlen sinkt der Preis pro Transfer deutlich. Überlegen Sie, ob eine größere Bestellung sinnvoll ist.
+				</p>
+				<div class="badge badge-primary gap-2">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
+						<path d="M1 1.75A.75.75 0 011.75 1h1.628a1.75 1.75 0 011.734 1.51L5.18 3a65.25 65.25 0 0113.36 1.412.75.75 0 01.58.875 48.645 48.645 0 01-1.618 6.2.75.75 0 01-.712.513H6a2.503 2.503 0 00-2.292 1.5H17.25a.75.75 0 010 1.5H2.76a.75.75 0 01-.748-.807 4.002 4.002 0 012.716-3.486L3.626 2.716a.25.25 0 00-.248-.216H1.75A.75.75 0 011 1.75zM6 17.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15.5 19a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" />
+					</svg>
+					Staffelpreise ab 10 Stk.
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<h2>Expertentipps für spezielle Anwendungen</h2>
+
+	<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 my-8">
+		<div class="card bg-gradient-to-br from-primary/5 to-primary/10 border border-primary/20">
+			<div class="card-body">
+				<h3 class="card-title">
+					<span class="badge badge-primary">Sportbekleidung</span>
+				</h3>
+				<ul class="space-y-2 text-sm">
+					<li class="flex items-start gap-2">
+						<span class="text-primary">→</span>
+						<span>Temperatur auf 150°C reduzieren bei Funktionsmaterialien</span>
+					</li>
+					<li class="flex items-start gap-2">
+						<span class="text-primary">→</span>
+						<span>Kürzere Presszeit (10-12 Sek.) bei Elasthan > 10%</span>
+					</li>
+					<li class="flex items-start gap-2">
+						<span class="text-primary">→</span>
+						<span>Textil leicht vorspannen für bessere Haftung auf dehnbaren Stellen</span>
+					</li>
+					<li class="flex items-start gap-2">
+						<span class="text-primary">→</span>
+						<span>Teflon-Sheet IMMER verwenden zum Schutz des Materials</span>
+					</li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="card bg-gradient-to-br from-secondary/5 to-secondary/10 border border-secondary/20">
+			<div class="card-body">
+				<h3 class="card-title">
+					<span class="badge badge-secondary">Dunkle Textilien</span>
+				</h3>
+				<ul class="space-y-2 text-sm">
+					<li class="flex items-start gap-2">
+						<span class="text-secondary">→</span>
+						<span>Immer ausreichend weiße Unterlegung für leuchtende Farben</span>
+					</li>
+					<li class="flex items-start gap-2">
+						<span class="text-secondary">→</span>
+						<span>2 Sekunden länger pressen für optimale Weißdeckung</span>
+					</li>
+					<li class="flex items-start gap-2">
+						<span class="text-secondary">→</span>
+						<span>Bei sehr dunklen Stoffen Blockout-Transfers in Erwägung ziehen</span>
+					</li>
+					<li class="flex items-start gap-2">
+						<span class="text-secondary">→</span>
+						<span>Test-Transfer auf Stoffrest machen um Weißdeckung zu prüfen</span>
+					</li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="card bg-gradient-to-br from-accent/5 to-accent/10 border border-accent/20">
+			<div class="card-body">
+				<h3 class="card-title">
+					<span class="badge badge-accent">Polyester</span>
+				</h3>
+				<ul class="space-y-2 text-sm">
+					<li class="flex items-start gap-2">
+						<span class="text-accent">→</span>
+						<span>Vorsicht vor Dye-Migration bei hellen Polyesterstoffen</span>
+					</li>
+					<li class="flex items-start gap-2">
+						<span class="text-accent">→</span>
+						<span>Blockout-DTF verwenden um Farbwanderung zu verhindern</span>
+					</li>
+					<li class="flex items-start gap-2">
+						<span class="text-accent">→</span>
+						<span>Niemals über 165°C gehen - Polyester kann schmelzen</span>
+					</li>
+					<li class="flex items-start gap-2">
+						<span class="text-accent">→</span>
+						<span>Kühlzeit verlängern auf 2-3 Minuten</span>
+					</li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="card bg-gradient-to-br from-success/5 to-success/10 border border-success/20">
+			<div class="card-body">
+				<h3 class="card-title">
+					<span class="badge badge-success">Babykleidung</span>
+				</h3>
+				<ul class="space-y-2 text-sm">
+					<li class="flex items-start gap-2">
+						<span class="text-success">→</span>
+						<span>Nur auf Baumwolle oder Bio-Materialien drucken</span>
+					</li>
+					<li class="flex items-start gap-2">
+						<span class="text-success">→</span>
+						<span>Temperaturen eher niedriger (155°C) für empfindliche Stoffe</span>
+					</li>
+					<li class="flex items-start gap-2">
+						<span class="text-success">→</span>
+						<span>Designs kleiner halten (max. 10-15 cm)</span>
+					</li>
+					<li class="flex items-start gap-2">
+						<span class="text-success">→</span>
+						<span>Nach Transfer 48h warten vor erster Wäsche</span>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<h2>Workflow-Optimierung</h2>
+
+	<p>
+		Wenn Sie regelmäßig DTF-Transfers anbringen, hilft ein optimierter Workflow. So arbeiten Sie effizienter:
+	</p>
+
+	<div class="steps steps-vertical lg:steps-horizontal w-full my-8">
+		<li class="step step-primary" data-content="1">Vorbereitung</li>
+		<li class="step step-primary" data-content="2">Positionierung</li>
+		<li class="step step-primary" data-content="3">Transfer</li>
+		<li class="step step-primary" data-content="4">Abkühlung</li>
+		<li class="step step-primary" data-content="5">Kontrolle</li>
+	</div>
+
+	<div class="grid grid-cols-1 md:grid-cols-5 gap-4 my-6">
+		<div class="card bg-base-200 text-center">
+			<div class="card-body">
+				<div class="text-2xl font-bold text-primary">1</div>
+				<h5 class="font-bold text-sm">Vorbereitung</h5>
+				<ul class="text-xs space-y-1 text-left">
+					<li>• Presse vorheizen</li>
+					<li>• Textil vorpressen</li>
+					<li>• Transfer bereitlegen</li>
+					<li>• Werkzeug griffbereit</li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="card bg-base-200 text-center">
+			<div class="card-body">
+				<div class="text-2xl font-bold text-secondary">2</div>
+				<h5 class="font-bold text-sm">Positionierung</h5>
+				<ul class="text-xs space-y-1 text-left">
+					<li>• Maßband nutzen</li>
+					<li>• Mittig ausrichten</li>
+					<li>• Mit Tape fixieren</li>
+					<li>• Doppelt prüfen</li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="card bg-base-200 text-center">
+			<div class="card-body">
+				<div class="text-2xl font-bold text-accent">3</div>
+				<h5 class="font-bold text-sm">Transfer</h5>
+				<ul class="text-xs space-y-1 text-left">
+					<li>• Teflon drüber</li>
+					<li>• 15 Sek. pressen</li>
+					<li>• Gleichmäßig Druck</li>
+					<li>• Timer nutzen</li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="card bg-base-200 text-center">
+			<div class="card-body">
+				<div class="text-2xl font-bold text-warning">4</div>
+				<h5 class="font-bold text-sm">Abkühlung</h5>
+				<ul class="text-xs space-y-1 text-left">
+					<li>• Mind. 30 Sek.</li>
+					<li>• Komplett abkühlen</li>
+					<li>• Langsam abziehen</li>
+					<li>• 45° Winkel</li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="card bg-base-200 text-center">
+			<div class="card-body">
+				<div class="text-2xl font-bold text-success">5</div>
+				<h5 class="font-bold text-sm">Kontrolle</h5>
+				<ul class="text-xs space-y-1 text-left">
+					<li>• Haftung prüfen</li>
+					<li>• Kanten checken</li>
+					<li>• Ev. nachpressen</li>
+					<li>• Qualität sichern</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<h2>Schnelle Problem-Diagnose</h2>
+
+	<div class="overflow-x-auto my-8">
+		<table class="table table-sm">
+			<thead>
+				<tr>
+					<th>Symptom</th>
+					<th>Wahrscheinliche Ursache</th>
+					<th>Schnelle Lösung</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>Transfer haftet nicht</td>
+					<td>Temperatur zu niedrig</td>
+					<td>Auf 165°C erhöhen, nochmals 10 Sek. pressen</td>
+				</tr>
+				<tr>
+					<td>Blasenbildung</td>
+					<td>Feuchtigkeit im Textil</td>
+					<td>Länger vorpressen (10 Sek.), Textil muss trocken sein</td>
+				</tr>
+				<tr>
+					<td>Tinte bleibt an Folie</td>
+					<td>Heißer Abzug</td>
+					<td>IMMER komplett abkühlen lassen (kalt abziehen)</td>
+				</tr>
+				<tr>
+					<td>Farben verblassen sofort</td>
+					<td>Falsche Textilart</td>
+					<td>Nur auf geeigneten Materialien drucken</td>
+				</tr>
+				<tr>
+					<td>Ecken lösen sich</td>
+					<td>Ungleichmäßiger Druck</td>
+					<td>Druck erhöhen, Ränder nachpressen 5 Sek.</td>
+				</tr>
+				<tr>
+					<td>Gelbes Verfärben (Polyester)</td>
+					<td>Zu hohe Temperatur</td>
+					<td>Auf 155°C reduzieren bei Polyester</td>
+				</tr>
+				<tr>
+					<td>Transfer zu steif</td>
+					<td>Zu viel Pulver</td>
+					<td>Normal - wird nach 1-2 Wäschen weicher</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<h2>Die ultimative DTF-Checkliste</h2>
+
+	<div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
+		<div class="card bg-base-200">
+			<div class="card-body">
+				<h4 class="card-title">Vor dem Transfer</h4>
+				<div class="form-control">
+					<label class="label cursor-pointer justify-start gap-3">
+						<input type="checkbox" class="checkbox checkbox-primary checkbox-sm" />
+						<span class="label-text">Presse auf richtige Temperatur vorgeheizt (15 Min.)</span>
+					</label>
+					<label class="label cursor-pointer justify-start gap-3">
+						<input type="checkbox" class="checkbox checkbox-primary checkbox-sm" />
+						<span class="label-text">Textil ist sauber und trocken</span>
+					</label>
+					<label class="label cursor-pointer justify-start gap-3">
+						<input type="checkbox" class="checkbox checkbox-primary checkbox-sm" />
+						<span class="label-text">Textil wurde 5 Sek. vorgepresst</span>
+					</label>
+					<label class="label cursor-pointer justify-start gap-3">
+						<input type="checkbox" class="checkbox checkbox-primary checkbox-sm" />
+						<span class="label-text">Transfer korrekt positioniert</span>
+					</label>
+					<label class="label cursor-pointer justify-start gap-3">
+						<input type="checkbox" class="checkbox checkbox-primary checkbox-sm" />
+						<span class="label-text">Teflon-Sheet bereit</span>
+					</label>
+				</div>
+			</div>
+		</div>
+
+		<div class="card bg-base-200">
+			<div class="card-body">
+				<h4 class="card-title">Nach dem Transfer</h4>
+				<div class="form-control">
+					<label class="label cursor-pointer justify-start gap-3">
+						<input type="checkbox" class="checkbox checkbox-secondary checkbox-sm" />
+						<span class="label-text">Komplett abkühlen lassen (30+ Sek.)</span>
+					</label>
+					<label class="label cursor-pointer justify-start gap-3">
+						<input type="checkbox" class="checkbox checkbox-secondary checkbox-sm" />
+						<span class="label-text">Folie langsam in 45° abgezogen</span>
+					</label>
+					<label class="label cursor-pointer justify-start gap-3">
+						<input type="checkbox" class="checkbox checkbox-secondary checkbox-sm" />
+						<span class="label-text">Haftung an allen Stellen geprüft</span>
+					</label>
+					<label class="label cursor-pointer justify-start gap-3">
+						<input type="checkbox" class="checkbox checkbox-secondary checkbox-sm" />
+						<span class="label-text">Kanten bei Bedarf nachgepresst</span>
+					</label>
+					<label class="label cursor-pointer justify-start gap-3">
+						<input type="checkbox" class="checkbox checkbox-secondary checkbox-sm" />
+						<span class="label-text">24h warten vor erster Wäsche</span>
+					</label>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="card bg-gradient-to-br from-primary to-accent text-primary-content my-12">
+		<div class="card-body">
+			<h2 class="card-title text-2xl">Noch Fragen zu DTF?</h2>
+			<p>
+				Unser Expertenteam steht Ihnen mit Rat und Tat zur Seite. Wir helfen Ihnen gerne bei Design-Optimierung, Materialauswahl und allen technischen Fragen rund um DTF-Transfers.
+			</p>
+			<div class="card-actions justify-end mt-4">
+				<a href="/kontakt/" class="btn btn-secondary">Beratung anfragen</a>
+				<a href="/faq/" class="btn btn-ghost">Weitere FAQ</a>
+			</div>
+		</div>
+	</div>
+</CompanyLayout>

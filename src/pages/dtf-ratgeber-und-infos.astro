@@ -1,0 +1,419 @@
+---
+import CompanyLayout from '../layouts/CompanyLayout.astro';
+
+const title = 'DTF-Ratgeber und Grundlagen';
+const description = 'Alles Wissenswerte über DTF-Druck (Direct to Film): Technologie, Vorteile, Anwendungen und warum DTF die moderne Lösung für Textildruck ist.';
+---
+
+<CompanyLayout title={title} description={description}>
+	<h1>{title}</h1>
+
+	<p class="text-neutral/70 text-sm mb-8">
+		Ihr umfassender Leitfaden zur DTF-Technologie
+	</p>
+
+	<div class="alert alert-info mb-8">
+		<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+		<span><strong>Direct to Film (DTF)</strong> ist eine innovative Drucktechnologie, die die Textilveredelung revolutioniert. In diesem Ratgeber erfahren Sie alles Wichtige über diese zukunftsweisende Technologie.</span>
+	</div>
+
+	<h2>Was ist DTF-Druck?</h2>
+	<p>
+		DTF steht für "Direct to Film" und bezeichnet ein modernes Druckverfahren für Textilien, bei dem das Motiv zunächst auf eine spezielle Transferfolie gedruckt und anschließend mit Heißpressen auf das Textil übertragen wird. Anders als bei herkömmlichen Verfahren ermöglicht DTF höchste Flexibilität, brillante Farben und außergewöhnliche Haltbarkeit.
+	</p>
+
+	<p>
+		Die DTF-Technologie kombiniert die Vorteile verschiedener Druckverfahren: Die Flexibilität des Digitaldrucks, die Haltbarkeit des Siebdrucks und die Farbbrillanz modernster Tinten. Das Ergebnis ist ein Druckverfahren, das nahezu unbegrenzte Gestaltungsmöglichkeiten bei gleichzeitig höchster Qualität bietet.
+	</p>
+
+	<div class="stats stats-vertical lg:stats-horizontal shadow my-8 w-full">
+		<div class="stat">
+			<div class="stat-figure text-primary">
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+			</div>
+			<div class="stat-title">Materialien</div>
+			<div class="stat-value text-primary">100%</div>
+			<div class="stat-desc">Kompatibel mit allen Textilarten</div>
+		</div>
+
+		<div class="stat">
+			<div class="stat-figure text-secondary">
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+			</div>
+			<div class="stat-title">Produktionszeit</div>
+			<div class="stat-value text-secondary">24-48h</div>
+			<div class="stat-desc">Express-Druck verfügbar</div>
+		</div>
+
+		<div class="stat">
+			<div class="stat-figure text-accent">
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+			</div>
+			<div class="stat-title">Haltbarkeit</div>
+			<div class="stat-value text-accent">50+</div>
+			<div class="stat-desc">Waschzyklen bei richtiger Pflege</div>
+		</div>
+	</div>
+
+	<h2>Der DTF-Druckprozess im Detail</h2>
+
+	<h3>1. Digitaldruck auf Spezialfolie</h3>
+	<p>
+		Im ersten Schritt wird das gewünschte Motiv mit speziellen CMYK+White-Tinten auf eine PET-Transferfolie gedruckt. Die weiße Tinte bildet dabei eine Grundierung, die besonders wichtig für dunkle Textilien ist und für leuchtende Farben sorgt.
+	</p>
+
+	<div class="card bg-base-200 my-6">
+		<div class="card-body">
+			<h4 class="card-title text-lg">
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-primary inline">
+					<path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
+				</svg>
+				Technischer Hinweis
+			</h4>
+			<p class="mb-0">
+				DTF-Drucker verwenden speziell entwickelte pigmentbasierte Tinten, die eine hervorragende Farbdeckung und Haltbarkeit auf der Folie gewährleisten. Die Schichtdicke der weißen Untergrundfarbe ist dabei entscheidend für die spätere Farbbrillanz.
+			</p>
+		</div>
+	</div>
+
+	<h3>2. Pulverbeschichtung</h3>
+	<p>
+		Direkt nach dem Druck wird ein spezielles Schmelzpulver (Hotmelt-Adhesive) auf die noch feuchte Tinte aufgetragen. Dieses Pulver bildet später die Verbindung zwischen Folie und Textil. Überschüssiges Pulver wird abgeschüttelt und kann wiederverwendet werden.
+	</p>
+
+	<h3>3. Fixierung durch Trocknung</h3>
+	<p>
+		Die beschichtete Folie durchläuft einen Trocknungs- und Fixierungsprozess, bei dem das Pulver schmilzt und sich mit der Tinte verbindet. Nach dem Aushärten ist der Transfer bereit für die Übertragung.
+	</p>
+
+	<h3>4. Heißpress-Transfer</h3>
+	<p>
+		Mit einer Transferpresse wird der Transfer bei kontrollierten Temperaturen (ca. 150-170°C) und Druck für 10-15 Sekunden auf das Textil übertragen. Der geschmolzene Klebstoff verbindet sich dauerhaft mit den Textilfasern.
+	</p>
+
+	<h3>5. Kaltabzug der Folie</h3>
+	<p>
+		Nach dem Abkühlen wird die Trägerfolie abgezogen. Zurück bleibt ein brillanter, waschfester Druck, der sich weich anfühlt und atmungsaktiv ist.
+	</p>
+
+	<h2>Die Vorteile von DTF gegenüber anderen Verfahren</h2>
+
+	<div class="overflow-x-auto my-8">
+		<table class="table table-zebra">
+			<thead>
+				<tr>
+					<th>Eigenschaft</th>
+					<th>DTF</th>
+					<th>DTG (Direct to Garment)</th>
+					<th>Siebdruck</th>
+					<th>Flex/Flock</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><strong>Materialkompatibilität</strong></td>
+					<td><span class="badge badge-success">Alle Textilien</span></td>
+					<td><span class="badge badge-warning">Nur Baumwolle</span></td>
+					<td><span class="badge badge-success">Alle Textilien</span></td>
+					<td><span class="badge badge-success">Alle Textilien</span></td>
+				</tr>
+				<tr>
+					<td><strong>Mindestmenge</strong></td>
+					<td><span class="badge badge-success">Ab 1 Stück</span></td>
+					<td><span class="badge badge-success">Ab 1 Stück</span></td>
+					<td><span class="badge badge-error">Ab ~50 Stück</span></td>
+					<td><span class="badge badge-success">Ab 1 Stück</span></td>
+				</tr>
+				<tr>
+					<td><strong>Farbvielfalt</strong></td>
+					<td><span class="badge badge-success">Unbegrenzt</span></td>
+					<td><span class="badge badge-success">Unbegrenzt</span></td>
+					<td><span class="badge badge-warning">Begrenzt</span></td>
+					<td><span class="badge badge-error">Sehr begrenzt</span></td>
+				</tr>
+				<tr>
+					<td><strong>Haltbarkeit</strong></td>
+					<td><span class="badge badge-success">Sehr hoch</span></td>
+					<td><span class="badge badge-warning">Mittel</span></td>
+					<td><span class="badge badge-success">Sehr hoch</span></td>
+					<td><span class="badge badge-success">Hoch</span></td>
+				</tr>
+				<tr>
+					<td><strong>Detailgenauigkeit</strong></td>
+					<td><span class="badge badge-success">Sehr hoch</span></td>
+					<td><span class="badge badge-success">Sehr hoch</span></td>
+					<td><span class="badge badge-warning">Mittel</span></td>
+					<td><span class="badge badge-error">Niedrig</span></td>
+				</tr>
+				<tr>
+					<td><strong>Produktionsgeschwindigkeit</strong></td>
+					<td><span class="badge badge-success">Schnell</span></td>
+					<td><span class="badge badge-warning">Mittel</span></td>
+					<td><span class="badge badge-error">Langsam (Setup)</span></td>
+					<td><span class="badge badge-success">Schnell</span></td>
+				</tr>
+				<tr>
+					<td><strong>Fühlt sich an wie</strong></td>
+					<td><span class="badge badge-success">Weich, flexibel</span></td>
+					<td><span class="badge badge-success">Sehr weich</span></td>
+					<td><span class="badge badge-warning">Etwas steif</span></td>
+					<td><span class="badge badge-error">Steif, dick</span></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<h2>Für welche Anwendungen eignet sich DTF?</h2>
+
+	<div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
+		<div class="card bg-base-200">
+			<div class="card-body">
+				<h3 class="card-title">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-primary">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+					</svg>
+					Merchandise & Mode
+				</h3>
+				<ul>
+					<li>T-Shirts und Hoodies</li>
+					<li>Sportbekleidung und Trikots</li>
+					<li>Caps und Mützen</li>
+					<li>Taschen und Accessoires</li>
+					<li>Babykleidung</li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="card bg-base-200">
+			<div class="card-body">
+				<h3 class="card-title">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-secondary">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 00.75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 00-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0112 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 01-.673-.38m0 0A2.18 2.18 0 013 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 013.413-.387m7.5 0V5.25A2.25 2.25 0 0013.5 3h-3a2.25 2.25 0 00-2.25 2.25v.894m7.5 0a48.667 48.667 0 00-7.5 0M12 12.75h.008v.008H12v-.008z" />
+					</svg>
+					Business & Events
+				</h3>
+				<ul>
+					<li>Firmenbekleidung und Corporate Wear</li>
+					<li>Eventshirts und Fanwear</li>
+					<li>Vereinskleidung</li>
+					<li>Promotion-Artikel</li>
+					<li>Arbeitskleidung mit Logo</li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="card bg-base-200">
+			<div class="card-body">
+				<h3 class="card-title">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-accent">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
+					</svg>
+					Kreative Projekte
+				</h3>
+				<ul>
+					<li>Individuelle Designs und Kunstdrucke</li>
+					<li>Fotorealistischer Textildruck</li>
+					<li>Kleinserien und Prototypen</li>
+					<li>Personalisierte Geschenke</li>
+					<li>DIY-Projekte</li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="card bg-base-200">
+			<div class="card-body">
+				<h3 class="card-title">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-warning">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M16.5 18.75h-9m9 0a3 3 0 013 3h-15a3 3 0 013-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 01-.982-3.172M9.497 14.25a7.454 7.454 0 00.981-3.172M5.25 4.236c-.982.143-1.954.317-2.916.52A6.003 6.003 0 007.73 9.728M5.25 4.236V4.5c0 2.108.966 3.99 2.48 5.228M5.25 4.236V2.721C7.456 2.41 9.71 2.25 12 2.25c2.291 0 4.545.16 6.75.47v1.516M7.73 9.728a6.726 6.726 0 002.748 1.35m8.272-6.842V4.5c0 2.108-.966 3.99-2.48 5.228m2.48-5.492a46.32 46.32 0 012.916.52 6.003 6.003 0 01-5.395 4.972m0 0a6.726 6.726 0 01-2.749 1.35m0 0a6.772 6.772 0 01-3.044 0" />
+					</svg>
+					Sport & Performance
+				</h3>
+				<ul>
+					<li>Funktionskleidung mit Logos</li>
+					<li>Teambekleidung</li>
+					<li>Sportswear und Activewear</li>
+					<li>Technische Textilien</li>
+					<li>Outdoor-Bekleidung</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<h2>Welche Materialien können bedruckt werden?</h2>
+	<p>
+		Einer der größten Vorteile von DTF ist die universelle Materialkompatibilität. Anders als DTG (Direct to Garment), das hauptsächlich auf Baumwolle funktioniert, haftet DTF auf nahezu allen Textilarten:
+	</p>
+
+	<div class="grid grid-cols-2 md:grid-cols-4 gap-4 my-6">
+		<div class="badge badge-lg badge-outline gap-2 p-4">
+			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+				<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+			</svg>
+			Baumwolle
+		</div>
+		<div class="badge badge-lg badge-outline gap-2 p-4">
+			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+				<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+			</svg>
+			Polyester
+		</div>
+		<div class="badge badge-lg badge-outline gap-2 p-4">
+			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+				<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+			</svg>
+			Mischgewebe
+		</div>
+		<div class="badge badge-lg badge-outline gap-2 p-4">
+			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+				<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+			</svg>
+			Nylon
+		</div>
+		<div class="badge badge-lg badge-outline gap-2 p-4">
+			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+				<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+			</svg>
+			Spandex
+		</div>
+		<div class="badge badge-lg badge-outline gap-2 p-4">
+			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+				<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+			</svg>
+			Leder
+		</div>
+		<div class="badge badge-lg badge-outline gap-2 p-4">
+			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+				<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+			</svg>
+			Canvas
+		</div>
+		<div class="badge badge-lg badge-outline gap-2 p-4">
+			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+				<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+			</svg>
+			Kunstleder
+		</div>
+	</div>
+
+	<div class="alert alert-warning my-8">
+		<svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+		<div>
+			<h4 class="font-bold">Wichtiger Hinweis zu Polyester</h4>
+			<p class="mb-0">Bei hellen Polyesterstoffen kann es durch die hohen Transfertemperaturen zu leichtem "Dye-Migration" (Farbwanderung) kommen. Für beste Ergebnisse empfehlen wir auf Polyester unsere speziellen Blockout-DTF-Transfers, die eine zusätzliche Sperrschicht enthalten.</p>
+		</div>
+	</div>
+
+	<h2>DTF vs. DTG: Wann ist welches Verfahren besser?</h2>
+	<p>
+		Während DTG (Direct to Garment) direkt auf das Textil druckt, wird bei DTF zunächst auf Folie gedruckt. Beide Verfahren haben ihre Berechtigung:
+	</p>
+
+	<div class="collapse collapse-arrow bg-base-200 mb-4">
+		<input type="radio" name="comparison-accordion" checked />
+		<div class="collapse-title text-xl font-medium">
+			Wählen Sie DTF, wenn...
+		</div>
+		<div class="collapse-content">
+			<ul>
+				<li>Sie auf verschiedenen Materialien drucken möchten (besonders Polyester, Mischgewebe)</li>
+				<li>Sie dunkle oder farbige Textilien bedrucken wollen</li>
+				<li>Sie höchste Waschbeständigkeit benötigen</li>
+				<li>Sie Transfers auf Vorrat produzieren möchten</li>
+				<li>Sie flexible Positionierung des Motivs wünschen</li>
+				<li>Sie auch kleinere Mengen wirtschaftlich produzieren wollen</li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="collapse collapse-arrow bg-base-200 mb-4">
+		<input type="radio" name="comparison-accordion" />
+		<div class="collapse-title text-xl font-medium">
+			Wählen Sie DTG, wenn...
+		</div>
+		<div class="collapse-content">
+			<ul>
+				<li>Sie ausschließlich auf weißer oder heller Baumwolle drucken</li>
+				<li>Sie den absolut weichsten Griff bevorzugen</li>
+				<li>Sie Vintage- oder Distressed-Looks erzielen möchten</li>
+				<li>Sie sofortige Produktion ohne Transferprozess benötigen</li>
+			</ul>
+		</div>
+	</div>
+
+	<h2>Häufig gestellte Fragen zu DTF</h2>
+
+	<div class="join join-vertical w-full my-8">
+		<div class="collapse collapse-arrow join-item border border-base-300">
+			<input type="radio" name="faq-accordion" />
+			<div class="collapse-title text-lg font-medium">
+				Wie lange hält ein DTF-Druck?
+			</div>
+			<div class="collapse-content">
+				<p>Bei richtiger Pflege und Anwendung hält ein DTF-Druck über 50 Waschzyklen. Viele unserer Kunden berichten von deutlich längerer Haltbarkeit. Die Langlebigkeit hängt von Faktoren wie Waschtemperatur, Waschmittel und Trocknungsart ab.</p>
+			</div>
+		</div>
+
+		<div class="collapse collapse-arrow join-item border border-base-300">
+			<input type="radio" name="faq-accordion" />
+			<div class="collapse-title text-lg font-medium">
+				Fühlt sich DTF steif oder schwer an?
+			</div>
+			<div class="collapse-content">
+				<p>Nein, moderne DTF-Transfers sind weich und flexibel. Die Schichtstärke ist minimal (ca. 0,1-0,2mm) und der Transfer bewegt sich mit dem Stoff. Im Vergleich zu Flex- oder Flock-Transfers ist DTF deutlich angenehmer zu tragen und atmungsaktiver.</p>
+			</div>
+		</div>
+
+		<div class="collapse collapse-arrow join-item border border-base-300">
+			<input type="radio" name="faq-accordion" />
+			<div class="collapse-title text-lg font-medium">
+				Kann ich DTF-Transfers selbst aufbringen?
+			</div>
+			<div class="collapse-content">
+				<p>Ja! DTF-Transfers sind einfach anzubringen. Sie benötigen lediglich eine Transferpresse oder ein hochwertiges Bügeleisen. Wir liefern detaillierte Anleitungen mit jedem Auftrag. Professionelle Ergebnisse erzielen Sie am besten mit einer Transferpresse bei konstanten 160°C für 15 Sekunden.</p>
+			</div>
+		</div>
+
+		<div class="collapse collapse-arrow join-item border border-base-300">
+			<input type="radio" name="faq-accordion" />
+			<div class="collapse-title text-lg font-medium">
+				Gibt es Mindestbestellmengen?
+			</div>
+			<div class="collapse-content">
+				<p>Nein! Bei DTF können Sie bereits ab einem Stück bestellen. Das macht DTF ideal für Prototypen, Einzelstücke oder Kleinserien. Natürlich profitieren Sie bei größeren Mengen von attraktiven Staffelpreisen.</p>
+			</div>
+		</div>
+
+		<div class="collapse collapse-arrow join-item border border-base-300">
+			<input type="radio" name="faq-accordion" />
+			<div class="collapse-title text-lg font-medium">
+				Wie detailliert können DTF-Drucke sein?
+			</div>
+			<div class="collapse-content">
+				<p>DTF ermöglicht extrem feine Details und Auflösungen bis zu 1200 dpi. Kleine Texte (ab ca. 6pt), filigrane Linien und fotorealistische Bilder sind problemlos möglich. Die digitale Drucktechnologie erlaubt präziseste Wiedergabe Ihrer Designs.</p>
+			</div>
+		</div>
+
+		<div class="collapse collapse-arrow join-item border border-base-300">
+			<input type="radio" name="faq-accordion" />
+			<div class="collapse-title text-lg font-medium">
+				Können auch weiße oder transparente Designs gedruckt werden?
+			</div>
+			<div class="collapse-content">
+				<p>Ja, absolut! Die weiße Untergrundfarbe beim DTF-Druck ermöglicht brillante weiße Drucke auch auf dunklen Textilien. Transparente oder halbtransparente Effekte sind ebenfalls möglich durch Anpassung der Deckschicht.</p>
+			</div>
+		</div>
+	</div>
+
+	<div class="card bg-primary text-primary-content my-12">
+		<div class="card-body">
+			<h2 class="card-title text-2xl">Bereit für Ihr DTF-Projekt?</h2>
+			<p>
+				Ob Einzelstück oder Großserie – wir beraten Sie gerne zu Ihrem individuellen DTF-Druckprojekt. Unser Expertenteam hilft Ihnen bei der Auswahl des richtigen Verfahrens und erstellt Ihnen ein unverbindliches Angebot.
+			</p>
+			<div class="card-actions justify-end mt-4">
+				<a href="/kontakt/" class="btn btn-secondary">Jetzt beraten lassen</a>
+				<a href="/products/" class="btn btn-ghost">Produkte ansehen</a>
+			</div>
+		</div>
+	</div>
+</CompanyLayout>

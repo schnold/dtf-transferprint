@@ -122,6 +122,10 @@ export const auth = betterAuth({
         type: "boolean",
         defaultValue: true,
       },
+      isAdmin: {
+        type: "boolean",
+        defaultValue: false,
+      },
     },
   },
 
