@@ -154,6 +154,9 @@ export interface CartItemWithDetails {
   unitPrice: number;
   currentPrice: number;
   customOptions?: any;
+  uploadedFileUrl?: string;
+  uploadedFileName?: string;
+  fileMetadata?: any;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -232,6 +235,9 @@ export interface OrderItem {
   unitPrice: number;
   totalPrice: number;
   customOptions?: any;
+  uploadedFileUrl?: string;
+  uploadedFileName?: string;
+  fileMetadata?: any;
   createdAt: Date;
 }
 
@@ -636,15 +642,19 @@ export async function createOrder(
       await client.query(`
         INSERT INTO "orderItems" (
           id, "orderId", "productId", "productName", sku,
-          quantity, "unitPrice", "totalPrice", "customOptions"
+          quantity, "unitPrice", "totalPrice", "customOptions",
+          "uploadedFileUrl", "uploadedFileName", "fileMetadata"
         ) VALUES (
-          gen_random_uuid()::text, $1, $2, $3, $4, $5, $6, $7, $8
+          gen_random_uuid()::text, $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11
         )
       `, [
         order.id, item.productId, productResult.rows[0].name,
         productResult.rows[0].sku, item.quantity,
         item.unitPrice, parseFloat(item.unitPrice) * item.quantity,
-        item.customOptions
+        item.customOptions,
+        item.uploadedFileUrl || null,
+        item.uploadedFileName || null,
+        item.fileMetadata || null
       ]);
 
       await client.query(`

@@ -170,7 +170,7 @@ const relatedProducts = relatedProductsResult.rows.map(p => ({
 	<Navbar />
 
 	<!-- Breadcrumbs -->
-	<div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl pt-8 pb-6">
+	<div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl lg:max-w-7xl-extended pt-8 pb-6">
 		<nav class="flex items-center gap-2 text-sm text-neutral/60">
 			<a href="/" class="hover:text-primary transition-colors">Startseite</a>
 			<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -185,7 +185,7 @@ const relatedProducts = relatedProductsResult.rows.map(p => ({
 	</div>
 
 	<!-- Main Product Section -->
-	<div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl pb-32">
+	<div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl lg:max-w-7xl-extended pb-32">
 		<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 mb-32">
 			<!-- Left Column: Product Gallery -->
 			<div class="lg:sticky lg:top-24 lg:self-start">
@@ -230,7 +230,7 @@ const relatedProducts = relatedProductsResult.rows.map(p => ({
 
 				<!-- Price Tiers Table (if available) - Moved up -->
 				{priceTiers.rows.length > 0 && (
-					<div class="bg-gradient-to-br from-success/5 to-primary/5 rounded-xl p-4 border border-success/20">
+					<div class="product-container rounded-xl p-4">
 						<div class="mb-3">
 							<h3 class="text-base font-bold text-neutral mb-1 flex items-center gap-2">
 								<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -289,7 +289,7 @@ const relatedProducts = relatedProductsResult.rows.map(p => ({
 				)}
 
 				<!-- File Upload Section (always visible) -->
-				<div class="bg-gradient-to-br from-primary/5 to-secondary/5 rounded-xl p-4 border border-primary/20 space-y-3">
+				<div class="product-container rounded-xl p-4 space-y-3">
 					<h3 class="text-base font-bold text-neutral flex items-center gap-2">
 						<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
@@ -297,16 +297,85 @@ const relatedProducts = relatedProductsResult.rows.map(p => ({
 						Design hochladen
 					</h3>
 					<p class="text-xs text-neutral/60">
-						Laden Sie Ihre Designdatei hoch für individuelle Anfertigung
+						Laden Sie Ihre Designdatei (PDF oder PNG) für individuelle Anfertigung hoch. Die Datei wird beim Hinzufügen zum Warenkorb gespeichert.
 					</p>
+
+					<!-- File Upload Input -->
 					<input
 						type="file"
 						id="designFileUpload"
-						accept=".pdf,.png,.jpg,.jpeg,.ai,.eps,.svg"
+						accept=".pdf,.png,application/pdf,image/png"
 						class="file-input file-input-bordered file-input-primary w-full file-input-sm"
 					/>
+
+					<!-- Upload Progress -->
+					<div id="upload-progress" class="hidden">
+						<div class="alert alert-info py-2">
+							<span class="loading loading-spinner loading-xs"></span>
+							<span class="text-xs">Datei wird hochgeladen und analysiert...</span>
+						</div>
+					</div>
+
+					<!-- Upload Error -->
+					<div id="upload-error" class="hidden">
+						<div class="alert alert-error py-2">
+							<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+							</svg>
+							<span class="text-xs" id="upload-error-message"></span>
+						</div>
+					</div>
+
+					<!-- Quality Warnings -->
+					<div id="quality-warnings" class="hidden space-y-2">
+					</div>
+
+					<!-- File Preview -->
+					<div id="file-preview" class="hidden bg-base-100 rounded-lg p-3 border border-base-300">
+						<!-- Image Preview (for PNG) -->
+						<div id="image-preview-container" class="hidden mb-3">
+							<div class="relative aspect-video bg-base-200 rounded-lg overflow-hidden">
+								<img id="image-preview" src="" alt="Preview" class="w-full h-full object-contain" />
+							</div>
+						</div>
+
+						<!-- PDF Preview (for PDF) -->
+						<div id="pdf-preview-container" class="hidden mb-3">
+							<div class="relative aspect-video bg-base-200 rounded-lg overflow-hidden flex items-center justify-center">
+								<canvas id="pdf-canvas" class="max-w-full max-h-full"></canvas>
+								<div id="pdf-loading" class="absolute inset-0 flex items-center justify-center bg-base-200/80">
+									<span class="loading loading-spinner loading-lg"></span>
+								</div>
+							</div>
+						</div>
+
+						<!-- File Info -->
+						<div class="flex items-center gap-3">
+							<div class="flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center" id="file-icon">
+								<!-- Icon will be set by script -->
+							</div>
+							<div class="flex-1 min-w-0">
+								<p class="text-sm font-medium text-neutral truncate" id="file-name">
+									Keine Datei hochgeladen
+								</p>
+								<p class="text-xs text-neutral/60" id="file-info">0 MB</p>
+							</div>
+							<button
+								type="button"
+								id="remove-file-btn"
+								class="btn btn-ghost btn-xs btn-circle"
+								title="Datei entfernen"
+							>
+								<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+								</svg>
+							</button>
+						</div>
+					</div>
+
 					<p class="text-xs text-neutral/50">
-						Erlaubt: PDF, PNG, JPG, AI, EPS, SVG • Max: 255MB
+						<strong>PDF oder PNG</strong> • Max: 255MB • Empfohlen: 300 DPI<br/>
+						Die Datei wird beim Hinzufügen zum Warenkorb automatisch mit Ihrer Bestellung verknüpft.
 					</p>
 				</div>
 
@@ -320,7 +389,7 @@ const relatedProducts = relatedProductsResult.rows.map(p => ({
 
 				<!-- Product Files (if public files available) -->
 				{productFiles.rows.length > 0 && (
-					<div class="bg-base-200/30 rounded-xl p-4 border border-base-300">
+					<div class="product-container rounded-xl p-4">
 						<h3 class="text-base font-bold text-neutral mb-3 flex items-center gap-2">
 							<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-info" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
@@ -364,7 +433,7 @@ const relatedProducts = relatedProductsResult.rows.map(p => ({
 
 				<!-- Custom Dimensions (if applicable) -->
 				{product.maxWidthMm && (
-					<div class="bg-base-200/30 rounded-xl p-4 space-y-3">
+					<div class="product-container rounded-xl p-4 space-y-3">
 						<h3 class="text-base font-bold text-neutral">📏 Abmessungen</h3>
 						<div class="grid grid-cols-2 gap-3">
 							<div>
@@ -487,4 +556,334 @@ const relatedProducts = relatedProductsResult.rows.map(p => ({
 			</div>
 		</div>
 	</section>
+
+	<!-- PDF.js Library -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+	<script>
+		// Set PDF.js worker
+		(window as any).pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+	</script>
+
+	<!-- Design File Upload Script -->
+	<script define:vars={{ productId: product.id }}>
+		// Track uploaded file info
+		let uploadedFileInfo: {
+			fileUrl: string;
+			fileName: string;
+			fileSize: number;
+			fileType: string;
+			metadata?: any;
+		} | null = null;
+
+		const fileInput = document.getElementById('designFileUpload') as HTMLInputElement;
+		const uploadProgress = document.getElementById('upload-progress');
+		const uploadError = document.getElementById('upload-error');
+		const uploadErrorMessage = document.getElementById('upload-error-message');
+		const qualityWarnings = document.getElementById('quality-warnings');
+		const filePreview = document.getElementById('file-preview');
+		const imagePreviewContainer = document.getElementById('image-preview-container');
+		const imagePreview = document.getElementById('image-preview') as HTMLImageElement;
+		const pdfPreviewContainer = document.getElementById('pdf-preview-container');
+		const pdfCanvas = document.getElementById('pdf-canvas') as HTMLCanvasElement;
+		const pdfLoading = document.getElementById('pdf-loading');
+		const fileIcon = document.getElementById('file-icon');
+		const fileName = document.getElementById('file-name');
+		const fileInfo = document.getElementById('file-info');
+		const removeFileBtn = document.getElementById('remove-file-btn');
+
+		// Handle file selection
+		if (fileInput) {
+			fileInput.addEventListener('change', async (e) => {
+				const target = e.target as HTMLInputElement;
+				const file = target.files?.[0];
+
+				if (!file) return;
+
+				// Validate file type (PDF or PNG)
+				const fileType = file.type.toLowerCase();
+				const fileName = file.name.toLowerCase();
+				if (!((fileType === 'application/pdf' || fileName.endsWith('.pdf')) ||
+				      (fileType === 'image/png' || fileName.endsWith('.png')))) {
+					showError('Nur PDF oder PNG-Dateien sind erlaubt.');
+					target.value = '';
+					return;
+				}
+
+				// Validate file size (255MB max)
+				const maxSizeMB = 255;
+				const maxSizeBytes = maxSizeMB * 1024 * 1024;
+				if (file.size > maxSizeBytes) {
+					showError(`Die Datei ist zu groß. Maximal ${maxSizeMB}MB erlaubt.`);
+					target.value = '';
+					return;
+				}
+
+				// Upload file
+				await uploadDesignFile(file);
+			});
+		}
+
+		// Upload design file to R2
+		async function uploadDesignFile(file: File) {
+			// Hide previous errors and warnings
+			if (uploadError) uploadError.classList.add('hidden');
+			if (qualityWarnings) {
+				qualityWarnings.classList.add('hidden');
+				qualityWarnings.innerHTML = '';
+			}
+
+			// Show progress
+			if (uploadProgress) uploadProgress.classList.remove('hidden');
+
+			try {
+				const formData = new FormData();
+				formData.append('file', file);
+				formData.append('productId', productId);
+
+				const response = await fetch('/api/upload/design-file', {
+					method: 'POST',
+					body: formData,
+				});
+
+				const result = await response.json();
+
+				if (result.success) {
+					// Store uploaded file info
+					uploadedFileInfo = {
+						fileUrl: result.data.fileUrl,
+						fileName: result.data.fileName,
+						fileSize: result.data.fileSize,
+						fileType: result.data.fileType,
+						metadata: result.data.metadata,
+					};
+
+					// Show preview
+					await showPreview(file, result.data);
+
+					// Show quality warnings
+					if (result.data.metadata?.warnings && result.data.metadata.warnings.length > 0) {
+						showQualityWarnings(result.data.metadata.warnings, result.data.metadata.meetsRequirements);
+					}
+
+					// Store in sessionStorage so it persists across page navigations
+					sessionStorage.setItem('uploadedDesignFile', JSON.stringify(uploadedFileInfo));
+				} else {
+					throw new Error(result.error.message);
+				}
+			} catch (error: any) {
+				console.error('Upload error:', error);
+				showError(error.message || 'Fehler beim Hochladen der Datei');
+				if (fileInput) fileInput.value = '';
+			} finally {
+				// Hide progress
+				if (uploadProgress) uploadProgress.classList.add('hidden');
+			}
+		}
+
+		// Show preview
+		async function showPreview(file: File, data: any) {
+			if (!filePreview) return;
+
+			// Show preview container
+			filePreview.classList.remove('hidden');
+
+			// Determine file type
+			const isImage = data.fileType === 'png';
+			const isPdf = data.fileType === 'pdf';
+
+			// Show appropriate preview
+			if (isImage) {
+				if (imagePreviewContainer && imagePreview) {
+					imagePreviewContainer.classList.remove('hidden');
+					pdfPreviewContainer?.classList.add('hidden');
+
+					// Load image preview
+					const reader = new FileReader();
+					reader.onload = (e) => {
+						imagePreview.src = e.target?.result as string;
+					};
+					reader.readAsDataURL(file);
+
+					// Set icon
+					if (fileIcon) {
+						fileIcon.className = 'flex-shrink-0 w-10 h-10 bg-success/10 rounded-lg flex items-center justify-center';
+						fileIcon.innerHTML = `
+							<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+							</svg>
+						`;
+					}
+				}
+			} else if (isPdf) {
+				if (pdfPreviewContainer && pdfCanvas) {
+					pdfPreviewContainer.classList.remove('hidden');
+					imagePreviewContainer?.classList.add('hidden');
+
+					// Load PDF preview
+					const fileReader = new FileReader();
+					fileReader.onload = async function(e) {
+						const typedarray = new Uint8Array(e.target?.result as ArrayBuffer);
+
+						try {
+							const pdf = await (window as any).pdfjsLib.getDocument(typedarray).promise;
+							const page = await pdf.getPage(1);
+
+							const viewport = page.getViewport({ scale: 1.5 });
+							pdfCanvas.height = viewport.height;
+							pdfCanvas.width = viewport.width;
+
+							const renderContext = {
+								canvasContext: pdfCanvas.getContext('2d'),
+								viewport: viewport
+							};
+
+							await page.render(renderContext).promise;
+							if (pdfLoading) pdfLoading.classList.add('hidden');
+						} catch (error) {
+							console.error('Error rendering PDF:', error);
+							if (pdfLoading) pdfLoading.classList.add('hidden');
+						}
+					};
+					fileReader.readAsArrayBuffer(file);
+
+					// Set icon
+					if (fileIcon) {
+						fileIcon.className = 'flex-shrink-0 w-10 h-10 bg-error/10 rounded-lg flex items-center justify-center';
+						fileIcon.innerHTML = `
+							<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-error" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+							</svg>
+						`;
+					}
+				}
+			}
+
+			// Update file info
+			if (fileName) fileName.textContent = data.fileName;
+			if (fileInfo) {
+				const sizeMB = (data.fileSize / 1024 / 1024).toFixed(2);
+				let infoText = `${sizeMB} MB`;
+
+				if (data.metadata?.width && data.metadata?.height) {
+					infoText += ` • ${data.metadata.width}x${data.metadata.height}px`;
+				}
+				if (data.metadata?.dpi) {
+					infoText += ` • ${data.metadata.dpi} DPI`;
+				}
+
+				fileInfo.textContent = infoText;
+			}
+		}
+
+		// Show quality warnings
+		function showQualityWarnings(warnings: string[], meetsRequirements: boolean) {
+			if (!qualityWarnings) return;
+
+			qualityWarnings.innerHTML = '';
+			qualityWarnings.classList.remove('hidden');
+
+			warnings.forEach((warning) => {
+				const isSuccess = warning.startsWith('✓');
+				const alertClass = isSuccess ? 'alert-success' : (meetsRequirements ? 'alert-warning' : 'alert-error');
+
+				const alertDiv = document.createElement('div');
+				alertDiv.className = `alert ${alertClass} py-2`;
+				alertDiv.innerHTML = `
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						${isSuccess
+							? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />'
+							: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />'
+						}
+					</svg>
+					<span class="text-xs">${warning}</span>
+				`;
+				qualityWarnings.appendChild(alertDiv);
+			});
+		}
+
+		// Show error
+		function showError(message: string) {
+			if (uploadError) uploadError.classList.remove('hidden');
+			if (uploadErrorMessage) uploadErrorMessage.textContent = message;
+
+			// Auto-hide after 5 seconds
+			setTimeout(() => {
+				if (uploadError) uploadError.classList.add('hidden');
+			}, 5000);
+		}
+
+		// Remove uploaded file
+		if (removeFileBtn) {
+			removeFileBtn.addEventListener('click', () => {
+				// Clear uploaded file info
+				uploadedFileInfo = null;
+				sessionStorage.removeItem('uploadedDesignFile');
+
+				// Hide preview and warnings
+				if (filePreview) filePreview.classList.add('hidden');
+				if (qualityWarnings) {
+					qualityWarnings.classList.add('hidden');
+					qualityWarnings.innerHTML = '';
+				}
+
+				// Clear file input
+				if (fileInput) fileInput.value = '';
+			});
+		}
+
+		// Restore uploaded file from sessionStorage on page load
+		document.addEventListener('DOMContentLoaded', () => {
+			const storedFile = sessionStorage.getItem('uploadedDesignFile');
+			if (storedFile) {
+				try {
+					uploadedFileInfo = JSON.parse(storedFile);
+					if (uploadedFileInfo) {
+						// Can't fully restore preview without original file, but show info
+						if (filePreview && fileName && fileInfo) {
+							filePreview.classList.remove('hidden');
+							fileName.textContent = uploadedFileInfo.fileName;
+							const sizeMB = (uploadedFileInfo.fileSize / 1024 / 1024).toFixed(2);
+							fileInfo.textContent = `${sizeMB} MB`;
+
+							// Set appropriate icon
+							if (fileIcon) {
+								if (uploadedFileInfo.fileType === 'png') {
+									fileIcon.className = 'flex-shrink-0 w-10 h-10 bg-success/10 rounded-lg flex items-center justify-center';
+									fileIcon.innerHTML = `
+										<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+										</svg>
+									`;
+								} else {
+									fileIcon.className = 'flex-shrink-0 w-10 h-10 bg-error/10 rounded-lg flex items-center justify-center';
+									fileIcon.innerHTML = `
+										<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-error" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+										</svg>
+									`;
+								}
+							}
+						}
+					}
+				} catch (error) {
+					console.error('Error restoring uploaded file:', error);
+					sessionStorage.removeItem('uploadedDesignFile');
+				}
+			}
+		});
+
+		// Make uploadedFileInfo available to ProductActions component
+		(window as any).getUploadedFileInfo = () => uploadedFileInfo;
+
+		// Listen for cart add event to clear the upload UI
+		window.addEventListener('designFileAddedToCart', () => {
+			uploadedFileInfo = null;
+			if (filePreview) filePreview.classList.add('hidden');
+			if (qualityWarnings) {
+				qualityWarnings.classList.add('hidden');
+				qualityWarnings.innerHTML = '';
+			}
+			if (fileInput) fileInput.value = '';
+		});
+	</script>
 </Layout>

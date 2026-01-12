@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import Navbar from '../../components/Navbar.astro';
 import { getUserOrders } from '../../lib/db';
 
 const user = Astro.locals.user;
@@ -23,8 +24,10 @@ const activeTab = url.searchParams.get('tab') || 'orders';
 ---
 
 <Layout title="Mein Konto - DTF Transfer Print">
-  <div class="min-h-screen bg-gradient-to-br from-base-200 via-base-100 to-base-200 py-8 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-7xl mx-auto">
+  <div class="min-h-screen">
+    <Navbar />
+    <div class="py-8 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl lg:max-w-7xl-extended mx-auto">
       <!-- Header -->
       <div class="mb-8">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -364,6 +367,7 @@ const activeTab = url.searchParams.get('tab') || 'orders';
         </div>
       </div>
     </div>
+  </div>
   </div>
 </Layout>
 

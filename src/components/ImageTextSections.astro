@@ -25,7 +25,7 @@ const { sections } = Astro.props;
 ---
 
 <section class="py-24 bg-base-100 overflow-x-visible">
-	<div class="container mx-auto px-4 sm:px-6 lg:px-0 max-w-7xl space-y-32 overflow-x-visible">
+	<div class="container mx-auto px-4 sm:px-6 lg:px-0 max-w-7xl lg:max-w-7xl-extended space-y-32 overflow-x-visible">
 		{sections.map((section, index) => {
 			// Automatically alternate: first left, second right, third left, etc.
 			const align = index % 2 === 0 ? 'left' : 'right';

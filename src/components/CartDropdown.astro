@@ -38,7 +38,7 @@ const formatPrice = (price: number) => {
 	<div class="dropdown dropdown-end cart-dropdown relative">
 		<button
 			tabindex="0"
-			class={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all duration-200 cursor-pointer relative ${hasCartItems ? 'border-orange-400 hover:bg-orange-50' : 'border-accent hover:bg-accent/10'}`}
+			class={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all duration-200 cursor-pointer relative ${hasCartItems ? 'border-orange-400' : 'border-accent'}`}
 			aria-label="Shopping cart"
 			id="cart-icon-button"
 		>
@@ -64,51 +64,57 @@ const formatPrice = (price: number) => {
 								</svg>
 								Warenkorb
 							</h3>
-							<span class="badge badge-primary" id="cart-item-count">{cartItems.length}</span>
 						</div>
 					</div>
 
 					<!-- Cart Items -->
 					<div class="overflow-y-auto flex-1 p-4 space-y-3" id="cart-items-container">
 						{cartItems.map((item) => (
-							<div class="cart-item flex gap-3 p-3 bg-base-200/30 rounded-lg hover:bg-base-200/50 transition-colors" data-cart-item-id={item.id}>
+							<div class="cart-item relative flex gap-3 p-3 bg-base-200/30 rounded-lg border border-base-300/50 transition-colors" data-cart-item-id={item.id}>
 								<!-- Product Image -->
-								<div class="flex-shrink-0 w-16 h-16 bg-base-300 rounded-lg overflow-hidden">
-									{item.productImage ? (
-										<img src={item.productImage} alt={item.productName} class="w-full h-full object-cover" />
-									) : (
-										<div class="w-full h-full flex items-center justify-center text-neutral/20">
-											<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-												<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-											</svg>
-										</div>
-									)}
+								<div class="flex-shrink-0">
+									<div class="w-16 h-16 bg-base-300 rounded-lg overflow-hidden">
+										{item.productImage ? (
+											<img src={item.productImage} alt={item.productName} class="w-full h-full object-cover" />
+										) : (
+											<div class="w-full h-full flex items-center justify-center text-neutral/20">
+												<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+													<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+												</svg>
+											</div>
+										)}
+									</div>
 								</div>
 
 								<!-- Product Info -->
-								<div class="flex-1 min-w-0">
-									<a href={`/product/${item.productSlug}`} class="text-sm font-medium text-neutral hover:text-primary transition-colors line-clamp-2">
+								<div class="flex-1 min-w-0 flex flex-col">
+									<a href={`/product/${item.productSlug}`} class="text-sm font-medium text-neutral hover:text-primary transition-colors line-clamp-2 mb-1">
 										{item.productName}
 									</a>
-									<div class="flex items-center gap-2 mt-1">
+									<!-- Price with Savings right beside it -->
+									<div class="flex items-center gap-2 flex-wrap">
 										<span class="text-xs text-neutral/60">Stückpreis:</span>
 										<span class="text-sm font-semibold text-primary cart-item-unit-price" data-cart-item-id={item.id}>{formatPrice(item.unitPrice)}</span>
+										{item.currentSavings > 0 && (
+											<span class="savings-indicator text-xs text-success flex items-center gap-1">
+												<svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+													<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+												</svg>
+												Sie sparen {formatPrice(item.currentSavings)}
+											</span>
+										)}
 									</div>
-									
-									<!-- Current savings indicator -->
-									{item.currentSavings > 0 && (
-										<div class="savings-indicator text-xs text-success mt-1 flex items-center gap-1">
-											<svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-												<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-											</svg>
-											Sie sparen {formatPrice(item.currentSavings)}
-										</div>
-									)}
-									
-									<!-- Quantity Controls -->
-									<div class="flex items-center gap-2 mt-2">
+								</div>
+
+								<!-- Item Total with Quantity Selector Below -->
+								<div class="flex-shrink-0 text-right flex flex-col items-end">
+									<div class="text-sm font-bold text-neutral cart-item-total mb-1">
+										{formatPrice(item.unitPrice * item.quantity)}
+									</div>
+									<!-- Quantity Controls under total price -->
+									<div class="flex items-center gap-1">
 										<button 
-											class="quantity-decrease btn btn-xs btn-ghost text-neutral/70 hover:text-primary"
+											class="quantity-decrease btn btn-xs btn-ghost p-0.5 h-5 w-5 min-h-0 text-neutral/70 hover:text-primary"
 											data-cart-item-id={item.id}
 											aria-label="Menge verringern"
 										>
@@ -116,9 +122,9 @@ const formatPrice = (price: number) => {
 												<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
 											</svg>
 										</button>
-										<span class="cart-item-quantity text-sm font-medium px-2">{item.quantity}</span>
+										<span class="cart-item-quantity text-xs font-medium px-1 min-w-[1.5rem] text-center">{item.quantity}</span>
 										<button 
-											class="quantity-increase btn btn-xs btn-ghost text-neutral/70 hover:text-primary"
+											class="quantity-increase btn btn-xs btn-ghost p-0.5 h-5 w-5 min-h-0 text-neutral/70 hover:text-primary"
 											data-cart-item-id={item.id}
 											aria-label="Menge erhöhen"
 										>
@@ -126,24 +132,19 @@ const formatPrice = (price: number) => {
 												<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
 											</svg>
 										</button>
-										<button 
-											class="remove-item btn btn-xs btn-ghost text-error hover:bg-error/10 ml-auto"
-											data-cart-item-id={item.id}
-											aria-label="Entfernen"
-										>
-											<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-												<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-											</svg>
-										</button>
 									</div>
 								</div>
 
-								<!-- Item Total -->
-								<div class="flex-shrink-0 text-right">
-									<div class="text-sm font-bold text-neutral cart-item-total">
-										{formatPrice(item.unitPrice * item.quantity)}
-									</div>
-								</div>
+								<!-- Delete button at bottom right -->
+								<button 
+									class="remove-item absolute bottom-2 right-2 btn btn-sm btn-ghost h-7 w-7 min-h-0 p-1 text-error hover:bg-error/10"
+									data-cart-item-id={item.id}
+									aria-label="Entfernen"
+								>
+									<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+									</svg>
+								</button>
 							</div>
 						))}
 					</div>
@@ -188,7 +189,7 @@ const formatPrice = (price: number) => {
 	<!-- Not logged in - redirect to login when clicking cart -->
 	<button
 		id="cart-login-prompt"
-		class="w-8 h-8 rounded-full border border-neutral/30 flex items-center justify-center hover:border-neutral/50 hover:bg-white/10 transition-all duration-200 cursor-pointer"
+		class="w-8 h-8 rounded-full border border-neutral/30 flex items-center justify-center transition-all duration-200 cursor-pointer"
 		aria-label="Shopping cart - Login required"
 	>
 		<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 text-neutral/80">
@@ -252,138 +253,121 @@ const formatPrice = (price: number) => {
 		}).format(price);
 	};
 
-	const updateCartUI = async () => {
-		try {
-			const response = await fetch('/api/cart/get');
-			const result = await response.json();
-
-			if (result.success) {
-				const { items, count, subtotal } = result.data;
-
-				// Update cart count badge
-				const cartCountBadge = document.getElementById('cart-count-badge');
-				const cartItemCount = document.getElementById('cart-item-count');
-				const cartIconButton = document.getElementById('cart-icon-button');
-				
-				if (count > 0) {
-					if (cartCountBadge) {
-						cartCountBadge.textContent = count.toString();
-						cartCountBadge.style.display = 'flex';
-					} else {
-						// Create badge if it doesn't exist
-						if (cartIconButton) {
-							const newBadge = document.createElement('span');
-							newBadge.id = 'cart-count-badge';
-							newBadge.className = 'absolute -top-2 -right-2 bg-orange-500 text-white text-xs font-bold rounded-full min-w-[1.25rem] h-5 px-1 flex items-center justify-center shadow-md';
-							newBadge.textContent = count.toString();
-							cartIconButton.appendChild(newBadge);
-						}
-					}
-					if (cartItemCount) {
-						cartItemCount.textContent = count.toString();
-					}
-					
-					// Update cart icon styling
-					if (cartIconButton) {
-						cartIconButton.classList.remove('border-accent', 'hover:bg-accent/10');
-						cartIconButton.classList.add('border-orange-400', 'hover:bg-orange-50');
-						
-						const svgIcon = cartIconButton.querySelector('svg');
-						if (svgIcon) {
-							svgIcon.classList.remove('text-accent');
-							svgIcon.classList.add('text-orange-600');
-						}
-					}
-				} else {
-					if (cartCountBadge) {
-						cartCountBadge.style.display = 'none';
-					}
-					
-					// Update cart icon styling to default
-					if (cartIconButton) {
-						cartIconButton.classList.remove('border-orange-400', 'hover:bg-orange-50');
-						cartIconButton.classList.add('border-accent', 'hover:bg-accent/10');
-						
-						const svgIcon = cartIconButton.querySelector('svg');
-						if (svgIcon) {
-							svgIcon.classList.remove('text-orange-600');
-							svgIcon.classList.add('text-accent');
-						}
-					}
-				}
-
-				// Update subtotal
-				const cartSubtotal = document.getElementById('cart-subtotal');
-				if (cartSubtotal) {
-					cartSubtotal.textContent = formatPrice(subtotal);
-				}
-
-				// Dispatch event for other components
-				window.dispatchEvent(new CustomEvent('cartUpdated', { detail: { count, items, subtotal } }));
-			}
-		} catch (error) {
-			console.error('Error updating cart UI:', error);
-		}
+	// Escape HTML to prevent XSS
+	const escapeHtml = (text: string) => {
+		const div = document.createElement('div');
+		div.textContent = text;
+		return div.innerHTML;
 	};
 
-	const updateCartItemQuantity = async (cartItemId: string, newQuantity: number) => {
-		try {
-			const response = await fetch('/api/cart/update', {
-				method: 'PUT',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ cartItemId, quantity: newQuantity }),
-			});
+	// Render a single cart item
+	const renderCartItem = (item: any) => {
+		const savingsHtml = item.currentSavings > 0 
+			? `<span class="savings-indicator text-xs text-success flex items-center gap-1">
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+					</svg>
+					Sie sparen ${formatPrice(item.currentSavings)}
+				</span>`
+			: '';
 
-			const result = await response.json();
+		const imageHtml = item.productImage
+			? `<img src="${escapeHtml(item.productImage)}" alt="${escapeHtml(item.productName)}" class="w-full h-full object-cover" />`
+			: `<div class="w-full h-full flex items-center justify-center text-neutral/20">
+					<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+					</svg>
+				</div>`;
 
-			if (result.success) {
-				if (newQuantity === 0) {
-					// Remove item from UI
-					const itemElement = document.querySelector(`.cart-item[data-cart-item-id="${cartItemId}"]`);
-					if (itemElement) {
-						itemElement.remove();
-					}
-				} else {
-					// Reload page to show updated prices and quantities
-					window.location.reload();
-				}
-			} else {
-				alert(result.error?.message || 'Fehler beim Aktualisieren des Warenkorbs');
-			}
-		} catch (error) {
-			console.error('Error updating cart item:', error);
-			alert('Fehler beim Aktualisieren des Warenkorbs');
-		}
+		return `
+			<div class="cart-item relative flex gap-3 p-3 bg-base-200/30 rounded-lg border border-base-300/50 transition-colors" data-cart-item-id="${escapeHtml(item.id)}">
+				<!-- Product Image -->
+				<div class="flex-shrink-0">
+					<div class="w-16 h-16 bg-base-300 rounded-lg overflow-hidden">
+						${imageHtml}
+					</div>
+				</div>
+
+				<!-- Product Info -->
+				<div class="flex-1 min-w-0 flex flex-col">
+					<a href="/product/${escapeHtml(item.productSlug)}" class="text-sm font-medium text-neutral hover:text-primary transition-colors line-clamp-2 mb-1">
+						${escapeHtml(item.productName)}
+					</a>
+					<!-- Price with Savings right beside it -->
+					<div class="flex items-center gap-2 flex-wrap">
+						<span class="text-xs text-neutral/60">Stückpreis:</span>
+						<span class="text-sm font-semibold text-primary cart-item-unit-price" data-cart-item-id="${escapeHtml(item.id)}">${formatPrice(item.unitPrice)}</span>
+						${savingsHtml}
+					</div>
+				</div>
+
+				<!-- Item Total with Quantity Selector Below -->
+				<div class="flex-shrink-0 text-right flex flex-col items-end">
+					<div class="text-sm font-bold text-neutral cart-item-total mb-1">
+						${formatPrice(item.unitPrice * item.quantity)}
+					</div>
+					<!-- Quantity Controls under total price -->
+					<div class="flex items-center gap-1">
+						<button 
+							class="quantity-decrease btn btn-xs btn-ghost p-0.5 h-5 w-5 min-h-0 text-neutral/70 hover:text-primary"
+							data-cart-item-id="${escapeHtml(item.id)}"
+							aria-label="Menge verringern"
+						>
+							<svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
+							</svg>
+						</button>
+						<span class="cart-item-quantity text-xs font-medium px-1 min-w-[1.5rem] text-center">${item.quantity}</span>
+						<button 
+							class="quantity-increase btn btn-xs btn-ghost p-0.5 h-5 w-5 min-h-0 text-neutral/70 hover:text-primary"
+							data-cart-item-id="${escapeHtml(item.id)}"
+							aria-label="Menge erhöhen"
+						>
+							<svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+							</svg>
+						</button>
+					</div>
+				</div>
+
+				<!-- Delete button at bottom right -->
+				<button 
+					class="remove-item absolute bottom-2 right-2 btn btn-sm btn-ghost h-7 w-7 min-h-0 p-1 text-error hover:bg-error/10"
+					data-cart-item-id="${escapeHtml(item.id)}"
+					aria-label="Entfernen"
+				>
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+					</svg>
+				</button>
+			</div>
+		`;
 	};
 
-	const removeCartItem = async (cartItemId: string) => {
-		if (!confirm('Möchten Sie diesen Artikel wirklich entfernen?')) {
+	// Re-render all cart items
+	const renderCartItems = (items: any[]) => {
+		const container = document.getElementById('cart-items-container');
+		if (!container) {
+			// If container doesn't exist (empty cart initially), we might need to reload
+			// But for now, just return - the page will show empty state from server
 			return;
 		}
 
-		try {
-			const response = await fetch('/api/cart/remove', {
-				method: 'DELETE',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ cartItemId }),
-			});
-
-			const result = await response.json();
-
-			if (result.success) {
-				// Reload page to show updated cart
-				window.location.reload();
-			} else {
-				alert(result.error?.message || 'Fehler beim Entfernen des Artikels');
-			}
-		} catch (error) {
-			console.error('Error removing cart item:', error);
-			alert('Fehler beim Entfernen des Artikels');
+		if (items.length === 0) {
+			// If cart becomes empty, reload to show empty state
+			// This is simpler than dynamically showing/hiding the empty state structure
+			window.location.reload();
+			return;
 		}
+
+		container.innerHTML = items.map(item => renderCartItem(item)).join('');
+		
+		// Re-attach event listeners
+		attachCartItemListeners();
 	};
 
-	// Event listeners
-	document.addEventListener('DOMContentLoaded', () => {
+	// Attach event listeners to cart items
+	const attachCartItemListeners = () => {
 		// Quantity decrease buttons
 		document.querySelectorAll('.quantity-decrease').forEach((button) => {
 			button.addEventListener('click', (e) => {
@@ -425,6 +409,136 @@ const formatPrice = (price: number) => {
 				removeCartItem(cartItemId);
 			});
 		});
+	};
+
+	const updateCartUI = async () => {
+		try {
+			const response = await fetch('/api/cart/get');
+			const result = await response.json();
+
+			if (result.success) {
+				const { items, count, subtotal } = result.data;
+
+				// Update cart count badge
+				const cartCountBadge = document.getElementById('cart-count-badge');
+				const cartIconButton = document.getElementById('cart-icon-button');
+				
+				if (count > 0) {
+					if (cartCountBadge) {
+						cartCountBadge.textContent = count.toString();
+						cartCountBadge.style.display = 'flex';
+					} else {
+						// Create badge if it doesn't exist
+						if (cartIconButton) {
+							const newBadge = document.createElement('span');
+							newBadge.id = 'cart-count-badge';
+							newBadge.className = 'absolute -top-2 -right-2 bg-orange-500 text-white text-xs font-bold rounded-full min-w-[1.25rem] h-5 px-1 flex items-center justify-center shadow-md';
+							newBadge.textContent = count.toString();
+							cartIconButton.appendChild(newBadge);
+						}
+					}
+					
+					// Update cart icon styling
+					if (cartIconButton) {
+						cartIconButton.classList.remove('border-accent');
+						cartIconButton.classList.add('border-orange-400');
+						
+						const svgIcon = cartIconButton.querySelector('svg');
+						if (svgIcon) {
+							svgIcon.classList.remove('text-accent');
+							svgIcon.classList.add('text-orange-600');
+						}
+					}
+
+					// Re-render cart items
+					renderCartItems(items);
+				} else {
+					if (cartCountBadge) {
+						cartCountBadge.style.display = 'none';
+					}
+					
+					// Update cart icon styling to default
+					if (cartIconButton) {
+						cartIconButton.classList.remove('border-orange-400');
+						cartIconButton.classList.add('border-accent');
+						
+						const svgIcon = cartIconButton.querySelector('svg');
+						if (svgIcon) {
+							svgIcon.classList.remove('text-orange-600');
+							svgIcon.classList.add('text-accent');
+						}
+					}
+
+					// Clear cart items
+					renderCartItems([]);
+				}
+
+				// Update subtotal
+				const cartSubtotal = document.getElementById('cart-subtotal');
+				if (cartSubtotal) {
+					cartSubtotal.textContent = formatPrice(subtotal);
+				}
+
+				// Dispatch event for other components
+				window.dispatchEvent(new CustomEvent('cartUpdated', { detail: { count, items, subtotal } }));
+			}
+		} catch (error) {
+			console.error('Error updating cart UI:', error);
+		}
+	};
+
+	const updateCartItemQuantity = async (cartItemId: string, newQuantity: number) => {
+		try {
+			const response = await fetch('/api/cart/update', {
+				method: 'PUT',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ cartItemId, quantity: newQuantity }),
+			});
+
+			const result = await response.json();
+
+			if (result.success) {
+				// Update cart UI without page reload
+				await updateCartUI();
+			} else {
+				alert(result.error?.message || 'Fehler beim Aktualisieren des Warenkorbs');
+			}
+		} catch (error) {
+			console.error('Error updating cart item:', error);
+			alert('Fehler beim Aktualisieren des Warenkorbs');
+		}
+	};
+
+	const removeCartItem = async (cartItemId: string) => {
+		if (!confirm('Möchten Sie diesen Artikel wirklich entfernen?')) {
+			return;
+		}
+
+		try {
+			const response = await fetch('/api/cart/remove', {
+				method: 'DELETE',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ cartItemId }),
+			});
+
+			const result = await response.json();
+
+			if (result.success) {
+				// Update cart UI without page reload
+				await updateCartUI();
+			} else {
+				alert(result.error?.message || 'Fehler beim Entfernen des Artikels');
+			}
+		} catch (error) {
+			console.error('Error removing cart item:', error);
+			alert('Fehler beim Entfernen des Artikels');
+		}
+	};
+
+	// Event listeners
+	document.addEventListener('DOMContentLoaded', () => {
+		// Attach initial event listeners
+		attachCartItemListeners();
 
 		// Login prompt for non-authenticated users
 		const cartLoginPrompt = document.getElementById('cart-login-prompt');
@@ -436,10 +550,9 @@ const formatPrice = (price: number) => {
 	});
 
 	// Listen for cart updates from other parts of the app
-	window.addEventListener('cartItemAdded', () => {
-		// Reload the page to show new items in cart dropdown
-		// This ensures all items are visible immediately
-		window.location.reload();
+	window.addEventListener('cartItemAdded', async () => {
+		// Update cart UI without page reload
+		await updateCartUI();
 	});
 	
 	// Also listen for page load to ensure cart is up to date

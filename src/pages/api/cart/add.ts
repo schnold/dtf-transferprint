@@ -10,7 +10,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
   try {
     const body = await request.json();
-    const { productId, quantity, widthMm, heightMm, uploadedFileUrl, uploadedFileName } = body;
+    const { productId, quantity, widthMm, heightMm, uploadedFileUrl, uploadedFileName, fileMetadata } = body;
 
     // Debug logging
     console.log('[CART ADD] locals.user:', locals.user);
@@ -146,10 +146,11 @@ export const POST: APIRoute = async ({ request, locals }) => {
         "heightMm",
         "uploadedFileUrl",
         "uploadedFileName",
+        "fileMetadata",
         "customOptions"
       ) VALUES (
         gen_random_uuid()::text,
-        $1, $2, $3, $4, $5, $6, $7, $8, $9
+        $1, $2, $3, $4, $5, $6, $7, $8, $9, $10
       )
       RETURNING *
     `,
@@ -162,6 +163,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
         heightMm || null,
         uploadedFileUrl || null,
         uploadedFileName || null,
+        fileMetadata ? JSON.stringify(fileMetadata) : null,
         JSON.stringify(customOptions),
       ]
     );

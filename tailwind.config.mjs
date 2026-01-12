@@ -7,6 +7,9 @@ export default {
         sans: ['DM Sans', 'Inter', 'system-ui', 'sans-serif'],
         body: ['Inter', 'DM Sans', 'system-ui', 'sans-serif'],
       },
+      maxWidth: {
+        '7xl-extended': '101.2rem', // 26.5% larger than max-w-7xl (80rem * 1.15 * 1.10 = 101.2rem)
+      },
     },
   },
   plugins: [require('daisyui')],
