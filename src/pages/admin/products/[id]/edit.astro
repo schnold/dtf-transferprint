@@ -1,0 +1,798 @@
+---
+import AdminLayout from '@/layouts/AdminLayout.astro';
+import { pool } from '@/lib/db';
+import ProductImageUpload from '@/components/ProductImageUpload.astro';
+
+// Note: Admin check is handled by middleware.ts
+const { id } = Astro.params;
+
+// Fetch product
+const client = await pool.connect();
+try {
+  var productResult = await client.query('SELECT * FROM products WHERE id = $1', [id]);
+
+  if (productResult.rows.length === 0) {
+    return Astro.redirect('/admin/products');
+  }
+
+  var product = productResult.rows[0];
+
+  // Fetch categories for dropdown
+  var categories = await client.query(`
+    SELECT * FROM categories
+    WHERE "isActive" = true
+    ORDER BY "displayOrder"
+  `);
+
+  // Fetch price tiers
+  var priceTiers = await client.query(`
+    SELECT * FROM "priceTiers"
+    WHERE "productId" = $1
+    ORDER BY "displayOrder"
+  `, [id]);
+
+  // Fetch product images
+  var productImages = await client.query(`
+    SELECT id, url, "altText", "isPrimary", "displayOrder"
+    FROM "productImages"
+    WHERE "productId" = $1
+    ORDER BY "displayOrder"
+  `, [id]);
+
+  // Fetch product specifications
+  var productSpecs = await client.query(`
+    SELECT id, "specKey", "specLabel", "specValue", "displayOrder"
+    FROM "productSpecifications"
+    WHERE "productId" = $1
+    ORDER BY "displayOrder"
+  `, [id]);
+} finally {
+  client.release();
+}
+---
+
+<AdminLayout title={`Edit: ${product.name}`} currentPage="products">
+  <!-- Page Header -->
+  <div class="flex items-center justify-between mb-6">
+    <div class="flex items-center gap-3">
+      <a href="/admin/products" class="btn btn-ghost btn-sm">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+      </a>
+      <div>
+        <h2 class="text-2xl font-bold text-base-content">Edit Product</h2>
+        <p class="text-sm text-base-content/60">{product.name}</p>
+      </div>
+    </div>
+    <div class="flex gap-2">
+      <a href={`/product/${product.slug}`} target="_blank" class="btn btn-ghost btn-sm gap-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+        </svg>
+        View Product
+      </a>
+      <button id="deleteBtn" class="btn btn-error btn-sm">Delete</button>
+    </div>
+  </div>
+
+  <!-- Tabbed Interface -->
+  <div class="bg-base-100 rounded-lg shadow-sm">
+    <!-- Tabs -->
+    <div role="tablist" class="tabs tabs-bordered tabs-lg border-b border-base-300">
+      <input type="radio" name="product_tabs" role="tab" class="tab" aria-label="Basic Info" checked />
+      <div role="tabpanel" class="tab-content p-6">
+        <form id="productForm" class="space-y-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Product Name -->
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text font-medium">Product Name</span>
+                <span class="label-text-alt text-error">*</span>
+              </label>
+              <input type="text" name="name" required class="input input-bordered" value={product.name} />
+            </div>
+
+            <!-- Slug -->
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text font-medium">URL Slug</span>
+                <span class="label-text-alt text-error">*</span>
+              </label>
+              <input type="text" name="slug" required class="input input-bordered" value={product.slug} />
+            </div>
+
+            <!-- Category -->
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text font-medium">Category</span>
+                <span class="label-text-alt text-error">*</span>
+              </label>
+              <select name="categoryId" required class="select select-bordered">
+                <option value="">Select category...</option>
+                {categories.rows.map((cat) => (
+                  <option value={cat.id} selected={cat.id === product.categoryId}>{cat.name}</option>
+                ))}
+              </select>
+            </div>
+
+            <!-- SKU -->
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text font-medium">SKU</span>
+              </label>
+              <input type="text" name="sku" class="input input-bordered" value={product.sku || ''} placeholder="Optional" />
+            </div>
+          </div>
+
+          <!-- Short Description -->
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text font-medium">Short Description</span>
+              <span class="label-text-alt text-error">*</span>
+            </label>
+            <textarea name="shortDescription" required class="textarea textarea-bordered h-20" placeholder="Brief description for product cards">{product.shortDescription}</textarea>
+          </div>
+
+          <!-- Full Description -->
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text font-medium">Full Description</span>
+              <span class="label-text-alt text-error">*</span>
+            </label>
+            <textarea name="description" required class="textarea textarea-bordered h-32" placeholder="Detailed product description">{product.description}</textarea>
+          </div>
+
+          <!-- Status Toggles -->
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 p-4 bg-base-200 rounded-lg">
+            <div class="form-control">
+              <label class="label cursor-pointer justify-start gap-3">
+                <input type="checkbox" name="isActive" class="toggle toggle-success" checked={product.isActive} />
+                <span class="label-text font-medium">Active</span>
+              </label>
+            </div>
+            <div class="form-control">
+              <label class="label cursor-pointer justify-start gap-3">
+                <input type="checkbox" name="isFeatured" class="toggle toggle-info" checked={product.isFeatured} />
+                <span class="label-text font-medium">Featured</span>
+              </label>
+            </div>
+            <div class="form-control">
+              <label class="label cursor-pointer justify-start gap-3">
+                <input type="checkbox" name="trackInventory" class="toggle toggle-warning" checked={product.trackInventory} />
+                <span class="label-text font-medium">Track Stock</span>
+              </label>
+            </div>
+            <div class="form-control">
+              <label class="label cursor-pointer justify-start gap-3">
+                <input type="checkbox" name="requiresShipping" class="toggle" checked={product.requiresShipping} />
+                <span class="label-text font-medium">Requires Shipping</span>
+              </label>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <input type="radio" name="product_tabs" role="tab" class="tab" aria-label="Pricing" />
+      <div role="tabpanel" class="tab-content p-6">
+        <div class="space-y-6">
+          <!-- Base Pricing -->
+          <div>
+            <h3 class="text-lg font-semibold mb-4">Base Pricing</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div class="form-control">
+                <label class="label">
+                  <span class="label-text font-medium">Base Price (€)</span>
+                  <span class="label-text-alt text-error">*</span>
+                </label>
+                <input type="number" name="basePrice" step="0.01" required class="input input-bordered" value={parseFloat(product.basePrice)} />
+              </div>
+
+              <div class="form-control">
+                <label class="label">
+                  <span class="label-text font-medium">Compare Price (€)</span>
+                </label>
+                <input type="number" name="compareAtPrice" step="0.01" class="input input-bordered" value={product.compareAtPrice ? parseFloat(product.compareAtPrice) : ''} placeholder="Original price" />
+              </div>
+
+              <div class="form-control">
+                <label class="label">
+                  <span class="label-text font-medium">Calculation Method</span>
+                </label>
+                <select name="priceCalculationMethod" class="select select-bordered">
+                  <option value="per_piece" selected={product.priceCalculationMethod === 'per_piece'}>Per Piece</option>
+                  <option value="per_meter" selected={product.priceCalculationMethod === 'per_meter'}>Per Meter</option>
+                  <option value="per_area" selected={product.priceCalculationMethod === 'per_area'}>Per Area (m²)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <!-- Price Tiers -->
+          <div>
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="text-lg font-semibold">Price Tiers</h3>
+              <button type="button" id="addTierBtn" class="btn btn-sm btn-primary">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                </svg>
+                Add Tier
+              </button>
+            </div>
+
+            <div id="priceTiersContainer" class="space-y-3">
+              {priceTiers.rows.length > 0 ? (
+                priceTiers.rows.map((tier, index) => (
+                  <div class="tier-row p-4 bg-base-200 rounded-lg">
+                    <div class="grid grid-cols-5 gap-3">
+                      <div class="form-control">
+                        <label class="label"><span class="label-text text-xs">Min Qty</span></label>
+                        <input type="number" name="tier_minQty[]" value={tier.minQuantity} required class="input input-sm input-bordered" />
+                      </div>
+                      <div class="form-control">
+                        <label class="label"><span class="label-text text-xs">Max Qty</span></label>
+                        <input type="number" name="tier_maxQty[]" value={tier.maxQuantity || ''} class="input input-sm input-bordered" placeholder="∞" />
+                      </div>
+                      <div class="form-control">
+                        <label class="label"><span class="label-text text-xs">Discount %</span></label>
+                        <input type="number" name="tier_discount[]" value={parseFloat(tier.discountPercent)} step="0.01" required class="input input-sm input-bordered" />
+                      </div>
+                      <div class="form-control">
+                        <label class="label"><span class="label-text text-xs">Price (€)</span></label>
+                        <input type="number" name="tier_price[]" value={parseFloat(tier.pricePerUnit)} step="0.01" required class="input input-sm input-bordered" />
+                      </div>
+                      <div class="form-control">
+                        <label class="label"><span class="label-text text-xs">Order</span></label>
+                        <div class="join w-full">
+                          <input type="number" name="tier_order[]" value={tier.displayOrder} required class="input input-sm input-bordered join-item flex-1" />
+                          <button type="button" class="btn btn-sm btn-error join-item remove-tier">×</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div class="tier-row p-4 bg-base-200 rounded-lg">
+                  <div class="grid grid-cols-5 gap-3">
+                    <div class="form-control">
+                      <label class="label"><span class="label-text text-xs">Min Qty</span></label>
+                      <input type="number" name="tier_minQty[]" value="0" required class="input input-sm input-bordered" />
+                    </div>
+                    <div class="form-control">
+                      <label class="label"><span class="label-text text-xs">Max Qty</span></label>
+                      <input type="number" name="tier_maxQty[]" class="input input-sm input-bordered" placeholder="∞" />
+                    </div>
+                    <div class="form-control">
+                      <label class="label"><span class="label-text text-xs">Discount %</span></label>
+                      <input type="number" name="tier_discount[]" value="0" step="0.01" required class="input input-sm input-bordered" />
+                    </div>
+                    <div class="form-control">
+                      <label class="label"><span class="label-text text-xs">Price (€)</span></label>
+                      <input type="number" name="tier_price[]" value={parseFloat(product.basePrice)} step="0.01" required class="input input-sm input-bordered" />
+                    </div>
+                    <div class="form-control">
+                      <label class="label"><span class="label-text text-xs">Order</span></label>
+                      <div class="join w-full">
+                        <input type="number" name="tier_order[]" value="1" required class="input input-sm input-bordered join-item flex-1" />
+                        <button type="button" class="btn btn-sm btn-error join-item remove-tier">×</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <input type="radio" name="product_tabs" role="tab" class="tab" aria-label="Images" />
+      <div role="tabpanel" class="tab-content p-6">
+        <ProductImageUpload productId={id} existingImages={productImages.rows} />
+      </div>
+
+      <input type="radio" name="product_tabs" role="tab" class="tab" aria-label="DTF Settings" />
+      <div role="tabpanel" class="tab-content p-6">
+        <div class="space-y-6">
+          <!-- DTF Type -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="form-control">
+              <label class="label cursor-pointer justify-start gap-3">
+                <input type="checkbox" name="isBlockout" class="toggle toggle-primary" checked={product.isBlockout} />
+                <div>
+                  <span class="label-text font-medium">Blockout Product</span>
+                  <p class="text-xs text-base-content/60">Special blockout DTF transfer</p>
+                </div>
+              </label>
+            </div>
+
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text font-medium">Print Technology</span>
+              </label>
+              <input type="text" name="printTechnology" value={product.printTechnology || 'DTF'} class="input input-bordered" />
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <!-- File Upload Settings -->
+          <div class="form-control">
+            <label class="label cursor-pointer justify-start gap-3">
+              <input type="checkbox" id="acceptsFileUpload" name="acceptsFileUpload" class="toggle toggle-secondary" checked={product.acceptsFileUpload} />
+              <div>
+                <span class="label-text font-medium">Accepts File Upload</span>
+                <p class="text-xs text-base-content/60">Allow customers to upload design files</p>
+              </div>
+            </label>
+          </div>
+
+          <div id="fileUploadSettings" class={product.acceptsFileUpload ? 'space-y-4' : 'hidden space-y-4'}>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="form-control">
+                <label class="label">
+                  <span class="label-text font-medium">Max File Size (MB)</span>
+                </label>
+                <input type="number" name="maxFileSizeMb" value={product.maxFileSizeMb || 255} class="input input-bordered" />
+              </div>
+
+              <div class="form-control">
+                <label class="label">
+                  <span class="label-text font-medium">Allowed File Types</span>
+                </label>
+                <input type="text" name="allowedFileTypes" value={product.allowedFileTypes || 'PDF'} class="input input-bordered" placeholder="PDF, PNG, JPG" />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div class="form-control">
+                <label class="label">
+                  <span class="label-text font-medium">Max Width (mm)</span>
+                </label>
+                <input type="number" name="maxWidthMm" value={product.maxWidthMm || ''} class="input input-bordered" placeholder="560" />
+              </div>
+
+              <div class="form-control">
+                <label class="label">
+                  <span class="label-text font-medium">Min Height (mm)</span>
+                </label>
+                <input type="number" name="minHeightMm" value={product.minHeightMm || ''} class="input input-bordered" placeholder="100" />
+              </div>
+
+              <div class="form-control">
+                <label class="label">
+                  <span class="label-text font-medium">Max Height (mm)</span>
+                </label>
+                <input type="number" name="maxHeightMm" value={product.maxHeightMm || ''} class="input input-bordered" placeholder="5000" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <input type="radio" name="product_tabs" role="tab" class="tab" aria-label="SEO" />
+      <div role="tabpanel" class="tab-content p-6">
+        <div class="space-y-4">
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text font-medium">Meta Title</span>
+              <span class="label-text-alt">{(product.metaTitle || '').length}/60</span>
+            </label>
+            <input type="text" name="metaTitle" class="input input-bordered" value={product.metaTitle || ''} placeholder="Leave empty to use product name" maxlength="60" />
+          </div>
+
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text font-medium">Meta Description</span>
+              <span class="label-text-alt">{(product.metaDescription || '').length}/160</span>
+            </label>
+            <textarea name="metaDescription" class="textarea textarea-bordered h-24" placeholder="Leave empty to use short description" maxlength="160">{product.metaDescription || ''}</textarea>
+          </div>
+
+          <div class="alert alert-info">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span>SEO fields are optional. If left empty, product name and short description will be used.</span>
+          </div>
+        </div>
+      </div>
+
+      <input type="radio" name="product_tabs" role="tab" class="tab" aria-label="Technical Specs" />
+      <div role="tabpanel" class="tab-content p-6">
+        <div class="space-y-4">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <h3 class="font-bold text-lg">Product Specifications</h3>
+              <p class="text-sm text-base-content/60">Add custom technical specifications to display on the product page</p>
+            </div>
+            <button type="button" id="addSpecBtn" class="btn btn-primary btn-sm gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+              </svg>
+              Add Spec
+            </button>
+          </div>
+
+          <div id="specificationsContainer" class="space-y-3">
+            {productSpecs.rows.length === 0 ? (
+              <div class="text-center py-8 text-base-content/50">
+                <svg class="w-16 h-16 mx-auto mb-3 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                <p>No specifications added yet. Click "Add Spec" to get started.</p>
+              </div>
+            ) : (
+              productSpecs.rows.map((spec) => (
+                <div class="spec-row p-4 bg-base-200 rounded-lg" data-spec-id={spec.id}>
+                  <div class="grid grid-cols-12 gap-3 items-end">
+                    <div class="col-span-3 form-control">
+                      <label class="label"><span class="label-text text-xs font-medium">Label</span></label>
+                      <input
+                        type="text"
+                        class="input input-sm input-bordered spec-label"
+                        value={spec.specLabel}
+                        placeholder="e.g., Material"
+                      />
+                    </div>
+                    <div class="col-span-3 form-control">
+                      <label class="label"><span class="label-text text-xs font-medium">Key (unique)</span></label>
+                      <input
+                        type="text"
+                        class="input input-sm input-bordered spec-key"
+                        value={spec.specKey}
+                        placeholder="e.g., material"
+                      />
+                    </div>
+                    <div class="col-span-4 form-control">
+                      <label class="label"><span class="label-text text-xs font-medium">Value</span></label>
+                      <input
+                        type="text"
+                        class="input input-sm input-bordered spec-value"
+                        value={spec.specValue}
+                        placeholder="e.g., Polyester"
+                      />
+                    </div>
+                    <div class="col-span-1 form-control">
+                      <label class="label"><span class="label-text text-xs font-medium">Order</span></label>
+                      <input
+                        type="number"
+                        class="input input-sm input-bordered spec-order text-center"
+                        value={spec.displayOrder}
+                      />
+                    </div>
+                    <div class="col-span-1 flex items-end">
+                      <button type="button" class="btn btn-sm btn-error btn-square remove-spec">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+
+          <div class="flex justify-end mt-4">
+            <button type="button" id="saveSpecsBtn" class="btn btn-success gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+              Save Specifications
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Bar -->
+    <div class="border-t border-base-300 p-4 bg-base-100 rounded-b-lg">
+      <div class="flex justify-between items-center">
+        <div class="text-sm text-base-content/60">
+          Last updated: {new Date(product.updatedAt).toLocaleString('de-DE')}
+        </div>
+        <div class="flex gap-3">
+          <a href="/admin/products" class="btn btn-ghost">Cancel</a>
+          <button type="submit" form="productForm" class="btn btn-primary">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            Save Changes
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</AdminLayout>
+
+<script define:vars={{ productId: id }}>
+  // Toggle file upload settings
+  document.getElementById('acceptsFileUpload')?.addEventListener('change', (e) => {
+    const settings = document.getElementById('fileUploadSettings');
+    if (settings) {
+      settings.classList.toggle('hidden', !e.target.checked);
+    }
+  });
+
+  // Add price tier
+  let tierCount = document.querySelectorAll('.tier-row').length;
+  document.getElementById('addTierBtn')?.addEventListener('click', () => {
+    tierCount++;
+    const container = document.getElementById('priceTiersContainer');
+    const tier = document.createElement('div');
+    tier.className = 'tier-row p-4 bg-base-200 rounded-lg';
+    tier.innerHTML = `
+      <div class="grid grid-cols-5 gap-3">
+        <div class="form-control">
+          <label class="label"><span class="label-text text-xs">Min Qty</span></label>
+          <input type="number" name="tier_minQty[]" value="${tierCount * 5}" required class="input input-sm input-bordered" />
+        </div>
+        <div class="form-control">
+          <label class="label"><span class="label-text text-xs">Max Qty</span></label>
+          <input type="number" name="tier_maxQty[]" class="input input-sm input-bordered" placeholder="∞" />
+        </div>
+        <div class="form-control">
+          <label class="label"><span class="label-text text-xs">Discount %</span></label>
+          <input type="number" name="tier_discount[]" value="0" step="0.01" required class="input input-sm input-bordered" />
+        </div>
+        <div class="form-control">
+          <label class="label"><span class="label-text text-xs">Price (€)</span></label>
+          <input type="number" name="tier_price[]" step="0.01" required class="input input-sm input-bordered" />
+        </div>
+        <div class="form-control">
+          <label class="label"><span class="label-text text-xs">Order</span></label>
+          <div class="join w-full">
+            <input type="number" name="tier_order[]" value="${tierCount}" required class="input input-sm input-bordered join-item flex-1" />
+            <button type="button" class="btn btn-sm btn-error join-item remove-tier">×</button>
+          </div>
+        </div>
+      </div>
+    `;
+    container?.appendChild(tier);
+  });
+
+  // Remove price tier
+  document.addEventListener('click', (e) => {
+    if (e.target.classList.contains('remove-tier')) {
+      const tiers = document.querySelectorAll('.tier-row');
+      if (tiers.length > 1) {
+        e.target.closest('.tier-row')?.remove();
+      } else {
+        alert('At least one price tier is required');
+      }
+    }
+  });
+
+  // Form submission
+  document.getElementById('productForm')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(e.target);
+    const data = {
+      name: formData.get('name'),
+      slug: formData.get('slug'),
+      categoryId: formData.get('categoryId'),
+      sku: formData.get('sku'),
+      shortDescription: formData.get('shortDescription'),
+      description: formData.get('description'),
+      basePrice: parseFloat(formData.get('basePrice')),
+      compareAtPrice: formData.get('compareAtPrice') ? parseFloat(formData.get('compareAtPrice')) : null,
+      priceCalculationMethod: formData.get('priceCalculationMethod'),
+      isBlockout: formData.get('isBlockout') === 'on',
+      acceptsFileUpload: formData.get('acceptsFileUpload') === 'on',
+      maxFileSizeMb: parseInt(formData.get('maxFileSizeMb')) || 255,
+      allowedFileTypes: formData.get('allowedFileTypes') || 'PDF',
+      maxWidthMm: parseInt(formData.get('maxWidthMm')) || null,
+      minHeightMm: parseInt(formData.get('minHeightMm')) || null,
+      maxHeightMm: parseInt(formData.get('maxHeightMm')) || null,
+      printTechnology: formData.get('printTechnology'),
+      trackInventory: formData.get('trackInventory') === 'on',
+      requiresShipping: formData.get('requiresShipping') === 'on',
+      isActive: formData.get('isActive') === 'on',
+      isFeatured: formData.get('isFeatured') === 'on',
+      metaTitle: formData.get('metaTitle'),
+      metaDescription: formData.get('metaDescription'),
+      priceTiers: []
+    };
+
+    // Collect price tiers
+    const minQties = formData.getAll('tier_minQty[]');
+    const maxQties = formData.getAll('tier_maxQty[]');
+    const discounts = formData.getAll('tier_discount[]');
+    const prices = formData.getAll('tier_price[]');
+    const orders = formData.getAll('tier_order[]');
+
+    for (let i = 0; i < minQties.length; i++) {
+      data.priceTiers.push({
+        minQuantity: parseInt(minQties[i]),
+        maxQuantity: maxQties[i] ? parseInt(maxQties[i]) : null,
+        discountPercent: parseFloat(discounts[i]),
+        pricePerUnit: parseFloat(prices[i]),
+        displayOrder: parseInt(orders[i])
+      });
+    }
+
+    const submitBtn = e.target.querySelector('button[type="submit"]');
+    const originalText = submitBtn.innerHTML;
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<span class="loading loading-spinner loading-sm"></span> Saving...';
+
+    try {
+      const response = await fetch(`/api/admin/products/${productId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        // Show success toast
+        const toast = document.createElement('div');
+        toast.className = 'toast toast-top toast-end';
+        toast.innerHTML = '<div class="alert alert-success"><span>Product updated successfully!</span></div>';
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+
+        // Reset button
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalText;
+      } else {
+        throw new Error(result.error.message);
+      }
+    } catch (error) {
+      alert('Failed to update product: ' + error.message);
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = originalText;
+    }
+  });
+
+  // Add specification
+  let specCount = document.querySelectorAll('.spec-row').length;
+  document.getElementById('addSpecBtn')?.addEventListener('click', () => {
+    specCount++;
+    const container = document.getElementById('specificationsContainer');
+
+    // Remove empty state if it exists
+    const emptyState = container?.querySelector('.text-center');
+    if (emptyState) {
+      emptyState.remove();
+    }
+
+    const spec = document.createElement('div');
+    spec.className = 'spec-row p-4 bg-base-200 rounded-lg';
+    spec.dataset.specId = 'new';
+    spec.innerHTML = `
+      <div class="grid grid-cols-12 gap-3 items-end">
+        <div class="col-span-3 form-control">
+          <label class="label"><span class="label-text text-xs font-medium">Label</span></label>
+          <input type="text" class="input input-sm input-bordered spec-label" placeholder="e.g., Material" />
+        </div>
+        <div class="col-span-3 form-control">
+          <label class="label"><span class="label-text text-xs font-medium">Key (unique)</span></label>
+          <input type="text" class="input input-sm input-bordered spec-key" placeholder="e.g., material" />
+        </div>
+        <div class="col-span-4 form-control">
+          <label class="label"><span class="label-text text-xs font-medium">Value</span></label>
+          <input type="text" class="input input-sm input-bordered spec-value" placeholder="e.g., Polyester" />
+        </div>
+        <div class="col-span-1 form-control">
+          <label class="label"><span class="label-text text-xs font-medium">Order</span></label>
+          <input type="number" class="input input-sm input-bordered spec-order text-center" value="${specCount}" />
+        </div>
+        <div class="col-span-1 flex items-end">
+          <button type="button" class="btn btn-sm btn-error btn-square remove-spec">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    `;
+    container?.appendChild(spec);
+  });
+
+  // Remove specification
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('.remove-spec')) {
+      const specRow = e.target.closest('.spec-row');
+      specRow?.remove();
+
+      // Show empty state if no specs remain
+      const container = document.getElementById('specificationsContainer');
+      if (container && container.querySelectorAll('.spec-row').length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-8 text-base-content/50">
+            <svg class="w-16 h-16 mx-auto mb-3 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            <p>No specifications added yet. Click "Add Spec" to get started.</p>
+          </div>
+        `;
+      }
+    }
+  });
+
+  // Save specifications
+  document.getElementById('saveSpecsBtn')?.addEventListener('click', async () => {
+    const specRows = document.querySelectorAll('.spec-row');
+    const specifications = [];
+
+    specRows.forEach(row => {
+      const specId = row.dataset.specId;
+      const label = row.querySelector('.spec-label')?.value;
+      const key = row.querySelector('.spec-key')?.value;
+      const value = row.querySelector('.spec-value')?.value;
+      const order = parseInt(row.querySelector('.spec-order')?.value) || 0;
+
+      if (label && key && value) {
+        specifications.push({
+          id: specId !== 'new' ? specId : undefined,
+          specKey: key,
+          specLabel: label,
+          specValue: value,
+          displayOrder: order
+        });
+      }
+    });
+
+    try {
+      const response = await fetch(`/api/admin/products/${productId}/specifications`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ specifications })
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        // Show success toast
+        const toast = document.createElement('div');
+        toast.className = 'toast toast-end';
+        toast.innerHTML = `
+          <div class="alert alert-success">
+            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span>Specifications saved successfully!</span>
+          </div>
+        `;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+
+        // Reload to update spec IDs
+        setTimeout(() => window.location.reload(), 1500);
+      } else {
+        throw new Error(result.error?.message || 'Failed to save specifications');
+      }
+    } catch (error) {
+      alert('Failed to save specifications: ' + error.message);
+    }
+  });
+
+  // Delete button
+  document.getElementById('deleteBtn')?.addEventListener('click', async () => {
+    if (!confirm('Are you sure you want to deactivate this product? This will hide it from the frontend.')) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/admin/products/${productId}`, {
+        method: 'DELETE',
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        window.location.href = '/admin/products';
+      } else {
+        throw new Error(result.error.message);
+      }
+    } catch (error) {
+      alert('Failed to delete product: ' + error.message);
+    }
+  });
+</script>
+</AdminLayout>

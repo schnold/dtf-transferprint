@@ -1,8 +1,50 @@
 ---
 import { SITE_CONFIG } from '../constants/site';
 import AuthModal from './AuthModal.astro';
+import { getCart, pool } from '../lib/db';
 
 const user = Astro.locals.user;
+const cartItems = user ? await getCart(user.id) : [];
+const hasCartItems = cartItems.length > 0;
+
+// Fetch categories with products for navigation
+const client = await pool.connect();
+let categoriesWithProducts = [];
+try {
+	const categoriesResult = await client.query(`
+		SELECT id, name, slug, "displayOrder", "parentId"
+		FROM categories
+		WHERE "isActive" = true
+		ORDER BY "displayOrder", name
+	`);
+
+	categoriesWithProducts = await Promise.all(
+		categoriesResult.rows.map(async (category) => {
+			const productsResult = await client.query(`
+				SELECT id, slug, name, "shortDescription", "basePrice", "isFeatured"
+				FROM products
+				WHERE "categoryId" = $1 AND "isActive" = true
+				ORDER BY "isFeatured" DESC, name
+				LIMIT 10
+			`, [category.id]);
+
+			return {
+				...category,
+				products: productsResult.rows.map(p => ({
+					...p,
+					basePrice: parseFloat(p.basePrice),
+				})),
+			};
+		})
+	);
+} finally {
+	client.release();
+}
+
+// Group by parent category for mega menu
+const basicDTFCategory = categoriesWithProducts.find(c => c.name.toLowerCase().includes('basic') || c.name.toLowerCase() === 'dtf');
+const blockoutCategory = categoriesWithProducts.find(c => c.name.toLowerCase().includes('blockout'));
+const otherCategories = categoriesWithProducts.filter(c => c !== basicDTFCategory && c !== blockoutCategory);
 ---
 
 <!-- Navbar -->
@@ -30,51 +72,85 @@ const user = Astro.locals.user;
 					<div class="mega-dropdown-content absolute left-1/2 -translate-x-1/2 top-full mt-2 bg-base-100 rounded-2xl shadow-2xl border border-base-300/30 p-6 w-[calc(100vw-4rem)] max-w-[700px] opacity-0 invisible transform translate-y-2 transition-all duration-300 ease-out z-50">
 						<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 							<!-- Basic DTF Column -->
-							<div>
-								<h3 class="font-bold text-neutral mb-4 text-lg flex items-center gap-2">
-									<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5" style="color: var(--color-primary);">
-										<path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
-									</svg>
-									Basic DTF
-								</h3>
-								<ul class="space-y-3">
-									<li><a href="/product/dtf-transfer-freie-groesse/" class="text-neutral/70 hover:text-primary text-sm py-1.5 transition-colors">
-										Freigröße
-									</a></li>
-								</ul>
-							</div>
+							{basicDTFCategory && basicDTFCategory.products.length > 0 && (
+								<div>
+									<h3 class="font-bold text-neutral mb-4 text-lg flex items-center gap-2">
+										<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5" style="color: var(--color-primary);">
+											<path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
+										</svg>
+										{basicDTFCategory.name}
+									</h3>
+									<ul class="space-y-3">
+										{basicDTFCategory.products.map((product) => (
+											<li>
+												<a href={`/product/${product.slug}`} class="text-neutral/70 hover:text-primary text-sm py-1.5 transition-colors block">
+													{product.name}
+												</a>
+											</li>
+										))}
+									</ul>
+								</div>
+							)}
 
 							<!-- Blockout DTF Column -->
-							<div>
-								<h3 class="font-bold text-neutral mb-4 text-lg flex items-center gap-2">
-									<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5" style="color: var(--color-primary);">
-										<path stroke-linecap="round" stroke-linejoin="round" d="M6.429 9.75L2.25 12l4.179 2.25m0-4.5l5.571 3 5.571-3m-11.142 0L2.25 7.5l4.179-2.25m11.142 0L21.75 7.5l-4.179 2.25m0 0L21.75 12l-4.179 2.25m0 0l4.179 2.25L21.75 16.5l-4.179-2.25m-11.142 0l-4.179 2.25L2.25 16.5l4.179-2.25" />
-									</svg>
-									Blockout DTF
-								</h3>
-								<ul class="space-y-3">
-									<li><a href="/product/blockout-dtf-transfer-freie-groesse/" class="text-neutral/70 hover:text-primary text-sm py-1.5 transition-colors">
-										Blockout Freigröße
-									</a></li>
-								</ul>
-							</div>
+							{blockoutCategory && blockoutCategory.products.length > 0 && (
+								<div>
+									<h3 class="font-bold text-neutral mb-4 text-lg flex items-center gap-2">
+										<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5" style="color: var(--color-primary);">
+											<path stroke-linecap="round" stroke-linejoin="round" d="M6.429 9.75L2.25 12l4.179 2.25m0-4.5l5.571 3 5.571-3m-11.142 0L2.25 7.5l4.179-2.25m11.142 0L21.75 7.5l-4.179 2.25m0 0L21.75 12l-4.179 2.25m0 0l4.179 2.25L21.75 16.5l-4.179-2.25m-11.142 0l-4.179 2.25L2.25 16.5l4.179-2.25" />
+										</svg>
+										{blockoutCategory.name}
+									</h3>
+									<ul class="space-y-3">
+										{blockoutCategory.products.map((product) => (
+											<li>
+												<a href={`/product/${product.slug}`} class="text-neutral/70 hover:text-primary text-sm py-1.5 transition-colors block">
+													{product.name}
+												</a>
+											</li>
+										))}
+									</ul>
+								</div>
+							)}
 
-							<!-- Mustermappen & Info -->
+							<!-- Other Categories or Static Links -->
 							<div>
-								<h3 class="font-bold text-neutral mb-4 text-lg flex items-center gap-2">
-									<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5" style="color: var(--color-primary);">
-										<path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" />
-									</svg>
-									Mustermappen & Info
-								</h3>
-								<ul class="space-y-3">
-									<li><a href="/mustermappe/" class="text-neutral/70 hover:text-primary text-sm py-1.5 transition-colors">
-										Basic Mustermappe
-									</a></li>
-									<li><a href="/blockout/" class="text-neutral/70 hover:text-primary text-sm py-1.5 transition-colors">
-										Blockout Mustermappe
-									</a></li>
-								</ul>
+								{otherCategories.length > 0 ? (
+									<>
+										<h3 class="font-bold text-neutral mb-4 text-lg flex items-center gap-2">
+											<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5" style="color: var(--color-primary);">
+												<path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" />
+											</svg>
+											Weitere Produkte
+										</h3>
+										<ul class="space-y-3">
+											{otherCategories.slice(0, 2).map((category) => (
+												<li>
+													<a href={`/categories/${category.slug}`} class="text-neutral/70 hover:text-primary text-sm py-1.5 transition-colors block">
+														{category.name}
+													</a>
+												</li>
+											))}
+										</ul>
+									</>
+								) : (
+									<>
+										<h3 class="font-bold text-neutral mb-4 text-lg flex items-center gap-2">
+											<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5" style="color: var(--color-primary);">
+												<path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" />
+											</svg>
+											Mustermappen & Info
+										</h3>
+										<ul class="space-y-3">
+											<li><a href="/mustermappe/" class="text-neutral/70 hover:text-primary text-sm py-1.5 transition-colors">
+												Basic Mustermappe
+											</a></li>
+											<li><a href="/blockout/" class="text-neutral/70 hover:text-primary text-sm py-1.5 transition-colors">
+												Blockout Mustermappe
+											</a></li>
+										</ul>
+									</>
+								)}
 								<div class="mt-6 pt-4 border-t border-base-300/20">
 									<a href="/products/" class="btn btn-primary btn-sm w-full">Alle Produkte ansehen</a>
 								</div>
@@ -231,6 +307,19 @@ const user = Astro.locals.user;
 		<div class="navbar-end flex items-center gap-4">
 			<!-- Auth Section -->
 			{user ? (
+				<>
+					<!-- Cart Icon -->
+					<a 
+						href="/cart" 
+						class={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all duration-200 cursor-pointer relative ${hasCartItems ? 'border-orange-400 hover:bg-orange-50' : 'border-accent hover:bg-accent/10'}`}
+						aria-label="Shopping cart"
+					>
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class={`w-4 h-4 transition-colors ${hasCartItems ? 'text-orange-600' : 'text-accent'}`}>
+							<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+						</svg>
+					</a>
+					
+					<!-- User Icon -->
 				<!-- Logged In: User Icon with Accent Color -->
 				<div class="dropdown relative user-dropdown">
 					<button
@@ -242,18 +331,18 @@ const user = Astro.locals.user;
 							<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
 						</svg>
 					</button>
-					<ul tabindex="0" class="user-dropdown-content absolute right-0 top-full mt-3 z-[1] p-6 shadow-2xl bg-base-100 rounded-xl w-72 border border-base-300/30 overflow-hidden opacity-0 invisible transform translate-y-2 transition-all duration-300 ease-out">
+					<ul tabindex="0" class="user-dropdown-content absolute right-0 top-full mt-3 z-[1] p-6 shadow-2xl bg-base-100 rounded-xl w-80 border border-base-300/30 overflow-hidden opacity-0 invisible transform translate-y-2 transition-all duration-300 ease-out">
 						<!-- Header -->
 						<div class="pt-6 pb-4 bg-base-100 border-b border-base-200">
-							<div class="flex items-center gap-2 mb-2">
-								<div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-									<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-primary">
+							<div class="flex items-center gap-3 mb-2">
+								<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+									<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-primary">
 										<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
 									</svg>
 								</div>
 								<div class="flex-1 min-w-0">
-									<p class="text-sm font-semibold text-base-content truncate">Mein Konto</p>
-									<p class="text-xs text-base-content/60 truncate">{user.email}</p>
+									<p class="text-base font-semibold text-base-content truncate">Mein Konto</p>
+									<p class="text-sm text-base-content/60 truncate">{user.email}</p>
 								</div>
 							</div>
 						</div>
@@ -261,30 +350,30 @@ const user = Astro.locals.user;
 						<!-- Menu Items -->
 						<div class="py-2">
 							<li>
-								<a href="/auth/account?tab=profile" class="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-base-200 transition-colors">
-									<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-base-content/70">
+								<a href="/auth/account?tab=profile" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-base-200 transition-colors">
+									<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-base-content/70">
 										<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
 									</svg>
-									<span class="text-sm">Mein Profil</span>
+									<span class="text-base">Mein Profil</span>
 								</a>
 							</li>
 							{user.isAdmin && (
 								<li>
-									<a href="/admin" class="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-base-200 transition-colors bg-primary/5">
-										<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-primary">
+									<a href="/admin" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-base-200 transition-colors bg-primary/5">
+										<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-primary">
 											<path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z" />
 											<path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
 										</svg>
-										<span class="text-sm font-medium">Admin Panel</span>
+										<span class="text-base font-medium">Admin Panel</span>
 									</a>
 								</li>
 							)}
 							<li>
-								<a href="/auth/account?tab=orders" class="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-base-200 transition-colors">
-									<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-base-content/70">
+								<a href="/auth/account?tab=orders" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-base-200 transition-colors">
+									<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-base-content/70">
 										<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
 									</svg>
-									<span class="text-sm">Bestellungen</span>
+									<span class="text-base">Bestellungen</span>
 								</a>
 							</li>
 						</div>
@@ -295,16 +384,17 @@ const user = Astro.locals.user;
 						<!-- Sign Out -->
 						<div class="pb-2">
 							<li>
-								<button id="logout-button" class="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-error/10 text-error w-full transition-colors">
-									<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+								<button id="logout-button" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-error/10 text-error w-full transition-colors">
+									<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
 										<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
 									</svg>
-									<span class="text-sm font-medium">Abmelden</span>
+									<span class="text-base font-medium">Abmelden</span>
 								</button>
 							</li>
 						</div>
 					</ul>
 				</div>
+				</>
 			) : (
 				<!-- Not Logged In: User Icon -->
 				<button
@@ -318,8 +408,6 @@ const user = Astro.locals.user;
 				</button>
 			)}
 
-			<!-- CTA Button -->
-			<a class="btn btn-primary btn-sm shadow-sm hover:shadow-md transition-all duration-200 px-3 sm:px-4">Angebot anfordern</a>
 			<!-- Mobile Menu Dropdown -->
 			<div class="dropdown dropdown-end md:hidden">
 				<label tabindex="0" class="btn btn-ghost text-neutral hover:bg-white/10 px-2 sm:px-3" aria-label="Menu">
@@ -330,32 +418,63 @@ const user = Astro.locals.user;
 				<div tabindex="0" class="dropdown-content mt-3 bg-base-100 rounded-2xl shadow-2xl border border-base-300/30 p-6 w-[calc(100vw-2rem)] max-w-sm max-h-[calc(100vh-8rem)] overflow-y-auto overflow-x-hidden z-50">
 					<div class="space-y-6">
 						<!-- Products -->
-						<div>
-							<h3 class="font-bold text-neutral mb-4 text-lg flex items-center gap-2">
-								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5" style="color: var(--color-primary);">
-									<path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
-								</svg>
-								Basic DTF
-							</h3>
-							<ul class="space-y-3">
-								<li><a href="/product/dtf-transfer-freie-groesse/" class="text-neutral/70 hover:text-primary text-sm py-1.5 transition-colors">
-									Freigröße
-								</a></li>
-							</ul>
-						</div>
+						{basicDTFCategory && basicDTFCategory.products.length > 0 && (
+							<div>
+								<h3 class="font-bold text-neutral mb-4 text-lg flex items-center gap-2">
+									<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5" style="color: var(--color-primary);">
+										<path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
+									</svg>
+									{basicDTFCategory.name}
+								</h3>
+								<ul class="space-y-3">
+									{basicDTFCategory.products.map((product) => (
+										<li>
+											<a href={`/product/${product.slug}`} class="text-neutral/70 hover:text-primary text-sm py-1.5 transition-colors">
+												{product.name}
+											</a>
+										</li>
+									))}
+								</ul>
+							</div>
+						)}
 
-						<div>
-							<h3 class="font-bold text-neutral mb-4 text-lg flex items-center gap-2">
-								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5" style="color: var(--color-primary);">
-									<path stroke-linecap="round" stroke-linejoin="round" d="M6.429 9.75L2.25 12l4.179 2.25m0-4.5l5.571 3 5.571-3m-11.142 0L2.25 7.5l4.179-2.25m11.142 0L21.75 7.5l-4.179 2.25m0 0L21.75 12l-4.179 2.25m0 0l4.179 2.25L21.75 16.5l-4.179-2.25m-11.142 0l-4.179 2.25L2.25 16.5l4.179-2.25" />
-								</svg>
-								Blockout DTF
-							</h3>
-							<ul class="space-y-3">
-								<li><a href="/product/blockout-dtf-transfer-freie-groesse/" class="text-neutral/70 hover:text-primary text-sm py-1.5 transition-colors">
-									Blockout Freigröße
-								</a></li>
-							</ul>
+						{blockoutCategory && blockoutCategory.products.length > 0 && (
+							<div>
+								<h3 class="font-bold text-neutral mb-4 text-lg flex items-center gap-2">
+									<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5" style="color: var(--color-primary);">
+										<path stroke-linecap="round" stroke-linejoin="round" d="M6.429 9.75L2.25 12l4.179 2.25m0-4.5l5.571 3 5.571-3m-11.142 0L2.25 7.5l4.179-2.25m11.142 0L21.75 7.5l-4.179 2.25m0 0L21.75 12l-4.179 2.25m0 0l4.179 2.25L21.75 16.5l-4.179-2.25m-11.142 0l-4.179 2.25L2.25 16.5l4.179-2.25" />
+									</svg>
+									{blockoutCategory.name}
+								</h3>
+								<ul class="space-y-3">
+									{blockoutCategory.products.map((product) => (
+										<li>
+											<a href={`/product/${product.slug}`} class="text-neutral/70 hover:text-primary text-sm py-1.5 transition-colors">
+												{product.name}
+											</a>
+										</li>
+									))}
+								</ul>
+							</div>
+						)}
+
+						{otherCategories.length > 0 && otherCategories.map((category) => (
+							<div>
+								<h3 class="font-bold text-neutral mb-4 text-lg">{category.name}</h3>
+								<ul class="space-y-3">
+									{category.products.slice(0, 5).map((product) => (
+										<li>
+											<a href={`/product/${product.slug}`} class="text-neutral/70 hover:text-primary text-sm py-1.5 transition-colors">
+												{product.name}
+											</a>
+										</li>
+									))}
+								</ul>
+							</div>
+						))}
+
+						<div class="pt-4 border-t border-base-300/20">
+							<a href="/products/" class="btn btn-primary btn-sm w-full">Alle Produkte ansehen</a>
 						</div>
 					</div>
 				</div>

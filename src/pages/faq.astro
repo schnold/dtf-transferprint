@@ -1,0 +1,685 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import { SITE_CONFIG } from '../constants/site';
+
+const title = 'Häufig gestellte Fragen (FAQ) - DTF Transfer Print';
+const description = 'Umfassende Antworten zu häufig gestellten Fragen über DTF-Druck, unsere Produkte, Dienstleistungen, Bestellprozess und mehr. Finden Sie alle Informationen, die Sie benötigen.';
+---
+
+<Layout title={title} description={description}>
+	<Navbar />
+
+	<!-- Hero Section -->
+	<section class="hero bg-gradient-to-br from-primary/10 via-base-100 to-secondary/10 py-16 md:py-24">
+		<div class="hero-content text-center max-w-4xl">
+			<h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-neutral">
+				Häufig gestellte Fragen
+			</h1>
+			<p class="text-lg md:text-xl text-neutral/70 max-w-2xl mx-auto leading-relaxed">
+				Finden Sie umfassende Antworten zu allen Fragen rund um DTF-Druck, unsere Produkte, 
+				Dienstleistungen und Bestellprozess. Unser Ziel ist es, Ihnen alle notwendigen Informationen 
+				bereitzustellen, damit Sie unsere DTF-Transfer-Produkte optimal nutzen können.
+			</p>
+			<div class="flex flex-wrap gap-2 justify-center mt-6">
+				<span class="badge badge-primary badge-lg">DTF-Druck</span>
+				<span class="badge badge-secondary badge-lg">Textilveredelung</span>
+				<span class="badge badge-accent badge-lg">Professionelle Qualität</span>
+				<span class="badge badge-info badge-lg">Seit 2009</span>
+			</div>
+		</div>
+	</section>
+
+	<!-- Stats Section -->
+	<section class="py-12 bg-base-200/50">
+		<div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+			<div class="stats stats-vertical lg:stats-horizontal shadow-lg bg-base-100 w-full border border-base-300/30">
+				<div class="stat">
+					<div class="stat-figure text-primary">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+						</svg>
+					</div>
+					<div class="stat-title">Zufriedene Kunden</div>
+					<div class="stat-value text-primary">10K+</div>
+					<div class="stat-desc">Weltweit</div>
+				</div>
+
+				<div class="stat">
+					<div class="stat-figure text-primary">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+						</svg>
+					</div>
+					<div class="stat-title">Abgeschlossene Bestellungen</div>
+					<div class="stat-value text-primary">50K+</div>
+					<div class="stat-desc">Erfolgreiche Druckaufträge</div>
+				</div>
+
+				<div class="stat">
+					<div class="stat-figure text-primary">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
+						</svg>
+					</div>
+					<div class="stat-title">Jahre Erfahrung</div>
+					<div class="stat-value text-primary">15+</div>
+					<div class="stat-desc">In der Druckbranche</div>
+				</div>
+
+				<div class="stat">
+					<div class="stat-figure text-primary">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+						</svg>
+					</div>
+					<div class="stat-title">Qualitätsbewertung</div>
+					<div class="stat-value text-primary">99.9%</div>
+					<div class="stat-desc">Kundenzufriedenheitsrate</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Main FAQ Section -->
+	<section class="py-16 md:py-24 bg-base-100">
+		<div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
+			<!-- DTF-Druck Grundlagen -->
+			<div class="mb-16">
+				<div class="text-center mb-12">
+					<h2 class="text-3xl md:text-4xl font-bold mb-4 text-neutral flex items-center justify-center gap-3">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-primary">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" />
+						</svg>
+						DTF-Druck Grundlagen
+					</h2>
+					<p class="text-neutral/70">Alles was Sie über das Direct-to-Film-Verfahren wissen müssen</p>
+				</div>
+
+				<div class="join join-vertical w-full space-y-4">
+					<div class="collapse collapse-plus join-item border border-base-300/30 bg-base-200/50 shadow-sm hover:shadow-md transition-all">
+						<input type="radio" name="faq-dtf" checked="checked" />
+						<div class="collapse-title text-xl font-semibold text-neutral">
+							Was ist DTF-Druck und wie funktioniert das Direct-to-Film-Verfahren?
+						</div>
+						<div class="collapse-content">
+							<div class="prose prose-sm max-w-none text-neutral/80">
+								<p>
+									DTF steht für "Direct-to-Film" und bezeichnet ein innovatives Druckverfahren im Textildruck. 
+									Beim DTF-Druck werden Designs zunächst auf eine spezielle Transferfolie gedruckt und anschließend 
+									mit Hitze und Druck auf das Textil übertragen. Dieses moderne Druckverfahren ermöglicht hochwertige, 
+									lebendige Drucke auf nahezu allen Textilien.
+								</p>
+								<p class="mt-3">
+									DTF Transfer Print nutzt seit 2009 diese fortschrittliche Technologie, um Ihre Designs mit 
+									beeindruckender Präzision und Brillanz auf Transferfolien zu drucken. Unsere DTF-Transfers 
+									zeichnen sich durch ihre Flexibilität, Haltbarkeit und die Fähigkeit aus, auf einer Vielzahl 
+									von Stoffen makellose Ergebnisse zu liefern.
+								</p>
+							</div>
+						</div>
+					</div>
+
+					<div class="collapse collapse-plus join-item border border-base-300/30 bg-base-200/50 shadow-sm hover:shadow-md transition-all">
+						<input type="radio" name="faq-dtf" />
+						<div class="collapse-title text-xl font-semibold text-neutral">
+							Welche Vorteile bietet der DTF-Druck gegenüber anderen Druckverfahren?
+						</div>
+						<div class="collapse-content">
+							<div class="prose prose-sm max-w-none text-neutral/80 space-y-3">
+								<div class="flex items-start gap-3">
+									<span class="badge badge-primary badge-sm mt-1">Schnell</span>
+									<p>
+										<strong class="text-neutral">Schnelle Bearbeitung:</strong> Druck und Versand erfolgen bei uns 
+										in der Regel innerhalb von 24-48 Stunden nach Bestell- und Zahlungseingang. Dank der DTF-Technologie 
+										können Sie Ihre Textilveredelungs-Projekte in kürzester Zeit umsetzen.
+									</p>
+								</div>
+								<div class="flex items-start gap-3">
+									<span class="badge badge-secondary badge-sm mt-1">Günstig</span>
+									<p>
+										<strong class="text-neutral">Kosteneffizient:</strong> Preiswerte Lösung für Einzelstücke und Kleinserien. 
+										Ideal für individuelle Designs, Merchandising-Artikel und limitierte Auflagen. Mit unseren wettbewerbsfähigen 
+										Preisen erhalten Sie höchste Qualität, auch bei kleinen Aufträgen oder Einzelstücken!
+									</p>
+								</div>
+								<div class="flex items-start gap-3">
+									<span class="badge badge-accent badge-sm mt-1">Vielseitig</span>
+									<p>
+										<strong class="text-neutral">Vielseitige Anwendung:</strong> Haftet auf nahezu allen Textilien, wie Baumwolle, 
+										Polyester, Mischgewebe, Leder, Canvas und sogar einige empfindliche Materialien wie Softshell.
+									</p>
+								</div>
+								<div class="flex items-start gap-3">
+									<span class="badge badge-success badge-sm mt-1">Qualität</span>
+									<p>
+										<strong class="text-neutral">Hervorragende Druckqualität:</strong> Hochwertiger Druck mit leuchtenden Farben 
+										und gestochen scharfen Details für professionelle Ergebnisse.
+									</p>
+								</div>
+								<div class="flex items-start gap-3">
+									<span class="badge badge-info badge-sm mt-1">Langlebig</span>
+									<p>
+										<strong class="text-neutral">Langlebigkeit:</strong> Waschbeständig und dauerhaft. Hält bis zu 40°C Waschtemperatur 
+										und zahlreiche Wäschen aus. Unsere DTF-Transfers garantieren leuchtende Farben, hervorragende Waschbeständigkeit 
+										und eine beeindruckende Haltbarkeit.
+									</p>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="collapse collapse-plus join-item border border-base-300/30 bg-base-200/50 shadow-sm hover:shadow-md transition-all">
+						<input type="radio" name="faq-dtf" />
+						<div class="collapse-title text-xl font-semibold text-neutral">
+							Welche Textilien können mit DTF-Druck bedruckt werden?
+						</div>
+						<div class="collapse-content">
+							<div class="prose prose-sm max-w-none text-neutral/80">
+								<p>
+									DTF-Transfers haften auf nahezu allen Textilien, ob Baumwolle, Polyester, Mischgewebe, Leder oder sogar Canvas. 
+									Beachten Sie jedoch, dass einige Materialien wie wasserabweisende Stoffe, stark strukturierte Textilien oder 
+									sehr grobe Stoffe die Haftung des Drucks beeinträchtigen können.
+								</p>
+								<p class="mt-3">
+									<strong class="text-neutral">Für optimale Ergebnisse empfehlen wir:</strong>
+								</p>
+								<ul class="list-disc list-inside space-y-2 mt-2">
+									<li>Glatte bis leicht strukturierte Textilien</li>
+									<li>Baumwolle, Polyester und Mischgewebe</li>
+									<li>Canvas und Leder</li>
+									<li>Softshell-Materialien (mit Vorsicht)</li>
+								</ul>
+								<p class="mt-3">
+									<strong class="text-neutral">Nicht geeignet für:</strong>
+								</p>
+								<ul class="list-disc list-inside space-y-2 mt-2">
+									<li>Wasserabweisende oder beschichtete Stoffe</li>
+									<li>Sehr grobe oder stark strukturierte Textilien</li>
+									<li>Extrem empfindliche Materialien</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<div class="collapse collapse-plus join-item border border-base-300/30 bg-base-200/50 shadow-sm hover:shadow-md transition-all">
+						<input type="radio" name="faq-dtf" />
+						<div class="collapse-title text-xl font-semibold text-neutral">
+							Wie funktioniert der DTF-Druckprozess im Detail?
+						</div>
+						<div class="collapse-content">
+							<div class="prose prose-sm max-w-none text-neutral/80 space-y-4">
+								<div class="flex gap-4">
+									<div class="badge badge-primary badge-lg">1</div>
+									<div>
+										<p><strong class="text-neutral">Druck auf Folie:</strong> Das Design wird 4-farbig (CMYK) auf eine spezielle Trägerfolie gedruckt.</p>
+									</div>
+								</div>
+								<div class="flex gap-4">
+									<div class="badge badge-primary badge-lg">2</div>
+									<div>
+										<p>
+											<strong class="text-neutral">Weißdruck:</strong> Um einen deckenden Druck auf allen Textilien zu gewährleisten, 
+											wird eine weiße Farbschicht aufgebracht. So wird sichergestellt, dass Ihre Designs auch auf dunklen Textilien 
+											und farbigen Untergründen perfekt zur Geltung kommen.
+										</p>
+									</div>
+								</div>
+								<div class="flex gap-4">
+									<div class="badge badge-primary badge-lg">3</div>
+									<div>
+										<p>
+											<strong class="text-neutral">Trocknung:</strong> Die Folie wird getrocknet, um die Farben zu fixieren.
+										</p>
+									</div>
+								</div>
+								<div class="flex gap-4">
+									<div class="badge badge-primary badge-lg">4</div>
+									<div>
+										<p>
+											<strong class="text-neutral">Transfer:</strong> Die Folie wird mit Hitze und Druck auf das Textil übertragen. 
+											Der Transferprozess erfolgt mithilfe einer Transferpresse, die den Druck und die Temperatur exakt regelt. 
+											Falls Sie keine Transferpresse haben, kann auch ein Bügeleisen genutzt werden.
+										</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Produkte & Bestellung -->
+			<div class="mb-16">
+				<div class="text-center mb-12">
+					<h2 class="text-3xl md:text-4xl font-bold mb-4 text-neutral flex items-center justify-center gap-3">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-primary">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
+						</svg>
+						Produkte & Bestellung
+					</h2>
+					<p class="text-neutral/70">Fragen zu unseren Produkten, Preisen und dem Bestellprozess</p>
+				</div>
+
+				<div class="join join-vertical w-full space-y-4">
+					<div class="collapse collapse-plus join-item border border-base-300/30 bg-base-200/50 shadow-sm hover:shadow-md transition-all">
+						<input type="radio" name="faq-products" />
+						<div class="collapse-title text-xl font-semibold text-neutral">
+							Welche Dateiformate und Anforderungen gelten für DTF-Druckdateien?
+						</div>
+						<div class="collapse-content">
+							<div class="prose prose-sm max-w-none text-neutral/80">
+								<p>
+									Wir benötigen druckfertige Designs im Format PNG oder PDF mit einer Auflösung von mindestens 300 dpi 
+									für optimale Druckqualität.
+								</p>
+								<p class="mt-3"><strong class="text-neutral">Wichtige Anforderungen für Ihre Druckdateien:</strong></p>
+								<ul class="list-disc list-inside space-y-2 ml-4">
+									<li>Alle Schriften müssen in Pfade oder Kurven konvertiert sein</li>
+									<li>Die Strichstärke sollte mindestens 0,6 mm betragen</li>
+									<li>Farbmodus: CMYK für beste Druckergebnisse</li>
+									<li>Hochauflösende Grafiken (mindestens 300 dpi)</li>
+									<li>Druckfertige Dateien ohne Platzhalter oder Wasserzeichen</li>
+								</ul>
+								<div class="alert alert-info mt-4">
+									<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+									</svg>
+									<span>
+										<strong>Tipp:</strong> Grundsätzlich können Sie auch Dateien aus Canva oder PowerPoint verwenden, 
+										aber diese Programme sind nicht für professionellen Druck optimiert. Exportieren Sie Ihre Designs 
+										als hochauflösende PDF oder PNG (mindestens 300 DPI) und senden Sie uns die Datei zur Prüfung.
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="collapse collapse-plus join-item border border-base-300/30 bg-base-200/50 shadow-sm hover:shadow-md transition-all">
+						<input type="radio" name="faq-products" />
+						<div class="collapse-title text-xl font-semibold text-neutral">
+							Was bedeutet "Freigröße" bei DTF-Transfers und welche Vorteile bietet sie?
+						</div>
+						<div class="collapse-content">
+							<div class="prose prose-sm max-w-none text-neutral/80">
+								<p>
+									Freigröße bietet maximale Flexibilität, da die einzelnen Motive nicht manuell verschachtelt werden müssen. 
+									Sie können Ihre Designs in beliebiger Größe und Anordnung platzieren, was besonders bei individuellen Aufträgen 
+									und kreativen Projekten von Vorteil ist.
+								</p>
+								<p class="mt-3">
+									<strong class="text-neutral">Vorteile der Freigröße:</strong>
+								</p>
+								<ul class="list-disc list-inside space-y-2 ml-4">
+									<li>Keine manuelle Verschachtelung der Motive erforderlich</li>
+									<li>Beliebige Größe und Anordnung Ihrer Designs</li>
+									<li>Ideal für individuelle Aufträge und kreative Projekte</li>
+									<li>Kosteneffizient, da nur die tatsächlich bedruckte Fläche berechnet wird</li>
+								</ul>
+								<div class="alert alert-success mt-4">
+									<svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 w-6 h-6" fill="none" viewBox="0 0 24 24">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+									</svg>
+									<span>
+										Bei DTF Transfer Print erhalten Sie DTF-Transfers bereits ab 1 Euro mit unserer praktischen Freigröße 
+										und müssen die Designs nicht einmal selbst Verschachteln oder Drucknutzen anlegen. Das spart Ihnen Zeit, Geld und Nerven!
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="collapse collapse-plus join-item border border-base-300/30 bg-base-200/50 shadow-sm hover:shadow-md transition-all">
+						<input type="radio" name="faq-products" />
+						<div class="collapse-title text-xl font-semibold text-neutral">
+							Warum ist Freigröße günstiger als feste Größen?
+						</div>
+						<div class="collapse-content">
+							<div class="prose prose-sm max-w-none text-neutral/80">
+								<p>
+									Freigröße ist kosteneffizienter, da nur die tatsächlich bedruckte Fläche berechnet wird. 
+									Im Gegensatz zu festen Größen zahlen Sie nicht für ungenutzten Platz, was besonders bei kleineren Designs 
+									oder individuellen Anordnungen erhebliche Kosteneinsparungen ermöglicht.
+								</p>
+								<p class="mt-3">
+									<strong class="text-neutral">Beispiel:</strong> Wenn Sie ein kleines Logo von 5x5 cm drucken möchten, 
+									zahlen Sie bei Freigröße nur für diese 25 cm², während Sie bei einer festen Größe (z.B. 30x30 cm) 
+									für die gesamte Fläche zahlen müssten, auch wenn der größte Teil ungenutzt bleibt.
+								</p>
+							</div>
+						</div>
+					</div>
+
+					<div class="collapse collapse-plus join-item border border-base-300/30 bg-base-200/50 shadow-sm hover:shadow-md transition-all">
+						<input type="radio" name="faq-products" />
+						<div class="collapse-title text-xl font-semibold text-neutral">
+							Was ist der Unterschied zwischen Basic DTF und Blockout DTF?
+						</div>
+						<div class="collapse-content">
+							<div class="prose prose-sm max-w-none text-neutral/80 space-y-3">
+								<div>
+									<p><strong class="text-neutral">Basic DTF:</strong></p>
+									<p>
+										Standard DTF-Transfers für helle und mittlere Textilien. Ideal für die meisten Anwendungen 
+										und kosteneffizient für große Auflagen.
+									</p>
+								</div>
+								<div>
+									<p><strong class="text-neutral">Blockout DTF:</strong></p>
+									<p>
+										Blockout DTF ist ideal, wenn Sie auf dunklen oder farbigen Textilien drucken möchten und 
+										maximale Farbbrillanz benötigen. Besonders bei kräftigen Farben wie Gelb, Orange oder Hellblau 
+										auf schwarzen Shirts macht sich der Unterschied deutlich bemerkbar.
+									</p>
+									<p class="mt-2">
+										Die Anwendung ist identisch zu Standard DTF - Sie benötigen dieselbe Transferpresse und dieselben 
+										Einstellungen (Temperatur, Druck, Zeit). Der einzige Unterschied ist die zusätzliche weiße Sperrschicht 
+										im Transfer selbst, die für perfekte Deckkraft auf dunklen Untergründen sorgt.
+									</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Haltbarkeit & Pflege -->
+			<div class="mb-16">
+				<div class="text-center mb-12">
+					<h2 class="text-3xl md:text-4xl font-bold mb-4 text-neutral flex items-center justify-center gap-3">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-primary">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+						</svg>
+						Haltbarkeit & Pflege
+					</h2>
+					<p class="text-neutral/70">Wie Sie die Lebensdauer Ihrer DTF-Drucke maximieren</p>
+				</div>
+
+				<div class="join join-vertical w-full space-y-4">
+					<div class="collapse collapse-plus join-item border border-base-300/30 bg-base-200/50 shadow-sm hover:shadow-md transition-all">
+						<input type="radio" name="faq-care" />
+						<div class="collapse-title text-xl font-semibold text-neutral">
+							Wie lange hält ein DTF-Druck und welche Faktoren beeinflussen die Haltbarkeit?
+						</div>
+						<div class="collapse-content">
+							<div class="prose prose-sm max-w-none text-neutral/80 space-y-4">
+								<p>
+									Die Haltbarkeit von DTF-Drucken ist ein wichtiges Thema für alle, die diese innovative Drucktechnik 
+									in Betracht ziehen. Die gute Nachricht ist, dass DTF-Drucke sehr langlebig sind und bis zu 40°C 
+									Waschtemperatur problemlos überstehen können.
+								</p>
+								<p><strong class="text-neutral">Faktoren, die die Haltbarkeit beeinflussen:</strong></p>
+								<ul class="list-disc list-inside space-y-2 ml-4">
+									<li><strong>Qualität des Textils:</strong> Hochwertige Textilien wie Baumwolle oder Polyester bieten die beste Grundlage für langlebige Drucke.</li>
+									<li><strong>Pflege des Textils:</strong> Die richtige Pflege ist entscheidend, um die Lebensdauer des Drucks zu verlängern.</li>
+									<li><strong>Einwirkung von Chemikalien:</strong> Vermeiden Sie den Kontakt des Drucks mit Chemikalien wie Chlorbleiche oder Fleckenentfernern.</li>
+									<li><strong>Mechanische Beanspruchung:</strong> Starke Reibung oder Kratzer können den Druck beschädigen.</li>
+									<li><strong>UV-Strahlung:</strong> Direkte Sonneneinstrahlung kann den Druck über die Zeit ausbleichen.</li>
+								</ul>
+								<p><strong class="text-neutral">Pflegetipps für maximale Haltbarkeit:</strong></p>
+								<ul class="list-disc list-inside space-y-2 ml-4">
+									<li>Waschen Sie das Textil auf links</li>
+									<li>Verwenden Sie ein mildes Waschmittel ohne Bleichmittel</li>
+									<li>Waschen Sie das Textil nicht heißer als 40°C</li>
+									<li>Trocknen Sie das Textil an der Luft oder im Trockner auf niedriger Stufe</li>
+									<li>Bügeln Sie den Druck nicht direkt</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Unternehmen & Service -->
+			<div class="mb-16">
+				<div class="text-center mb-12">
+					<h2 class="text-3xl md:text-4xl font-bold mb-4 text-neutral flex items-center justify-center gap-3">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-primary">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008z" />
+						</svg>
+						Unternehmen & Service
+					</h2>
+					<p class="text-neutral/70">Über DTF Transfer Print und unsere Dienstleistungen</p>
+				</div>
+
+				<div class="join join-vertical w-full space-y-4">
+					<div class="collapse collapse-plus join-item border border-base-300/30 bg-base-200/50 shadow-sm hover:shadow-md transition-all">
+						<input type="radio" name="faq-company" />
+						<div class="collapse-title text-xl font-semibold text-neutral">
+							Wer ist DTF Transfer Print und was macht Sie aus?
+						</div>
+						<div class="collapse-content">
+							<div class="prose prose-sm max-w-none text-neutral/80 space-y-3">
+								<p>
+									DTF Transfer Print wurde 2009 gegründet und hat sich seitdem zu einem führenden Anbieter für 
+									professionelle Drucklösungen entwickelt. Mit jahrelanger Erfahrung und einem engagierten Team 
+									setzen wir Maßstäbe in der DTF-Druckbranche.
+								</p>
+								<p>
+									Was als kleine Druckerei begann, ist heute ein etabliertes Unternehmen mit modernster Technologie 
+									und einem breiten Leistungsspektrum. Wir kombinieren traditionelles Handwerk mit innovativen 
+									Druckverfahren, um unseren Kunden die bestmöglichen Ergebnisse zu liefern.
+								</p>
+								<p><strong class="text-neutral">Unsere Werte:</strong></p>
+								<ul class="list-disc list-inside space-y-2 ml-4">
+									<li><strong>Innovation:</strong> Wir bleiben stets auf dem neuesten Stand der Technik und investieren kontinuierlich in neue Technologien.</li>
+									<li><strong>Zuverlässigkeit:</strong> Unsere Kunden können sich auf uns verlassen. Wir halten Termine ein, liefern pünktlich und stehen für unsere Arbeit ein.</li>
+									<li><strong>Nachhaltigkeit:</strong> Wir sind uns unserer Verantwortung gegenüber der Umwelt bewusst und setzen nachhaltige Praktiken um.</li>
+									<li><strong>Qualität:</strong> Qualität steht an erster Stelle. Wir verwenden nur die besten Materialien und modernste Drucktechnologien.</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<div class="collapse collapse-plus join-item border border-base-300/30 bg-base-200/50 shadow-sm hover:shadow-md transition-all">
+						<input type="radio" name="faq-company" />
+						<div class="collapse-title text-xl font-semibold text-neutral">
+							Welche Dienstleistungen bieten Sie an?
+						</div>
+						<div class="collapse-content">
+							<div class="prose prose-sm max-w-none text-neutral/80 space-y-4">
+								<div>
+									<p><strong class="text-neutral">DTF-Transfers:</strong></p>
+									<p>
+										Hochwertige Direct-to-Film-Transfers für lebendige, langlebige Drucke auf jedem Stoff. 
+										Verfügbar in Basic und Blockout Varianten, mit Freigröße-Option ab 1 Euro.
+									</p>
+								</div>
+								<div>
+									<p><strong class="text-neutral">Individueller Druck:</strong></p>
+									<p>
+										Personalisierte Drucke für T-Shirts, Hoodies und maßgeschneiderte Bekleidung mit Ihren Designs. 
+										Ideal für Einzelstücke, Kleinserien und Großaufträge.
+									</p>
+								</div>
+								<div>
+									<p><strong class="text-neutral">Eilaufträge:</strong></p>
+									<p>
+										Brauchen Sie es schnell? Wir bieten beschleunigte Druckdienstleistungen für dringende Termine. 
+										Die meisten Bestellungen innerhalb von 24-48 Stunden fertiggestellt.
+									</p>
+								</div>
+								<div>
+									<p><strong class="text-neutral">Druckvorlagen:</strong></p>
+									<p>
+										Unser Team überprüft Ihre Datei auf technische Anforderungen und Druckbarkeit. 
+										Sie erhalten innerhalb von 24h Feedback und ggf. Optimierungsvorschläge.
+									</p>
+								</div>
+								<div>
+									<p><strong class="text-neutral">Fachberatung:</strong></p>
+									<p>
+										Professionelle Beratung zu DTF-Druck, Materialauswahl und optimalen Druckergebnissen. 
+										Unser erfahrenes Team steht Ihnen zur Verfügung.
+									</p>
+								</div>
+								<div>
+									<p><strong class="text-neutral">B2B-Services:</strong></p>
+									<p>
+										Spezielle B2B-Preise, attraktive Rabattstaffeln und Whitelabel-Versand für Wiederverkäufer 
+										und Textilveredler. Sprechen Sie uns einfach an oder erstellen Sie sich einen Account für unseren Wiederverkäufer-Bereich.
+									</p>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="collapse collapse-plus join-item border border-base-300/30 bg-base-200/50 shadow-sm hover:shadow-md transition-all">
+						<input type="radio" name="faq-company" />
+						<div class="collapse-title text-xl font-semibold text-neutral">
+							Wie schnell ist die Lieferzeit?
+						</div>
+						<div class="collapse-content">
+							<div class="prose prose-sm max-w-none text-neutral/80 space-y-3">
+								<p>
+									DTF Transfer Print behauptet seine Position als am schnellsten liefernde DTF Druckerei. 
+									Druck und Versand erfolgen bei uns in der Regel innerhalb von 24-48 Stunden nach Bestell- 
+									und Zahlungseingang.
+								</p>
+								<div class="alert alert-info mt-4">
+									<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+									</svg>
+									<span>
+										<strong>Hinweis:</strong> Bei sehr großen Aufträgen oder speziellen Anforderungen kann die 
+										Bearbeitungszeit länger sein. Wir informieren Sie rechtzeitig über eventuelle Verzögerungen.
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- CTA Section -->
+			<div class="card bg-gradient-to-br from-primary/10 to-secondary/10 border border-primary/20 shadow-lg">
+				<div class="card-body text-center">
+					<h2 class="card-title justify-center text-2xl md:text-3xl mb-4">
+						Haben Sie weitere Fragen?
+					</h2>
+					<p class="text-neutral/70 mb-6 max-w-2xl mx-auto">
+						Unser erfahrenes Team steht Ihnen gerne zur Verfügung. Kontaktieren Sie uns für 
+						persönliche Beratung, individuelle Anfragen oder technischen Support.
+					</p>
+					<div class="card-actions justify-center gap-4 flex-wrap">
+						<a href="/support/" class="btn btn-primary btn-lg">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" />
+							</svg>
+							Technischer Support
+						</a>
+						<a href="/beratung/" class="btn btn-outline btn-primary btn-lg">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 01-.825-.242m9.345-8.334a2.126 2.126 0 00-.476-.095 48.64 48.64 0 00-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0011.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155" />
+							</svg>
+							Fachberatung
+						</a>
+						<a href="tel:+49123456789" class="btn btn-ghost btn-lg">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
+							</svg>
+							Jetzt anrufen
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Schema.org FAQPage Structured Data for SEO -->
+	<script type="application/ld+json" set:html={JSON.stringify({
+		"@context": "https://schema.org",
+		"@type": "FAQPage",
+		"mainEntity": [
+			{
+				"@type": "Question",
+				"name": "Was ist DTF-Druck und wie funktioniert das Direct-to-Film-Verfahren?",
+				"acceptedAnswer": {
+					"@type": "Answer",
+					"text": "DTF steht für 'Direct-to-Film' und bezeichnet ein innovatives Druckverfahren im Textildruck. Beim DTF-Druck werden Designs zunächst auf eine spezielle Transferfolie gedruckt und anschließend mit Hitze und Druck auf das Textil übertragen. Dieses moderne Druckverfahren ermöglicht hochwertige, lebendige Drucke auf nahezu allen Textilien."
+				}
+			},
+			{
+				"@type": "Question",
+				"name": "Welche Vorteile bietet der DTF-Druck gegenüber anderen Druckverfahren?",
+				"acceptedAnswer": {
+					"@type": "Answer",
+					"text": "DTF-Druck bietet schnelle Bearbeitung (24-48 Stunden), kosteneffiziente Preise für Einzelstücke und Kleinserien, vielseitige Anwendung auf nahezu allen Textilien, hervorragende Druckqualität mit leuchtenden Farben und gestochen scharfen Details, sowie Langlebigkeit mit Waschbeständigkeit bis zu 40°C."
+				}
+			},
+			{
+				"@type": "Question",
+				"name": "Welche Textilien können mit DTF-Druck bedruckt werden?",
+				"acceptedAnswer": {
+					"@type": "Answer",
+					"text": "DTF-Transfers haften auf nahezu allen Textilien, ob Baumwolle, Polyester, Mischgewebe, Leder oder sogar Canvas. Für optimale Ergebnisse empfehlen wir glatte bis leicht strukturierte Textilien. Nicht geeignet sind wasserabweisende Stoffe, stark strukturierte Textilien oder sehr grobe Stoffe."
+				}
+			},
+			{
+				"@type": "Question",
+				"name": "Wie funktioniert der DTF-Druckprozess im Detail?",
+				"acceptedAnswer": {
+					"@type": "Answer",
+					"text": "Der DTF-Druckprozess umfasst vier Schritte: 1. Druck auf Folie (CMYK), 2. Weißdruck für deckende Ergebnisse auf dunklen Textilien, 3. Trocknung der Folie, 4. Transfer mit Hitze und Druck auf das Textil mittels Transferpresse oder Bügeleisen."
+				}
+			},
+			{
+				"@type": "Question",
+				"name": "Welche Dateiformate und Anforderungen gelten für DTF-Druckdateien?",
+				"acceptedAnswer": {
+					"@type": "Answer",
+					"text": "Wir benötigen druckfertige Designs im Format PNG oder PDF mit einer Auflösung von mindestens 300 dpi. Alle Schriften müssen in Pfade oder Kurven konvertiert sein, die Strichstärke sollte mindestens 0,6 mm betragen, und der Farbmodus sollte CMYK sein."
+				}
+			},
+			{
+				"@type": "Question",
+				"name": "Was bedeutet 'Freigröße' bei DTF-Transfers und welche Vorteile bietet sie?",
+				"acceptedAnswer": {
+					"@type": "Answer",
+					"text": "Freigröße bietet maximale Flexibilität, da die einzelnen Motive nicht manuell verschachtelt werden müssen. Sie können Ihre Designs in beliebiger Größe und Anordnung platzieren. Zudem ist Freigröße kosteneffizienter, da nur die tatsächlich bedruckte Fläche berechnet wird."
+				}
+			},
+			{
+				"@type": "Question",
+				"name": "Warum ist Freigröße günstiger als feste Größen?",
+				"acceptedAnswer": {
+					"@type": "Answer",
+					"text": "Freigröße ist kosteneffizienter, da nur die tatsächlich bedruckte Fläche berechnet wird. Im Gegensatz zu festen Größen zahlen Sie nicht für ungenutzten Platz, was besonders bei kleineren Designs oder individuellen Anordnungen erhebliche Kosteneinsparungen ermöglicht."
+				}
+			},
+			{
+				"@type": "Question",
+				"name": "Wie lange hält ein DTF-Druck und welche Faktoren beeinflussen die Haltbarkeit?",
+				"acceptedAnswer": {
+					"@type": "Answer",
+					"text": "DTF-Drucke sind sehr langlebig und halten bis zu 40°C Waschtemperatur. Die Haltbarkeit wird beeinflusst durch die Qualität des Textils, die richtige Pflege (Waschen auf links, mildes Waschmittel, max. 40°C), Vermeidung von Chemikalien, mechanischer Beanspruchung und direkter UV-Strahlung."
+				}
+			},
+			{
+				"@type": "Question",
+				"name": "Wer ist DTF Transfer Print und was macht Sie aus?",
+				"acceptedAnswer": {
+					"@type": "Answer",
+					"text": "DTF Transfer Print wurde 2009 gegründet und hat sich zu einem führenden Anbieter für professionelle Drucklösungen entwickelt. Wir kombinieren traditionelles Handwerk mit innovativen Druckverfahren. Unsere Werte sind Innovation, Zuverlässigkeit, Nachhaltigkeit und Qualität."
+				}
+			},
+			{
+				"@type": "Question",
+				"name": "Wie schnell ist die Lieferzeit?",
+				"acceptedAnswer": {
+					"@type": "Answer",
+					"text": "DTF Transfer Print ist die am schnellsten liefernde DTF Druckerei. Druck und Versand erfolgen in der Regel innerhalb von 24-48 Stunden nach Bestell- und Zahlungseingang."
+				}
+			}
+		]
+	})} />
+
+	<!-- Additional SEO Meta Tags -->
+	<meta name="keywords" content="DTF-Druck FAQ, Direct-to-Film Fragen, Textildruck Fragen, DTF Transfer Fragen, Häufige Fragen DTF, DTF Druckverfahren, Textilveredelung FAQ" />
+	<meta property="og:title" content={title} />
+	<meta property="og:description" content={description} />
+	<meta property="og:type" content="website" />
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content={title} />
+	<meta name="twitter:description" content={description} />
+</Layout>

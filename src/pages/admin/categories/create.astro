@@ -1,0 +1,222 @@
+---
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import { pool } from '../../../lib/db';
+
+// Note: Admin check is handled by middleware.ts
+// If we reach here, user is already verified as admin
+
+// Fetch all categories for parent selection
+const client = await pool.connect();
+try {
+  var categories = await client.query(`
+    WITH RECURSIVE category_tree AS (
+      SELECT
+        id,
+        name,
+        "parentId",
+        0 as level,
+        name::text as path
+      FROM categories
+      WHERE "parentId" IS NULL
+
+      UNION ALL
+
+      SELECT
+        c.id,
+        c.name,
+        c."parentId",
+        ct.level + 1,
+        ct.path || ' > ' || c.name
+      FROM categories c
+      INNER JOIN category_tree ct ON c."parentId" = ct.id
+    )
+    SELECT * FROM category_tree
+    ORDER BY path
+  `);
+} finally {
+  client.release();
+}
+---
+
+<AdminLayout title="Create Category" currentPage="categories">
+  <div class="max-w-4xl mx-auto">
+    <div class="mb-6">
+      <h1 class="text-3xl font-bold">Neue Kategorie erstellen</h1>
+      <p class="text-base-content/60 mt-1">Erstellen Sie eine neue Kategorie für das Navbar-Menü</p>
+    </div>
+
+    <form id="categoryForm" class="space-y-6">
+      <!-- Basic Information -->
+      <div class="card bg-base-100 shadow-xl">
+        <div class="card-body">
+          <h2 class="card-title">Grundinformationen</h2>
+
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Kategoriename *</span>
+            </label>
+            <input
+              type="text"
+              name="name"
+              required
+              class="input input-bordered"
+              placeholder="DTF Transfer"
+              id="categoryName"
+            />
+          </div>
+
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Slug *</span>
+              <span class="label-text-alt">URL-freundlicher Identifier</span>
+            </label>
+            <input
+              type="text"
+              name="slug"
+              required
+              class="input input-bordered"
+              placeholder="dtf-transfer"
+              id="categorySlug"
+            />
+            <label class="label">
+              <span class="label-text-alt">Wird automatisch aus dem Namen generiert</span>
+            </label>
+          </div>
+
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Beschreibung</span>
+            </label>
+            <textarea
+              name="description"
+              class="textarea textarea-bordered h-24"
+              placeholder="Optionale Beschreibung der Kategorie"
+            ></textarea>
+          </div>
+
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Übergeordnete Kategorie</span>
+              <span class="label-text-alt">Leer lassen für Hauptkategorie</span>
+            </label>
+            <select name="parentId" class="select select-bordered">
+              <option value="">Keine (Hauptkategorie)</option>
+              {categories.rows.map((cat) => (
+                <option value={cat.id}>
+                  {[...Array(cat.level)].map(() => '  ')} {cat.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Anzeigereihenfolge</span>
+              <span class="label-text-alt">Niedrigere Zahlen erscheinen zuerst</span>
+            </label>
+            <input
+              type="number"
+              name="displayOrder"
+              value="0"
+              class="input input-bordered"
+              placeholder="0"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Media -->
+      <div class="card bg-base-100 shadow-xl">
+        <div class="card-body">
+          <h2 class="card-title">Bild</h2>
+
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Bild-URL</span>
+              <span class="label-text-alt">Optional</span>
+            </label>
+            <input
+              type="url"
+              name="imageUrl"
+              class="input input-bordered"
+              placeholder="https://example.com/image.jpg"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Status -->
+      <div class="card bg-base-100 shadow-xl">
+        <div class="card-body">
+          <h2 class="card-title">Status</h2>
+
+          <div class="form-control">
+            <label class="label cursor-pointer">
+              <span class="label-text">Kategorie aktivieren</span>
+              <input type="checkbox" name="isActive" checked class="checkbox checkbox-success" />
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Submit -->
+      <div class="flex gap-4">
+        <button type="submit" class="btn btn-primary flex-1">Kategorie erstellen</button>
+        <a href="/admin/categories" class="btn btn-ghost">Abbrechen</a>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    // Auto-generate slug from name
+    const nameInput = document.getElementById('categoryName');
+    const slugInput = document.getElementById('categorySlug');
+
+    nameInput.addEventListener('input', (e) => {
+      const slug = e.target.value
+        .toLowerCase()
+        .replace(/ä/g, 'ae')
+        .replace(/ö/g, 'oe')
+        .replace(/ü/g, 'ue')
+        .replace(/ß/g, 'ss')
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+      slugInput.value = slug;
+    });
+
+    // Form submission
+    document.getElementById('categoryForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(e.target);
+      const data = {
+        name: formData.get('name'),
+        slug: formData.get('slug'),
+        description: formData.get('description') || null,
+        parentId: formData.get('parentId') || null,
+        displayOrder: parseInt(formData.get('displayOrder')) || 0,
+        imageUrl: formData.get('imageUrl') || null,
+        isActive: formData.get('isActive') === 'on',
+      };
+
+      try {
+        const response = await fetch('/api/admin/categories/create', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          alert('Kategorie erfolgreich erstellt!');
+          window.location.href = '/admin/categories';
+        } else {
+          alert('Fehler: ' + result.error.message);
+        }
+      } catch (error) {
+        alert('Fehler beim Erstellen der Kategorie: ' + error.message);
+      }
+    });
+  </script>
+</AdminLayout>

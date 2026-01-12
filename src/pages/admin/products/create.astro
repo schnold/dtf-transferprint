@@ -1,0 +1,440 @@
+---
+import { pool } from '@/lib/db';
+import ProductImageUpload from '@/components/ProductImageUpload.astro';
+
+// Note: Admin check is handled by middleware.ts
+// If we reach here, user is already verified as admin
+
+// Fetch categories for dropdown
+const client = await pool.connect();
+try {
+  var categories = await client.query(`
+    SELECT * FROM categories
+    WHERE "isActive" = true
+    ORDER BY "displayOrder"
+  `);
+} finally {
+  client.release();
+}
+---
+
+<!DOCTYPE html>
+<html lang="de" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Product | Admin</title>
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@4/dist/full.min.css" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+  <div class="min-h-screen bg-base-200">
+    <!-- Header -->
+    <div class="navbar bg-base-100 shadow-lg">
+      <div class="flex-1">
+        <a href="/admin" class="btn btn-ghost text-xl">Admin Dashboard</a>
+      </div>
+      <div class="flex-none">
+        <a href="/admin/products" class="btn btn-ghost">← Back to Products</a>
+      </div>
+    </div>
+
+    <div class="container mx-auto p-6 max-w-4xl">
+      <h1 class="text-3xl font-bold mb-6">Create New Product</h1>
+
+      <form id="productForm" class="space-y-6">
+        <!-- Basic Information -->
+        <div class="card bg-base-100 shadow-xl">
+          <div class="card-body">
+            <h2 class="card-title">Basic Information</h2>
+
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text">Product Name *</span>
+              </label>
+              <input type="text" name="name" required class="input input-bordered" placeholder="DTF Laufmeter Blockout Meterware" />
+            </div>
+
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text">Slug *</span>
+                <span class="label-text-alt">URL-friendly identifier</span>
+              </label>
+              <input type="text" name="slug" required class="input input-bordered" placeholder="dtf-laufmeter-blockout-meterware" />
+            </div>
+
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text">Category *</span>
+              </label>
+              <select name="categoryId" required class="select select-bordered">
+                <option value="">Select a category</option>
+                {categories.rows.map((cat) => (
+                  <option value={cat.id}>{cat.name}</option>
+                ))}
+              </select>
+            </div>
+
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text">SKU</span>
+              </label>
+              <input type="text" name="sku" class="input input-bordered" placeholder="DTF-BLOCKOUT-5M" />
+            </div>
+
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text">Short Description *</span>
+              </label>
+              <textarea name="shortDescription" required class="textarea textarea-bordered h-20" placeholder="Brief description for product cards"></textarea>
+            </div>
+
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text">Full Description *</span>
+              </label>
+              <textarea name="description" required class="textarea textarea-bordered h-40" placeholder="Detailed product description"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pricing -->
+        <div class="card bg-base-100 shadow-xl">
+          <div class="card-body">
+            <h2 class="card-title">Pricing</h2>
+
+            <div class="grid grid-cols-2 gap-4">
+              <div class="form-control">
+                <label class="label">
+                  <span class="label-text">Base Price (€) *</span>
+                </label>
+                <input type="number" name="basePrice" step="0.01" required class="input input-bordered" placeholder="14.99" />
+              </div>
+
+              <div class="form-control">
+                <label class="label">
+                  <span class="label-text">Compare at Price (€)</span>
+                </label>
+                <input type="number" name="compareAtPrice" step="0.01" class="input input-bordered" placeholder="19.99" />
+              </div>
+            </div>
+
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text">Price Calculation Method</span>
+              </label>
+              <select name="priceCalculationMethod" class="select select-bordered">
+                <option value="per_piece">Per Piece</option>
+                <option value="per_meter">Per Meter</option>
+                <option value="per_area">Per Area (m²)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- DTF-Specific Fields -->
+        <div class="card bg-base-100 shadow-xl">
+          <div class="card-body">
+            <h2 class="card-title">DTF-Specific Settings</h2>
+
+            <div class="form-control">
+              <label class="label cursor-pointer">
+                <span class="label-text">Is Blockout Product</span>
+                <input type="checkbox" name="isBlockout" class="checkbox checkbox-primary" />
+              </label>
+            </div>
+
+            <div class="form-control">
+              <label class="label cursor-pointer">
+                <span class="label-text">Accepts File Upload</span>
+                <input type="checkbox" id="acceptsFileUpload" name="acceptsFileUpload" class="checkbox checkbox-primary" />
+              </label>
+            </div>
+
+            <div id="fileUploadSettings" class="hidden">
+              <div class="divider"></div>
+
+              <div class="grid grid-cols-2 gap-4">
+                <div class="form-control">
+                  <label class="label">
+                    <span class="label-text">Max File Size (MB)</span>
+                  </label>
+                  <input type="number" name="maxFileSizeMb" value="255" class="input input-bordered" />
+                </div>
+
+                <div class="form-control">
+                  <label class="label">
+                    <span class="label-text">Allowed File Types</span>
+                  </label>
+                  <input type="text" name="allowedFileTypes" value="PDF" class="input input-bordered" placeholder="PDF, PNG, JPG" />
+                </div>
+              </div>
+
+              <div class="grid grid-cols-3 gap-4">
+                <div class="form-control">
+                  <label class="label">
+                    <span class="label-text">Max Width (mm)</span>
+                  </label>
+                  <input type="number" name="maxWidthMm" value="560" class="input input-bordered" />
+                </div>
+
+                <div class="form-control">
+                  <label class="label">
+                    <span class="label-text">Min Height (mm)</span>
+                  </label>
+                  <input type="number" name="minHeightMm" value="100" class="input input-bordered" />
+                </div>
+
+                <div class="form-control">
+                  <label class="label">
+                    <span class="label-text">Max Height (mm)</span>
+                  </label>
+                  <input type="number" name="maxHeightMm" value="5000" class="input input-bordered" />
+                </div>
+              </div>
+            </div>
+
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text">Print Technology</span>
+              </label>
+              <input type="text" name="printTechnology" value="DTF" class="input input-bordered" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Price Tiers -->
+        <div class="card bg-base-100 shadow-xl">
+          <div class="card-body">
+            <div class="flex justify-between items-center mb-4">
+              <h2 class="card-title">Price Tiers</h2>
+              <button type="button" id="addTierBtn" class="btn btn-sm btn-primary">+ Add Tier</button>
+            </div>
+
+            <div id="priceTiersContainer" class="space-y-3">
+              <!-- Default tier -->
+              <div class="tier-row border rounded-lg p-4 relative">
+                <div class="grid grid-cols-5 gap-3">
+                  <div class="form-control">
+                    <label class="label label-text-alt">Min Qty</label>
+                    <input type="number" name="tier_minQty[]" value="0" required class="input input-sm input-bordered" />
+                  </div>
+                  <div class="form-control">
+                    <label class="label label-text-alt">Max Qty</label>
+                    <input type="number" name="tier_maxQty[]" value="4" class="input input-sm input-bordered" placeholder="∞" />
+                  </div>
+                  <div class="form-control">
+                    <label class="label label-text-alt">Discount %</label>
+                    <input type="number" name="tier_discount[]" value="0" step="0.01" required class="input input-sm input-bordered" />
+                  </div>
+                  <div class="form-control">
+                    <label class="label label-text-alt">Price (€)</label>
+                    <input type="number" name="tier_price[]" value="14.99" step="0.01" required class="input input-sm input-bordered" />
+                  </div>
+                  <div class="form-control">
+                    <label class="label label-text-alt">Order</label>
+                    <input type="number" name="tier_order[]" value="1" required class="input input-sm input-bordered" />
+                  </div>
+                </div>
+                <button type="button" class="btn btn-xs btn-ghost remove-tier absolute top-2 right-2">×</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Inventory & Status -->
+        <div class="card bg-base-100 shadow-xl">
+          <div class="card-body">
+            <h2 class="card-title">Inventory & Status</h2>
+
+            <div class="grid grid-cols-2 gap-4">
+              <div class="form-control">
+                <label class="label cursor-pointer">
+                  <span class="label-text">Track Inventory</span>
+                  <input type="checkbox" name="trackInventory" class="checkbox checkbox-primary" />
+                </label>
+              </div>
+
+              <div class="form-control">
+                <label class="label cursor-pointer">
+                  <span class="label-text">Requires Shipping</span>
+                  <input type="checkbox" name="requiresShipping" checked class="checkbox checkbox-primary" />
+                </label>
+              </div>
+
+              <div class="form-control">
+                <label class="label cursor-pointer">
+                  <span class="label-text">Active</span>
+                  <input type="checkbox" name="isActive" checked class="checkbox checkbox-success" />
+                </label>
+              </div>
+
+              <div class="form-control">
+                <label class="label cursor-pointer">
+                  <span class="label-text">Featured</span>
+                  <input type="checkbox" name="isFeatured" class="checkbox checkbox-info" />
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product Images -->
+        <ProductImageUpload />
+
+        <!-- SEO -->
+        <div class="card bg-base-100 shadow-xl">
+          <div class="card-body">
+            <h2 class="card-title">SEO</h2>
+
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text">Meta Title</span>
+              </label>
+              <input type="text" name="metaTitle" class="input input-bordered" />
+            </div>
+
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text">Meta Description</span>
+              </label>
+              <textarea name="metaDescription" class="textarea textarea-bordered h-20"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Submit -->
+        <div class="flex gap-4">
+          <button type="submit" class="btn btn-primary flex-1">Create Product</button>
+          <a href="/admin/products" class="btn btn-ghost">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Toggle file upload settings
+    document.getElementById('acceptsFileUpload').addEventListener('change', (e) => {
+      const settings = document.getElementById('fileUploadSettings');
+      settings.classList.toggle('hidden', !e.target.checked);
+    });
+
+    // Add price tier
+    let tierCount = 1;
+    document.getElementById('addTierBtn').addEventListener('click', () => {
+      tierCount++;
+      const container = document.getElementById('priceTiersContainer');
+      const tier = document.createElement('div');
+      tier.className = 'tier-row border rounded-lg p-4 relative';
+      tier.innerHTML = `
+        <div class="grid grid-cols-5 gap-3">
+          <div class="form-control">
+            <label class="label label-text-alt">Min Qty</label>
+            <input type="number" name="tier_minQty[]" value="${tierCount * 5}" required class="input input-sm input-bordered" />
+          </div>
+          <div class="form-control">
+            <label class="label label-text-alt">Max Qty</label>
+            <input type="number" name="tier_maxQty[]" class="input input-sm input-bordered" placeholder="∞" />
+          </div>
+          <div class="form-control">
+            <label class="label label-text-alt">Discount %</label>
+            <input type="number" name="tier_discount[]" value="0" step="0.01" required class="input input-sm input-bordered" />
+          </div>
+          <div class="form-control">
+            <label class="label label-text-alt">Price (€)</label>
+            <input type="number" name="tier_price[]" step="0.01" required class="input input-sm input-bordered" />
+          </div>
+          <div class="form-control">
+            <label class="label label-text-alt">Order</label>
+            <input type="number" name="tier_order[]" value="${tierCount}" required class="input input-sm input-bordered" />
+          </div>
+        </div>
+        <button type="button" class="btn btn-xs btn-ghost remove-tier absolute top-2 right-2">×</button>
+      `;
+      container.appendChild(tier);
+    });
+
+    // Remove price tier
+    document.addEventListener('click', (e) => {
+      if (e.target.classList.contains('remove-tier')) {
+        const tiers = document.querySelectorAll('.tier-row');
+        if (tiers.length > 1) {
+          e.target.closest('.tier-row').remove();
+        } else {
+          alert('At least one price tier is required');
+        }
+      }
+    });
+
+    // Form submission
+    document.getElementById('productForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(e.target);
+      const data = {
+        name: formData.get('name'),
+        slug: formData.get('slug'),
+        categoryId: formData.get('categoryId'),
+        sku: formData.get('sku'),
+        shortDescription: formData.get('shortDescription'),
+        description: formData.get('description'),
+        basePrice: parseFloat(formData.get('basePrice')),
+        compareAtPrice: formData.get('compareAtPrice') ? parseFloat(formData.get('compareAtPrice')) : null,
+        priceCalculationMethod: formData.get('priceCalculationMethod'),
+        isBlockout: formData.get('isBlockout') === 'on',
+        acceptsFileUpload: formData.get('acceptsFileUpload') === 'on',
+        maxFileSizeMb: parseInt(formData.get('maxFileSizeMb')) || 255,
+        allowedFileTypes: formData.get('allowedFileTypes') || 'PDF',
+        maxWidthMm: parseInt(formData.get('maxWidthMm')) || null,
+        minHeightMm: parseInt(formData.get('minHeightMm')) || null,
+        maxHeightMm: parseInt(formData.get('maxHeightMm')) || null,
+        printTechnology: formData.get('printTechnology'),
+        trackInventory: formData.get('trackInventory') === 'on',
+        requiresShipping: formData.get('requiresShipping') === 'on',
+        isActive: formData.get('isActive') === 'on',
+        isFeatured: formData.get('isFeatured') === 'on',
+        metaTitle: formData.get('metaTitle'),
+        metaDescription: formData.get('metaDescription'),
+        priceTiers: []
+      };
+
+      // Collect price tiers
+      const minQties = formData.getAll('tier_minQty[]');
+      const maxQties = formData.getAll('tier_maxQty[]');
+      const discounts = formData.getAll('tier_discount[]');
+      const prices = formData.getAll('tier_price[]');
+      const orders = formData.getAll('tier_order[]');
+
+      for (let i = 0; i < minQties.length; i++) {
+        data.priceTiers.push({
+          minQuantity: parseInt(minQties[i]),
+          maxQuantity: maxQties[i] ? parseInt(maxQties[i]) : null,
+          discountPercent: parseFloat(discounts[i]),
+          pricePerUnit: parseFloat(prices[i]),
+          displayOrder: parseInt(orders[i])
+        });
+      }
+
+      try {
+        const response = await fetch('/api/admin/products/create', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          alert('Product created successfully! You can now add images by editing the product.');
+          // Redirect to edit page to allow image upload
+          window.location.href = `/admin/products/${result.data.productId}/edit`;
+        } else {
+          alert('Error: ' + result.error.message);
+        }
+      } catch (error) {
+        alert('Failed to create product: ' + error.message);
+      }
+    });
+  </script>
+</body>
+</html>

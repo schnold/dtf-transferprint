@@ -1,0 +1,181 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import { SITE_CONFIG } from '../constants/site';
+
+const title = 'Kontakt - DTF Transfer Print';
+const description = 'Kontaktieren Sie uns für Fragen, Beratung oder individuelle Anfragen. Wir helfen Ihnen gerne weiter.';
+---
+
+<Layout title={title} description={description}>
+	<Navbar />
+
+	<div class="min-h-[calc(100vh-12rem)] flex items-center justify-center px-4 py-16">
+		<div class="card bg-base-100 shadow-2xl w-full max-w-2xl border border-base-300/30">
+			<div class="card-body">
+				<h1 class="card-title text-3xl md:text-4xl mb-2">Kontakt</h1>
+				<p class="text-neutral/70 mb-8">Wir freuen uns auf Ihre Nachricht</p>
+
+				<form id="contact-form" class="space-y-6">
+					<div class="form-control">
+						<label class="label" for="name">
+							<span class="label-text font-medium">Name *</span>
+						</label>
+						<input
+							type="text"
+							id="name"
+							name="name"
+							required
+							class="input input-bordered w-full"
+							placeholder="Ihr Name"
+						/>
+					</div>
+
+					<div class="form-control">
+						<label class="label" for="email">
+							<span class="label-text font-medium">E-Mail *</span>
+						</label>
+						<input
+							type="email"
+							id="email"
+							name="email"
+							required
+							class="input input-bordered w-full"
+							placeholder="ihre@email.de"
+						/>
+					</div>
+
+					<div class="form-control">
+						<label class="label" for="phone">
+							<span class="label-text font-medium">Telefon</span>
+						</label>
+						<input
+							type="tel"
+							id="phone"
+							name="phone"
+							class="input input-bordered w-full"
+							placeholder="+49 123 456789"
+						/>
+					</div>
+
+					<div class="form-control">
+						<label class="label" for="subject">
+							<span class="label-text font-medium">Betreff *</span>
+						</label>
+						<select
+							id="subject"
+							name="subject"
+							required
+							class="select select-bordered w-full"
+						>
+							<option value="">Bitte wählen Sie ein Thema</option>
+							<option value="allgemein">Allgemeine Anfrage</option>
+							<option value="beratung">Fachberatung</option>
+							<option value="bestellung">Frage zur Bestellung</option>
+							<option value="support">Technischer Support</option>
+							<option value="b2b">B2B / Wiederverkäufer</option>
+							<option value="sonstiges">Sonstiges</option>
+						</select>
+					</div>
+
+					<div class="form-control">
+						<label class="label" for="message">
+							<span class="label-text font-medium">Nachricht *</span>
+						</label>
+						<textarea
+							id="message"
+							name="message"
+							required
+							rows="6"
+							class="textarea textarea-bordered w-full"
+							placeholder="Ihre Nachricht an uns..."
+						></textarea>
+					</div>
+
+					<div class="form-control mt-8">
+						<button type="submit" class="btn btn-primary btn-lg w-full" id="submit-btn">
+							<span class="loading loading-spinner loading-sm hidden" id="loading-spinner"></span>
+							<span id="submit-text">Nachricht senden</span>
+						</button>
+					</div>
+
+					<div id="form-message" class="hidden mt-4"></div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		const form = document.getElementById('contact-form') as HTMLFormElement;
+		const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement;
+		const submitText = document.getElementById('submit-text') as HTMLSpanElement;
+		const loadingSpinner = document.getElementById('loading-spinner') as HTMLSpanElement;
+		const formMessage = document.getElementById('form-message') as HTMLDivElement;
+
+		form.addEventListener('submit', async (e) => {
+			e.preventDefault();
+
+			// Reset message
+			formMessage.classList.add('hidden');
+			formMessage.classList.remove('alert-success', 'alert-error');
+
+			// Disable submit button and show loading
+			submitBtn.disabled = true;
+			submitText.textContent = 'Wird gesendet...';
+			loadingSpinner.classList.remove('hidden');
+
+			try {
+				const formData = new FormData(form);
+				const data = Object.fromEntries(formData);
+
+				const response = await fetch('/api/contact', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify(data),
+				});
+
+				const result = await response.json();
+
+				if (response.ok) {
+					// Success
+					formMessage.classList.add('alert', 'alert-success');
+					formMessage.innerHTML = `
+						<svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+						</svg>
+						<span>${result.message || 'Ihre Nachricht wurde erfolgreich gesendet. Wir melden uns schnellstmöglich bei Ihnen.'}</span>
+					`;
+					formMessage.classList.remove('hidden');
+					form.reset();
+				} else {
+					// Error
+					formMessage.classList.add('alert', 'alert-error');
+					formMessage.innerHTML = `
+						<svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+						</svg>
+						<span>${result.error || 'Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut oder kontaktieren Sie uns direkt.'}</span>
+					`;
+					formMessage.classList.remove('hidden');
+				}
+			} catch (error) {
+				// Network or other error
+				formMessage.classList.add('alert', 'alert-error');
+				formMessage.innerHTML = `
+					<svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+					</svg>
+					<span>Verbindungsfehler. Bitte überprüfen Sie Ihre Internetverbindung und versuchen Sie es erneut.</span>
+				`;
+				formMessage.classList.remove('hidden');
+			} finally {
+				// Re-enable submit button
+				submitBtn.disabled = false;
+				submitText.textContent = 'Nachricht senden';
+				loadingSpinner.classList.add('hidden');
+			}
+		});
+	</script>
+</Layout>

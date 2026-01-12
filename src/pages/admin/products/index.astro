@@ -1,0 +1,131 @@
+---
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import { pool } from '../../../lib/db';
+
+// Note: Admin check is handled by middleware.ts
+// If we reach here, user is already verified as admin
+
+// Fetch all products
+const client = await pool.connect();
+try {
+  var products = await client.query(`
+    SELECT
+      p.*,
+      c.name as "categoryName",
+      (SELECT COUNT(*) FROM "priceTiers" WHERE "productId" = p.id) as "tierCount"
+    FROM products p
+    LEFT JOIN categories c ON p."categoryId" = c.id
+    ORDER BY p."createdAt" DESC
+  `);
+} finally {
+  client.release();
+}
+---
+
+<AdminLayout title="Product Management" currentPage="products">
+  <div>
+      <!-- Page Header -->
+      <div class="flex justify-between items-center mb-6">
+        <h1 class="text-3xl font-bold">Product Management</h1>
+        <a href="/admin/products/create" class="btn btn-primary">
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+          </svg>
+          Create Product
+        </a>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats shadow mb-6 w-full">
+        <div class="stat">
+          <div class="stat-title">Total Products</div>
+          <div class="stat-value">{products.rows.length}</div>
+        </div>
+        <div class="stat">
+          <div class="stat-title">Active</div>
+          <div class="stat-value text-success">{products.rows.filter(p => p.isActive).length}</div>
+        </div>
+        <div class="stat">
+          <div class="stat-title">Inactive</div>
+          <div class="stat-value text-error">{products.rows.filter(p => !p.isActive).length}</div>
+        </div>
+        <div class="stat">
+          <div class="stat-title">Featured</div>
+          <div class="stat-value text-info">{products.rows.filter(p => p.isFeatured).length}</div>
+        </div>
+      </div>
+
+      <!-- Products Table -->
+      <div class="card bg-base-100 shadow-xl">
+        <div class="card-body">
+          <div class="overflow-x-auto">
+            <table class="table table-zebra">
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Category</th>
+                  <th>Price</th>
+                  <th>Type</th>
+                  <th>Tiers</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {products.rows.map((product) => (
+                  <tr>
+                    <td>
+                      <div class="flex items-center gap-3">
+                        <div>
+                          <div class="font-bold">{product.name}</div>
+                          <div class="text-sm opacity-50">{product.sku || 'No SKU'}</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <span class="badge badge-ghost">{product.categoryName}</span>
+                    </td>
+                    <td class="font-semibold">{parseFloat(product.basePrice).toFixed(2)}€</td>
+                    <td>
+                      <div class="flex gap-1">
+                        {product.isBlockout && <span class="badge badge-secondary badge-sm">Blockout</span>}
+                        {product.acceptsFileUpload && <span class="badge badge-info badge-sm">Upload</span>}
+                        {product.priceCalculationMethod && (
+                          <span class="badge badge-outline badge-sm">{product.priceCalculationMethod}</span>
+                        )}
+                      </div>
+                    </td>
+                    <td>
+                      {parseInt(product.tierCount) > 0 ? (
+                        <span class="badge badge-success">{product.tierCount} tiers</span>
+                      ) : (
+                        <span class="badge badge-ghost">No tiers</span>
+                      )}
+                    </td>
+                    <td>
+                      {product.isActive ? (
+                        <span class="badge badge-success">Active</span>
+                      ) : (
+                        <span class="badge badge-error">Inactive</span>
+                      )}
+                      {product.isFeatured && <span class="badge badge-info ml-1">Featured</span>}
+                    </td>
+                    <td>
+                      <div class="flex gap-2">
+                        <a href={`/admin/products/${product.id}/edit`} class="btn btn-sm btn-ghost">
+                          Edit
+                        </a>
+                        <a href={`/product/${product.slug}`} target="_blank" class="btn btn-sm btn-ghost">
+                          View
+                        </a>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+  </div>
+</AdminLayout>

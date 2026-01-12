@@ -6,28 +6,156 @@ import ProductInfo from '../../components/product/ProductInfo.astro';
 import ProductSpecs from '../../components/product/ProductSpecs.astro';
 import ProductActions from '../../components/product/ProductActions.astro';
 import ProductReviews from '../../components/product/ProductReviews.astro';
-import RelatedProducts from '../../components/product/RelatedProducts.astro';
-import { getProductBySlug, products } from '../../data/products';
-
-export async function getStaticPaths() {
-	return products.map(product => ({
-		params: { slug: product.slug },
-	}));
-}
-
-interface Props {
-	slug: string;
-}
+import { pool } from '@/lib/db';
 
 const { slug } = Astro.params;
-const product = getProductBySlug(slug || '');
 
-if (!product) {
-	return Astro.redirect('/404');
+// Fetch product from database
+const client = await pool.connect();
+try {
+	const productResult = await client.query(`
+		SELECT
+			p.*,
+			c.name as "categoryName",
+			c.slug as "categorySlug"
+		FROM products p
+		LEFT JOIN categories c ON p."categoryId" = c.id
+		WHERE p.slug = $1 AND p."isActive" = true
+	`, [slug]);
+
+	if (productResult.rows.length === 0) {
+		return Astro.redirect('/404');
+	}
+
+	var product = productResult.rows[0];
+
+	// Fetch product images from R2
+	var productImages = await client.query(`
+		SELECT url, "altText", "isPrimary", "displayOrder"
+		FROM "productImages"
+		WHERE "productId" = $1
+		ORDER BY "isPrimary" DESC, "displayOrder"
+	`, [product.id]);
+
+	// Fetch price tiers
+	var priceTiers = await client.query(`
+		SELECT *
+		FROM "priceTiers"
+		WHERE "productId" = $1
+		ORDER BY "displayOrder"
+	`, [product.id]);
+
+	// Fetch related products
+	var relatedProductsResult = await client.query(`
+		SELECT
+			p.id, p.name, p.slug, p."basePrice", p."shortDescription",
+			c.name as "categoryName",
+			pi.url as "imageUrl"
+		FROM products p
+		LEFT JOIN categories c ON p."categoryId" = c.id
+		LEFT JOIN LATERAL (
+			SELECT url FROM "productImages"
+			WHERE "productId" = p.id AND "isPrimary" = true
+			LIMIT 1
+		) pi ON true
+		WHERE p."categoryId" = $1
+			AND p.slug != $2
+			AND p."isActive" = true
+		ORDER BY p."isFeatured" DESC, RANDOM()
+		LIMIT 3
+	`, [product.categoryId, slug]);
+
+	// Fetch custom specifications from database
+	var customSpecs = await client.query(`
+		SELECT "specKey", "specLabel", "specValue", "displayOrder"
+		FROM "productSpecifications"
+		WHERE "productId" = $1
+		ORDER BY "displayOrder"
+	`, [product.id]);
+
+} finally {
+	client.release();
 }
 
-const pageTitle = `${product.name} - DTF Transfer Print`;
-const pageDescription = product.shortDescription;
+// Map database data to component props
+const images = productImages.rows.map(img => img.url);
+const basePrice = parseFloat(product.basePrice);
+const inStock = product.trackInventory ? (product.inventoryQuantity > 0) : true;
+
+// Build specifications from custom database specs first
+const specifications = [];
+
+// Add custom specifications from productSpecifications table
+customSpecs.rows.forEach(spec => {
+	specifications.push({
+		label: spec.specLabel,
+		value: spec.specValue
+	});
+});
+
+// Add auto-generated specs from product fields (if not already in custom specs)
+const customKeys = customSpecs.rows.map(s => s.specKey);
+
+if (product.printTechnology && !customKeys.includes('printTechnology')) {
+	specifications.push({ label: 'Drucktechnologie', value: product.printTechnology });
+}
+
+if (product.isBlockout && !customKeys.includes('isBlockout')) {
+	specifications.push({ label: 'Typ', value: 'Blockout DTF' });
+}
+
+if (product.maxWidthMm && !customKeys.includes('maxWidthMm')) {
+	specifications.push({ label: 'Maximale Breite', value: `${product.maxWidthMm}mm` });
+}
+
+if (product.minHeightMm && product.maxHeightMm && !customKeys.includes('heightRange')) {
+	specifications.push({ label: 'Höhenbereich', value: `${product.minHeightMm} - ${product.maxHeightMm}mm` });
+}
+
+if (product.acceptsFileUpload && !customKeys.includes('fileUpload')) {
+	specifications.push({ label: 'Datei-Upload', value: 'Möglich' });
+	specifications.push({ label: 'Erlaubte Formate', value: product.allowedFileTypes || 'PDF' });
+	specifications.push({ label: 'Max. Dateigröße', value: `${product.maxFileSizeMb || 255}MB` });
+}
+
+if (product.priceCalculationMethod && !customKeys.includes('priceCalculationMethod')) {
+	const methodMap = {
+		'per_piece': 'Pro Stück',
+		'per_meter': 'Pro Laufmeter',
+		'per_area': 'Pro m²'
+	};
+	specifications.push({ label: 'Preisberechnung', value: methodMap[product.priceCalculationMethod] || 'Pro Stück' });
+}
+
+if (product.requiresShipping && !customKeys.includes('requiresShipping')) {
+	specifications.push({ label: 'Versand', value: 'Erforderlich' });
+}
+
+if (product.sku && !customKeys.includes('sku')) {
+	specifications.push({ label: 'SKU', value: product.sku });
+}
+
+// Add price tiers to description if available
+let enrichedDescription = product.description;
+if (priceTiers.rows.length > 0) {
+	enrichedDescription += '\n\nMengenrabatte verfügbar: Je mehr Sie bestellen, desto günstiger wird der Stückpreis!';
+}
+
+const pageTitle = product.metaTitle || `${product.name} - DTF Transfer Print`;
+const pageDescription = product.metaDescription || product.shortDescription;
+
+// Map related products
+const relatedProducts = relatedProductsResult.rows.map(p => ({
+	id: p.id,
+	slug: p.slug,
+	name: p.name,
+	shortDescription: p.shortDescription,
+	price: parseFloat(p.basePrice),
+	category: p.categoryName || 'DTF Transfer',
+	images: p.imageUrl ? [p.imageUrl] : [],
+	inStock: true,
+	tags: []
+}));
 ---
 
 <Layout title={pageTitle} description={pageDescription}>
@@ -40,7 +168,7 @@ const pageDescription = product.shortDescription;
 			<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
 			</svg>
-			<a href="/#services" class="hover:text-primary transition-colors">Produkte</a>
+			<a href="/products" class="hover:text-primary transition-colors">Produkte</a>
 			<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
 			</svg>
@@ -53,7 +181,74 @@ const pageDescription = product.shortDescription;
 		<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 mb-32">
 			<!-- Left Column: Product Gallery -->
 			<div class="lg:sticky lg:top-24 lg:self-start">
-				<ProductGallery images={product.images} name={product.name} />
+				<ProductGallery images={images} name={product.name} />
+
+				<!-- Product Badges -->
+				{(product.isFeatured || product.isBlockout || product.acceptsFileUpload) && (
+					<div class="flex gap-2 flex-wrap mt-6">
+						{product.isFeatured && (
+							<span class="badge badge-warning gap-2 py-3 px-4">
+								<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
+									<path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+								</svg>
+								Featured
+							</span>
+						)}
+						{product.isBlockout && (
+							<span class="badge badge-secondary py-3 px-4">Blockout DTF</span>
+						)}
+						{product.acceptsFileUpload && (
+							<span class="badge badge-info gap-2 py-3 px-4">
+								<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+								</svg>
+								File Upload
+							</span>
+						)}
+					</div>
+				)}
+
+				<!-- Price Tiers Table (if available) -->
+				{priceTiers.rows.length > 0 && (
+					<div class="mt-8 bg-base-100 rounded-3xl p-6 border border-base-300/20">
+						<h3 class="text-xl font-bold text-neutral mb-4">💰 Mengenrabatte</h3>
+						<p class="text-sm text-neutral/60 mb-4">
+							Je mehr Sie bestellen, desto günstiger wird's!
+						</p>
+						<div class="overflow-x-auto">
+							<table class="table table-sm">
+								<thead>
+									<tr>
+										<th class="text-neutral/70">Menge</th>
+										<th class="text-neutral/70">Rabatt</th>
+										<th class="text-neutral/70">Stückpreis</th>
+									</tr>
+								</thead>
+								<tbody>
+									{priceTiers.rows.map((tier) => (
+										<tr>
+											<td class="font-semibold">
+												{tier.minQuantity} - {tier.maxQuantity || '∞'}
+											</td>
+											<td>
+												{parseFloat(tier.discountPercent) > 0 ? (
+													<span class="badge badge-success badge-sm">
+														{parseFloat(tier.discountPercent)}%
+													</span>
+												) : (
+													<span class="text-neutral/40">-</span>
+												)}
+											</td>
+											<td class="font-bold text-primary">
+												{parseFloat(tier.pricePerUnit).toFixed(2)}€
+											</td>
+										</tr>
+									))}
+								</tbody>
+							</table>
+						</div>
+					</div>
+				)}
 			</div>
 
 			<!-- Right Column: Product Info & Actions -->
@@ -61,18 +256,78 @@ const pageDescription = product.shortDescription;
 				<ProductInfo
 					name={product.name}
 					shortDescription={product.shortDescription}
-					price={product.price}
-					category={product.category}
-					tags={product.tags}
-					inStock={product.inStock}
+					price={basePrice}
+					category={product.categoryName || 'DTF Transfer'}
+					tags={product.isBlockout ? ['Blockout'] : []}
+					inStock={inStock}
 				/>
 
 				<ProductActions
 					productId={product.id}
 					productName={product.name}
-					price={product.price}
-					inStock={product.inStock}
+					price={basePrice}
+					inStock={inStock}
 				/>
+
+				<!-- File Upload Section (if enabled) -->
+				{product.acceptsFileUpload && (
+					<div class="bg-base-200/30 rounded-2xl p-6 space-y-4">
+						<h3 class="text-lg font-bold text-neutral flex items-center gap-2">
+							<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+							</svg>
+							Design hochladen
+						</h3>
+						<p class="text-sm text-neutral/60">
+							Laden Sie Ihre Designdatei hoch für individuelle Anfertigung
+						</p>
+						<input
+							type="file"
+							accept={product.allowedFileTypes?.toLowerCase().split(',').map(t => `.${t.trim()}`).join(',')}
+							class="file-input file-input-bordered file-input-primary w-full"
+						/>
+						<p class="text-xs text-neutral/50">
+							Erlaubt: {product.allowedFileTypes} • Max: {product.maxFileSizeMb}MB
+						</p>
+					</div>
+				)}
+
+				<!-- Custom Dimensions (if applicable) -->
+				{product.maxWidthMm && (
+					<div class="bg-base-200/30 rounded-2xl p-6 space-y-4">
+						<h3 class="text-lg font-bold text-neutral">📏 Abmessungen</h3>
+						<div class="grid grid-cols-2 gap-4">
+							<div>
+								<label class="label">
+									<span class="label-text font-medium">Breite (mm)</span>
+								</label>
+								<input
+									type="number"
+									value={product.maxWidthMm}
+									readonly
+									class="input input-bordered w-full bg-base-100"
+								/>
+							</div>
+							<div>
+								<label class="label">
+									<span class="label-text font-medium">Höhe (mm)</span>
+								</label>
+								<input
+									type="number"
+									min={product.minHeightMm}
+									max={product.maxHeightMm}
+									value={product.minHeightMm || 1000}
+									class="input input-bordered w-full"
+								/>
+								<label class="label">
+									<span class="label-text-alt text-neutral/60">
+										{product.minHeightMm} - {product.maxHeightMm}mm
+									</span>
+								</label>
+							</div>
+						</div>
+					</div>
+				)}
 			</div>
 		</div>
 
@@ -80,29 +335,67 @@ const pageDescription = product.shortDescription;
 		<section class="mb-32">
 			<div class="max-w-4xl">
 				<h2 class="text-3xl md:text-4xl font-bold text-neutral mb-8">Über dieses Produkt</h2>
-				<p class="text-neutral/70 leading-relaxed text-lg md:text-xl">
-					{product.description}
-				</p>
+				<div class="text-neutral/70 leading-relaxed text-lg md:text-xl prose max-w-none">
+					<div set:html={enrichedDescription.replace(/\n/g, '<br>')} />
+				</div>
 			</div>
 		</section>
 
 		<!-- Product Specifications -->
-		<section class="mb-32">
-			<ProductSpecs specifications={product.specifications} />
-		</section>
-
-		<!-- Product Reviews -->
-		<section class="mb-32">
-			<ProductReviews
-				reviews={product.reviews || []}
-				productName={product.name}
-			/>
-		</section>
+		{specifications.length > 0 && (
+			<section class="mb-32">
+				<ProductSpecs specifications={specifications} />
+			</section>
+		)}
 
 		<!-- Related Products -->
-		<section>
-			<RelatedProducts currentSlug={product.slug} limit={3} />
-		</section>
+		{relatedProducts.length > 0 && (
+			<section>
+				<h2 class="text-3xl md:text-4xl font-bold text-neutral mb-12">Ähnliche Produkte</h2>
+				<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+					{relatedProducts.map((related) => (
+						<a
+							href={`/product/${related.slug}`}
+							class="group block bg-base-100 rounded-3xl overflow-hidden hover:shadow-2xl transition-all duration-300 border border-base-300/20"
+						>
+							<figure class="relative overflow-hidden aspect-square bg-base-200/30">
+								{related.images.length > 0 ? (
+									<img
+										src={related.images[0]}
+										alt={related.name}
+										class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+										loading="lazy"
+									/>
+								) : (
+									<div class="flex items-center justify-center h-full text-neutral/20">
+										<svg class="w-24 h-24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+										</svg>
+									</div>
+								)}
+							</figure>
+							<div class="p-6 space-y-3">
+								<p class="text-sm text-primary font-semibold uppercase tracking-wide">
+									{related.category}
+								</p>
+								<h3 class="text-xl font-bold text-neutral group-hover:text-primary transition-colors">
+									{related.name}
+								</h3>
+								<p class="text-neutral/60 text-sm line-clamp-2">
+									{related.shortDescription}
+								</p>
+								<div class="pt-2">
+									<span class="text-2xl font-bold text-neutral">
+										{new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(related.price)}
+									</span>
+									<span class="text-neutral/50 text-sm ml-1">pro Stück</span>
+								</div>
+							</div>
+						</a>
+					))}
+				</div>
+			</section>
+		)}
 	</div>
 
 	<!-- CTA Section -->
@@ -118,7 +411,7 @@ const pageDescription = product.shortDescription;
 				<a href="#contact" class="btn btn-primary btn-lg text-lg px-8">
 					Angebot anfordern
 				</a>
-				<a href="/" class="btn btn-ghost btn-lg text-lg text-neutral px-8">
+				<a href="/products" class="btn btn-ghost btn-lg text-lg text-neutral px-8">
 					Weitere Produkte
 				</a>
 			</div>

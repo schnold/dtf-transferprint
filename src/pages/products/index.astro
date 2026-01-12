@@ -1,0 +1,200 @@
+---
+import { pool } from '@/lib/db';
+
+// Fetch all active products with their categories
+const client = await pool.connect();
+try {
+  var productsResult = await client.query(`
+    SELECT
+      p.*,
+      c.name as "categoryName",
+      c.slug as "categorySlug",
+      (SELECT url FROM "productImages" WHERE "productId" = p.id AND "isPrimary" = true LIMIT 1) as "primaryImage"
+    FROM products p
+    LEFT JOIN categories c ON p."categoryId" = c.id
+    WHERE p."isActive" = true
+    ORDER BY p."isFeatured" DESC, p."createdAt" DESC
+  `);
+
+  var categoriesResult = await client.query(`
+    SELECT id, name, slug
+    FROM categories
+    WHERE "isActive" = true
+    ORDER BY "displayOrder", name
+  `);
+} finally {
+  client.release();
+}
+
+const products = productsResult.rows.map(p => ({
+  ...p,
+  basePrice: parseFloat(p.basePrice),
+  compareAtPrice: p.compareAtPrice ? parseFloat(p.compareAtPrice) : null,
+}));
+
+const categories = categoriesResult.rows;
+const selectedCategory = Astro.url.searchParams.get('category');
+const filteredProducts = selectedCategory
+  ? products.filter(p => p.categorySlug === selectedCategory)
+  : products;
+---
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alle Produkte | DTF Transfer</title>
+  <meta name="description" content="Entdecken Sie unser komplettes Sortiment an DTF Transfer Produkten - hochwertig, schnell und zuverlässig.">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+  <div class="max-w-7xl mx-auto px-4 py-8">
+    <!-- Header -->
+    <div class="mb-8">
+      <nav class="text-sm text-gray-600 mb-4">
+        <a href="/" class="hover:text-blue-600">Home</a> /
+        <span class="text-gray-900">Produkte</span>
+      </nav>
+      <h1 class="text-4xl font-bold mb-4">Unsere Produkte</h1>
+      <p class="text-lg text-gray-600">
+        Hochwertige DTF Transfer Produkte für professionelle Ergebnisse
+      </p>
+    </div>
+
+    <!-- Category Filter -->
+    {categories.length > 0 && (
+      <div class="bg-white rounded-lg p-4 mb-8 shadow-sm">
+        <div class="flex flex-wrap gap-2">
+          <a
+            href="/products/"
+            class={`px-4 py-2 rounded-md transition-colors ${
+              !selectedCategory
+                ? 'bg-blue-600 text-white'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+            }`}
+          >
+            Alle Kategorien
+          </a>
+          {categories.map((cat) => (
+            <a
+              href={`/products/?category=${cat.slug}`}
+              class={`px-4 py-2 rounded-md transition-colors ${
+                selectedCategory === cat.slug
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              {cat.name}
+            </a>
+          ))}
+        </div>
+      </div>
+    )}
+
+    <!-- Products Grid -->
+    {filteredProducts.length > 0 ? (
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {filteredProducts.map((product) => (
+          <a
+            href={`/product/${product.slug}`}
+            class="bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow overflow-hidden group"
+          >
+            <!-- Product Image -->
+            <div class="aspect-square bg-gray-100 flex items-center justify-center overflow-hidden">
+              {product.primaryImage ? (
+                <img
+                  src={product.primaryImage}
+                  alt={product.name}
+                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+              ) : (
+                <div class="text-gray-400 text-center p-8">
+                  <svg class="w-24 h-24 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                  <p class="text-sm">Kein Bild verfügbar</p>
+                </div>
+              )}
+            </div>
+
+            <!-- Product Info -->
+            <div class="p-5">
+              <!-- Category Badge -->
+              {product.categoryName && (
+                <div class="mb-2">
+                  <span class="inline-block px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded">
+                    {product.categoryName}
+                  </span>
+                  {product.isFeatured && (
+                    <span class="inline-block px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-800 rounded ml-2">
+                      Featured
+                    </span>
+                  )}
+                </div>
+              )}
+
+              <!-- Product Name -->
+              <h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
+                {product.name}
+              </h3>
+
+              <!-- Short Description -->
+              <p class="text-sm text-gray-600 mb-4 line-clamp-2">
+                {product.shortDescription}
+              </p>
+
+              <!-- Price -->
+              <div class="flex items-baseline gap-2">
+                <span class="text-2xl font-bold text-blue-600">
+                  {product.basePrice.toFixed(2)}€
+                </span>
+                {product.compareAtPrice && (
+                  <span class="text-sm text-gray-500 line-through">
+                    {product.compareAtPrice.toFixed(2)}€
+                  </span>
+                )}
+                <span class="text-sm text-gray-500">ab</span>
+              </div>
+
+              <!-- Additional Info -->
+              <div class="mt-4 flex gap-2 text-xs text-gray-500">
+                {product.isBlockout && (
+                  <span class="px-2 py-1 bg-gray-100 rounded">Blockout</span>
+                )}
+                {product.acceptsFileUpload && (
+                  <span class="px-2 py-1 bg-gray-100 rounded">Upload möglich</span>
+                )}
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+    ) : (
+      <div class="bg-white rounded-lg p-12 text-center">
+        <svg class="w-24 h-24 mx-auto mb-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+        </svg>
+        <h2 class="text-2xl font-bold text-gray-900 mb-2">Keine Produkte gefunden</h2>
+        <p class="text-gray-600 mb-6">
+          {selectedCategory
+            ? 'In dieser Kategorie sind derzeit keine Produkte verfügbar.'
+            : 'Derzeit sind keine Produkte verfügbar.'}
+        </p>
+        {selectedCategory && (
+          <a href="/products/" class="inline-block px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+            Alle Kategorien anzeigen
+          </a>
+        )}
+      </div>
+    )}
+  </div>
+
+  <!-- Back to Top -->
+  <div class="fixed bottom-8 right-8">
+    <a href="/products/" class="block px-6 py-3 bg-blue-600 text-white rounded-md shadow-lg hover:bg-blue-700 transition-colors">
+      ↑ Nach oben
+    </a>
+  </div>
+</body>
+</html>

@@ -1,27 +1,15 @@
 ---
 interface Props {
-	specifications: {
-		material?: string;
-		size?: string;
-		colors?: string;
-		durability?: string;
-		printArea?: string;
-		application?: string;
-		careInstructions?: string;
-	};
+	specifications: Array<{
+		label: string;
+		value: string;
+	}>;
 }
 
 const { specifications } = Astro.props;
 
-const specs = [
-	{ label: "Material", value: specifications.material },
-	{ label: "Größe", value: specifications.size },
-	{ label: "Farben", value: specifications.colors },
-	{ label: "Haltbarkeit", value: specifications.durability },
-	{ label: "Druckbereich", value: specifications.printArea },
-	{ label: "Anwendung", value: specifications.application },
-	{ label: "Pflegehinweise", value: specifications.careInstructions },
-].filter(spec => spec.value);
+// Filter out any empty specifications
+const specs = specifications.filter(spec => spec.label && spec.value);
 ---
 
 <div class="product-specs">
