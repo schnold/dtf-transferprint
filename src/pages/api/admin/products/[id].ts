@@ -7,8 +7,9 @@ import { pool } from '../../../../lib/db';
  */
 export const GET: APIRoute = async ({ params, locals }) => {
   try {
-    const session = locals.session;
-    if (!session?.user?.isAdmin) {
+    // Check if user is admin - use locals.user directly (set by middleware)
+    const user = locals.user;
+    if (!user?.isAdmin) {
       return new Response(
         JSON.stringify({
           success: false,
@@ -98,8 +99,9 @@ export const GET: APIRoute = async ({ params, locals }) => {
  */
 export const PUT: APIRoute = async ({ params, request, locals }) => {
   try {
-    const session = locals.session;
-    if (!session?.user?.isAdmin) {
+    // Check if user is admin - use locals.user directly (set by middleware)
+    const user = locals.user;
+    if (!user?.isAdmin) {
       return new Response(
         JSON.stringify({
           success: false,
@@ -210,8 +212,11 @@ export const PUT: APIRoute = async ({ params, request, locals }) => {
       await client.query('DELETE FROM "priceTiers" WHERE "productId" = $1', [id]);
 
       // Insert new price tiers if provided
+      console.log('[API] Received price tiers:', data.priceTiers?.length || 0);
       if (data.priceTiers && data.priceTiers.length > 0) {
+        console.log('[API] Inserting price tiers:', JSON.stringify(data.priceTiers, null, 2));
         for (const tier of data.priceTiers) {
+          console.log('[API] Inserting tier:', tier);
           await client.query(`
             INSERT INTO "priceTiers" (
               id,
@@ -233,7 +238,11 @@ export const PUT: APIRoute = async ({ params, request, locals }) => {
             tier.pricePerUnit,
             tier.displayOrder
           ]);
+          console.log('[API] Tier inserted successfully');
         }
+        console.log('[API] All price tiers inserted');
+      } else {
+        console.log('[API] No price tiers to insert');
       }
 
       await client.query('COMMIT');
@@ -272,8 +281,9 @@ export const PUT: APIRoute = async ({ params, request, locals }) => {
  */
 export const PATCH: APIRoute = async ({ params, request, locals }) => {
   try {
-    const session = locals.session;
-    if (!session?.user?.isAdmin) {
+    // Check if user is admin - use locals.user directly (set by middleware)
+    const user = locals.user;
+    if (!user?.isAdmin) {
       return new Response(
         JSON.stringify({
           success: false,
@@ -352,8 +362,9 @@ export const PATCH: APIRoute = async ({ params, request, locals }) => {
  */
 export const DELETE: APIRoute = async ({ params, locals }) => {
   try {
-    const session = locals.session;
-    if (!session?.user?.isAdmin) {
+    // Check if user is admin - use locals.user directly (set by middleware)
+    const user = locals.user;
+    if (!user?.isAdmin) {
       return new Response(
         JSON.stringify({
           success: false,

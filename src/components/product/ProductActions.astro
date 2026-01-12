@@ -2,11 +2,12 @@
 interface Props {
 	productId: string;
 	productName: string;
+	productSlug: string;
 	price: number;
 	inStock: boolean;
 }
 
-const { productId, productName, price, inStock } = Astro.props;
+const { productId, productName, productSlug, price, inStock } = Astro.props;
 
 const formatPrice = (price: number) => {
 	return new Intl.NumberFormat('de-DE', {
@@ -16,59 +17,20 @@ const formatPrice = (price: number) => {
 };
 ---
 
-<div class="product-actions space-y-8" data-product-name={productName} data-product-price={price}>
-	<!-- Quantity Selector -->
-	<div class="space-y-3">
-		<label class="text-neutral/70 text-sm font-medium">Menge</label>
-		<div class="flex items-center gap-4">
-			<button
-				class="text-neutral hover:text-primary transition-colors cursor-pointer"
-				id="quantity-decrease"
-				aria-label="Menge reduzieren"
-			>
-				<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-					<path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-				</svg>
-			</button>
-			<input
-				type="number"
-				value="1"
-				min="1"
-				max="100"
-				class="input input-bordered w-24 text-center text-xl font-semibold text-neutral border-2 no-spinner"
-				id="quantity-input"
-			/>
-			<button
-				class="text-neutral hover:text-primary transition-colors cursor-pointer"
-				id="quantity-increase"
-				aria-label="Menge erhöhen"
-			>
-				<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-					<path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-				</svg>
-			</button>
-		</div>
-	</div>
-
-	<!-- Total Price Display -->
-	<div class="bg-base-200/30 rounded-2xl p-6">
-		<div class="flex justify-between items-baseline">
-			<span class="text-neutral/60 text-lg">Gesamtpreis</span>
-			<span class="text-4xl font-bold text-neutral" id="total-price">
-				{formatPrice(price)}
-			</span>
-		</div>
-	</div>
-
+<div class="product-actions space-y-5" data-product-name={productName} data-product-price={price} data-product-slug={productSlug}>
 	<!-- Action Buttons -->
 	<div class="space-y-4">
 		{inStock ? (
 			<>
 				<button
 					class="btn btn-primary btn-lg w-full text-lg font-semibold shadow-lg hover:shadow-xl transition-all"
-					id="order-btn"
+					id="add-to-cart-btn"
+					data-product-id={productId}
 				>
-					Jetzt bestellen
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+					</svg>
+					In den Warenkorb
 				</button>
 				<button
 					class="btn btn-outline btn-lg w-full text-lg"
@@ -116,14 +78,27 @@ const formatPrice = (price: number) => {
 		const quantityDecrease = document.getElementById('quantity-decrease');
 		const quantityIncrease = document.getElementById('quantity-increase');
 		const totalPrice = document.getElementById('total-price');
+		const unitPrice = document.getElementById('unit-price');
+		const discountBadge = document.getElementById('discount-badge');
+		const discountPercent = document.getElementById('discount-percent');
+		const originalPriceContainer = document.getElementById('original-price-container');
+		const originalUnitPrice = document.getElementById('original-unit-price');
 		const orderBtn = document.getElementById('order-btn');
 		const quoteBtn = document.getElementById('quote-btn');
 		const productContainer = document.querySelector('[data-product-price]');
 
-		if (!quantityInput || !totalPrice || !productContainer) return;
+		if (!quantityInput || !totalPrice || !unitPrice || !productContainer) return;
 
 		const basePrice = parseFloat(productContainer.getAttribute('data-product-price') || '0');
 		const productName = productContainer.getAttribute('data-product-name') || 'Produkt';
+		const productSlug = productContainer.getAttribute('data-product-slug') || '';
+
+		let currentPriceData = {
+			unitPrice: basePrice,
+			basePrice: basePrice,
+			discountPercent: 0,
+			total: basePrice,
+		};
 
 		const formatPrice = (price: number) => {
 			return new Intl.NumberFormat('de-DE', {
@@ -132,13 +107,108 @@ const formatPrice = (price: number) => {
 			}).format(price);
 		};
 
-		const updateTotal = () => {
-			const quantity = parseInt(quantityInput.value) || 1;
-			const total = basePrice * quantity;
-			if (totalPrice) {
-				totalPrice.textContent = formatPrice(total);
+		const updatePriceDisplay = (priceData: typeof currentPriceData) => {
+			currentPriceData = priceData;
+			
+			// Update unit price
+			unitPrice.textContent = formatPrice(priceData.unitPrice);
+			
+			// Update total price
+			totalPrice.textContent = formatPrice(priceData.total);
+
+			// Show/hide discount badge
+			if (priceData.discountPercent > 0) {
+				if (discountBadge && discountPercent) {
+					discountBadge.classList.remove('hidden');
+					discountPercent.textContent = `-${priceData.discountPercent.toFixed(0)}%`;
+				}
+				// Show original price with strikethrough
+				if (originalPriceContainer && originalUnitPrice) {
+					originalPriceContainer.classList.remove('hidden');
+					originalUnitPrice.textContent = formatPrice(priceData.basePrice);
+				}
+			} else {
+				if (discountBadge) {
+					discountBadge.classList.add('hidden');
+				}
+				if (originalPriceContainer) {
+					originalPriceContainer.classList.add('hidden');
+				}
 			}
 		};
+
+		const fetchPrice = async (quantity: number) => {
+			if (!productSlug) {
+				// Fallback to client-side calculation if no slug
+				const total = basePrice * quantity;
+				updatePriceDisplay({
+					unitPrice: basePrice,
+					basePrice: basePrice,
+					discountPercent: 0,
+					total: total,
+				});
+				return;
+			}
+
+			try {
+				const response = await fetch(`/api/products/${productSlug}/price?quantity=${quantity}`);
+				const result = await response.json();
+
+				if (result.success && result.data) {
+					updatePriceDisplay({
+						unitPrice: result.data.unitPrice,
+						basePrice: result.data.basePrice,
+						discountPercent: result.data.discountPercent,
+						total: result.data.total,
+					});
+				} else {
+					// Fallback on error
+					const total = basePrice * quantity;
+					updatePriceDisplay({
+						unitPrice: basePrice,
+						basePrice: basePrice,
+						discountPercent: 0,
+						total: total,
+					});
+				}
+			} catch (error) {
+				console.error('Error fetching price:', error);
+				// Fallback on error
+				const total = basePrice * quantity;
+				updatePriceDisplay({
+					unitPrice: basePrice,
+					basePrice: basePrice,
+					discountPercent: 0,
+					total: total,
+				});
+			}
+		};
+
+		const updatePriceTierHighlight = (quantity: number) => {
+			const tierRows = document.querySelectorAll('.price-tier-row');
+			tierRows.forEach((row) => {
+				const minQty = parseInt(row.getAttribute('data-min-quantity') || '0');
+				const maxQtyAttr = row.getAttribute('data-max-quantity');
+				const maxQty = maxQtyAttr === '999999' || !maxQtyAttr ? Infinity : parseInt(maxQtyAttr);
+				
+				// Remove existing highlight classes
+				row.classList.remove('bg-success/20', 'border-l-4', 'border-success', 'shadow-sm');
+				
+				// Check if current quantity falls within this tier
+				if (quantity >= minQty && quantity <= maxQty) {
+					row.classList.add('bg-success/20', 'border-l-4', 'border-success', 'shadow-sm');
+				}
+			});
+		};
+
+		const updateTotal = () => {
+			const quantity = parseInt(quantityInput.value) || 1;
+			fetchPrice(quantity);
+			updatePriceTierHighlight(quantity);
+		};
+
+		// Initial price fetch
+		updateTotal();
 
 		quantityDecrease?.addEventListener('click', () => {
 			const current = parseInt(quantityInput.value) || 1;
@@ -163,10 +233,99 @@ const formatPrice = (price: number) => {
 			updateTotal();
 		});
 
-		orderBtn?.addEventListener('click', () => {
+		const addToCartBtn = document.getElementById('add-to-cart-btn') as HTMLButtonElement;
+		
+		addToCartBtn?.addEventListener('click', async () => {
 			const quantity = parseInt(quantityInput.value) || 1;
-			// In a real app, this would add to cart or redirect to checkout
-			alert(`Bestellung: ${quantity}x ${productName} - ${formatPrice(basePrice * quantity)}`);
+			const productId = addToCartBtn.getAttribute('data-product-id');
+			
+			if (!productId) {
+				alert('Produktfehler. Bitte laden Sie die Seite neu.');
+				return;
+			}
+
+			// Show loading state
+			addToCartBtn.disabled = true;
+			const originalText = addToCartBtn.innerHTML;
+			addToCartBtn.innerHTML = '<span class="loading loading-spinner loading-sm"></span> Wird hinzugefügt...';
+
+			try {
+				const response = await fetch('/api/cart/add', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({
+						productId,
+						quantity,
+					}),
+				});
+
+				const result = await response.json();
+
+				if (response.status === 401) {
+					// User not logged in
+					alert('Bitte melden Sie sich an, um Produkte in den Warenkorb zu legen.');
+					(window as any).openAuthModal('login');
+					return;
+				}
+
+				if (result.success) {
+					// Show success message
+					addToCartBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg> Hinzugefügt!';
+					addToCartBtn.classList.add('btn-success');
+					
+					// Update cart badge immediately with returned count
+					const cartCountBadge = document.getElementById('cart-count-badge');
+					const cartIconButton = document.getElementById('cart-icon-button');
+					
+					if (cartCountBadge) {
+						cartCountBadge.textContent = result.data.cartCount.toString();
+						cartCountBadge.style.display = 'flex';
+					} else if (cartIconButton && result.data.cartCount > 0) {
+						// Create badge if it doesn't exist
+						const newBadge = document.createElement('span');
+						newBadge.id = 'cart-count-badge';
+						newBadge.className = 'absolute -top-2 -right-2 bg-orange-500 text-white text-xs font-bold rounded-full min-w-[1.25rem] h-5 px-1 flex items-center justify-center shadow-md';
+						newBadge.textContent = result.data.cartCount.toString();
+						cartIconButton.appendChild(newBadge);
+					}
+					
+					// Update cart icon styling
+					if (cartIconButton && result.data.cartCount > 0) {
+						cartIconButton.classList.remove('border-accent', 'hover:bg-accent/10');
+						cartIconButton.classList.add('border-orange-400', 'hover:bg-orange-50');
+						
+						const svgIcon = cartIconButton.querySelector('svg');
+						if (svgIcon) {
+							svgIcon.classList.remove('text-accent');
+							svgIcon.classList.add('text-orange-600');
+						}
+					}
+					
+					// Dispatch event to update full cart UI
+					window.dispatchEvent(new CustomEvent('cartItemAdded', { 
+						detail: { 
+							cartCount: result.data.cartCount 
+						} 
+					}));
+
+					// Reset button after 2 seconds
+					setTimeout(() => {
+						addToCartBtn.innerHTML = originalText;
+						addToCartBtn.classList.remove('btn-success');
+						addToCartBtn.disabled = false;
+					}, 2000);
+				} else {
+					throw new Error(result.error?.message || 'Fehler beim Hinzufügen zum Warenkorb');
+				}
+			} catch (error: unknown) {
+				console.error('Error adding to cart:', error);
+				const errorMessage = error instanceof Error ? error.message : 'Fehler beim Hinzufügen zum Warenkorb. Bitte versuchen Sie es erneut.';
+				alert(errorMessage);
+				addToCartBtn.innerHTML = originalText;
+				addToCartBtn.disabled = false;
+			}
 		});
 
 		quoteBtn?.addEventListener('click', () => {

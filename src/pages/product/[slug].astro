@@ -73,6 +73,14 @@ try {
 		ORDER BY "displayOrder"
 	`, [product.id]);
 
+	// Fetch public product files (design files uploaded by customers)
+	var productFiles = await client.query(`
+		SELECT id, "fileName", "originalFileName", "fileUrl", "fileSize", "mimeType", "displayOrder", "createdAt"
+		FROM "productFiles"
+		WHERE "productId" = $1 AND "isPublic" = true
+		ORDER BY "displayOrder", "createdAt" DESC
+	`, [product.id]);
+
 } finally {
 	client.release();
 }
@@ -207,52 +215,10 @@ const relatedProducts = relatedProductsResult.rows.map(p => ({
 						)}
 					</div>
 				)}
-
-				<!-- Price Tiers Table (if available) -->
-				{priceTiers.rows.length > 0 && (
-					<div class="mt-8 bg-base-100 rounded-3xl p-6 border border-base-300/20">
-						<h3 class="text-xl font-bold text-neutral mb-4">💰 Mengenrabatte</h3>
-						<p class="text-sm text-neutral/60 mb-4">
-							Je mehr Sie bestellen, desto günstiger wird's!
-						</p>
-						<div class="overflow-x-auto">
-							<table class="table table-sm">
-								<thead>
-									<tr>
-										<th class="text-neutral/70">Menge</th>
-										<th class="text-neutral/70">Rabatt</th>
-										<th class="text-neutral/70">Stückpreis</th>
-									</tr>
-								</thead>
-								<tbody>
-									{priceTiers.rows.map((tier) => (
-										<tr>
-											<td class="font-semibold">
-												{tier.minQuantity} - {tier.maxQuantity || '∞'}
-											</td>
-											<td>
-												{parseFloat(tier.discountPercent) > 0 ? (
-													<span class="badge badge-success badge-sm">
-														{parseFloat(tier.discountPercent)}%
-													</span>
-												) : (
-													<span class="text-neutral/40">-</span>
-												)}
-											</td>
-											<td class="font-bold text-primary">
-												{parseFloat(tier.pricePerUnit).toFixed(2)}€
-											</td>
-										</tr>
-									))}
-								</tbody>
-							</table>
-						</div>
-					</div>
-				)}
 			</div>
 
 			<!-- Right Column: Product Info & Actions -->
-			<div class="space-y-10">
+			<div class="space-y-5">
 				<ProductInfo
 					name={product.name}
 					shortDescription={product.shortDescription}
@@ -262,65 +228,169 @@ const relatedProducts = relatedProductsResult.rows.map(p => ({
 					inStock={inStock}
 				/>
 
+				<!-- Price Tiers Table (if available) - Moved up -->
+				{priceTiers.rows.length > 0 && (
+					<div class="bg-gradient-to-br from-success/5 to-primary/5 rounded-xl p-4 border border-success/20">
+						<div class="mb-3">
+							<h3 class="text-base font-bold text-neutral mb-1 flex items-center gap-2">
+								<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+								</svg>
+								Mehr kaufen, mehr sparen
+							</h3>
+							<p class="text-xs text-neutral/60">
+								Mengenrabatte sind automatisch im Warenkorb verfügbar
+							</p>
+						</div>
+						<div class="overflow-x-auto">
+							<table class="table table-xs w-full">
+								<thead class="bg-base-100/50">
+									<tr>
+										<th class="text-neutral font-semibold text-xs py-2">Anzahl</th>
+										<th class="text-neutral font-semibold text-xs py-2">Mengenrabatt</th>
+										<th class="text-neutral font-semibold text-right text-xs py-2">Preis</th>
+									</tr>
+								</thead>
+								<tbody id="price-tier-tbody">
+									{priceTiers.rows.map((tier, index) => (
+										<tr 
+											class="price-tier-row hover:bg-base-100/30 transition-colors"
+											data-min-quantity={tier.minQuantity}
+											data-max-quantity={tier.maxQuantity || '999999'}
+										>
+											<td class="font-medium text-sm py-1.5">
+												{tier.minQuantity} - {tier.maxQuantity || '∞'}
+											</td>
+											<td class="py-1.5">
+												{parseFloat(tier.discountPercent) > 0 ? (
+													<span class="badge badge-success badge-xs gap-1">
+														{parseFloat(tier.discountPercent)}%
+													</span>
+												) : (
+													<span class="text-neutral/40 text-xs">0%</span>
+												)}
+											</td>
+											<td class="text-right py-1.5">
+												<span class="font-bold text-success text-sm">
+													{parseFloat(tier.pricePerUnit).toFixed(2)} €
+												</span>
+											</td>
+										</tr>
+									))}
+								</tbody>
+							</table>
+						</div>
+						{priceTiers.rows.length > 0 && parseFloat(priceTiers.rows[priceTiers.rows.length - 1].discountPercent) > 0 && (
+							<div class="mt-3 text-center text-xs text-success font-medium">
+								Spare bis zu {parseFloat(priceTiers.rows[priceTiers.rows.length - 1].discountPercent)}% bei größeren Mengen!
+							</div>
+						)}
+					</div>
+				)}
+
+				<!-- File Upload Section (always visible) -->
+				<div class="bg-gradient-to-br from-primary/5 to-secondary/5 rounded-xl p-4 border border-primary/20 space-y-3">
+					<h3 class="text-base font-bold text-neutral flex items-center gap-2">
+						<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+						</svg>
+						Design hochladen
+					</h3>
+					<p class="text-xs text-neutral/60">
+						Laden Sie Ihre Designdatei hoch für individuelle Anfertigung
+					</p>
+					<input
+						type="file"
+						id="designFileUpload"
+						accept=".pdf,.png,.jpg,.jpeg,.ai,.eps,.svg"
+						class="file-input file-input-bordered file-input-primary w-full file-input-sm"
+					/>
+					<p class="text-xs text-neutral/50">
+						Erlaubt: PDF, PNG, JPG, AI, EPS, SVG • Max: 255MB
+					</p>
+				</div>
+
 				<ProductActions
 					productId={product.id}
 					productName={product.name}
+					productSlug={product.slug}
 					price={basePrice}
 					inStock={inStock}
 				/>
 
-				<!-- File Upload Section (if enabled) -->
-				{product.acceptsFileUpload && (
-					<div class="bg-base-200/30 rounded-2xl p-6 space-y-4">
-						<h3 class="text-lg font-bold text-neutral flex items-center gap-2">
-							<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+				<!-- Product Files (if public files available) -->
+				{productFiles.rows.length > 0 && (
+					<div class="bg-base-200/30 rounded-xl p-4 border border-base-300">
+						<h3 class="text-base font-bold text-neutral mb-3 flex items-center gap-2">
+							<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-info" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
 							</svg>
-							Design hochladen
+							Verfügbare Dateien
 						</h3>
-						<p class="text-sm text-neutral/60">
-							Laden Sie Ihre Designdatei hoch für individuelle Anfertigung
+						<p class="text-xs text-neutral/60 mb-3">
+							Referenzdateien und Downloads für dieses Produkt
 						</p>
-						<input
-							type="file"
-							accept={product.allowedFileTypes?.toLowerCase().split(',').map(t => `.${t.trim()}`).join(',')}
-							class="file-input file-input-bordered file-input-primary w-full"
-						/>
-						<p class="text-xs text-neutral/50">
-							Erlaubt: {product.allowedFileTypes} • Max: {product.maxFileSizeMb}MB
-						</p>
+						<div class="space-y-2">
+							{productFiles.rows.map((file) => {
+								const fileSize = (file.fileSize / 1024 / 1024).toFixed(2);
+								const fileExt = file.originalFileName.split('.').pop().toUpperCase();
+								return (
+									<a
+										href={file.fileUrl}
+										target="_blank"
+										rel="noopener noreferrer"
+										class="flex items-center justify-between p-3 bg-base-100 rounded-lg border border-base-300 hover:border-primary hover:shadow-md transition-all group"
+									>
+										<div class="flex items-center gap-3 flex-1 min-w-0">
+											<div class="flex-shrink-0 w-9 h-9 bg-primary/10 rounded-lg flex items-center justify-center">
+												<span class="text-xs font-bold text-primary">{fileExt}</span>
+											</div>
+											<div class="flex-1 min-w-0">
+												<p class="text-sm font-medium text-neutral truncate group-hover:text-primary transition-colors">
+													{file.originalFileName}
+												</p>
+												<p class="text-xs text-neutral/60">{fileSize} MB</p>
+											</div>
+										</div>
+										<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-neutral/40 group-hover:text-primary transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+										</svg>
+									</a>
+								);
+							})}
+						</div>
 					</div>
 				)}
 
 				<!-- Custom Dimensions (if applicable) -->
 				{product.maxWidthMm && (
-					<div class="bg-base-200/30 rounded-2xl p-6 space-y-4">
-						<h3 class="text-lg font-bold text-neutral">📏 Abmessungen</h3>
-						<div class="grid grid-cols-2 gap-4">
+					<div class="bg-base-200/30 rounded-xl p-4 space-y-3">
+						<h3 class="text-base font-bold text-neutral">📏 Abmessungen</h3>
+						<div class="grid grid-cols-2 gap-3">
 							<div>
-								<label class="label">
-									<span class="label-text font-medium">Breite (mm)</span>
+								<label class="label py-1">
+									<span class="label-text font-medium text-sm">Breite (mm)</span>
 								</label>
 								<input
 									type="number"
 									value={product.maxWidthMm}
 									readonly
-									class="input input-bordered w-full bg-base-100"
+									class="input input-bordered input-sm w-full bg-base-100"
 								/>
 							</div>
 							<div>
-								<label class="label">
-									<span class="label-text font-medium">Höhe (mm)</span>
+								<label class="label py-1">
+									<span class="label-text font-medium text-sm">Höhe (mm)</span>
 								</label>
 								<input
 									type="number"
 									min={product.minHeightMm}
 									max={product.maxHeightMm}
 									value={product.minHeightMm || 1000}
-									class="input input-bordered w-full"
+									class="input input-bordered input-sm w-full"
 								/>
-								<label class="label">
-									<span class="label-text-alt text-neutral/60">
+								<label class="label py-0">
+									<span class="label-text-alt text-neutral/60 text-xs">
 										{product.minHeightMm} - {product.maxHeightMm}mm
 									</span>
 								</label>

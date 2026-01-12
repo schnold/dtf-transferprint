@@ -1,10 +1,10 @@
 import type { APIRoute } from 'astro';
-import { uploadToR2, validateImageFile } from '../../../../lib/r2';
+import { uploadToR2, validateDesignFile } from '../../../../lib/r2';
 import { pool } from '../../../../lib/db';
 
 /**
- * POST /api/admin/products/upload-image
- * Upload product images to R2 and save to database
+ * POST /api/admin/products/upload-file
+ * Upload product design files to R2 and save to database
  */
 export const POST: APIRoute = async ({ request, locals }) => {
   try {
@@ -22,8 +22,8 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
     const formData = await request.formData();
     const productId = formData.get('productId') as string;
-    const files = formData.getAll('images') as File[];
-    const isPrimary = formData.get('isPrimary') === 'true';
+    const files = formData.getAll('files') as File[];
+    const isPublic = formData.get('isPublic') === 'true';
 
     if (!productId) {
       return new Response(
@@ -39,14 +39,14 @@ export const POST: APIRoute = async ({ request, locals }) => {
       return new Response(
         JSON.stringify({
           success: false,
-          error: { message: 'No images provided' },
+          error: { message: 'No files provided' },
         }),
         { status: 400 }
       );
     }
 
     const client = await pool.connect();
-    const uploadedImages: Array<{ url: string; id: string }> = [];
+    const uploadedFiles: Array<{ url: string; id: string; fileName: string }> = [];
 
     try {
       await client.query('BEGIN');
@@ -61,17 +61,9 @@ export const POST: APIRoute = async ({ request, locals }) => {
         throw new Error('Product not found');
       }
 
-      // If this is primary, unset other primary images
-      if (isPrimary) {
-        await client.query(
-          'UPDATE "productImages" SET "isPrimary" = false WHERE "productId" = $1',
-          [productId]
-        );
-      }
-
       // Get current max display order
       const maxOrderResult = await client.query(
-        'SELECT COALESCE(MAX("displayOrder"), 0) as "maxOrder" FROM "productImages" WHERE "productId" = $1',
+        'SELECT COALESCE(MAX("displayOrder"), 0) as "maxOrder" FROM "productFiles" WHERE "productId" = $1',
         [productId]
       );
       let displayOrder = parseInt(maxOrderResult.rows[0].maxOrder) + 1;
@@ -81,7 +73,10 @@ export const POST: APIRoute = async ({ request, locals }) => {
         if (file.size === 0) continue; // Skip empty files
 
         // Validate file
-        const validation = validateImageFile({ size: file.size, type: file.type }, 10);
+        const validation = validateDesignFile(
+          { size: file.size, type: file.type, name: file.name },
+          255
+        );
         if (!validation.valid) {
           throw new Error(validation.error);
         }
@@ -91,27 +86,33 @@ export const POST: APIRoute = async ({ request, locals }) => {
         const buffer = Buffer.from(arrayBuffer);
 
         // Upload to R2
-        const imageUrl = await uploadToR2(buffer, file.name, file.type);
+        const fileUrl = await uploadToR2(buffer, file.name, file.type);
 
         // Save to database
-        const imageResult = await client.query(
-          `INSERT INTO "productImages" (
-            id, "productId", url, "altText", "isPrimary", "displayOrder"
+        const fileResult = await client.query(
+          `INSERT INTO "productFiles" (
+            id, "productId", "fileName", "originalFileName", "fileUrl",
+            "fileSize", "mimeType", "uploadedBy", "isPublic", "displayOrder"
           ) VALUES (
-            gen_random_uuid()::text, $1, $2, $3, $4, $5
-          ) RETURNING id, url`,
+            gen_random_uuid()::text, $1, $2, $3, $4, $5, $6, $7, $8, $9
+          ) RETURNING id, "fileUrl", "fileName"`,
           [
             productId,
-            imageUrl,
-            file.name.replace(/\.[^/.]+$/, ''), // Remove extension for alt text
-            isPrimary && uploadedImages.length === 0, // Only first image is primary if flag is set
+            file.name,
+            file.name,
+            fileUrl,
+            file.size,
+            file.type,
+            user.id,
+            isPublic,
             displayOrder++,
           ]
         );
 
-        uploadedImages.push({
-          id: imageResult.rows[0].id,
-          url: imageResult.rows[0].url,
+        uploadedFiles.push({
+          id: fileResult.rows[0].id,
+          url: fileResult.rows[0].fileUrl,
+          fileName: fileResult.rows[0].fileName,
         });
       }
 
@@ -121,8 +122,8 @@ export const POST: APIRoute = async ({ request, locals }) => {
         JSON.stringify({
           success: true,
           data: {
-            images: uploadedImages,
-            message: `Successfully uploaded ${uploadedImages.length} image(s)`,
+            files: uploadedFiles,
+            message: `Successfully uploaded ${uploadedFiles.length} file(s)`,
           },
         }),
         { status: 201 }
@@ -134,13 +135,13 @@ export const POST: APIRoute = async ({ request, locals }) => {
       client.release();
     }
   } catch (error) {
-    console.error('Error uploading images:', error);
+    console.error('Error uploading files:', error);
 
     return new Response(
       JSON.stringify({
         success: false,
         error: {
-          message: error instanceof Error ? error.message : 'Failed to upload images',
+          message: error instanceof Error ? error.message : 'Failed to upload files',
         },
       }),
       { status: 500 }
@@ -149,8 +150,8 @@ export const POST: APIRoute = async ({ request, locals }) => {
 };
 
 /**
- * DELETE /api/admin/products/upload-image
- * Delete a product image from R2 and database
+ * DELETE /api/admin/products/upload-file
+ * Delete a product file from R2 and database
  */
 export const DELETE: APIRoute = async ({ request, locals }) => {
   try {
@@ -165,13 +166,13 @@ export const DELETE: APIRoute = async ({ request, locals }) => {
       );
     }
 
-    const { imageId } = await request.json();
+    const { fileId } = await request.json();
 
-    if (!imageId) {
+    if (!fileId) {
       return new Response(
         JSON.stringify({
           success: false,
-          error: { message: 'Image ID is required' },
+          error: { message: 'File ID is required' },
         }),
         { status: 400 }
       );
@@ -180,35 +181,33 @@ export const DELETE: APIRoute = async ({ request, locals }) => {
     const client = await pool.connect();
 
     try {
-      // Get image URL before deleting
-      const imageResult = await client.query(
-        'SELECT url FROM "productImages" WHERE id = $1',
-        [imageId]
+      // Get file URL before deleting
+      const fileResult = await client.query(
+        'SELECT "fileUrl" FROM "productFiles" WHERE id = $1',
+        [fileId]
       );
 
-      if (imageResult.rows.length === 0) {
+      if (fileResult.rows.length === 0) {
         return new Response(
           JSON.stringify({
             success: false,
-            error: { message: 'Image not found' },
+            error: { message: 'File not found' },
           }),
           { status: 404 }
         );
       }
 
-      const imageUrl = imageResult.rows[0].url;
-
       // Delete from database
-      await client.query('DELETE FROM "productImages" WHERE id = $1', [imageId]);
+      await client.query('DELETE FROM "productFiles" WHERE id = $1', [fileId]);
 
       // Note: We keep the file in R2 for now to prevent breaking links
       // In production, you might want to implement a cleanup job
-      // deleteFromR2(imageUrl);
+      // deleteFromR2(fileUrl);
 
       return new Response(
         JSON.stringify({
           success: true,
-          message: 'Image deleted successfully',
+          message: 'File deleted successfully',
         }),
         { status: 200 }
       );
@@ -216,13 +215,13 @@ export const DELETE: APIRoute = async ({ request, locals }) => {
       client.release();
     }
   } catch (error) {
-    console.error('Error deleting image:', error);
+    console.error('Error deleting file:', error);
 
     return new Response(
       JSON.stringify({
         success: false,
         error: {
-          message: error instanceof Error ? error.message : 'Failed to delete image',
+          message: error instanceof Error ? error.message : 'Failed to delete file',
         },
       }),
       { status: 500 }

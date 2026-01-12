@@ -5,6 +5,20 @@ import 'dotenv/config';
 // Extract bucket name and endpoint from R2_API_KEY
 // Format: https://[accountId].eu.r2.cloudflarestorage.com/[bucketName]
 const R2_ENDPOINT = process.env.R2_API_KEY || '';
+const R2_ACCESS_KEY = process.env.R2_ACCESS_KEY || '';
+const R2_SECRET_KEY = process.env.R2_SECRET_KEY || '';
+
+// Validate required environment variables
+if (!R2_ENDPOINT) {
+  console.error('R2_API_KEY environment variable is not set');
+}
+if (!R2_ACCESS_KEY) {
+  console.error('R2_ACCESS_KEY environment variable is not set');
+}
+if (!R2_SECRET_KEY) {
+  console.error('R2_SECRET_KEY environment variable is not set');
+}
+
 const urlParts = R2_ENDPOINT.split('/');
 const bucketName = urlParts[urlParts.length - 1];
 const accountEndpoint = urlParts.slice(0, -1).join('/');
@@ -17,13 +31,35 @@ export const r2Client = new S3Client({
   region: 'auto',
   endpoint: r2Endpoint,
   credentials: {
-    accessKeyId: process.env.R2_ACCESS_KEY || '',
-    secretAccessKey: process.env.R2_SECRET_KEY || '',
+    accessKeyId: R2_ACCESS_KEY,
+    secretAccessKey: R2_SECRET_KEY,
   },
 });
 
 export const R2_BUCKET_NAME = bucketName;
-export const R2_PUBLIC_URL = `${r2Endpoint}/${bucketName}`;
+
+// Support custom domain if provided, otherwise use proxy endpoint
+// R2_CUSTOM_DOMAIN should be set if you have a custom domain configured for your R2 bucket
+// Format: https://your-custom-domain.com or https://your-bucket.r2.dev
+const R2_CUSTOM_DOMAIN = process.env.R2_CUSTOM_DOMAIN || '';
+
+// Generate public URL - use custom domain if available, otherwise use proxy endpoint
+export function getR2PublicUrl(key: string): string {
+  if (R2_CUSTOM_DOMAIN) {
+    // Remove trailing slash if present
+    const domain = R2_CUSTOM_DOMAIN.replace(/\/$/, '');
+    return `${domain}/${key}`;
+  }
+  
+  // Use proxy endpoint - this works even if bucket is not publicly accessible
+  // The proxy endpoint will fetch from R2 and serve the image
+  return `/api/images/${key}`;
+}
+
+// Legacy export for backward compatibility (deprecated - use getR2PublicUrl instead)
+export const R2_PUBLIC_URL = R2_CUSTOM_DOMAIN 
+  ? R2_CUSTOM_DOMAIN.replace(/\/$/, '')
+  : '/api/images';
 
 /**
  * Upload a file to R2
@@ -55,11 +91,27 @@ export async function uploadToR2(
 
     await upload.done();
 
-    // Return public URL
-    return `${R2_PUBLIC_URL}/${uniqueFileName}`;
-  } catch (error) {
+    // Return public URL using the new function
+    return getR2PublicUrl(uniqueFileName);
+  } catch (error: any) {
     console.error('Error uploading to R2:', error);
-    throw new Error('Failed to upload file to R2');
+    
+    // Provide more specific error messages
+    if (error?.Code === 'AccessDenied' || error?.name === 'AccessDenied') {
+      throw new Error(
+        'Access Denied: Check your R2 credentials (R2_ACCESS_KEY and R2_SECRET_KEY) and ensure the API token has "Object Read & Write" permissions'
+      );
+    }
+    
+    if (error?.Code === 'NoSuchBucket' || error?.name === 'NoSuchBucket') {
+      throw new Error(
+        `Bucket not found: "${R2_BUCKET_NAME}". Verify your R2_API_KEY includes the correct bucket name.`
+      );
+    }
+    
+    throw new Error(
+      `Failed to upload file to R2: ${error?.message || 'Unknown error'}`
+    );
   }
 }
 
@@ -91,7 +143,17 @@ export async function uploadMultipleToR2(
 export async function deleteFromR2(fileUrl: string): Promise<boolean> {
   try {
     // Extract key from URL
-    const key = fileUrl.replace(`${R2_PUBLIC_URL}/`, '');
+    // Handle both custom domain and proxy endpoint URLs
+    let key = fileUrl;
+    
+    if (R2_CUSTOM_DOMAIN) {
+      // Remove custom domain prefix
+      const domain = R2_CUSTOM_DOMAIN.replace(/\/$/, '');
+      key = fileUrl.replace(`${domain}/`, '');
+    } else {
+      // Remove proxy endpoint prefix
+      key = fileUrl.replace(/^\/api\/images\//, '');
+    }
 
     const command = new DeleteObjectCommand({
       Bucket: R2_BUCKET_NAME,
@@ -138,6 +200,50 @@ export function validateImageFile(
     return {
       valid: false,
       error: 'Invalid file type. Only JPEG, PNG, WebP, and GIF images are allowed.',
+    };
+  }
+
+  const maxSizeBytes = maxSizeMB * 1024 * 1024;
+  if (file.size > maxSizeBytes) {
+    return {
+      valid: false,
+      error: `File size exceeds ${maxSizeMB}MB limit.`,
+    };
+  }
+
+  return { valid: true };
+}
+
+/**
+ * Validate design file (for customer uploads)
+ * @param file - File object
+ * @param maxSizeMB - Maximum file size in MB
+ * @returns Validation result
+ */
+export function validateDesignFile(
+  file: { size: number; type: string; name: string },
+  maxSizeMB: number = 255
+): { valid: boolean; error?: string } {
+  const allowedTypes = [
+    'application/pdf',
+    'image/png',
+    'image/jpeg',
+    'image/jpg',
+    'application/postscript', // .ai, .eps
+    'image/svg+xml',
+    'application/illustrator', // .ai
+    'application/x-photoshop', // .psd
+  ];
+
+  // Also check file extension as backup
+  const fileName = file.name.toLowerCase();
+  const allowedExtensions = ['.pdf', '.png', '.jpg', '.jpeg', '.ai', '.eps', '.svg', '.psd'];
+  const hasValidExtension = allowedExtensions.some(ext => fileName.endsWith(ext));
+
+  if (!allowedTypes.includes(file.type) && !hasValidExtension) {
+    return {
+      valid: false,
+      error: 'Invalid file type. Only PDF, PNG, JPG, AI, EPS, SVG, and PSD files are allowed.',
     };
   }
 

@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { r2Client, R2_BUCKET_NAME, R2_PUBLIC_URL } from '../../../lib/r2';
+import { r2Client, R2_BUCKET_NAME, getR2PublicUrl } from '../../../lib/r2';
 import { ListObjectsV2Command } from '@aws-sdk/client-s3';
 
 /**
@@ -35,10 +35,11 @@ export const GET: APIRoute = async ({ locals }) => {
           message: 'R2 connection successful!',
           config: {
             bucketName: R2_BUCKET_NAME,
-            publicUrl: R2_PUBLIC_URL,
+            publicUrlPattern: '/api/images/{key}',
             objectCount: response.KeyCount || 0,
             sampleObjects: (response.Contents || []).map((obj) => ({
               key: obj.Key,
+              url: obj.Key ? getR2PublicUrl(obj.Key) : null,
               size: obj.Size,
               lastModified: obj.LastModified,
             })),

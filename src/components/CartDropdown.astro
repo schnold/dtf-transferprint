@@ -1,0 +1,452 @@
+---
+import { pool } from '../lib/db';
+
+const user = Astro.locals.user;
+
+// Fetch cart with price tier information
+let cartItems: any[] = [];
+let hasCartItems = false;
+let subtotal = 0;
+
+if (user) {
+	const response = await fetch(`${Astro.url.origin}/api/cart/get`, {
+		headers: {
+			'Cookie': Astro.request.headers.get('Cookie') || '',
+		},
+	});
+	
+	if (response.ok) {
+		const result = await response.json();
+		if (result.success) {
+			cartItems = result.data.items || [];
+			hasCartItems = cartItems.length > 0;
+			subtotal = result.data.subtotal || 0;
+		}
+	}
+}
+
+const formatPrice = (price: number) => {
+	return new Intl.NumberFormat('de-DE', {
+		style: 'currency',
+		currency: 'EUR'
+	}).format(price);
+};
+---
+
+<!-- Cart Icon & Dropdown -->
+{user ? (
+	<div class="dropdown dropdown-end cart-dropdown relative">
+		<button
+			tabindex="0"
+			class={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all duration-200 cursor-pointer relative ${hasCartItems ? 'border-orange-400 hover:bg-orange-50' : 'border-accent hover:bg-accent/10'}`}
+			aria-label="Shopping cart"
+			id="cart-icon-button"
+		>
+			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class={`w-4 h-4 transition-colors ${hasCartItems ? 'text-orange-600' : 'text-accent'}`}>
+				<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+			</svg>
+			{hasCartItems && (
+				<span class="absolute -top-2 -right-2 bg-orange-500 text-white text-xs font-bold rounded-full min-w-[1.25rem] h-5 px-1 flex items-center justify-center shadow-md" id="cart-count-badge">
+					{cartItems.length}
+				</span>
+			)}
+		</button>
+		
+		<div tabindex="0" class="cart-dropdown-content absolute right-0 top-full mt-3 z-[100] shadow-2xl bg-base-100 rounded-xl w-96 border border-base-300/30 overflow-hidden opacity-0 invisible transform translate-y-2 transition-all duration-300 ease-out">
+			{hasCartItems ? (
+				<div class="max-h-[500px] flex flex-col">
+					<!-- Header -->
+					<div class="p-4 bg-gradient-to-r from-primary/10 to-secondary/10 border-b border-base-200">
+						<div class="flex items-center justify-between">
+							<h3 class="text-lg font-bold text-neutral flex items-center gap-2">
+								<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+								</svg>
+								Warenkorb
+							</h3>
+							<span class="badge badge-primary" id="cart-item-count">{cartItems.length}</span>
+						</div>
+					</div>
+
+					<!-- Cart Items -->
+					<div class="overflow-y-auto flex-1 p-4 space-y-3" id="cart-items-container">
+						{cartItems.map((item) => (
+							<div class="cart-item flex gap-3 p-3 bg-base-200/30 rounded-lg hover:bg-base-200/50 transition-colors" data-cart-item-id={item.id}>
+								<!-- Product Image -->
+								<div class="flex-shrink-0 w-16 h-16 bg-base-300 rounded-lg overflow-hidden">
+									{item.productImage ? (
+										<img src={item.productImage} alt={item.productName} class="w-full h-full object-cover" />
+									) : (
+										<div class="w-full h-full flex items-center justify-center text-neutral/20">
+											<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+												<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+											</svg>
+										</div>
+									)}
+								</div>
+
+								<!-- Product Info -->
+								<div class="flex-1 min-w-0">
+									<a href={`/product/${item.productSlug}`} class="text-sm font-medium text-neutral hover:text-primary transition-colors line-clamp-2">
+										{item.productName}
+									</a>
+									<div class="flex items-center gap-2 mt-1">
+										<span class="text-xs text-neutral/60">Stückpreis:</span>
+										<span class="text-sm font-semibold text-primary cart-item-unit-price" data-cart-item-id={item.id}>{formatPrice(item.unitPrice)}</span>
+									</div>
+									
+									<!-- Current savings indicator -->
+									{item.currentSavings > 0 && (
+										<div class="savings-indicator text-xs text-success mt-1 flex items-center gap-1">
+											<svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+												<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+											</svg>
+											Sie sparen {formatPrice(item.currentSavings)}
+										</div>
+									)}
+									
+									<!-- Quantity Controls -->
+									<div class="flex items-center gap-2 mt-2">
+										<button 
+											class="quantity-decrease btn btn-xs btn-ghost text-neutral/70 hover:text-primary"
+											data-cart-item-id={item.id}
+											aria-label="Menge verringern"
+										>
+											<svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+												<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
+											</svg>
+										</button>
+										<span class="cart-item-quantity text-sm font-medium px-2">{item.quantity}</span>
+										<button 
+											class="quantity-increase btn btn-xs btn-ghost text-neutral/70 hover:text-primary"
+											data-cart-item-id={item.id}
+											aria-label="Menge erhöhen"
+										>
+											<svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+												<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+											</svg>
+										</button>
+										<button 
+											class="remove-item btn btn-xs btn-ghost text-error hover:bg-error/10 ml-auto"
+											data-cart-item-id={item.id}
+											aria-label="Entfernen"
+										>
+											<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+												<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+											</svg>
+										</button>
+									</div>
+								</div>
+
+								<!-- Item Total -->
+								<div class="flex-shrink-0 text-right">
+									<div class="text-sm font-bold text-neutral cart-item-total">
+										{formatPrice(item.unitPrice * item.quantity)}
+									</div>
+								</div>
+							</div>
+						))}
+					</div>
+
+					<!-- Footer -->
+					<div class="p-4 border-t border-base-200 bg-base-100">
+						<!-- Subtotal -->
+						<div class="flex justify-between items-center mb-3">
+							<span class="text-sm text-neutral/70">Zwischensumme</span>
+							<span class="text-lg font-bold text-neutral" id="cart-subtotal">{formatPrice(subtotal)}</span>
+						</div>
+
+						<!-- Action Buttons -->
+						<div class="space-y-2">
+							<a href="/checkout" class="btn btn-primary btn-block">
+								Zur Kasse
+							</a>
+							<a href="/cart" class="btn btn-outline btn-block text-sm">
+								Warenkorb ansehen
+							</a>
+						</div>
+					</div>
+				</div>
+			) : (
+				<!-- Empty Cart State -->
+				<div class="p-8 text-center">
+					<div class="w-20 h-20 mx-auto mb-4 bg-base-200 rounded-full flex items-center justify-center">
+						<svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-neutral/30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+						</svg>
+					</div>
+					<h3 class="text-lg font-bold text-neutral mb-2">Warenkorb ist leer</h3>
+					<p class="text-sm text-neutral/60 mb-4">Fügen Sie Produkte hinzu, um fortzufahren</p>
+					<a href="/products" class="btn btn-primary btn-sm">
+						Produkte ansehen
+					</a>
+				</div>
+			)}
+		</div>
+	</div>
+) : (
+	<!-- Not logged in - redirect to login when clicking cart -->
+	<button
+		id="cart-login-prompt"
+		class="w-8 h-8 rounded-full border border-neutral/30 flex items-center justify-center hover:border-neutral/50 hover:bg-white/10 transition-all duration-200 cursor-pointer"
+		aria-label="Shopping cart - Login required"
+	>
+		<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 text-neutral/80">
+			<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+		</svg>
+	</button>
+)}
+
+<style>
+	/* Cart dropdown styles with hover bridge */
+	.cart-dropdown {
+		position: relative;
+	}
+
+	/* Create invisible bridge between button and dropdown */
+	.cart-dropdown::before {
+		content: '';
+		position: absolute;
+		top: 100%;
+		left: -20px;
+		right: -20px;
+		height: 1rem;
+		pointer-events: none;
+		z-index: 99;
+	}
+
+	.cart-dropdown:hover::before {
+		pointer-events: auto;
+	}
+
+	.cart-dropdown-content {
+		pointer-events: none;
+		transition: opacity 0.2s ease-out, visibility 0.2s ease-out, transform 0.2s ease-out;
+		transition-delay: 0s;
+	}
+
+	.cart-dropdown:hover .cart-dropdown-content,
+	.cart-dropdown-content:hover,
+	.cart-dropdown-content:focus-within {
+		opacity: 1;
+		visibility: visible;
+		transform: translateY(0);
+		pointer-events: auto;
+		transition-delay: 0s;
+	}
+
+	.cart-dropdown:not(:hover) .cart-dropdown-content:not(:hover):not(:focus-within) {
+		opacity: 0;
+		visibility: hidden;
+		transform: translateY(2px);
+		transition-delay: 0.3s;
+	}
+</style>
+
+<script>
+	// Cart management functions
+	const formatPrice = (price: number) => {
+		return new Intl.NumberFormat('de-DE', {
+			style: 'currency',
+			currency: 'EUR'
+		}).format(price);
+	};
+
+	const updateCartUI = async () => {
+		try {
+			const response = await fetch('/api/cart/get');
+			const result = await response.json();
+
+			if (result.success) {
+				const { items, count, subtotal } = result.data;
+
+				// Update cart count badge
+				const cartCountBadge = document.getElementById('cart-count-badge');
+				const cartItemCount = document.getElementById('cart-item-count');
+				const cartIconButton = document.getElementById('cart-icon-button');
+				
+				if (count > 0) {
+					if (cartCountBadge) {
+						cartCountBadge.textContent = count.toString();
+						cartCountBadge.style.display = 'flex';
+					} else {
+						// Create badge if it doesn't exist
+						if (cartIconButton) {
+							const newBadge = document.createElement('span');
+							newBadge.id = 'cart-count-badge';
+							newBadge.className = 'absolute -top-2 -right-2 bg-orange-500 text-white text-xs font-bold rounded-full min-w-[1.25rem] h-5 px-1 flex items-center justify-center shadow-md';
+							newBadge.textContent = count.toString();
+							cartIconButton.appendChild(newBadge);
+						}
+					}
+					if (cartItemCount) {
+						cartItemCount.textContent = count.toString();
+					}
+					
+					// Update cart icon styling
+					if (cartIconButton) {
+						cartIconButton.classList.remove('border-accent', 'hover:bg-accent/10');
+						cartIconButton.classList.add('border-orange-400', 'hover:bg-orange-50');
+						
+						const svgIcon = cartIconButton.querySelector('svg');
+						if (svgIcon) {
+							svgIcon.classList.remove('text-accent');
+							svgIcon.classList.add('text-orange-600');
+						}
+					}
+				} else {
+					if (cartCountBadge) {
+						cartCountBadge.style.display = 'none';
+					}
+					
+					// Update cart icon styling to default
+					if (cartIconButton) {
+						cartIconButton.classList.remove('border-orange-400', 'hover:bg-orange-50');
+						cartIconButton.classList.add('border-accent', 'hover:bg-accent/10');
+						
+						const svgIcon = cartIconButton.querySelector('svg');
+						if (svgIcon) {
+							svgIcon.classList.remove('text-orange-600');
+							svgIcon.classList.add('text-accent');
+						}
+					}
+				}
+
+				// Update subtotal
+				const cartSubtotal = document.getElementById('cart-subtotal');
+				if (cartSubtotal) {
+					cartSubtotal.textContent = formatPrice(subtotal);
+				}
+
+				// Dispatch event for other components
+				window.dispatchEvent(new CustomEvent('cartUpdated', { detail: { count, items, subtotal } }));
+			}
+		} catch (error) {
+			console.error('Error updating cart UI:', error);
+		}
+	};
+
+	const updateCartItemQuantity = async (cartItemId: string, newQuantity: number) => {
+		try {
+			const response = await fetch('/api/cart/update', {
+				method: 'PUT',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ cartItemId, quantity: newQuantity }),
+			});
+
+			const result = await response.json();
+
+			if (result.success) {
+				if (newQuantity === 0) {
+					// Remove item from UI
+					const itemElement = document.querySelector(`.cart-item[data-cart-item-id="${cartItemId}"]`);
+					if (itemElement) {
+						itemElement.remove();
+					}
+				} else {
+					// Reload page to show updated prices and quantities
+					window.location.reload();
+				}
+			} else {
+				alert(result.error?.message || 'Fehler beim Aktualisieren des Warenkorbs');
+			}
+		} catch (error) {
+			console.error('Error updating cart item:', error);
+			alert('Fehler beim Aktualisieren des Warenkorbs');
+		}
+	};
+
+	const removeCartItem = async (cartItemId: string) => {
+		if (!confirm('Möchten Sie diesen Artikel wirklich entfernen?')) {
+			return;
+		}
+
+		try {
+			const response = await fetch('/api/cart/remove', {
+				method: 'DELETE',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ cartItemId }),
+			});
+
+			const result = await response.json();
+
+			if (result.success) {
+				// Reload page to show updated cart
+				window.location.reload();
+			} else {
+				alert(result.error?.message || 'Fehler beim Entfernen des Artikels');
+			}
+		} catch (error) {
+			console.error('Error removing cart item:', error);
+			alert('Fehler beim Entfernen des Artikels');
+		}
+	};
+
+	// Event listeners
+	document.addEventListener('DOMContentLoaded', () => {
+		// Quantity decrease buttons
+		document.querySelectorAll('.quantity-decrease').forEach((button) => {
+			button.addEventListener('click', (e) => {
+				e.preventDefault();
+				const cartItemId = (e.currentTarget as HTMLElement).getAttribute('data-cart-item-id');
+				if (!cartItemId) return;
+
+				const quantityElement = document.querySelector(`[data-cart-item-id="${cartItemId}"] .cart-item-quantity`);
+				const currentQuantity = parseInt(quantityElement?.textContent || '1');
+				
+				if (currentQuantity > 1) {
+					updateCartItemQuantity(cartItemId, currentQuantity - 1);
+				}
+			});
+		});
+
+		// Quantity increase buttons
+		document.querySelectorAll('.quantity-increase').forEach((button) => {
+			button.addEventListener('click', (e) => {
+				e.preventDefault();
+				const cartItemId = (e.currentTarget as HTMLElement).getAttribute('data-cart-item-id');
+				if (!cartItemId) return;
+
+				const quantityElement = document.querySelector(`[data-cart-item-id="${cartItemId}"] .cart-item-quantity`);
+				const currentQuantity = parseInt(quantityElement?.textContent || '1');
+				
+				updateCartItemQuantity(cartItemId, currentQuantity + 1);
+			});
+		});
+
+		// Remove item buttons
+		document.querySelectorAll('.remove-item').forEach((button) => {
+			button.addEventListener('click', (e) => {
+				e.preventDefault();
+				e.stopPropagation();
+				const cartItemId = (e.currentTarget as HTMLElement).getAttribute('data-cart-item-id');
+				if (!cartItemId) return;
+
+				removeCartItem(cartItemId);
+			});
+		});
+
+		// Login prompt for non-authenticated users
+		const cartLoginPrompt = document.getElementById('cart-login-prompt');
+		if (cartLoginPrompt) {
+			cartLoginPrompt.addEventListener('click', () => {
+				(window as any).openAuthModal('login');
+			});
+		}
+	});
+
+	// Listen for cart updates from other parts of the app
+	window.addEventListener('cartItemAdded', () => {
+		// Reload the page to show new items in cart dropdown
+		// This ensures all items are visible immediately
+		window.location.reload();
+	});
+	
+	// Also listen for page load to ensure cart is up to date
+	window.addEventListener('load', () => {
+		const cartIconButton = document.getElementById('cart-icon-button');
+		if (cartIconButton) {
+			updateCartUI();
+		}
+	});
+</script>

@@ -29,23 +29,8 @@ const formatPrice = (price: number) => {
 		{name}
 	</h1>
 
-	<!-- Price -->
-	<div class="flex items-baseline gap-2">
-		<span class="text-3xl font-semibold text-neutral">
-			{formatPrice(price)}
-		</span>
-		<span class="text-neutral/50 text-sm">
-			pro Stück
-		</span>
-	</div>
-
-	<!-- Short Description -->
-	<p class="text-xl text-neutral/60 leading-relaxed max-w-2xl">
-		{shortDescription}
-	</p>
-
 	<!-- Stock Status -->
-	<div class="pt-4">
+	<div>
 		{inStock ? (
 			<div class="inline-flex items-center gap-2 text-success text-sm font-medium">
 				<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -62,4 +47,87 @@ const formatPrice = (price: number) => {
 			</div>
 		)}
 	</div>
+
+	<!-- Quantity Selector -->
+	<div class="flex items-center gap-3">
+		<label class="text-neutral/70 text-sm font-medium whitespace-nowrap">Menge:</label>
+		<div class="flex items-center gap-2">
+			<button
+				class="btn btn-sm btn-ghost btn-circle h-8 w-8 min-h-0 p-0 text-neutral hover:text-primary transition-colors"
+				id="quantity-decrease"
+				aria-label="Menge reduzieren"
+			>
+				<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+					<path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+				</svg>
+			</button>
+			<input
+				type="number"
+				value="1"
+				min="1"
+				max="100"
+				class="input input-bordered input-sm w-16 text-center text-base font-semibold text-neutral border-2 no-spinner"
+				id="quantity-input"
+			/>
+			<button
+				class="btn btn-sm btn-ghost btn-circle h-8 w-8 min-h-0 p-0 text-neutral hover:text-primary transition-colors"
+				id="quantity-increase"
+				aria-label="Menge erhöhen"
+			>
+				<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+					<path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+				</svg>
+			</button>
+		</div>
+	</div>
+
+	<!-- Price -->
+	<div class="bg-base-200/30 rounded-xl p-4 space-y-3">
+		<div class="flex justify-between items-baseline">
+			<span class="text-neutral/60 text-sm">Preis pro Stück</span>
+			<div class="text-right flex items-center gap-2">
+				<span id="original-price-container" class="hidden">
+					<span class="text-sm text-neutral/50 line-through" id="original-unit-price"></span>
+				</span>
+				<span class="text-xl font-bold text-neutral" id="unit-price">
+					{formatPrice(price)}
+				</span>
+				<span id="discount-badge" class="hidden badge badge-success badge-sm">
+					<span id="discount-percent"></span>
+				</span>
+			</div>
+		</div>
+		<div class="flex justify-between items-baseline pt-2 border-t border-base-300/20">
+			<span class="text-neutral/60 text-sm">Gesamtpreis</span>
+			<span class="text-2xl font-bold text-neutral" id="total-price">
+				{formatPrice(price)}
+			</span>
+		</div>
+	</div>
+
+	<!-- Description Dropdown -->
+	<div class="collapse collapse-arrow bg-base-200/30 rounded-xl border border-base-300/20">
+		<input type="checkbox" class="collapse-toggle" />
+		<div class="collapse-title text-sm font-medium text-neutral/70 px-4 py-3 min-h-0">
+			Produktbeschreibung
+		</div>
+		<div class="collapse-content px-4 pb-4">
+			<p class="text-sm text-neutral/70 leading-relaxed">
+				{shortDescription}
+			</p>
+		</div>
+	</div>
 </div>
+
+<style>
+	/* Hide number input spinner buttons */
+	.no-spinner::-webkit-outer-spin-button,
+	.no-spinner::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
+	}
+
+	.no-spinner {
+		-moz-appearance: textfield;
+	}
+</style>

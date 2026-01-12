@@ -1,0 +1,172 @@
+---
+// This component shows a password protection overlay
+---
+
+<div id="block-overlay" class="block-overlay fixed inset-0 z-[9999] flex items-center justify-center hidden">
+  <div class="block-overlay-content bg-base-100 rounded-2xl shadow-2xl p-10 w-full max-w-sm mx-4 border border-base-300">
+    <div class="text-center mb-8">
+      <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-4">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+        </svg>
+      </div>
+      <h2 class="text-2xl font-semibold text-base-content mb-2">Zugang zur Website</h2>
+      <p class="text-sm text-base-content/60">Bitte geben Sie das Passwort ein, um fortzufahren</p>
+    </div>
+    
+    <form id="block-form" class="space-y-5">
+      <div>
+        <input
+          type="password"
+          id="block-password"
+          placeholder="Passwort"
+          class="input input-bordered w-full h-12 text-base focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+          autocomplete="off"
+          required
+        />
+      </div>
+      
+      <div id="block-error" class="block-error text-error text-sm text-center min-h-[20px] hidden"></div>
+      
+      <button
+        type="submit"
+        id="block-submit"
+        class="btn btn-primary w-full h-12 font-medium text-base"
+      >
+        Fortfahren
+      </button>
+    </form>
+  </div>
+</div>
+
+<script>
+  (async function() {
+    // Function to disable body scroll
+    function disableScroll() {
+      document.body.style.overflow = 'hidden';
+      document.body.style.position = 'fixed';
+      document.body.style.width = '100%';
+    }
+    
+    // Function to enable body scroll
+    function enableScroll() {
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.width = '';
+    }
+    
+    // Check if already authenticated
+    const checkAuth = await fetch("/api/block-auth");
+    const { authenticated } = await checkAuth.json();
+    
+    if (authenticated) {
+      return; // Already authenticated, don't show overlay
+    }
+    
+    // Show overlay and disable scroll
+    const overlay = document.getElementById("block-overlay");
+    if (overlay) {
+      overlay.classList.remove("hidden");
+      disableScroll();
+    }
+    
+    const form = document.getElementById("block-form");
+    const passwordInput = document.getElementById("block-password") as HTMLInputElement;
+    const errorDiv = document.getElementById("block-error");
+    const submitBtn = document.getElementById("block-submit") as HTMLButtonElement;
+    
+    if (!form || !passwordInput || !errorDiv || !submitBtn) return;
+    
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      
+      const password = passwordInput.value.trim();
+      if (!password) {
+        errorDiv.textContent = "Bitte geben Sie ein Passwort ein";
+        errorDiv.classList.remove("hidden");
+        return;
+      }
+      
+      // Disable submit button
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Wird überprüft...";
+      submitBtn.classList.add("loading");
+      errorDiv.classList.add("hidden");
+      
+      try {
+        const response = await fetch("/api/block-auth", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ password }),
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok && data.success) {
+          // Success - enable scroll, hide overlay and reload page
+          enableScroll();
+          overlay?.classList.add("hidden");
+          window.location.reload();
+        } else {
+          // Error
+          errorDiv.textContent = data.error || "Ungültiges Passwort";
+          errorDiv.classList.remove("hidden");
+          passwordInput.value = "";
+          passwordInput.focus();
+        }
+      } catch (error) {
+        errorDiv.textContent = "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.";
+        errorDiv.classList.remove("hidden");
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Fortfahren";
+        submitBtn.classList.remove("loading");
+      }
+    });
+    
+    // Focus password input on load
+    passwordInput.focus();
+  })();
+</script>
+
+<style>
+  .block-overlay {
+    backdrop-filter: blur(12px);
+    background-color: rgba(0, 0, 0, 0.6);
+    animation: fadeIn 0.2s ease-out;
+  }
+  
+  .block-overlay-content {
+    animation: slideUp 0.3s ease-out;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .block-error {
+    transition: all 0.2s ease;
+  }
+  
+  #block-password:focus {
+    border-color: hsl(var(--p));
+  }
+</style>

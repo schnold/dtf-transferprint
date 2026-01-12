@@ -409,14 +409,12 @@ export async function getCart(userId: string): Promise<CartItemWithDetails[]> {
         p.name as "productName",
         p.slug as "productSlug",
         p."basePrice" as "currentPrice",
-        pi.url as "productImage"
+        COALESCE(
+          (SELECT url FROM "productImages" WHERE "productId" = p.id AND "isPrimary" = true LIMIT 1),
+          (SELECT url FROM "productImages" WHERE "productId" = p.id ORDER BY "displayOrder", "createdAt" LIMIT 1)
+        ) as "productImage"
       FROM "cartItems" ci
       JOIN products p ON ci."productId" = p.id
-      LEFT JOIN LATERAL (
-        SELECT url FROM "productImages"
-        WHERE "productId" = p.id AND "isPrimary" = true
-        LIMIT 1
-      ) pi ON true
       WHERE ci."userId" = $1
       ORDER BY ci."createdAt" DESC
     `, [userId]);

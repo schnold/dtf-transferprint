@@ -1,0 +1,336 @@
+---
+interface Props {
+  productId?: string;
+  existingFiles?: Array<{
+    id: string;
+    fileName: string;
+    originalFileName: string;
+    fileUrl: string;
+    fileSize: number;
+    mimeType: string;
+    isPublic: boolean;
+    displayOrder: number;
+    createdAt: string;
+  }>;
+}
+
+const { productId, existingFiles = [] } = Astro.props;
+
+// Helper function to format file size
+function formatFileSize(bytes: number): string {
+  if (bytes === 0) return '0 Bytes';
+  const k = 1024;
+  const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+}
+
+// Helper function to get file icon
+function getFileIcon(mimeType: string): string {
+  if (mimeType.includes('pdf')) return '📄';
+  if (mimeType.includes('image')) return '🖼️';
+  if (mimeType.includes('postscript') || mimeType.includes('illustrator')) return '🎨';
+  return '📁';
+}
+---
+
+<div class="space-y-4">
+  <div class="flex items-center justify-between">
+    <div>
+      <h3 class="text-sm font-bold text-neutral">Design-Dateien</h3>
+      <p class="text-xs text-neutral/60 mt-1">Hochgeladene Kundendateien für dieses Produkt</p>
+    </div>
+  </div>
+
+  <!-- Existing Files -->
+  {existingFiles.length > 0 && (
+    <div class="space-y-2">
+      <h4 class="text-xs font-semibold text-neutral/70">Vorhandene Dateien ({existingFiles.length})</h4>
+      <div id="existing-files" class="space-y-2">
+        {existingFiles
+          .sort((a, b) => a.displayOrder - b.displayOrder)
+          .map((file) => (
+            <div
+              class="file-item flex items-center justify-between p-3 bg-base-200 rounded-lg border border-base-300 hover:border-primary transition-colors group"
+              data-file-id={file.id}
+            >
+              <div class="flex items-center gap-3 flex-1 min-w-0">
+                <span class="text-2xl flex-shrink-0">{getFileIcon(file.mimeType)}</span>
+                <div class="flex-1 min-w-0">
+                  <p class="text-sm font-medium text-neutral truncate">{file.originalFileName}</p>
+                  <div class="flex items-center gap-2 mt-1">
+                    <span class="text-xs text-neutral/60">{formatFileSize(file.fileSize)}</span>
+                    {file.isPublic && (
+                      <span class="badge badge-success badge-xs">Öffentlich</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+              <div class="flex items-center gap-2">
+                <a
+                  href={file.fileUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="btn btn-ghost btn-xs gap-1"
+                  title="Datei herunterladen"
+                >
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                  </svg>
+                </a>
+                <button
+                  type="button"
+                  class="delete-file-btn btn btn-error btn-xs btn-square opacity-0 group-hover:opacity-100 transition-opacity"
+                  data-file-id={file.id}
+                  title="Datei löschen"
+                >
+                  <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          ))}
+      </div>
+    </div>
+  )}
+
+  <!-- Upload New Files -->
+  <div class="space-y-3">
+    <h4 class="text-xs font-semibold text-neutral/70">Neue Dateien hochladen</h4>
+
+    <div class="form-control">
+      <label class="label cursor-pointer justify-start gap-2 py-2">
+        <input
+          type="checkbox"
+          id="set-as-public"
+          class="checkbox checkbox-sm checkbox-success"
+        />
+        <span class="label-text text-xs">Dateien öffentlich machen (auf Produktseite anzeigen)</span>
+      </label>
+    </div>
+
+    <!-- File Input -->
+    <div>
+      <input
+        type="file"
+        id="file-upload-input"
+        accept=".pdf,.png,.jpg,.jpeg,.ai,.eps,.svg,.psd"
+        multiple
+        class="file-input file-input-bordered file-input-sm w-full"
+      />
+      <p class="text-xs text-neutral/50 mt-2">
+        Erlaubt: PDF, PNG, JPG, AI, EPS, SVG, PSD • Max: 255MB pro Datei
+      </p>
+    </div>
+
+    <!-- Preview Area -->
+    <div id="file-preview" class="space-y-2 hidden">
+      <h5 class="text-xs font-semibold text-neutral/70">Ausgewählte Dateien:</h5>
+      <div id="file-preview-list" class="space-y-1"></div>
+    </div>
+
+    <!-- Upload Button -->
+    {productId && (
+      <button
+        type="button"
+        id="upload-files-btn"
+        class="btn btn-primary btn-sm w-full gap-2"
+        disabled
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+        </svg>
+        <span class="btn-text">Dateien hochladen</span>
+      </button>
+    )}
+
+    {!productId && (
+      <div class="alert alert-info py-2">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-5 h-5">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        <span class="text-xs">Speichern Sie das Produkt zuerst, um Dateien hochzuladen.</span>
+      </div>
+    )}
+  </div>
+
+  <!-- Upload Progress -->
+  <div id="upload-progress" class="hidden">
+    <div class="alert alert-info py-2">
+      <span class="loading loading-spinner loading-sm"></span>
+      <span id="upload-status" class="text-xs">Dateien werden hochgeladen...</span>
+    </div>
+  </div>
+</div>
+
+<script define:vars={{ productId }}>
+  let selectedFiles = [];
+
+  // Helper functions
+  function formatFileSize(bytes) {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+  }
+
+  function getFileIcon(fileName) {
+    const ext = fileName.split('.').pop().toLowerCase();
+    if (ext === 'pdf') return '📄';
+    if (['png', 'jpg', 'jpeg'].includes(ext)) return '🖼️';
+    if (['ai', 'eps', 'psd'].includes(ext)) return '🎨';
+    if (ext === 'svg') return '🎨';
+    return '📁';
+  }
+
+  // Handle file selection
+  const fileInput = document.getElementById('file-upload-input');
+  const previewArea = document.getElementById('file-preview');
+  const previewList = document.getElementById('file-preview-list');
+  const uploadBtn = document.getElementById('upload-files-btn');
+
+  if (fileInput) {
+    fileInput.addEventListener('change', (e) => {
+      const files = Array.from(e.target.files || []);
+      selectedFiles = files;
+
+      // Clear and show preview
+      if (previewList) {
+        previewList.innerHTML = '';
+        previewArea.classList.toggle('hidden', files.length === 0);
+
+        // Add previews
+        files.forEach((file, index) => {
+          const fileItem = document.createElement('div');
+          fileItem.className = 'flex items-center justify-between p-2 bg-base-100 rounded border border-base-300 text-xs';
+          fileItem.innerHTML = `
+            <div class="flex items-center gap-2 flex-1 min-w-0">
+              <span class="text-lg">${getFileIcon(file.name)}</span>
+              <div class="flex-1 min-w-0">
+                <p class="font-medium truncate">${file.name}</p>
+                <p class="text-neutral/60">${formatFileSize(file.size)}</p>
+              </div>
+            </div>
+            <button type="button" class="btn btn-ghost btn-xs btn-square remove-file-preview" data-index="${index}">
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          `;
+          previewList.appendChild(fileItem);
+        });
+      }
+
+      // Enable upload button
+      if (uploadBtn) {
+        uploadBtn.disabled = files.length === 0;
+      }
+    });
+  }
+
+  // Handle remove file from preview
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('.remove-file-preview')) {
+      const btn = e.target.closest('.remove-file-preview');
+      const index = parseInt(btn.dataset.index);
+      selectedFiles.splice(index, 1);
+
+      // Update file input
+      const dataTransfer = new DataTransfer();
+      selectedFiles.forEach(file => dataTransfer.items.add(file));
+      fileInput.files = dataTransfer.files;
+
+      // Trigger change event
+      fileInput.dispatchEvent(new Event('change'));
+    }
+  });
+
+  // Handle upload
+  if (uploadBtn) {
+    uploadBtn.addEventListener('click', async () => {
+      if (selectedFiles.length === 0 || !productId) return;
+
+      const isPublic = document.getElementById('set-as-public').checked;
+      const progress = document.getElementById('upload-progress');
+      const status = document.getElementById('upload-status');
+
+      try {
+        // Disable button and show progress
+        uploadBtn.disabled = true;
+        progress.classList.remove('hidden');
+
+        // Create form data
+        const formData = new FormData();
+        formData.append('productId', productId);
+        formData.append('isPublic', isPublic);
+        selectedFiles.forEach(file => {
+          formData.append('files', file);
+        });
+
+        // Upload
+        const response = await fetch('/api/admin/products/upload-file', {
+          method: 'POST',
+          body: formData,
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          status.textContent = result.data.message;
+
+          // Show success and reload after delay
+          setTimeout(() => {
+            window.location.reload();
+          }, 1500);
+        } else {
+          throw new Error(result.error.message);
+        }
+      } catch (error) {
+        alert('Fehler beim Hochladen: ' + error.message);
+        progress.classList.add('hidden');
+        uploadBtn.disabled = false;
+      }
+    });
+  }
+
+  // Handle delete file
+  document.addEventListener('click', async (e) => {
+    if (e.target.closest('.delete-file-btn')) {
+      const btn = e.target.closest('.delete-file-btn');
+      const fileId = btn.dataset.fileId;
+
+      if (!confirm('Sind Sie sicher, dass Sie diese Datei löschen möchten?')) {
+        return;
+      }
+
+      try {
+        const response = await fetch('/api/admin/products/upload-file', {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ fileId }),
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          // Remove from DOM
+          const fileItem = btn.closest('.file-item');
+          fileItem?.remove();
+
+          // Show success message
+          const toast = document.createElement('div');
+          toast.className = 'toast toast-end';
+          toast.innerHTML = '<div class="alert alert-success"><span class="text-xs">Datei erfolgreich gelöscht!</span></div>';
+          document.body.appendChild(toast);
+          setTimeout(() => toast.remove(), 3000);
+        } else {
+          throw new Error(result.error.message);
+        }
+      } catch (error) {
+        alert('Fehler beim Löschen: ' + error.message);
+      }
+    }
+  });
+</script>

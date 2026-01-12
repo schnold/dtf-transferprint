@@ -44,6 +44,11 @@ Required environment variables in `.env`:
 R2_ACCESS_KEY=your_access_key_id
 R2_SECRET_KEY=your_secret_access_key
 R2_API_KEY=https://[accountId].eu.r2.cloudflarestorage.com/[bucketName]
+
+# Optional: Custom domain for R2 bucket (if configured)
+# If set, images will be served directly from this domain
+# If not set, images will be served via the proxy endpoint at /api/images/{key}
+R2_CUSTOM_DOMAIN=https://your-custom-domain.com
 ```
 
 ### Getting R2 Credentials
@@ -148,19 +153,42 @@ CREATE TABLE "productImages" (
 
 ## Image URLs
 
-Images are served directly from R2 with the following URL pattern:
+Images are served through a proxy endpoint by default, which allows images to be displayed even if the R2 bucket is not publicly accessible.
+
+### Default Proxy Endpoint (Recommended)
+
+By default, images are served via the proxy endpoint:
 ```
-https://[accountId].eu.r2.cloudflarestorage.com/[bucketName]/[timestamp]-[filename]
+/api/images/[timestamp]-[filename]
 ```
 
-### Making Bucket Public
+The proxy endpoint (`/api/images/[...path]`) fetches images from R2 and serves them with proper headers. This approach:
+- Works even if the bucket is not publicly accessible
+- Provides better security (no direct bucket access)
+- Allows for additional processing/caching if needed
 
-To serve images publicly:
+### Custom Domain (Optional)
+
+If you have configured a custom domain for your R2 bucket, set the `R2_CUSTOM_DOMAIN` environment variable:
+
+```env
+R2_CUSTOM_DOMAIN=https://your-custom-domain.com
+```
+
+Images will then be served directly from your custom domain:
+```
+https://your-custom-domain.com/[timestamp]-[filename]
+```
+
+### Making Bucket Public (Alternative)
+
+If you prefer to serve images directly from R2 without a proxy:
 
 1. Go to Cloudflare Dashboard > R2
 2. Select your bucket
 3. Go to Settings > Public Access
 4. Enable "Allow Access" or set up a custom domain
+5. Set `R2_CUSTOM_DOMAIN` to your public bucket URL
 
 ## Performance Optimization
 

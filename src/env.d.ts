@@ -7,3 +7,11 @@ declare namespace App {
     session: import("better-auth").Session | null;
   }
 }
+
+interface ImportMetaEnv {
+  readonly BLOCK_PASSWORD?: string;
+}
+
+interface ImportMeta {
+  readonly env: ImportMetaEnv;
+}
