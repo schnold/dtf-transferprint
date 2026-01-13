@@ -1,0 +1,357 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import { pool } from '../../lib/db';
+
+// Fetch all shipping profiles
+const client = await pool.connect();
+let shippingProfiles = [];
+try {
+	const result = await client.query(`
+		SELECT * FROM "shippingProfiles"
+		ORDER BY "displayOrder", "createdAt"
+	`);
+	shippingProfiles = result.rows.map(row => ({
+		...row,
+		basePrice: parseFloat(row.basePrice),
+		freeShippingThreshold: row.freeShippingThreshold ? parseFloat(row.freeShippingThreshold) : null,
+	}));
+} finally {
+	client.release();
+}
+
+const formatPrice = (price: number) => {
+	return new Intl.NumberFormat('de-DE', {
+		style: 'currency',
+		currency: 'EUR'
+	}).format(price);
+};
+---
+
+<AdminLayout title="Versandprofile verwalten" currentPage="shipping">
+	<!-- Page Header -->
+	<div class="mb-6 flex items-center justify-between">
+		<div>
+			<h2 class="text-3xl font-bold text-base-content mb-2">Versandprofile</h2>
+			<p class="text-base-content/60">Verwalten Sie Ihre Versandoptionen und Preise</p>
+		</div>
+		<button class="btn btn-primary gap-2" onclick="openCreateModal()">
+			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+				<path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+			</svg>
+			Neues Profil
+		</button>
+	</div>
+
+	<!-- Shipping Profiles List -->
+	<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="profiles-container">
+		{shippingProfiles.map((profile) => (
+			<div class="card bg-base-100 shadow-md hover:shadow-lg transition-shadow border border-base-300/50" data-profile-id={profile.id}>
+				<div class="card-body">
+					<div class="flex items-start justify-between mb-3">
+						<div class="flex-1">
+							<h3 class="card-title text-lg">{profile.name}</h3>
+							{profile.isDefault && (
+								<span class="badge badge-primary badge-sm mt-1">Standard</span>
+							)}
+						</div>
+						<div class="form-control">
+							<label class="label cursor-pointer gap-2">
+								<input
+									type="checkbox"
+									class="toggle toggle-sm toggle-success"
+									checked={profile.isActive}
+									onchange={`toggleStatus('${profile.id}', this.checked)`}
+								/>
+							</label>
+						</div>
+					</div>
+
+					<p class="text-sm text-base-content/60 mb-4">{profile.description || 'Keine Beschreibung'}</p>
+
+					<div class="space-y-2 text-sm">
+						<div class="flex justify-between">
+							<span class="text-base-content/60">Basispreis:</span>
+							<span class="font-semibold text-neutral">{formatPrice(profile.basePrice)}</span>
+						</div>
+						{profile.freeShippingThreshold && (
+							<div class="flex justify-between">
+								<span class="text-base-content/60">Kostenlos ab:</span>
+								<span class="font-semibold text-success">{formatPrice(profile.freeShippingThreshold)}</span>
+							</div>
+						)}
+						{profile.estimatedDays && (
+							<div class="flex justify-between">
+								<span class="text-base-content/60">Lieferzeit:</span>
+								<span class="font-semibold text-neutral">{profile.estimatedDays} {profile.estimatedDays === 1 ? 'Tag' : 'Tage'}</span>
+							</div>
+						)}
+					</div>
+
+					<div class="card-actions justify-end mt-4 pt-4 border-t border-base-300/50">
+						<button class="btn btn-sm btn-ghost" onclick={`openEditModal('${profile.id}')`}>
+							Bearbeiten
+						</button>
+						<button class="btn btn-sm btn-ghost text-error" onclick={`deleteProfile('${profile.id}')`}>
+							Löschen
+						</button>
+					</div>
+				</div>
+			</div>
+		))}
+	</div>
+
+	{shippingProfiles.length === 0 && (
+		<div class="text-center py-12">
+			<svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-base-content/20 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+			</svg>
+			<h3 class="text-xl font-semibold text-base-content mb-2">Keine Versandprofile</h3>
+			<p class="text-base-content/60 mb-4">Erstellen Sie Ihr erstes Versandprofil</p>
+			<button class="btn btn-primary" onclick="openCreateModal()">Profil erstellen</button>
+		</div>
+	)}
+
+	<!-- Create/Edit Modal -->
+	<dialog id="profile-modal" class="modal">
+		<div class="modal-box max-w-2xl">
+			<form method="dialog">
+				<button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+			</form>
+			<h3 class="font-bold text-lg mb-4" id="modal-title">Versandprofil erstellen</h3>
+
+			<form id="profile-form" class="space-y-4">
+				<input type="hidden" id="profile-id" name="id" />
+
+				<div class="form-control">
+					<label class="label">
+						<span class="label-text font-medium">Name *</span>
+					</label>
+					<input type="text" id="profile-name" name="name" placeholder="z.B. Standard Versand" class="input input-bordered" required />
+				</div>
+
+				<div class="form-control">
+					<label class="label">
+						<span class="label-text font-medium">Beschreibung</span>
+					</label>
+					<textarea id="profile-description" name="description" placeholder="Kurze Beschreibung des Versandprofils" class="textarea textarea-bordered" rows="3"></textarea>
+				</div>
+
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+					<div class="form-control">
+						<label class="label">
+							<span class="label-text font-medium">Basispreis (€) *</span>
+						</label>
+						<input type="number" id="profile-base-price" name="basePrice" placeholder="4.99" step="0.01" min="0" class="input input-bordered" required />
+					</div>
+
+					<div class="form-control">
+						<label class="label">
+							<span class="label-text font-medium">Kostenlos ab (€)</span>
+						</label>
+						<input type="number" id="profile-free-threshold" name="freeShippingThreshold" placeholder="50.00" step="0.01" min="0" class="input input-bordered" />
+						<label class="label">
+							<span class="label-text-alt">Leer lassen für nie kostenlos</span>
+						</label>
+					</div>
+				</div>
+
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+					<div class="form-control">
+						<label class="label">
+							<span class="label-text font-medium">Lieferzeit (Tage)</span>
+						</label>
+						<input type="number" id="profile-estimated-days" name="estimatedDays" placeholder="3" min="1" class="input input-bordered" />
+					</div>
+
+					<div class="form-control">
+						<label class="label">
+							<span class="label-text font-medium">Anzeigereihenfolge</span>
+						</label>
+						<input type="number" id="profile-display-order" name="displayOrder" placeholder="0" min="0" class="input input-bordered" />
+					</div>
+				</div>
+
+				<div class="flex gap-4">
+					<div class="form-control">
+						<label class="label cursor-pointer gap-2">
+							<span class="label-text font-medium">Aktiv</span>
+							<input type="checkbox" id="profile-is-active" name="isActive" class="checkbox checkbox-primary" checked />
+						</label>
+					</div>
+
+					<div class="form-control">
+						<label class="label cursor-pointer gap-2">
+							<span class="label-text font-medium">Standard</span>
+							<input type="checkbox" id="profile-is-default" name="isDefault" class="checkbox checkbox-primary" />
+						</label>
+						<label class="label">
+							<span class="label-text-alt">Wird automatisch ausgewählt</span>
+						</label>
+					</div>
+				</div>
+
+				<div class="modal-action">
+					<button type="button" class="btn btn-ghost" onclick="document.getElementById('profile-modal').close()">Abbrechen</button>
+					<button type="submit" class="btn btn-primary">Speichern</button>
+				</div>
+			</form>
+		</div>
+		<form method="dialog" class="modal-backdrop">
+			<button>close</button>
+		</form>
+	</dialog>
+</AdminLayout>
+
+<script>
+	const formatPrice = (price: number) => {
+		return new Intl.NumberFormat('de-DE', {
+			style: 'currency',
+			currency: 'EUR'
+		}).format(price);
+	};
+
+	// Open create modal
+	(window as any).openCreateModal = () => {
+		const modal = document.getElementById('profile-modal') as HTMLDialogElement;
+		const form = document.getElementById('profile-form') as HTMLFormElement;
+		const title = document.getElementById('modal-title');
+
+		if (title) title.textContent = 'Versandprofil erstellen';
+		form.reset();
+		(document.getElementById('profile-id') as HTMLInputElement).value = '';
+		(document.getElementById('profile-is-active') as HTMLInputElement).checked = true;
+		modal?.showModal();
+	};
+
+	// Open edit modal
+	(window as any).openEditModal = async (profileId: string) => {
+		const modal = document.getElementById('profile-modal') as HTMLDialogElement;
+		const title = document.getElementById('modal-title');
+
+		if (title) title.textContent = 'Versandprofil bearbeiten';
+
+		try {
+			const response = await fetch(`/api/admin/shipping/${profileId}`);
+			const result = await response.json();
+
+			if (result.success) {
+				const profile = result.data;
+				(document.getElementById('profile-id') as HTMLInputElement).value = profile.id;
+				(document.getElementById('profile-name') as HTMLInputElement).value = profile.name;
+				(document.getElementById('profile-description') as HTMLTextAreaElement).value = profile.description || '';
+				(document.getElementById('profile-base-price') as HTMLInputElement).value = profile.basePrice;
+				(document.getElementById('profile-free-threshold') as HTMLInputElement).value = profile.freeShippingThreshold || '';
+				(document.getElementById('profile-estimated-days') as HTMLInputElement).value = profile.estimatedDays || '';
+				(document.getElementById('profile-display-order') as HTMLInputElement).value = profile.displayOrder || '0';
+				(document.getElementById('profile-is-active') as HTMLInputElement).checked = profile.isActive;
+				(document.getElementById('profile-is-default') as HTMLInputElement).checked = profile.isDefault;
+
+				modal?.showModal();
+			}
+		} catch (error) {
+			console.error('Error loading profile:', error);
+			alert('Fehler beim Laden des Profils');
+		}
+	};
+
+	// Toggle status
+	(window as any).toggleStatus = async (profileId: string, isActive: boolean) => {
+		try {
+			const response = await fetch(`/api/admin/shipping/${profileId}`, {
+				method: 'PATCH',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ isActive }),
+			});
+
+			if (!response.ok) {
+				throw new Error('Failed to update status');
+			}
+		} catch (error) {
+			console.error('Error toggling status:', error);
+			alert('Fehler beim Aktualisieren des Status');
+			// Revert the toggle
+			const toggle = document.querySelector(`[data-profile-id="${profileId}"] input[type="checkbox"]`) as HTMLInputElement;
+			if (toggle) toggle.checked = !isActive;
+		}
+	};
+
+	// Delete profile
+	(window as any).deleteProfile = async (profileId: string) => {
+		if (!confirm('Möchten Sie dieses Versandprofil wirklich löschen?')) {
+			return;
+		}
+
+		try {
+			const response = await fetch(`/api/admin/shipping/${profileId}`, {
+				method: 'DELETE',
+			});
+
+			const result = await response.json();
+
+			if (result.success) {
+				// Remove from DOM
+				const card = document.querySelector(`[data-profile-id="${profileId}"]`);
+				card?.remove();
+
+				// Check if we need to show empty state
+				const container = document.getElementById('profiles-container');
+				if (container && container.children.length === 0) {
+					location.reload();
+				}
+			} else {
+				alert(result.error?.message || 'Fehler beim Löschen');
+			}
+		} catch (error) {
+			console.error('Error deleting profile:', error);
+			alert('Fehler beim Löschen des Profils');
+		}
+	};
+
+	// Handle form submission
+	document.getElementById('profile-form')?.addEventListener('submit', async (e) => {
+		e.preventDefault();
+
+		const form = e.target as HTMLFormElement;
+		const formData = new FormData(form);
+		const data: any = {};
+
+		formData.forEach((value, key) => {
+			if (key === 'isActive' || key === 'isDefault') {
+				data[key] = (form.elements.namedItem(key) as HTMLInputElement).checked;
+			} else if (key === 'basePrice' || key === 'freeShippingThreshold') {
+				data[key] = value ? parseFloat(value as string) : null;
+			} else if (key === 'estimatedDays' || key === 'displayOrder') {
+				data[key] = value ? parseInt(value as string) : null;
+			} else {
+				data[key] = value || null;
+			}
+		});
+
+		const profileId = (document.getElementById('profile-id') as HTMLInputElement).value;
+		const isEdit = !!profileId;
+
+		try {
+			const response = await fetch(
+				isEdit ? `/api/admin/shipping/${profileId}` : '/api/admin/shipping/create',
+				{
+					method: isEdit ? 'PUT' : 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify(data),
+				}
+			);
+
+			const result = await response.json();
+
+			if (result.success) {
+				// Close modal and reload
+				document.getElementById('profile-modal')?.close();
+				location.reload();
+			} else {
+				alert(result.error?.message || 'Fehler beim Speichern');
+			}
+		} catch (error) {
+			console.error('Error saving profile:', error);
+			alert('Fehler beim Speichern des Profils');
+		}
+	});
+</script>

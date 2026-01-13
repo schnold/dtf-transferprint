@@ -165,10 +165,11 @@ export const PUT: APIRoute = async ({ params, request, locals }) => {
           description = COALESCE($3, description),
           "parentId" = $4,
           "displayOrder" = COALESCE($5, "displayOrder"),
-          "imageUrl" = $6,
-          "isActive" = COALESCE($7, "isActive"),
+          icon = $6,
+          "imageUrl" = $7,
+          "isActive" = COALESCE($8, "isActive"),
           "updatedAt" = CURRENT_TIMESTAMP
-        WHERE id = $8
+        WHERE id = $9
       `,
         [
           data.name,
@@ -176,6 +177,7 @@ export const PUT: APIRoute = async ({ params, request, locals }) => {
           data.description,
           data.parentId,
           data.displayOrder,
+          data.icon,
           data.imageUrl,
           data.isActive,
           id,

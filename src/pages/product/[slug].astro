@@ -432,41 +432,7 @@ const relatedProducts = relatedProductsResult.rows.map(p => ({
 				)}
 
 				<!-- Custom Dimensions (if applicable) -->
-				{product.maxWidthMm && (
-					<div class="product-container rounded-xl p-4 space-y-3">
-						<h3 class="text-base font-bold text-neutral">📏 Abmessungen</h3>
-						<div class="grid grid-cols-2 gap-3">
-							<div>
-								<label class="label py-1">
-									<span class="label-text font-medium text-sm">Breite (mm)</span>
-								</label>
-								<input
-									type="number"
-									value={product.maxWidthMm}
-									readonly
-									class="input input-bordered input-sm w-full bg-base-100"
-								/>
-							</div>
-							<div>
-								<label class="label py-1">
-									<span class="label-text font-medium text-sm">Höhe (mm)</span>
-								</label>
-								<input
-									type="number"
-									min={product.minHeightMm}
-									max={product.maxHeightMm}
-									value={product.minHeightMm || 1000}
-									class="input input-bordered input-sm w-full"
-								/>
-								<label class="label py-0">
-									<span class="label-text-alt text-neutral/60 text-xs">
-										{product.minHeightMm} - {product.maxHeightMm}mm
-									</span>
-								</label>
-							</div>
-						</div>
-					</div>
-				)}
+				
 			</div>
 		</div>
 

@@ -57,11 +57,12 @@ export const POST: APIRoute = async ({ request, locals }) => {
           description,
           "parentId",
           "displayOrder",
+          icon,
           "imageUrl",
           "isActive"
         ) VALUES (
           gen_random_uuid()::text,
-          $1, $2, $3, $4, $5, $6, $7
+          $1, $2, $3, $4, $5, $6, $7, $8
         ) RETURNING id
       `,
         [
@@ -70,6 +71,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
           data.description || null,
           data.parentId || null,
           data.displayOrder || 0,
+          data.icon || null,
           data.imageUrl || null,
           data.isActive !== false,
         ]
