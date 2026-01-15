@@ -589,7 +589,16 @@ export async function createOrder(
 
     let subtotal = 0;
     for (const item of cartResult.rows) {
-      subtotal += parseFloat(item.unitPrice) * item.quantity;
+      const itemSubtotal = parseFloat(item.unitPrice) * item.quantity;
+
+      // Add zusatzleistungen total for this cart item
+      const servicesResult = await client.query(
+        'SELECT SUM(price) as total FROM "cartItemZusatzleistungen" WHERE "cartItemId" = $1',
+        [item.id]
+      );
+      const servicesTotal = parseFloat(servicesResult.rows[0]?.total || 0);
+
+      subtotal += itemSubtotal + servicesTotal;
     }
 
     let discountAmount = 0;
@@ -639,7 +648,7 @@ export async function createOrder(
         [item.productId]
       );
 
-      await client.query(`
+      const orderItemResult = await client.query(`
         INSERT INTO "orderItems" (
           id, "orderId", "productId", "productName", sku,
           quantity, "unitPrice", "totalPrice", "customOptions",
@@ -647,6 +656,7 @@ export async function createOrder(
         ) VALUES (
           gen_random_uuid()::text, $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11
         )
+        RETURNING id
       `, [
         order.id, item.productId, productResult.rows[0].name,
         productResult.rows[0].sku, item.quantity,
@@ -656,6 +666,24 @@ export async function createOrder(
         item.uploadedFileName || null,
         item.fileMetadata || null
       ]);
+
+      const orderItemId = orderItemResult.rows[0].id;
+
+      // Insert zusatzleistungen for this order item
+      const zusatzleistungenResult = await client.query(`
+        SELECT ciz.price, z.name, z.description
+        FROM "cartItemZusatzleistungen" ciz
+        INNER JOIN "zusatzleistungen" z ON ciz."zusatzleistungId" = z.id
+        WHERE ciz."cartItemId" = $1
+      `, [item.id]);
+
+      for (const service of zusatzleistungenResult.rows) {
+        await client.query(`
+          INSERT INTO "orderItemZusatzleistungen"
+            (id, "orderItemId", "zusatzleistungName", "zusatzleistungDescription", price)
+          VALUES (gen_random_uuid()::text, $1, $2, $3, $4)
+        `, [orderItemId, service.name, service.description, service.price]);
+      }
 
       await client.query(`
         UPDATE products

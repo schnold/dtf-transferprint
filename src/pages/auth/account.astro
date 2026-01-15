@@ -26,16 +26,16 @@ const activeTab = url.searchParams.get('tab') || 'orders';
 <Layout title="Mein Konto - DTF Transfer Print">
   <div class="min-h-screen">
     <Navbar />
-    <div class="py-8 px-4 sm:px-6 lg:px-8">
+    <div class="py-4 px-4 sm:px-6 lg:px-8">
     <div class="max-w-7xl lg:max-w-7xl-extended mx-auto">
       <!-- Header -->
-      <div class="mb-8">
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div class="mb-4">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div>
-            <h1 class="text-3xl sm:text-4xl font-bold text-base-content bg-clip-text">
+            <h1 class="text-2xl sm:text-3xl font-bold text-base-content bg-clip-text">
               Mein Konto
             </h1>
-            <p class="text-base-content/60 mt-2">Willkommen zurück, {user.name}</p>
+            <p class="text-sm text-base-content/60 mt-1">Willkommen zurück, {user.name}</p>
           </div>
           <button id="logout-button" class="btn btn-outline btn-error btn-sm gap-2">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
@@ -47,25 +47,25 @@ const activeTab = url.searchParams.get('tab') || 'orders';
       </div>
 
       <!-- Tabs -->
-      <div class="bg-base-100/80 backdrop-blur-xl shadow-2xl rounded-3xl overflow-hidden border border-base-300/20">
-        <div role="tablist" class="tabs tabs-bordered tabs-lg bg-base-200/50 px-6 pt-6">
+      <div class="bg-base-100/80 backdrop-blur-xl shadow-2xl rounded-2xl overflow-hidden border border-base-300/20">
+        <div role="tablist" class="tabs tabs-bordered bg-base-200/50 px-4 pt-4">
           <a
             href="?tab=orders"
             role="tab"
-            class={`tab gap-2 ${activeTab === 'orders' ? 'tab-active [--tab-border-color:var(--color-primary)]' : ''}`}
+            class={`tab gap-1.5 text-sm ${activeTab === 'orders' ? 'tab-active [--tab-border-color:var(--color-primary)]' : ''}`}
           >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
               <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
             </svg>
             Bestellungen
-            <span class="badge badge-primary badge-sm">{orders.length}</span>
+            <span class="badge badge-primary badge-xs">{orders.length}</span>
           </a>
           <a
             href="?tab=profile"
             role="tab"
-            class={`tab gap-2 ${activeTab === 'profile' ? 'tab-active [--tab-border-color:var(--color-primary)]' : ''}`}
+            class={`tab gap-1.5 text-sm ${activeTab === 'profile' ? 'tab-active [--tab-border-color:var(--color-primary)]' : ''}`}
           >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
               <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
             </svg>
             Profil & Einstellungen
@@ -73,39 +73,39 @@ const activeTab = url.searchParams.get('tab') || 'orders';
         </div>
 
         <!-- Tab Content -->
-        <div class="p-6 sm:p-8">
+        <div class="p-4 sm:p-5">
           <!-- Orders Tab -->
           {activeTab === 'orders' && (
-            <div class="space-y-6">
+            <div class="space-y-3">
               {orders.length === 0 ? (
-                <div class="text-center py-16">
-                  <div class="w-24 h-24 mx-auto mb-6 rounded-full bg-base-200 flex items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 text-base-content/40">
+                <div class="text-center py-12">
+                  <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-base-200 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-base-content/40">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
                     </svg>
                   </div>
-                  <h3 class="text-2xl font-semibold text-base-content mb-2">Keine Bestellungen</h3>
-                  <p class="text-base-content/60 mb-6">Sie haben noch keine Bestellungen aufgegeben.</p>
-                  <a href="/products" class="btn btn-primary gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                  <h3 class="text-xl font-semibold text-base-content mb-2">Keine Bestellungen</h3>
+                  <p class="text-sm text-base-content/60 mb-4">Sie haben noch keine Bestellungen aufgegeben.</p>
+                  <a href="/products" class="btn btn-primary btn-sm gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 21v-7.5a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349M3.75 21V9.349m0 0a3.001 3.001 0 0 0 3.75-.615A2.993 2.993 0 0 0 9.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 0 0 2.25 1.016c.896 0 1.7-.393 2.25-1.015a3.001 3.001 0 0 0 3.75.614m-16.5 0a3.004 3.004 0 0 1-.621-4.72l1.189-1.19A1.5 1.5 0 0 1 3.129 3h17.742a1.5 1.5 0 0 1 1.06.44l1.19 1.189a3 3 0 0 1-.621 4.72M6.75 18h3.75a.75.75 0 0 0 .75-.75V13.5a.75.75 0 0 0-.75-.75H6.75a.75.75 0 0 0-.75.75v3.75c0 .414.336.75.75.75Z" />
                     </svg>
                     Produkte ansehen
                   </a>
                 </div>
               ) : (
-                <div class="space-y-4">
+                <div class="space-y-3">
                   {orders.map((order) => (
-                    <div class="card bg-base-200/50 shadow-lg hover:shadow-xl transition-all duration-300 border border-base-300/30">
-                      <div class="card-body">
-                        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-                          <div class="flex-1 space-y-3">
-                            <div class="flex items-start justify-between">
+                    <div class="card bg-base-200/50 shadow-md hover:shadow-lg transition-all duration-300 border border-base-300/30">
+                      <div class="card-body p-4">
+                        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
+                          <div class="flex-1 space-y-2">
+                            <div class="flex items-start justify-between gap-3">
                               <div>
-                                <h3 class="text-lg font-semibold text-base-content">
+                                <h3 class="text-base font-semibold text-base-content">
                                   Bestellung #{order.orderNumber}
                                 </h3>
-                                <p class="text-sm text-base-content/60">
+                                <p class="text-xs text-base-content/60">
                                   {new Date(order.createdAt).toLocaleDateString('de-DE', {
                                     year: 'numeric',
                                     month: 'long',
@@ -115,7 +115,7 @@ const activeTab = url.searchParams.get('tab') || 'orders';
                                   })}
                                 </p>
                               </div>
-                              <div class="badge badge-lg" class:list={[
+                              <div class="badge" class:list={[
                                 order.status === 'delivered' && 'badge-success',
                                 order.status === 'shipped' && 'badge-info',
                                 order.status === 'processing' && 'badge-warning',
@@ -132,40 +132,40 @@ const activeTab = url.searchParams.get('tab') || 'orders';
                               </div>
                             </div>
 
-                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                              <div class="flex items-center gap-3 p-3 rounded-lg bg-base-100/50">
-                                <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-primary">
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                              <div class="flex items-center gap-2 p-2 rounded-lg bg-base-100/50">
+                                <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-primary">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 0h.008v.008H18V10.5Zm-12 0h.008v.008H6V10.5Z" />
                                   </svg>
                                 </div>
                                 <div>
                                   <p class="text-xs text-base-content/60">Gesamt</p>
-                                  <p class="text-lg font-bold text-base-content">{order.total.toFixed(2)} €</p>
+                                  <p class="text-base font-bold text-base-content">{order.total.toFixed(2)} €</p>
                                 </div>
                               </div>
 
-                              <div class="flex items-center gap-3 p-3 rounded-lg bg-base-100/50">
-                                <div class="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0">
-                                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-accent">
+                              <div class="flex items-center gap-2 p-2 rounded-lg bg-base-100/50">
+                                <div class="w-8 h-8 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0">
+                                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-accent">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
                                   </svg>
                                 </div>
                                 <div>
                                   <p class="text-xs text-base-content/60">Artikel</p>
-                                  <p class="text-lg font-bold text-base-content">{order.itemCount || 0}</p>
+                                  <p class="text-base font-bold text-base-content">{order.itemCount || 0}</p>
                                 </div>
                               </div>
 
-                              <div class="flex items-center gap-3 p-3 rounded-lg bg-base-100/50">
-                                <div class="w-10 h-10 rounded-full bg-info/10 flex items-center justify-center flex-shrink-0">
-                                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-info">
+                              <div class="flex items-center gap-2 p-2 rounded-lg bg-base-100/50">
+                                <div class="w-8 h-8 rounded-full bg-info/10 flex items-center justify-center flex-shrink-0">
+                                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-info">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z" />
                                   </svg>
                                 </div>
                                 <div>
                                   <p class="text-xs text-base-content/60">Zahlung</p>
-                                  <p class="text-sm font-medium text-base-content">
+                                  <p class="text-xs font-medium text-base-content">
                                     {order.paymentStatus === 'paid' && 'Bezahlt'}
                                     {order.paymentStatus === 'pending' && 'Ausstehend'}
                                     {order.paymentStatus === 'failed' && 'Fehlgeschlagen'}
@@ -177,7 +177,7 @@ const activeTab = url.searchParams.get('tab') || 'orders';
                           </div>
 
                           <div class="flex lg:flex-col gap-2">
-                            <a href={`/orders/${order.id}`} class="btn btn-primary btn-sm gap-2 flex-1 lg:flex-none">
+                            <a href={`/orders/${order.id}`} class="btn btn-primary btn-sm gap-1.5 flex-1 lg:flex-none">
                               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
@@ -185,7 +185,7 @@ const activeTab = url.searchParams.get('tab') || 'orders';
                               Details
                             </a>
                             {order.trackingNumber && (
-                              <button class="btn btn-outline btn-sm gap-2 flex-1 lg:flex-none">
+                              <button class="btn btn-outline btn-sm gap-1.5 flex-1 lg:flex-none">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
                                   <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 0 1-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 0 0-3.213-9.193 2.056 2.056 0 0 0-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 0 0-10.026 0 1.106 1.106 0 0 0-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" />
                                 </svg>
@@ -204,54 +204,54 @@ const activeTab = url.searchParams.get('tab') || 'orders';
 
           <!-- Profile Tab -->
           {activeTab === 'profile' && (
-            <div class="space-y-8">
+            <div class="space-y-4">
               <!-- Profile Information -->
-              <div class="card bg-base-200/50 shadow-lg border border-base-300/30">
-                <div class="card-body">
-                  <h2 class="card-title text-2xl mb-4 flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-primary">
+              <div class="card bg-base-200/50 shadow-md border border-base-300/30">
+                <div class="card-body p-4">
+                  <h2 class="card-title text-lg mb-3 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-primary">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
                     </svg>
                     Profil-Informationen
                   </h2>
-                  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div class="form-control">
-                      <label class="label">
-                        <span class="label-text font-medium">Name</span>
+                      <label class="label py-1">
+                        <span class="label-text text-sm font-medium">Name</span>
                       </label>
                       <input
                         type="text"
                         value={user.name}
-                        class="input input-bordered"
+                        class="input input-bordered input-sm"
                         readonly
                       />
                     </div>
                     <div class="form-control">
-                      <label class="label">
-                        <span class="label-text font-medium">E-Mail</span>
+                      <label class="label py-1">
+                        <span class="label-text text-sm font-medium">E-Mail</span>
                       </label>
                       <input
                         type="email"
                         value={user.email}
-                        class="input input-bordered"
+                        class="input input-bordered input-sm"
                         readonly
                       />
                     </div>
                     <div class="form-control">
-                      <label class="label">
-                        <span class="label-text font-medium">E-Mail Status</span>
+                      <label class="label py-1">
+                        <span class="label-text text-sm font-medium">E-Mail Status</span>
                       </label>
-                      <div class="flex items-center gap-2 pt-3">
+                      <div class="flex items-center gap-2 pt-2">
                         {user.emailVerified ? (
-                          <span class="badge badge-success gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                          <span class="badge badge-success badge-sm gap-1.5">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-3.5 h-3.5">
                               <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                             </svg>
                             Verifiziert
                           </span>
                         ) : (
-                          <span class="badge badge-warning gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                          <span class="badge badge-warning badge-sm gap-1.5">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-3.5 h-3.5">
                               <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
                             </svg>
                             Nicht verifiziert
@@ -260,20 +260,20 @@ const activeTab = url.searchParams.get('tab') || 'orders';
                       </div>
                     </div>
                     <div class="form-control">
-                      <label class="label">
-                        <span class="label-text font-medium">Konto Status</span>
+                      <label class="label py-1">
+                        <span class="label-text text-sm font-medium">Konto Status</span>
                       </label>
-                      <div class="flex items-center gap-2 pt-3">
+                      <div class="flex items-center gap-2 pt-2">
                         {user.accountLocked ? (
-                          <span class="badge badge-error gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                          <span class="badge badge-error badge-sm gap-1.5">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-3.5 h-3.5">
                               <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
                             </svg>
                             Gesperrt
                           </span>
                         ) : (
-                          <span class="badge badge-success gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                          <span class="badge badge-success badge-sm gap-1.5">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-3.5 h-3.5">
                               <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5V6.75a4.5 4.5 0 1 1 9 0v3.75M3.75 21.75h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H3.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
                             </svg>
                             Aktiv
@@ -286,20 +286,20 @@ const activeTab = url.searchParams.get('tab') || 'orders';
               </div>
 
               <!-- Account Details -->
-              <div class="card bg-base-200/50 shadow-lg border border-base-300/30">
-                <div class="card-body">
-                  <h2 class="card-title text-2xl mb-4 flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-primary">
+              <div class="card bg-base-200/50 shadow-md border border-base-300/30">
+                <div class="card-body p-4">
+                  <h2 class="card-title text-lg mb-3 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-primary">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
                     Konto-Details
                   </h2>
-                  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label class="label">
-                        <span class="label-text font-medium text-base-content/70">Konto erstellt</span>
+                      <label class="label py-1">
+                        <span class="label-text text-sm font-medium text-base-content/70">Konto erstellt</span>
                       </label>
-                      <p class="text-lg text-base-content">
+                      <p class="text-sm text-base-content">
                         {new Date(user.createdAt).toLocaleDateString('de-DE', {
                           year: 'numeric',
                           month: 'long',
@@ -309,10 +309,10 @@ const activeTab = url.searchParams.get('tab') || 'orders';
                     </div>
                     {user.lastLoginAt && (
                       <div>
-                        <label class="label">
-                          <span class="label-text font-medium text-base-content/70">Letzter Login</span>
+                        <label class="label py-1">
+                          <span class="label-text text-sm font-medium text-base-content/70">Letzter Login</span>
                         </label>
-                        <p class="text-lg text-base-content">
+                        <p class="text-sm text-base-content">
                           {new Date(user.lastLoginAt).toLocaleDateString('de-DE', {
                             year: 'numeric',
                             month: 'long',
@@ -328,24 +328,24 @@ const activeTab = url.searchParams.get('tab') || 'orders';
               </div>
 
               <!-- Email Preferences -->
-              <div class="card bg-base-200/50 shadow-lg border border-base-300/30">
-                <div class="card-body">
-                  <h2 class="card-title text-2xl mb-4 flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-primary">
+              <div class="card bg-base-200/50 shadow-md border border-base-300/30">
+                <div class="card-body p-4">
+                  <h2 class="card-title text-lg mb-3 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-primary">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
                     </svg>
                     E-Mail Einstellungen
                   </h2>
                   <div class="form-control">
-                    <label class="label cursor-pointer justify-start gap-4">
+                    <label class="label cursor-pointer justify-start gap-3 py-1">
                       <input
                         type="checkbox"
                         checked={user.emailNotifications}
-                        class="checkbox checkbox-primary"
+                        class="checkbox checkbox-primary checkbox-sm"
                       />
                       <div>
-                        <span class="label-text font-medium text-base">E-Mail-Benachrichtigungen empfangen</span>
-                        <p class="text-sm text-base-content/60 mt-1">Erhalten Sie Updates zu Ihren Bestellungen und Angeboten</p>
+                        <span class="label-text text-sm font-medium">E-Mail-Benachrichtigungen empfangen</span>
+                        <p class="text-xs text-base-content/60 mt-0.5">Erhalten Sie Updates zu Ihren Bestellungen und Angeboten</p>
                       </div>
                     </label>
                   </div>
@@ -353,12 +353,12 @@ const activeTab = url.searchParams.get('tab') || 'orders';
               </div>
 
               <!-- Security Alert -->
-              <div class="alert alert-info shadow-lg">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
+              <div class="alert alert-info shadow-md py-3">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-5 h-5">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />
                 </svg>
                 <div class="flex-1">
-                  <h3 class="font-bold">Sicherheitshinweis</h3>
+                  <h3 class="font-semibold text-sm">Sicherheitshinweis</h3>
                   <div class="text-xs">Ihr Konto ist durch sichere Passwort-Verschlüsselung und Session-Management geschützt. Alle Login-Versuche werden auf verdächtige Aktivitäten überwacht.</div>
                 </div>
               </div>

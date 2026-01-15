@@ -18,6 +18,24 @@ const formatPrice = (price: number) => {
 ---
 
 <div class="product-actions space-y-5" data-product-name={productName} data-product-price={price} data-product-slug={productSlug}>
+	<!-- Zusatzleistungen Section -->
+	<div id="zusatzleistungen-section" class="hidden space-y-3">
+		<div class="border-t border-base-300/20 pt-5">
+			<h3 class="text-sm font-semibold text-neutral mb-3">
+				Zusätzliche Leistungen
+			</h3>
+			<div id="zusatzleistungen-checkboxes" class="space-y-2">
+				<!-- Populated via script -->
+			</div>
+			<div id="zusatzleistungen-total-display" class="hidden mt-3 pt-3 border-t border-base-300/20">
+				<div class="flex justify-between items-center text-sm">
+					<span class="text-neutral/70">Zusatzleistungen:</span>
+					<span class="font-semibold text-primary" id="zusatzleistungen-total">0,00 €</span>
+				</div>
+			</div>
+		</div>
+	</div>
+
 	<!-- Action Buttons -->
 	<div class="space-y-4">
 		{inStock ? (
@@ -99,6 +117,9 @@ const formatPrice = (price: number) => {
 			discountPercent: 0,
 			total: basePrice,
 		};
+
+		let availableZusatzleistungen: any[] = [];
+		let selectedZusatzleistungIds: string[] = [];
 
 		const formatPrice = (price: number) => {
 			return new Intl.NumberFormat('de-DE', {
@@ -190,15 +211,81 @@ const formatPrice = (price: number) => {
 				const minQty = parseInt(row.getAttribute('data-min-quantity') || '0');
 				const maxQtyAttr = row.getAttribute('data-max-quantity');
 				const maxQty = maxQtyAttr === '999999' || !maxQtyAttr ? Infinity : parseInt(maxQtyAttr);
-				
+
 				// Remove existing highlight classes
 				row.classList.remove('bg-success/20', 'border-l-4', 'border-success', 'shadow-sm');
-				
+
 				// Check if current quantity falls within this tier
 				if (quantity >= minQty && quantity <= maxQty) {
 					row.classList.add('bg-success/20', 'border-l-4', 'border-success', 'shadow-sm');
 				}
 			});
+		};
+
+		// Load zusatzleistungen for this product
+		const loadZusatzleistungen = async () => {
+			if (!productSlug) return;
+
+			try {
+				const response = await fetch(`/api/products/${productSlug}/zusatzleistungen`);
+				const result = await response.json();
+
+				if (result.success && result.data.length > 0) {
+					availableZusatzleistungen = result.data;
+					renderZusatzleistungen();
+					document.getElementById('zusatzleistungen-section')?.classList.remove('hidden');
+				}
+			} catch (error) {
+				console.error('Error loading zusatzleistungen:', error);
+			}
+		};
+
+		// Render zusatzleistungen checkboxes
+		const renderZusatzleistungen = () => {
+			const container = document.getElementById('zusatzleistungen-checkboxes');
+			if (!container) return;
+
+			container.innerHTML = availableZusatzleistungen.map(service => `
+				<label class="flex items-start gap-3 p-3 bg-base-100 rounded-lg border border-base-300/50 hover:border-primary/30 cursor-pointer transition-all">
+					<input
+						type="checkbox"
+						class="checkbox checkbox-primary checkbox-sm mt-0.5"
+						data-zusatzleistung-id="${service.id}"
+						data-zusatzleistung-price="${service.price}"
+						onchange="window.updateZusatzleistungenTotal()"
+					/>
+					<div class="flex-1 min-w-0">
+						<div class="flex items-baseline justify-between gap-2">
+							<span class="text-sm font-medium text-neutral">${service.name}</span>
+							<span class="text-sm font-semibold text-primary">+${formatPrice(service.price)}</span>
+						</div>
+						${service.description ? `<p class="text-xs text-neutral/60 mt-1">${service.description}</p>` : ''}
+					</div>
+				</label>
+			`).join('');
+		};
+
+		// Update zusatzleistungen total
+		(window as any).updateZusatzleistungenTotal = function() {
+			const checkboxes = document.querySelectorAll<HTMLInputElement>('#zusatzleistungen-checkboxes input[type="checkbox"]:checked');
+			let total = 0;
+			selectedZusatzleistungIds = [];
+
+			checkboxes.forEach(cb => {
+				total += parseFloat(cb.dataset.zusatzleistungPrice || '0');
+				const id = cb.dataset.zusatzleistungId;
+				if (id) selectedZusatzleistungIds.push(id);
+			});
+
+			const totalDisplay = document.getElementById('zusatzleistungen-total-display');
+			const totalElement = document.getElementById('zusatzleistungen-total');
+
+			if (total > 0) {
+				totalDisplay?.classList.remove('hidden');
+				if (totalElement) totalElement.textContent = formatPrice(total);
+			} else {
+				totalDisplay?.classList.add('hidden');
+			}
 		};
 
 		const updateTotal = () => {
@@ -209,6 +296,9 @@ const formatPrice = (price: number) => {
 
 		// Initial price fetch
 		updateTotal();
+
+		// Load zusatzleistungen
+		loadZusatzleistungen();
 
 		quantityDecrease?.addEventListener('click', () => {
 			const current = parseInt(quantityInput.value) || 1;
@@ -257,6 +347,7 @@ const formatPrice = (price: number) => {
 				const requestBody: {
 					productId: string;
 					quantity: number;
+					zusatzleistungIds?: string[];
 					uploadedFileUrl?: string;
 					uploadedFileName?: string;
 					fileMetadata?: any;
@@ -264,6 +355,11 @@ const formatPrice = (price: number) => {
 					productId,
 					quantity,
 				};
+
+				// Include zusatzleistungen if selected
+				if (selectedZusatzleistungIds.length > 0) {
+					requestBody.zusatzleistungIds = selectedZusatzleistungIds;
+				}
 
 				// Include uploaded file info if available
 				if (uploadedFile) {

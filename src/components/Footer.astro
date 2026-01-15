@@ -127,14 +127,27 @@ import { SITE_CONFIG } from '../constants/site';
 					</li>
 				</ul>
 				<div class="pt-4 border-t border-base-300/30">
-					<p class="text-sm text-neutral/60 mb-2">Kontakt</p>
-					<a href="mailto:info@dtf-transferprint.de" class="text-sm text-primary hover:underline">info@dtf-transferprint.de</a>
+					<h4 class="text-sm font-semibold text-neutral mb-3">Kontakt</h4>
+					<ul class="space-y-2 mb-4">
+						<li>
+							<a href="/kontakt/" class="text-neutral/70 hover:text-primary transition-colors duration-200 text-sm flex items-center gap-2 group">
+								<span class="w-1.5 h-1.5 rounded-full bg-primary/0 group-hover:bg-primary transition-all duration-200"></span>
+								Kontaktformular
+							</a>
+						</li>
+						<li>
+							<a href="mailto:info@dtf-transferprint.de" class="text-neutral/70 hover:text-primary transition-colors duration-200 text-sm flex items-center gap-2 group">
+								<span class="w-1.5 h-1.5 rounded-full bg-primary/0 group-hover:bg-primary transition-all duration-200"></span>
+								info@dtf-transferprint.de
+							</a>
+						</li>
+					</ul>
 				</div>
 			</div>
 		</div>
 
 		<!-- Bottom Bar -->
-		<div class="mt-12 pt-8 border-t border-base-300/30 flex flex-col md:flex-row justify-between items-center gap-4">
+		<div class="mt-12 pt-8 border-t border-base-300/30 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
 			<p class="text-sm text-neutral/50">
 				Copyright © {new Date().getFullYear()} DTF Transfer Print. Alle Rechte vorbehalten.
 			</p>

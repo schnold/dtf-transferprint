@@ -41,7 +41,7 @@ const formatPrice = (price: number) => {
 <Layout title={title} description={description}>
 	<Navbar />
 
-	<div class="min-h-screen bg-base-100">
+	<div class="min-h-screen bg-gradient-to-br from-primary/10 via-base-100 to-secondary/10">
 		<div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 max-w-6xl">
 			{!user ? (
 				<!-- Not logged in state -->
@@ -115,7 +115,7 @@ const formatPrice = (price: number) => {
 
 												<!-- Info -->
 												<div class="flex-1 min-w-0">
-													<a href={`/product/${item.productSlug}`} class="text-base font-medium text-neutral hover:text-primary transition-colors line-clamp-2 mb-2 block">
+													<a href={`/product/${item.productSlug}`} class="text-base font-medium text-neutral line-clamp-2 mb-2 block">
 														{item.productName}
 													</a>
 
@@ -132,6 +132,21 @@ const formatPrice = (price: number) => {
 																<path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
 															</svg>
 															Sie sparen {formatPrice(item.currentSavings)}
+														</div>
+													)}
+
+													<!-- Zusatzleistungen -->
+													{item.zusatzleistungen && item.zusatzleistungen.length > 0 && (
+														<div class="mt-3 pt-3 border-t border-base-200">
+															<div class="text-xs font-medium text-neutral/50 mb-2">Zusatzleistungen:</div>
+															<div class="space-y-1">
+																{item.zusatzleistungen.map((service: any) => (
+																	<div class="flex items-center justify-between text-xs">
+																		<span class="text-neutral/70">{service.name}</span>
+																		<span class="font-medium text-neutral">+{formatPrice(service.price)}</span>
+																	</div>
+																))}
+															</div>
 														</div>
 													)}
 
@@ -165,7 +180,7 @@ const formatPrice = (price: number) => {
 												<!-- Price & Remove -->
 												<div class="flex flex-col items-end justify-between text-right">
 													<div class="text-lg font-semibold text-neutral cart-item-total">
-														{formatPrice(item.unitPrice * item.quantity)}
+														{formatPrice(item.totalWithServices || (item.unitPrice * item.quantity))}
 													</div>
 													<button
 														class="remove-item text-xs text-error/70 hover:text-error transition-colors mt-2"
@@ -188,35 +203,41 @@ const formatPrice = (price: number) => {
 								<div class="bg-base-100 border border-base-300/50 rounded-lg p-6">
 									<h2 class="text-lg font-semibold text-neutral mb-5">Zusammenfassung</h2>
 
-									<div class="space-y-3">
-										<!-- Subtotal -->
-										<div class="flex justify-between text-sm">
-											<span class="text-neutral/60">Zwischensumme</span>
-											<span class="font-medium text-neutral" id="cart-subtotal">{formatPrice(subtotal)}</span>
+									<div class="space-y-5">
+										<!-- Order Summary Section -->
+										<div class="space-y-3">
+											<div class="text-xs font-medium text-neutral/50 uppercase tracking-wide mb-2">Bestellübersicht</div>
+											<!-- Subtotal -->
+											<div class="flex justify-between text-sm">
+												<span class="text-neutral/60">Zwischensumme</span>
+												<span class="font-medium text-neutral" id="cart-subtotal">{formatPrice(subtotal)}</span>
+											</div>
+
+											{totalSavings > 0 && (
+												<div class="flex justify-between items-center text-sm bg-success/5 -mx-6 px-6 py-3 rounded">
+													<span class="text-success font-medium">Sie sparen</span>
+													<span class="text-success font-semibold" id="total-savings">{formatPrice(totalSavings)}</span>
+												</div>
+											)}
 										</div>
 
-										{totalSavings > 0 && (
-											<div class="flex justify-between items-center text-sm bg-success/5 -mx-6 px-6 py-3">
-												<span class="text-success font-medium">Sie sparen</span>
-												<span class="text-success font-semibold" id="total-savings">{formatPrice(totalSavings)}</span>
-											</div>
-										)}
-
-										<!-- Shipping Method Selector -->
-										<div class="space-y-2">
-											<div class="text-xs font-medium text-neutral/50 uppercase tracking-wide px-3">Versandart</div>
+										<!-- Shipping Section -->
+										<div class="space-y-3 pt-3 border-t border-base-300/30">
+											<div class="text-xs font-medium text-neutral/50 uppercase tracking-wide mb-2">Versand</div>
+											<!-- Shipping Method Selector -->
 											<div id="shipping-profiles-container" class="space-y-1">
 												<!-- Shipping profiles will be loaded here -->
 											</div>
+
+											<!-- Shipping Cost -->
+											<div class="flex justify-between text-sm pt-2">
+												<span class="text-neutral/60">Versandkosten</span>
+												<span class="font-medium text-neutral" id="shipping-cost">-</span>
+											</div>
 										</div>
 
-										<!-- Shipping Cost -->
-										<div class="flex justify-between text-sm pt-2">
-											<span class="text-neutral/60">Versandkosten</span>
-											<span class="font-medium text-neutral" id="shipping-cost">-</span>
-										</div>
-
-										<div class="border-t border-base-300/30 pt-3 mt-3">
+										<!-- Total Section -->
+										<div class="border-t border-base-300/30 pt-4 mt-4">
 											<div class="flex justify-between items-baseline">
 												<span class="text-base font-semibold text-neutral">Gesamt</span>
 												<span class="text-2xl font-semibold text-neutral" id="cart-total">{formatPrice(subtotal)}</span>
@@ -267,6 +288,20 @@ const formatPrice = (price: number) => {
 	.cart-item-quantity {
 		transition: all 0.2s ease;
 	}
+
+	/* Radio buttons in accent orange */
+	.radio:checked {
+		border-color: var(--color-accent);
+		background-color: var(--color-accent);
+	}
+
+	.radio:checked::before {
+		background-color: white;
+	}
+
+	.radio:focus {
+		outline-color: var(--color-accent);
+	}
 </style>
 
 <script>
@@ -314,7 +349,7 @@ const formatPrice = (price: number) => {
 
 						<!-- Info -->
 						<div class="flex-1 min-w-0">
-							<a href="/product/${escapeHtml(item.productSlug)}" class="text-base font-medium text-neutral hover:text-primary transition-colors line-clamp-2 mb-2 block">
+							<a href="/product/${escapeHtml(item.productSlug)}" class="text-base font-medium text-neutral line-clamp-2 mb-2 block">
 								${escapeHtml(item.productName)}
 							</a>
 
@@ -581,7 +616,7 @@ const formatPrice = (price: number) => {
 								type="radio"
 								name="shipping-profile"
 								value="${profile.id}"
-								class="radio radio-xs ${isSelected ? 'radio-primary' : ''}"
+								class="radio radio-xs"
 								${isSelected ? 'checked' : ''}
 								onchange="selectShippingProfile('${profile.id}')"
 							/>

@@ -10,7 +10,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
   try {
     const body = await request.json();
-    const { productId, quantity, widthMm, heightMm, uploadedFileUrl, uploadedFileName, fileMetadata } = body;
+    const { productId, quantity, widthMm, heightMm, uploadedFileUrl, uploadedFileName, fileMetadata, zusatzleistungIds } = body;
 
     // Debug logging
     console.log('[CART ADD] locals.user:', locals.user);
@@ -167,6 +167,31 @@ export const POST: APIRoute = async ({ request, locals }) => {
         JSON.stringify(customOptions),
       ]
     );
+
+    // Handle zusatzleistungen if provided
+    if (zusatzleistungIds && Array.isArray(zusatzleistungIds) && zusatzleistungIds.length > 0) {
+      // Validate zusatzleistungen are active and enabled for this product
+      // SECURITY: Always fetch prices from database, never trust client
+      const servicesResult = await client.query(`
+        SELECT z.id, z.price
+        FROM "zusatzleistungen" z
+        INNER JOIN "productZusatzleistungen" pz
+          ON z.id = pz."zusatzleistungId"
+        WHERE z.id = ANY($1::text[])
+          AND z."isActive" = true
+          AND pz."productId" = $2
+          AND pz."isEnabled" = true
+      `, [zusatzleistungIds, productId]);
+
+      // Insert validated services with server-fetched prices
+      for (const service of servicesResult.rows) {
+        await client.query(`
+          INSERT INTO "cartItemZusatzleistungen" (id, "cartItemId", "zusatzleistungId", price)
+          VALUES (gen_random_uuid()::text, $1, $2, $3)
+          ON CONFLICT ("cartItemId", "zusatzleistungId") DO NOTHING
+        `, [cartItemResult.rows[0].id, service.id, service.price]);
+      }
+    }
 
     // Fetch cart count
     const cartCountResult = await client.query(

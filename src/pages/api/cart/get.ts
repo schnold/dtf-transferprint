@@ -22,13 +22,7 @@ export const GET: APIRoute = async ({ locals }) => {
 
     const cartItems = await getCart(userId);
 
-    // Calculate totals
-    const subtotal = cartItems.reduce(
-      (sum, item) => sum + item.unitPrice * item.quantity,
-      0
-    );
-
-    // Calculate price tier info for each item
+    // Calculate price tier info for each item (including zusatzleistungen)
     const { pool } = await import('../../../lib/db');
     const client = await pool.connect();
     
@@ -46,7 +40,7 @@ export const GET: APIRoute = async ({ locals }) => {
           const tiers = tiersResult.rows;
           const currentQuantity = item.quantity;
           const unitPrice = item.unitPrice;
-          
+
           // Get base price
           const productResult = await client.query(
             'SELECT "basePrice" FROM products WHERE id = $1',
@@ -76,12 +70,48 @@ export const GET: APIRoute = async ({ locals }) => {
             };
           }
 
+          // Get zusatzleistungen for this cart item
+          const zusatzleistungenResult = await client.query(`
+            SELECT
+              ciz.id,
+              ciz.price,
+              z.name,
+              z.description
+            FROM "cartItemZusatzleistungen" ciz
+            INNER JOIN "zusatzleistungen" z ON ciz."zusatzleistungId" = z.id
+            WHERE ciz."cartItemId" = $1
+            ORDER BY z."displayOrder" ASC
+          `, [item.id]);
+
+          const zusatzleistungen = zusatzleistungenResult.rows.map(row => ({
+            ...row,
+            price: parseFloat(row.price),
+          }));
+
+          // Calculate zusatzleistungen total (charged once per cart item, not per quantity)
+          const zusatzleistungenTotal = zusatzleistungen.reduce(
+            (sum, service) => sum + service.price,
+            0
+          );
+
+          // Total for this cart item including zusatzleistungen
+          const totalWithServices = (unitPrice * currentQuantity) + zusatzleistungenTotal;
+
           return {
             ...item,
             currentSavings,
             nextTier: nextTierInfo,
+            zusatzleistungen,
+            zusatzleistungenTotal,
+            totalWithServices,
           };
         })
+      );
+
+      // Calculate subtotal including zusatzleistungen
+      const subtotal = itemsWithTierInfo.reduce(
+        (sum, item) => sum + item.totalWithServices,
+        0
       );
 
       return new Response(

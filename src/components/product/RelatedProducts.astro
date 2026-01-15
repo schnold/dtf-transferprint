@@ -26,13 +26,13 @@ const formatPrice = (price: number) => {
 			{relatedProducts.map((product) => (
 				<a 
 					href={`/product/${product.slug}`}
-					class="card bg-base-200/50 shadow-sm border border-base-300/30 hover:shadow-md transition-all duration-200 group"
+					class="card bg-base-200/50 shadow-sm border border-base-300/30"
 				>
 					<figure class="px-6 pt-6">
 						<img 
 							src={product.images[0] || "/images/placeholder.jpg"} 
 							alt={product.name}
-							class="w-full rounded-lg aspect-square object-cover group-hover:scale-105 transition-transform duration-200"
+							class="w-full rounded-lg aspect-square object-cover"
 							loading="lazy"
 						/>
 					</figure>
@@ -40,7 +40,7 @@ const formatPrice = (price: number) => {
 						<div class="badge badge-sm mb-2">
 							{product.category}
 						</div>
-						<h3 class="card-title text-neutral text-lg group-hover:text-primary transition-colors">
+						<h3 class="card-title text-neutral text-lg">
 							{product.name}
 						</h3>
 						<p class="text-neutral/70 text-sm line-clamp-2">

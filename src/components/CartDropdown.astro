@@ -52,11 +52,11 @@ const formatPrice = (price: number) => {
 			)}
 		</button>
 		
-		<div tabindex="0" class="cart-dropdown-content absolute right-0 top-full mt-3 z-[100] shadow-2xl bg-base-100 rounded-xl w-96 border border-base-300/30 overflow-hidden opacity-0 invisible transform translate-y-2 transition-all duration-300 ease-out">
+		<div tabindex="0" class="cart-dropdown-content absolute top-full mt-3 z-[100] shadow-2xl bg-base-100 rounded-xl w-96 border border-base-300/30 overflow-hidden opacity-0 invisible transform translate-y-2 transition-all duration-300 ease-out">
 			{hasCartItems ? (
 				<div class="max-h-[500px] flex flex-col">
 					<!-- Header -->
-					<div class="p-4 bg-gradient-to-r from-primary/10 to-secondary/10 border-b border-base-200">
+					<div class="p-4 bg-base-200 border-b border-base-200">
 						<div class="flex items-center justify-between">
 							<h3 class="text-lg font-bold text-neutral flex items-center gap-2">
 								<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -224,6 +224,10 @@ const formatPrice = (price: number) => {
 		pointer-events: none;
 		transition: opacity 0.2s ease-out, visibility 0.2s ease-out, transform 0.2s ease-out;
 		transition-delay: 0s;
+		/* Align to the right like profile dropdown */
+		right: 0;
+		/* Ensure it doesn't overflow viewport */
+		max-width: calc(100vw - 2rem);
 	}
 
 	.cart-dropdown:hover .cart-dropdown-content,
@@ -241,6 +245,31 @@ const formatPrice = (price: number) => {
 		visibility: hidden;
 		transform: translateY(2px);
 		transition-delay: 0.3s;
+	}
+
+	/* Mobile and Tablet: Better centered positioning */
+	@media (max-width: 1023px) {
+		.cart-dropdown-content {
+			/* Position relative to viewport, not parent */
+			position: fixed !important;
+			right: auto !important;
+			left: 50% !important;
+			top: 4.5rem !important;
+			transform: translateX(-50%) translateY(2px) !important;
+			width: calc(100vw - 2rem) !important;
+			max-width: 24rem !important;
+			margin-top: 0 !important;
+		}
+
+		.cart-dropdown:hover .cart-dropdown-content,
+		.cart-dropdown-content:hover,
+		.cart-dropdown-content:focus-within {
+			transform: translateX(-50%) translateY(0) !important;
+		}
+
+		.cart-dropdown:not(:hover) .cart-dropdown-content:not(:hover):not(:focus-within) {
+			transform: translateX(-50%) translateY(2px) !important;
+		}
 	}
 </style>
 
