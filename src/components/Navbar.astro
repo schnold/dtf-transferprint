@@ -93,7 +93,7 @@ const remainingCategories = categoriesWithProducts.slice(3);
 											<ul class="space-y-2">
 												{category.products.map((product) => (
 													<li>
-														<a href={`/product/${product.slug}`} class="text-neutral/70 hover:text-primary text-sm py-1.5 transition-colors block break-words">
+														<a href={`/product/${product.slug}`} class="text-neutral/70 menu-link-hover text-sm py-1.5 transition-colors block break-words">
 															{product.name}
 														</a>
 													</li>
@@ -113,7 +113,7 @@ const remainingCategories = categoriesWithProducts.slice(3);
 										<ul class="space-y-2">
 											{remainingCategories.map((category) => (
 												<li>
-													<a href={`/categories/${category.slug}`} class="text-neutral/70 hover:text-primary text-sm py-1.5 transition-colors block break-words">
+													<a href={`/categories/${category.slug}`} class="text-neutral/70 menu-link-hover text-sm py-1.5 transition-colors block break-words">
 														{category.name}
 													</a>
 												</li>
@@ -133,10 +133,10 @@ const remainingCategories = categoriesWithProducts.slice(3);
 											Mustermappen & Info
 										</h3>
 										<ul class="space-y-2">
-											<li><a href="/mustermappe/" class="text-neutral/70 hover:text-primary text-sm py-1.5 transition-colors block break-words">
+											<li><a href="/mustermappe/" class="text-neutral/70 menu-link-hover text-sm py-1.5 transition-colors block break-words">
 												Basic Mustermappe
 											</a></li>
-											<li><a href="/blockout/" class="text-neutral/70 hover:text-primary text-sm py-1.5 transition-colors block break-words">
+											<li><a href="/blockout/" class="text-neutral/70 menu-link-hover text-sm py-1.5 transition-colors block break-words">
 												Blockout Mustermappe
 											</a></li>
 										</ul>
@@ -163,20 +163,20 @@ const remainingCategories = categoriesWithProducts.slice(3);
 							<!-- Druckdienstleistungen -->
 							<div>
 								<h3 class="font-bold text-neutral mb-3 text-base flex items-center gap-2">
-									<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5" style="color: var(--color-primary);">
+									<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5" style="color: var(--color-metrics-text);">
 										<path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
 									</svg>
 									Druckdienstleistungen
 								</h3>
 								<ul class="space-y-2">
-									<li><a href="/dtf-express-druck/" class="text-neutral/70 hover:text-primary text-sm py-1.5 transition-colors flex items-center justify-between break-words">
+									<li><a href="/dtf-express-druck/" class="text-neutral/70 menu-link-hover text-sm py-1.5 transition-colors flex items-center justify-between break-words">
 										<span>DTF Express Druck</span>
 										<span class="badge badge-accent badge-xs">24-48h</span>
 									</a></li>
-									<li><a href="/textil-lohndruck/" class="text-neutral/70 hover:text-primary text-sm py-1.5 transition-colors block break-words">
+									<li><a href="/textil-lohndruck/" class="text-neutral/70 menu-link-hover text-sm py-1.5 transition-colors block break-words">
 										Textil-Lohndruck
 									</a></li>
-									<li><a href="/individueller-druck/" class="text-neutral/70 hover:text-primary text-sm py-1.5 transition-colors block break-words">
+									<li><a href="/individueller-druck/" class="text-neutral/70 menu-link-hover text-sm py-1.5 transition-colors block break-words">
 										Individueller Druck
 									</a></li>
 								</ul>
@@ -185,19 +185,19 @@ const remainingCategories = categoriesWithProducts.slice(3);
 							<!-- Zusatzleistungen -->
 							<div>
 								<h3 class="font-bold text-neutral mb-3 text-base flex items-center gap-2">
-									<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5" style="color: var(--color-primary);">
+									<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5" style="color: var(--color-metrics-text);">
 										<path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
 									</svg>
 									Zusatzleistungen
 								</h3>
 								<ul class="space-y-2">
-									<li><a href="/druckvorlagen/" class="text-neutral/70 hover:text-primary text-sm py-1.5 transition-colors block break-words">
+									<li><a href="/druckvorlagen/" class="text-neutral/70 menu-link-hover text-sm py-1.5 transition-colors block break-words">
 										Druckvorlagen
 									</a></li>
-									<li><a href="/beratung/" class="text-neutral/70 hover:text-primary text-sm py-1.5 transition-colors block break-words">
+									<li><a href="/beratung/" class="text-neutral/70 menu-link-hover text-sm py-1.5 transition-colors block break-words">
 										Fachberatung
 									</a></li>
-									<li><a href="/support/" class="text-neutral/70 hover:text-primary text-sm py-1.5 transition-colors block break-words">
+									<li><a href="/support/" class="text-neutral/70 menu-link-hover text-sm py-1.5 transition-colors block break-words">
 										Technischer Support
 									</a></li>
 								</ul>
@@ -222,16 +222,16 @@ const remainingCategories = categoriesWithProducts.slice(3);
 							<!-- Unternehmen -->
 							<div>
 								<h3 class="font-bold text-neutral mb-3 text-base flex items-center gap-2">
-									<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5" style="color: var(--color-primary);">
+									<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5" style="color: var(--color-metrics-text);">
 										<path stroke-linecap="round" stroke-linejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008z" />
 									</svg>
 									Unternehmen
 								</h3>
 								<ul class="space-y-2">
-									<li><a href="/ueber-uns/" class="text-neutral/70 hover:text-primary text-sm py-1.5 transition-colors block break-words">
+									<li><a href="/ueber-uns/" class="text-neutral/70 menu-link-hover text-sm py-1.5 transition-colors block break-words">
 										Über Uns
 									</a></li>
-									<li><a href="/karriere/" class="text-neutral/70 hover:text-primary text-sm py-1.5 transition-colors block break-words">
+									<li><a href="/karriere/" class="text-neutral/70 menu-link-hover text-sm py-1.5 transition-colors block break-words">
 										Stellenangebote
 									</a></li>
 								</ul>
@@ -240,25 +240,25 @@ const remainingCategories = categoriesWithProducts.slice(3);
 							<!-- DTF-Ratgeber -->
 							<div>
 								<h3 class="font-bold text-neutral mb-3 text-base flex items-center gap-2">
-									<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5" style="color: var(--color-primary); transform: scaleY(-1);">
+									<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5" style="color: var(--color-metrics-text); transform: scaleY(-1);">
 										<path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
 									</svg>
 									DTF-Ratgeber
 								</h3>
 								<ul class="space-y-2">
-									<li><a href="/dtf-ratgeber-und-infos/" class="text-neutral/70 hover:text-primary text-sm py-1.5 transition-colors block break-words">
+									<li><a href="/dtf-ratgeber-und-infos/" class="text-neutral/70 menu-link-hover text-sm py-1.5 transition-colors block break-words">
 										DTF Grundlagen
 									</a></li>
-									<li><a href="/dtf-druck/" class="text-neutral/70 hover:text-primary text-sm py-1.5 transition-colors block break-words">
+									<li><a href="/dtf-druck/" class="text-neutral/70 menu-link-hover text-sm py-1.5 transition-colors block break-words">
 										DTF Druckprozess
 									</a></li>
-									<li><a href="/dtf-haltbarkeit/" class="text-neutral/70 hover:text-primary text-sm py-1.5 transition-colors block break-words">
+									<li><a href="/dtf-haltbarkeit/" class="text-neutral/70 menu-link-hover text-sm py-1.5 transition-colors block break-words">
 										DTF Haltbarkeit
 									</a></li>
-									<li><a href="/infos-zu-printpunk/" class="text-neutral/70 hover:text-primary text-sm py-1.5 transition-colors block break-words">
+									<li><a href="/infos-zu-printpunk/" class="text-neutral/70 menu-link-hover text-sm py-1.5 transition-colors block break-words">
 										Tipps & Tricks
 									</a></li>
-									<li><a href="/textildruckverfahren/" class="text-neutral/70 hover:text-primary text-sm py-1.5 transition-colors block break-words">
+									<li><a href="/textildruckverfahren/" class="text-neutral/70 menu-link-hover text-sm py-1.5 transition-colors block break-words">
 										Textildruckverfahren
 									</a></li>
 								</ul>
@@ -267,19 +267,19 @@ const remainingCategories = categoriesWithProducts.slice(3);
 							<!-- Support -->
 							<div>
 								<h3 class="font-bold text-neutral mb-3 text-base flex items-center gap-2">
-									<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5" style="color: var(--color-primary);">
+									<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5" style="color: var(--color-metrics-text);">
 										<path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" />
 									</svg>
 									Support & FAQ
 								</h3>
 								<ul class="space-y-2">
-									<li><a href="/faq/" class="text-neutral/70 hover:text-primary text-sm py-1.5 transition-colors block break-words">
+									<li><a href="/faq/" class="text-neutral/70 menu-link-hover text-sm py-1.5 transition-colors block break-words">
 										Häufige Fragen
 									</a></li>
-									<li><a href="/kontakt/" class="text-neutral/70 hover:text-primary text-sm py-1.5 transition-colors block break-words">
+									<li><a href="/kontakt/" class="text-neutral/70 menu-link-hover text-sm py-1.5 transition-colors block break-words">
 										Kontakt
 									</a></li>
-									<li><a href="/support/" class="text-neutral/70 hover:text-primary text-sm py-1.5 transition-colors block break-words">
+									<li><a href="/support/" class="text-neutral/70 menu-link-hover text-sm py-1.5 transition-colors block break-words">
 										Technischer Support
 									</a></li>
 								</ul>
@@ -314,10 +314,11 @@ const remainingCategories = categoriesWithProducts.slice(3);
 				<div class="dropdown relative user-dropdown">
 					<button
 						tabindex="0"
-						class="w-8 h-8 rounded-full border-2 border-accent flex items-center justify-center hover:bg-accent/10 transition-all duration-200 cursor-pointer"
+						class="w-8 h-8 rounded-full border-2 flex items-center justify-center hover:bg-accent/10 transition-all duration-200 cursor-pointer"
+						style="border-color: var(--color-metrics-text);"
 						aria-label="User menu"
 					>
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 text-accent">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4" style="color: var(--color-metrics-text);">
 							<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
 						</svg>
 					</button>
@@ -326,7 +327,7 @@ const remainingCategories = categoriesWithProducts.slice(3);
 						<div class="pt-6 pb-4 bg-base-100 border-b border-base-200">
 							<div class="flex items-center gap-3 mb-2">
 								<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-									<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-primary">
+									<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6" style="color: var(--color-metrics-text);">
 										<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
 									</svg>
 								</div>
@@ -350,7 +351,7 @@ const remainingCategories = categoriesWithProducts.slice(3);
 							{user.isAdmin && (
 								<li>
 									<a href="/admin" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-base-200 transition-colors bg-primary/5">
-										<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-primary">
+										<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5" style="color: var(--color-metrics-text);">
 											<path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z" />
 											<path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
 										</svg>
@@ -389,10 +390,11 @@ const remainingCategories = categoriesWithProducts.slice(3);
 				<!-- Not Logged In: User Icon -->
 				<button
 					id="auth-icon-button"
-					class="w-8 h-8 rounded-full border border-neutral/30 flex items-center justify-center hover:border-neutral/50 hover:bg-white/10 transition-all duration-200 cursor-pointer"
+					class="w-8 h-8 rounded-full border-2 flex items-center justify-center hover:bg-accent/10 transition-all duration-200 cursor-pointer"
+					style="border-color: var(--color-metrics-text);"
 					aria-label="Sign in or Sign up"
 				>
-					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 text-neutral/80 hover:text-neutral transition-colors">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 transition-colors" style="color: var(--color-metrics-text);">
 						<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
 					</svg>
 				</button>
@@ -411,7 +413,7 @@ const remainingCategories = categoriesWithProducts.slice(3);
 						<details class="mobile-menu-section" open>
 							<summary class="font-bold text-neutral text-lg flex items-center justify-between cursor-pointer py-2">
 								<span class="flex items-center gap-2">
-									<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5" style="color: var(--color-primary);">
+									<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5" style="color: var(--color-metrics-text);">
 										<path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
 									</svg>
 									Produkte
@@ -431,7 +433,7 @@ const remainingCategories = categoriesWithProducts.slice(3);
 											<ul class="space-y-2 pl-6">
 												{category.products.map((product) => (
 													<li>
-														<a href={`/product/${product.slug}`} class="text-neutral/70 hover:text-primary text-sm py-1 transition-colors block">
+														<a href={`/product/${product.slug}`} class="text-neutral/70 menu-link-hover text-sm py-1 transition-colors block">
 															{product.name}
 														</a>
 													</li>
@@ -450,7 +452,7 @@ const remainingCategories = categoriesWithProducts.slice(3);
 						<details class="mobile-menu-section">
 							<summary class="font-bold text-neutral text-lg flex items-center justify-between cursor-pointer py-2">
 								<span class="flex items-center gap-2">
-									<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5" style="color: var(--color-primary);">
+									<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5" style="color: var(--color-metrics-text);">
 										<path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
 									</svg>
 									Dienstleistungen
@@ -465,18 +467,18 @@ const remainingCategories = categoriesWithProducts.slice(3);
 									<h4 class="font-semibold text-neutral mb-2 text-sm">Druckdienstleistungen</h4>
 									<ul class="space-y-2 pl-6">
 										<li>
-											<a href="/dtf-express-druck/" class="text-neutral/70 hover:text-primary text-sm py-1 transition-colors flex items-center justify-between">
+											<a href="/dtf-express-druck/" class="text-neutral/70 menu-link-hover text-sm py-1 transition-colors flex items-center justify-between">
 												<span>DTF Express Druck</span>
 												<span class="badge badge-accent badge-xs">24-48h</span>
 											</a>
 										</li>
 										<li>
-											<a href="/textil-lohndruck/" class="text-neutral/70 hover:text-primary text-sm py-1 transition-colors block">
+											<a href="/textil-lohndruck/" class="text-neutral/70 menu-link-hover text-sm py-1 transition-colors block">
 												Textil-Lohndruck
 											</a>
 										</li>
 										<li>
-											<a href="/individueller-druck/" class="text-neutral/70 hover:text-primary text-sm py-1 transition-colors block">
+											<a href="/individueller-druck/" class="text-neutral/70 menu-link-hover text-sm py-1 transition-colors block">
 												Individueller Druck
 											</a>
 										</li>
@@ -487,17 +489,17 @@ const remainingCategories = categoriesWithProducts.slice(3);
 									<h4 class="font-semibold text-neutral mb-2 text-sm">Zusatzleistungen</h4>
 									<ul class="space-y-2 pl-6">
 										<li>
-											<a href="/druckvorlagen/" class="text-neutral/70 hover:text-primary text-sm py-1 transition-colors block">
+											<a href="/druckvorlagen/" class="text-neutral/70 menu-link-hover text-sm py-1 transition-colors block">
 												Druckvorlagen
 											</a>
 										</li>
 										<li>
-											<a href="/beratung/" class="text-neutral/70 hover:text-primary text-sm py-1 transition-colors block">
+											<a href="/beratung/" class="text-neutral/70 menu-link-hover text-sm py-1 transition-colors block">
 												Fachberatung
 											</a>
 										</li>
 										<li>
-											<a href="/support/" class="text-neutral/70 hover:text-primary text-sm py-1 transition-colors block">
+											<a href="/support/" class="text-neutral/70 menu-link-hover text-sm py-1 transition-colors block">
 												Technischer Support
 											</a>
 										</li>
@@ -513,7 +515,7 @@ const remainingCategories = categoriesWithProducts.slice(3);
 						<details class="mobile-menu-section">
 							<summary class="font-bold text-neutral text-lg flex items-center justify-between cursor-pointer py-2">
 								<span class="flex items-center gap-2">
-									<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5" style="color: var(--color-primary);">
+									<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5" style="color: var(--color-metrics-text);">
 										<path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
 									</svg>
 									Informationen
@@ -528,12 +530,12 @@ const remainingCategories = categoriesWithProducts.slice(3);
 									<h4 class="font-semibold text-neutral mb-2 text-sm">Unternehmen</h4>
 									<ul class="space-y-2 pl-6">
 										<li>
-											<a href="/ueber-uns/" class="text-neutral/70 hover:text-primary text-sm py-1 transition-colors block">
+											<a href="/ueber-uns/" class="text-neutral/70 menu-link-hover text-sm py-1 transition-colors block">
 												Über Uns
 											</a>
 										</li>
 										<li>
-											<a href="/karriere/" class="text-neutral/70 hover:text-primary text-sm py-1 transition-colors block">
+											<a href="/karriere/" class="text-neutral/70 menu-link-hover text-sm py-1 transition-colors block">
 												Stellenangebote
 											</a>
 										</li>
@@ -544,27 +546,27 @@ const remainingCategories = categoriesWithProducts.slice(3);
 									<h4 class="font-semibold text-neutral mb-2 text-sm">DTF-Ratgeber</h4>
 									<ul class="space-y-2 pl-6">
 										<li>
-											<a href="/dtf-ratgeber-und-infos/" class="text-neutral/70 hover:text-primary text-sm py-1 transition-colors block">
+											<a href="/dtf-ratgeber-und-infos/" class="text-neutral/70 menu-link-hover text-sm py-1 transition-colors block">
 												DTF Grundlagen
 											</a>
 										</li>
 										<li>
-											<a href="/dtf-druck/" class="text-neutral/70 hover:text-primary text-sm py-1 transition-colors block">
+											<a href="/dtf-druck/" class="text-neutral/70 menu-link-hover text-sm py-1 transition-colors block">
 												DTF Druckprozess
 											</a>
 										</li>
 										<li>
-											<a href="/dtf-haltbarkeit/" class="text-neutral/70 hover:text-primary text-sm py-1 transition-colors block">
+											<a href="/dtf-haltbarkeit/" class="text-neutral/70 menu-link-hover text-sm py-1 transition-colors block">
 												DTF Haltbarkeit
 											</a>
 										</li>
 										<li>
-											<a href="/infos-zu-printpunk/" class="text-neutral/70 hover:text-primary text-sm py-1 transition-colors block">
+											<a href="/infos-zu-printpunk/" class="text-neutral/70 menu-link-hover text-sm py-1 transition-colors block">
 												Tipps & Tricks
 											</a>
 										</li>
 										<li>
-											<a href="/textildruckverfahren/" class="text-neutral/70 hover:text-primary text-sm py-1 transition-colors block">
+											<a href="/textildruckverfahren/" class="text-neutral/70 menu-link-hover text-sm py-1 transition-colors block">
 												Textildruckverfahren
 											</a>
 										</li>
@@ -575,17 +577,17 @@ const remainingCategories = categoriesWithProducts.slice(3);
 									<h4 class="font-semibold text-neutral mb-2 text-sm">Support & FAQ</h4>
 									<ul class="space-y-2 pl-6">
 										<li>
-											<a href="/faq/" class="text-neutral/70 hover:text-primary text-sm py-1 transition-colors block">
+											<a href="/faq/" class="text-neutral/70 menu-link-hover text-sm py-1 transition-colors block">
 												Häufige Fragen
 											</a>
 										</li>
 										<li>
-											<a href="/kontakt/" class="text-neutral/70 hover:text-primary text-sm py-1 transition-colors block">
+											<a href="/kontakt/" class="text-neutral/70 menu-link-hover text-sm py-1 transition-colors block">
 												Kontakt
 											</a>
 										</li>
 										<li>
-											<a href="/support/" class="text-neutral/70 hover:text-primary text-sm py-1 transition-colors block">
+											<a href="/support/" class="text-neutral/70 menu-link-hover text-sm py-1 transition-colors block">
 												Technischer Support
 											</a>
 										</li>
@@ -602,7 +604,7 @@ const remainingCategories = categoriesWithProducts.slice(3);
 
 						<!-- Muster bestellen -->
 						<div class="pt-4 border-t border-base-300/20">
-							<a href="/muster-bestellen/" class="text-neutral/80 hover:text-primary text-base font-medium py-2 transition-colors block">
+							<a href="/muster-bestellen/" class="text-neutral/80 menu-link-hover text-base font-medium py-2 transition-colors block">
 								Muster bestellen
 							</a>
 						</div>

@@ -44,13 +44,13 @@ const mainImage = images[0] || "/images/placeholder.jpg";
 	// Simple image gallery functionality
 	document.addEventListener('DOMContentLoaded', () => {
 		const thumbnails = document.querySelectorAll('.thumbnail-btn');
-		const mainImage = document.querySelector('.product-gallery figure img');
+		const mainImage = document.querySelector('.product-gallery figure img') as HTMLImageElement | null;
 
 		if (!mainImage) return;
 
 		thumbnails.forEach((thumbnail) => {
 			thumbnail.addEventListener('click', () => {
-				const img = thumbnail.querySelector('img');
+				const img = thumbnail.querySelector('img') as HTMLImageElement | null;
 				if (img && mainImage) {
 					mainImage.src = img.src;
 					mainImage.alt = img.alt;

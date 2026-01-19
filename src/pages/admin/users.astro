@@ -57,9 +57,12 @@ users.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).get
               <th>Benutzer</th>
               <th>Status</th>
               <th>Rolle</th>
+              <th>Gewerbetreibender</th>
+              <th>USt-IdNr.</th>
+              <th>Rabatt</th>
               <th>Registriert</th>
               <th>Letzter Login</th>
-              <th>Benutzer-ID</th>
+              <th>Aktionen</th>
             </tr>
           </thead>
           <tbody>
@@ -118,6 +121,32 @@ users.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).get
                   )}
                 </td>
                 <td>
+                  {user.gewerbebetreiber ? (
+                    <span class="badge badge-success badge-sm gap-1">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3 h-3">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                      </svg>
+                      Ja
+                    </span>
+                  ) : (
+                    <span class="badge badge-ghost badge-sm">Nein</span>
+                  )}
+                </td>
+                <td>
+                  {user.umsatzsteuernummer ? (
+                    <span class="text-sm font-mono">{user.umsatzsteuernummer}</span>
+                  ) : (
+                    <span class="text-sm opacity-50">-</span>
+                  )}
+                </td>
+                <td>
+                  {user.discountPercent > 0 ? (
+                    <span class="badge badge-accent badge-sm">{user.discountPercent}%</span>
+                  ) : (
+                    <span class="text-sm opacity-50">-</span>
+                  )}
+                </td>
+                <td>
                   <div class="text-sm">
                     {new Date(user.createdAt).toLocaleDateString('de-DE', {
                       year: 'numeric',
@@ -140,9 +169,13 @@ users.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).get
                   )}
                 </td>
                 <td>
-                  <div class="text-xs text-base-content/50">
-                    ID: {user.id.substring(0, 8)}...
-                  </div>
+                  <a href={`/admin/users/${user.id}`} class="btn btn-ghost btn-sm gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                    </svg>
+                    Details
+                  </a>
                 </td>
               </tr>
             ))}
@@ -152,12 +185,12 @@ users.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).get
     </div>
   </div>
 
-  <!-- Security Notice -->
-  <div class="alert alert-warning mt-6">
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+  <!-- Info Notice -->
+  <div class="alert alert-info mt-6">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z"></path></svg>
     <div>
-      <div class="font-bold">Schreibgeschützte Ansicht</div>
-      <div class="text-sm">Admin-Status und Kontosperrungen können nur direkt über die Datenbank geändert werden. Dies dient der Sicherheit und verhindert unbefugte Rechteänderungen.</div>
+      <div class="font-bold">Benutzerdetails</div>
+      <div class="text-sm">Klicken Sie auf "Details" um alle Benutzerdaten einzusehen und individuelle Rabatte festzulegen. Admin-Status und Kontosperrungen können nur direkt über die Datenbank geändert werden.</div>
     </div>
   </div>
 </AdminLayout>

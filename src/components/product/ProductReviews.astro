@@ -22,7 +22,8 @@ const averageRating = reviews.length > 0
 					{Array.from({ length: 5 }).map((_, i) => (
 						<input
 							type="radio"
-							class="mask mask-star-2 bg-accent"
+							class="mask mask-star-2"
+							style={`background-color: var(--color-yellow-accent);`}
 							checked={i === Math.round(averageRating) - 1}
 							disabled
 						/>
@@ -70,7 +71,8 @@ const averageRating = reviews.length > 0
 							{Array.from({ length: 5 }).map((_, i) => (
 								<input
 									type="radio"
-									class="mask mask-star-2 bg-accent"
+									class="mask mask-star-2"
+									style={`background-color: var(--color-yellow-accent);`}
 									checked={i < review.rating}
 									disabled
 								/>

@@ -87,25 +87,57 @@ const displayAlt = imageAlt || (images.length > 0 ? images[0].alt : '');
 			<!-- Features List -->
 			{features.length > 0 && (
 				<ul class="space-y-4">
-					{features.map((feature) => (
-						<li class="flex items-start gap-4">
-							<div class="flex-shrink-0 w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-								{feature.icon && (
-									<span class="w-5 h-5 text-primary" set:html={feature.icon} />
-								)}
-							</div>
-							<p class="text-sm text-neutral/80 leading-relaxed pt-1 flex-1">{feature.text}</p>
-						</li>
-					))}
+					{features.map((feature) => {
+						// Use yellow color for icons in specific sections
+						const yellowSections = [
+							"Was macht Selini-Shirt aus?",
+							"Ihr Premium-Partner für DTF-Drucke im B2B-Bereich",
+							"Veredelung - Keine Zeit zum Pressen?"
+						];
+						const useYellow = yellowSections.includes(title);
+						
+						return (
+							<li class="flex items-start gap-4">
+								<div 
+									class={`flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center ${useYellow ? '' : 'bg-primary/10'}`}
+									style={useYellow ? `background-color: var(--color-yellow-accent-10);` : ''}
+								>
+									{feature.icon && (
+										<span 
+											class={`w-5 h-5 ${useYellow ? '' : 'text-primary'}`}
+											style={useYellow ? `color: var(--color-yellow-accent-dark);` : ''}
+											set:html={feature.icon} 
+										/>
+									)}
+								</div>
+								<p class="text-sm text-neutral/80 leading-relaxed pt-1 flex-1">{feature.text}</p>
+							</li>
+						);
+					})}
 				</ul>
 			)}
 
 			<!-- Badges -->
 			{badges.length > 0 && (
 				<div class="flex flex-wrap gap-2 pt-4">
-					{badges.map((badge) => (
-						<span class="badge badge-primary badge-lg">{badge}</span>
-					))}
+					{badges.map((badge) => {
+						// Use yellow color for badges in specific sections
+						const yellowSections = [
+							"Was macht Selini-Shirt aus?",
+							"Ihr Premium-Partner für DTF-Drucke im B2B-Bereich",
+							"Veredelung - Keine Zeit zum Pressen?"
+						];
+						const useYellow = yellowSections.includes(title);
+						
+						return (
+							<span 
+								class={`badge badge-lg ${useYellow ? '' : 'badge-primary'}`}
+								style={useYellow ? `background-color: var(--color-yellow-accent); color: #1c1917; border-color: var(--color-yellow-accent);` : ''}
+							>
+								{badge}
+							</span>
+						);
+					})}
 				</div>
 			)}
 		</div>

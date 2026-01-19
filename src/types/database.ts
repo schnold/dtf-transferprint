@@ -13,6 +13,8 @@ export interface User {
   updatedAt: Date;
   isReseller?: boolean;
   resellerDiscountPercent?: number;
+  gewerbebetreiber: boolean;
+  umsatzsteuernummer?: string;
 }
 
 export interface Category {

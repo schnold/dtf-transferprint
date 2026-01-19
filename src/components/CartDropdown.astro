@@ -38,15 +38,16 @@ const formatPrice = (price: number) => {
 	<div class="dropdown dropdown-end cart-dropdown relative">
 		<button
 			tabindex="0"
-			class={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all duration-200 cursor-pointer relative ${hasCartItems ? 'border-orange-400' : 'border-accent'}`}
+			class="w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all duration-200 cursor-pointer relative"
+			style="border-color: var(--color-metrics-text);"
 			aria-label="Shopping cart"
 			id="cart-icon-button"
 		>
-			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class={`w-4 h-4 transition-colors ${hasCartItems ? 'text-orange-600' : 'text-accent'}`}>
+			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 transition-colors" style="color: var(--color-metrics-text);">
 				<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
 			</svg>
 			{hasCartItems && (
-				<span class="absolute -top-2 -right-2 bg-orange-500 text-white text-xs font-bold rounded-full min-w-[1.25rem] h-5 px-1 flex items-center justify-center shadow-md" id="cart-count-badge">
+				<span class="absolute -top-2 -right-2 bg-accent text-accent-content text-xs font-bold rounded-full min-w-[1.25rem] h-5 px-1 flex items-center justify-center shadow-md" id="cart-count-badge">
 					{cartItems.length}
 				</span>
 			)}
@@ -59,7 +60,7 @@ const formatPrice = (price: number) => {
 					<div class="p-4 bg-base-200 border-b border-base-200">
 						<div class="flex items-center justify-between">
 							<h3 class="text-lg font-bold text-neutral flex items-center gap-2">
-								<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="color: var(--color-metrics-text);">
 									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
 								</svg>
 								Warenkorb
@@ -88,7 +89,7 @@ const formatPrice = (price: number) => {
 
 								<!-- Product Info -->
 								<div class="flex-1 min-w-0 flex flex-col">
-									<a href={`/product/${item.productSlug}`} class="text-sm font-medium text-neutral hover:text-primary transition-colors line-clamp-2 mb-1">
+									<a href={`/product/${item.productSlug}`} class="text-sm font-medium text-neutral menu-link-hover transition-colors line-clamp-2 mb-1">
 										{item.productName}
 									</a>
 									<!-- Price with Savings right beside it -->
@@ -114,7 +115,7 @@ const formatPrice = (price: number) => {
 									<!-- Quantity Controls under total price -->
 									<div class="flex items-center gap-1">
 										<button 
-											class="quantity-decrease btn btn-xs btn-ghost p-0.5 h-5 w-5 min-h-0 text-neutral/70 hover:text-primary"
+											class="quantity-decrease btn btn-xs btn-ghost p-0.5 h-5 w-5 min-h-0 text-neutral/70 menu-link-hover"
 											data-cart-item-id={item.id}
 											aria-label="Menge verringern"
 										>
@@ -124,7 +125,7 @@ const formatPrice = (price: number) => {
 										</button>
 										<span class="cart-item-quantity text-xs font-medium px-1 min-w-[1.5rem] text-center">{item.quantity}</span>
 										<button 
-											class="quantity-increase btn btn-xs btn-ghost p-0.5 h-5 w-5 min-h-0 text-neutral/70 hover:text-primary"
+											class="quantity-increase btn btn-xs btn-ghost p-0.5 h-5 w-5 min-h-0 text-neutral/70 menu-link-hover"
 											data-cart-item-id={item.id}
 											aria-label="Menge erhöhen"
 										>
@@ -189,10 +190,11 @@ const formatPrice = (price: number) => {
 	<!-- Not logged in - redirect to login when clicking cart -->
 	<button
 		id="cart-login-prompt"
-		class="w-8 h-8 rounded-full border border-neutral/30 flex items-center justify-center transition-all duration-200 cursor-pointer"
+		class="w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all duration-200 cursor-pointer"
+		style="border-color: var(--color-metrics-text);"
 		aria-label="Shopping cart - Login required"
 	>
-		<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 text-neutral/80">
+		<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4" style="color: var(--color-metrics-text);">
 			<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
 		</svg>
 	</button>
@@ -319,7 +321,7 @@ const formatPrice = (price: number) => {
 
 				<!-- Product Info -->
 				<div class="flex-1 min-w-0 flex flex-col">
-					<a href="/product/${escapeHtml(item.productSlug)}" class="text-sm font-medium text-neutral hover:text-primary transition-colors line-clamp-2 mb-1">
+					<a href="/product/${escapeHtml(item.productSlug)}" class="text-sm font-medium text-neutral menu-link-hover transition-colors line-clamp-2 mb-1">
 						${escapeHtml(item.productName)}
 					</a>
 					<!-- Price with Savings right beside it -->
@@ -338,7 +340,7 @@ const formatPrice = (price: number) => {
 					<!-- Quantity Controls under total price -->
 					<div class="flex items-center gap-1">
 						<button 
-							class="quantity-decrease btn btn-xs btn-ghost p-0.5 h-5 w-5 min-h-0 text-neutral/70 hover:text-primary"
+							class="quantity-decrease btn btn-xs btn-ghost p-0.5 h-5 w-5 min-h-0 text-neutral/70 menu-link-hover"
 							data-cart-item-id="${escapeHtml(item.id)}"
 							aria-label="Menge verringern"
 						>
@@ -348,7 +350,7 @@ const formatPrice = (price: number) => {
 						</button>
 						<span class="cart-item-quantity text-xs font-medium px-1 min-w-[1.5rem] text-center">${item.quantity}</span>
 						<button 
-							class="quantity-increase btn btn-xs btn-ghost p-0.5 h-5 w-5 min-h-0 text-neutral/70 hover:text-primary"
+							class="quantity-increase btn btn-xs btn-ghost p-0.5 h-5 w-5 min-h-0 text-neutral/70 menu-link-hover"
 							data-cart-item-id="${escapeHtml(item.id)}"
 							aria-label="Menge erhöhen"
 						>
@@ -461,7 +463,7 @@ const formatPrice = (price: number) => {
 						if (cartIconButton) {
 							const newBadge = document.createElement('span');
 							newBadge.id = 'cart-count-badge';
-							newBadge.className = 'absolute -top-2 -right-2 bg-orange-500 text-white text-xs font-bold rounded-full min-w-[1.25rem] h-5 px-1 flex items-center justify-center shadow-md';
+							newBadge.className = 'absolute -top-2 -right-2 bg-accent text-accent-content text-xs font-bold rounded-full min-w-[1.25rem] h-5 px-1 flex items-center justify-center shadow-md';
 							newBadge.textContent = count.toString();
 							cartIconButton.appendChild(newBadge);
 						}
@@ -469,13 +471,10 @@ const formatPrice = (price: number) => {
 					
 					// Update cart icon styling
 					if (cartIconButton) {
-						cartIconButton.classList.remove('border-accent');
-						cartIconButton.classList.add('border-orange-400');
-						
+						// Icon always stays dark green
 						const svgIcon = cartIconButton.querySelector('svg');
 						if (svgIcon) {
-							svgIcon.classList.remove('text-accent');
-							svgIcon.classList.add('text-orange-600');
+							svgIcon.style.color = 'var(--color-metrics-text)';
 						}
 					}
 
@@ -488,13 +487,11 @@ const formatPrice = (price: number) => {
 					
 					// Update cart icon styling to default
 					if (cartIconButton) {
-						cartIconButton.classList.remove('border-orange-400');
-						cartIconButton.classList.add('border-accent');
-						
+						// Border always stays accent color
 						const svgIcon = cartIconButton.querySelector('svg');
 						if (svgIcon) {
 							svgIcon.classList.remove('text-orange-600');
-							svgIcon.classList.add('text-accent');
+							svgIcon.style.color = 'var(--color-metrics-text)';
 						}
 					}
 

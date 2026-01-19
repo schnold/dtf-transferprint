@@ -10,81 +10,27 @@ import WhyChooseUsSections from '../components/WhyChooseUsSections.astro';
 	<Navbar />
 
 	<!-- Hero Section -->
-	<section class="hero bg-gradient-to-br from-primary/10 via-base-100 to-secondary/10 overflow-hidden relative -mt-[7.5rem]" style="height: 100vh;">
-		<div class="grid grid-cols-1 lg:grid-cols-2 w-full h-full">
-			<!-- Left Column: Video -->
-			<div class="relative w-full h-full overflow-hidden">
-				<video
-					id="hero-video"
-					class="w-full h-full object-cover"
-					poster="/images/landing-page/2149120698.jpg"
-					preload="none"
-					muted
-					loop
-					playsinline
-					aria-label="Professionelle Drucklösungen Video"
-				>
-					<source src="/videos/2349642_Paint_Silk_Screen_1920x1080.mp4" type="video/mp4" />
-				</video>
-			</div>
-			
-			<!-- Right Column: Hero Content -->
-			<div class="hero-content text-center w-full flex items-center justify-center px-4 sm:px-6 lg:px-8 relative z-10" style="padding-top: 7.5rem;">
-				<div class="max-w-2xl mx-auto px-4">
-					<h1 class="mb-6 text-4xl sm:text-5xl md:text-6xl font-bold text-neutral leading-tight">Die #1 für DTF-Printlösungen in Deutschland</h1>
-					<p class="mb-8 text-lg sm:text-xl text-neutral/70 leading-relaxed">
+	<section class="hero overflow-hidden relative -mt-[7.5rem] hero-bg-cover" style="height: 100vh; background: url('/images/landing-page/still-life-cmyk-toners-composition.jpg') center/cover no-repeat; background-color: #1a1a1a;">
+		<div class="w-full h-full flex items-center justify-end px-4 sm:px-6 lg:px-8 relative z-10" style="padding-top: 7.5rem;">
+			<!-- Right Column: Hero Content Container -->
+			<div class="max-w-2xl mr-0 lg:mr-12">
+				<div class="bg-base-100/20 backdrop-blur-xl backdrop-saturate-150 border border-white/20 shadow-lg rounded-2xl px-6 sm:px-8 lg:px-10 py-8 sm:py-10 lg:py-12">
+					<h1 class="mb-6 text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight">Die #1 für DTF-Printlösungen in Deutschland</h1>
+					<p class="mb-8 text-base sm:text-lg lg:text-xl text-white/90 leading-relaxed">
 						Hochwertige DTF-Transfers, individueller Druck und schnelle Bearbeitungszeiten.
 						Über 20 Jahre Erfahrung in der Druckbranche. Ihre Vision, unsere Expertise.
 					</p>
-					<div class="flex flex-col sm:flex-row gap-4 justify-center">
-						<a href="/kontakt/" class="btn btn-primary btn-lg shadow-sm">Bestellung starten</a>
-						<a href="#services" class="btn btn-ghost btn-lg text-neutral border-neutral/20 hover:bg-base-200">Unsere Leistungen</a>
+					<div class="flex flex-col sm:flex-row gap-4">
+						<a href="/kontakt/" class="btn btn-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 font-semibold bg-white/30 backdrop-blur-md text-gray-800 hover:bg-white/40 hover:text-gray-600 border border-white/30">Bestellung starten</a>
+						<a href="#services" class="btn btn-ghost btn-lg text-gray-800 border-white/30 hover:bg-white/10 hover:text-gray-600">Unsere Leistungen</a>
 					</div>
 				</div>
 			</div>
 		</div>
 	</section>
 
-	<!-- Video Lazy Loading Script -->
-	<script is:inline>
-		// Wait for page to fully load before initializing video
-		if (document.readyState === 'complete') {
-			initVideoLazyLoad();
-		} else {
-			window.addEventListener('load', initVideoLazyLoad);
-		}
-
-		function initVideoLazyLoad() {
-			const video = document.getElementById('hero-video');
-			if (!video || video.tagName !== 'VIDEO') return;
-
-			// Use Intersection Observer to load video when it's about to enter viewport
-			const observer = new IntersectionObserver((entries) => {
-				entries.forEach(entry => {
-					if (entry.isIntersecting) {
-						// Load and play video when it enters viewport
-						const videoElement = entry.target;
-						if (videoElement.tagName === 'VIDEO') {
-							videoElement.load();
-							videoElement.play().catch(() => {
-								// Autoplay was prevented, video will play on user interaction
-							});
-							observer.unobserve(videoElement);
-						}
-					}
-				});
-			}, {
-				rootMargin: '50px' // Start loading 50px before video enters viewport
-			});
-
-			observer.observe(video);
-		}
-	</script>
-
 	<!-- Logo Carousel -->
-	<div class="pt-12 md:pt-16">
-		<LogoCarousel />
-	</div>
+	<LogoCarousel />
 
 	<!-- Services Section -->
 	<section id="services" class="py-24 bg-base-100">
@@ -97,98 +43,74 @@ import WhyChooseUsSections from '../components/WhyChooseUsSections.astro';
 			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
 				<!-- Service Card 1 -->
 				<div class="hover-3d">
-					<div class="card card-gradient-dark shadow-sm border border-secondary/50 hover:shadow-md transition-shadow">
+					<div class="card bg-base-100/20 backdrop-blur-xl backdrop-saturate-150 border border-white/20 shadow-lg hover:shadow-xl transition-shadow">
 						<figure class="px-10 pt-10">
-							<div class="w-20 h-20 rounded-full bg-white/10 flex items-center justify-center">
-								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 text-white">
+							<div class="w-20 h-20 rounded-full bg-primary/20 flex items-center justify-center">
+								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10" style="color: var(--color-metrics-text);">
 									<path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
 								</svg>
 							</div>
 						</figure>
 						<div class="card-body items-center text-center">
-							<h2 class="card-title text-white">DTF-Transfers</h2>
-							<p class="text-white/80">Hochwertige Direct-to-Film-Transfers für lebendige, langlebige Drucke auf jedem Stoff.</p>
+							<h2 class="card-title text-neutral">DTF-Transfers</h2>
+							<p class="text-neutral/80">Hochwertige Direct-to-Film-Transfers für lebendige, langlebige Drucke auf jedem Stoff.</p>
 							<div class="card-actions mt-4">
 								<span class="badge badge-primary badge-sm">Schnelle Bearbeitung</span>
 								<span class="badge badge-success badge-sm">Qualität garantiert</span>
 							</div>
 							<div class="card-actions mt-6">
-								<button class="btn btn-outline-light shadow-sm">Mehr erfahren</button>
+								<button class="btn btn-primary shadow-sm">Mehr erfahren</button>
 							</div>
 						</div>
 					</div>
-					<div></div>
-					<div></div>
-					<div></div>
-					<div></div>
-					<div></div>
-					<div></div>
-					<div></div>
-					<div></div>
 				</div>
 
 				<!-- Service Card 2 -->
 				<div class="hover-3d">
-					<div class="card card-gradient-dark shadow-sm border border-secondary/50 hover:shadow-md transition-shadow">
+					<div class="card bg-base-100/20 backdrop-blur-xl backdrop-saturate-150 border border-white/20 shadow-lg hover:shadow-xl transition-shadow">
 						<figure class="px-10 pt-10">
-							<div class="w-20 h-20 rounded-full bg-white/10 flex items-center justify-center">
-								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 text-white">
+							<div class="w-20 h-20 rounded-full bg-secondary/20 flex items-center justify-center">
+								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10" style="color: var(--color-metrics-text);">
 									<path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" />
 								</svg>
 							</div>
 						</figure>
 						<div class="card-body items-center text-center">
-							<h2 class="card-title text-white">Individueller Druck</h2>
-							<p class="text-white/80">Personalisierte Drucke für T-Shirts, Hoodies und maßgeschneiderte Bekleidung mit Ihren Designs.</p>
+							<h2 class="card-title text-neutral">Individueller Druck</h2>
+							<p class="text-neutral/80">Personalisierte Drucke für T-Shirts, Hoodies und maßgeschneiderte Bekleidung mit Ihren Designs.</p>
 							<div class="card-actions mt-4">
 								<span class="badge badge-secondary badge-sm">Individuelle Designs</span>
 								<span class="badge badge-info badge-sm">Großaufträge</span>
 							</div>
 							<div class="card-actions mt-6">
-								<button class="btn btn-outline-light shadow-sm">Mehr erfahren</button>
+								<button class="btn btn-primary shadow-sm">Mehr erfahren</button>
 							</div>
 						</div>
 					</div>
-					<div></div>
-					<div></div>
-					<div></div>
-					<div></div>
-					<div></div>
-					<div></div>
-					<div></div>
-					<div></div>
 				</div>
 
 				<!-- Service Card 3 -->
 				<div class="hover-3d">
-					<div class="card card-gradient-dark shadow-sm border border-secondary/50 hover:shadow-md transition-shadow">
+					<div class="card bg-base-100/20 backdrop-blur-xl backdrop-saturate-150 border border-white/20 shadow-lg hover:shadow-xl transition-shadow">
 						<figure class="px-10 pt-10">
-							<div class="w-20 h-20 rounded-full bg-white/10 flex items-center justify-center">
-								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 text-white">
+							<div class="w-20 h-20 rounded-full bg-accent/20 flex items-center justify-center">
+								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10" style="color: var(--color-metrics-text);">
 									<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
 								</svg>
 							</div>
 						</figure>
 						<div class="card-body items-center text-center">
-							<h2 class="card-title text-white">Eilaufträge</h2>
-							<p class="text-white/80">Brauchen Sie es schnell? Wir bieten beschleunigte Druckdienstleistungen für dringende Termine.</p>
+							<h2 class="card-title text-neutral">Eilaufträge</h2>
+							<p class="text-neutral/80">Brauchen Sie es schnell? Wir bieten beschleunigte Druckdienstleistungen für dringende Termine.</p>
 							<div class="card-actions mt-4">
 								<span class="badge badge-accent badge-sm">24-48 Std</span>
 								<span class="badge badge-warning badge-sm">Eilauftrag möglich</span>
 							</div>
 							<div class="card-actions mt-6">
-								<button class="btn btn-outline-light shadow-sm">Mehr erfahren</button>
+								<button class="btn btn-primary shadow-sm">Mehr erfahren</button>
 							</div>
 						</div>
 					</div>
-					<div></div>
-					<div></div>
-					<div></div>
-					<div></div>
-					<div></div>
-					<div></div>
-					<div></div>
-					<div></div>
 				</div>
 			</div>
 		</div>
@@ -197,48 +119,48 @@ import WhyChooseUsSections from '../components/WhyChooseUsSections.astro';
 	<!-- Stats Section -->
 	<section class="py-24 bg-base-100">
 		<div class="w-full px-4 sm:px-6 lg:px-8">
-			<div class="stats stats-vertical lg:stats-horizontal shadow-sm bg-base-200/50 w-full border border-base-300/30">
+			<div class="stats stats-vertical lg:stats-horizontal shadow-lg bg-base-100/20 backdrop-blur-xl backdrop-saturate-150 w-full border border-white/20">
 				<div class="stat">
-					<div class="stat-figure text-primary -mr-2">
+					<div class="stat-figure text-secondary -mr-2">
 						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
 						</svg>
 					</div>
 					<div class="stat-title">Zufriedene Kunden</div>
-					<div class="stat-value text-primary">10K+</div>
+					<div class="stat-value" style="color: var(--color-metrics-text);">10K+</div>
 					<div class="stat-desc">Zufriedene Kunden weltweit</div>
 				</div>
 
 				<div class="stat">
-					<div class="stat-figure text-primary -mr-2">
+					<div class="stat-figure text-secondary -mr-2">
 						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
 						</svg>
 					</div>
 					<div class="stat-title">Abgeschlossene Bestellungen</div>
-					<div class="stat-value text-primary">50K+</div>
+					<div class="stat-value" style="color: var(--color-metrics-text);">50K+</div>
 					<div class="stat-desc">Erfolgreiche Druckaufträge</div>
 				</div>
 
 				<div class="stat">
-					<div class="stat-figure text-primary -mr-2">
+					<div class="stat-figure text-secondary -mr-2">
 						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
 						</svg>
 					</div>
 					<div class="stat-title">Jahre Erfahrung</div>
-					<div class="stat-value text-primary">15+</div>
+					<div class="stat-value" style="color: var(--color-metrics-text);">15+</div>
 					<div class="stat-desc">In der Druckbranche</div>
 				</div>
 
 				<div class="stat">
-					<div class="stat-figure text-primary -mr-2">
+					<div class="stat-figure text-secondary -mr-2">
 						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
 						</svg>
 					</div>
 					<div class="stat-title">Qualitätsbewertung</div>
-					<div class="stat-value text-primary">99.9%</div>
+					<div class="stat-value" style="color: var(--color-metrics-text);">99.9%</div>
 					<div class="stat-desc">Kundenzufriedenheitsrate</div>
 				</div>
 			</div>
@@ -246,8 +168,17 @@ import WhyChooseUsSections from '../components/WhyChooseUsSections.astro';
 	</section>
 
 	<!-- Features Section -->
-	<section id="features" class="py-20" style="background: radial-gradient(ellipse at top, var(--color-secondary) 0%, var(--color-secondary-dark) 100%);">
-		<div class="w-full px-4 sm:px-6 lg:px-8">
+	<section id="features" class="py-20 relative overflow-hidden" style="background: radial-gradient(ellipse at top, var(--color-secondary) 0%, var(--color-secondary-dark) 100%);">
+		<!-- Overlay Image -->
+		<div class="absolute inset-0 flex items-center justify-center pointer-events-none z-0 opacity-30 lg:opacity-40">
+			<img
+				src="/images/landing-page/still-life-cmyk-toners-composition (1).jpg"
+				alt="CMYK Druckkartuschen - Professionelle Druckqualität mit präzisen Farben"
+				class="w-full h-full object-cover"
+				onerror="this.style.display='none'"
+			/>
+		</div>
+		<div class="w-full px-4 sm:px-6 lg:px-8 relative z-10">
 			<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
 				<!-- Left Column: Heading -->
 				<div class="lg:pl-16 lg:pr-8">
@@ -309,7 +240,7 @@ import WhyChooseUsSections from '../components/WhyChooseUsSections.astro';
 
 			<div class="space-y-3">
 				<!-- FAQ Item 1 -->
-				<div class="faq-item group border border-base-300/30 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-primary/30 overflow-hidden">
+				<div class="faq-item group border border-base-300/30 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-accent/30 overflow-hidden">
 					<input type="checkbox" id="faq-1" class="faq-toggle" checked="checked" />
 					<label for="faq-1" class="faq-label flex items-center justify-between cursor-pointer p-6 bg-base-200/50 transition-all duration-300">
 						<span class="text-xl font-semibold text-neutral pr-4">Was ist DTF-Druck und wie funktioniert das Direct-to-Film-Verfahren?</span>
@@ -335,7 +266,7 @@ import WhyChooseUsSections from '../components/WhyChooseUsSections.astro';
 				</div>
 
 				<!-- FAQ Item 2 -->
-				<div class="faq-item group border border-base-300/30 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-primary/30 overflow-hidden">
+				<div class="faq-item group border border-base-300/30 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-accent/30 overflow-hidden">
 					<input type="checkbox" id="faq-2" class="faq-toggle" />
 					<label for="faq-2" class="faq-label flex items-center justify-between cursor-pointer p-6 bg-base-200/50 transition-all duration-300">
 						<span class="text-xl font-semibold text-neutral pr-4">Welche Vorteile bietet der DTF-Druck gegenüber anderen Druckverfahren?</span>
@@ -362,7 +293,7 @@ import WhyChooseUsSections from '../components/WhyChooseUsSections.astro';
 				</div>
 
 				<!-- FAQ Item 3 -->
-				<div class="faq-item group border border-base-300/30 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-primary/30 overflow-hidden">
+				<div class="faq-item group border border-base-300/30 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-accent/30 overflow-hidden">
 					<input type="checkbox" id="faq-3" class="faq-toggle" />
 					<label for="faq-3" class="faq-label flex items-center justify-between cursor-pointer p-6 bg-base-200/50 transition-all duration-300">
 						<span class="text-xl font-semibold text-neutral pr-4">Welche Textilien können mit DTF-Druck bedruckt werden?</span>
@@ -387,7 +318,7 @@ import WhyChooseUsSections from '../components/WhyChooseUsSections.astro';
 				</div>
 
 				<!-- FAQ Item 4 -->
-				<div class="faq-item group border border-base-300/30 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-primary/30 overflow-hidden">
+				<div class="faq-item group border border-base-300/30 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-accent/30 overflow-hidden">
 					<input type="checkbox" id="faq-4" class="faq-toggle" />
 					<label for="faq-4" class="faq-label flex items-center justify-between cursor-pointer p-6 bg-base-200/50 transition-all duration-300">
 						<span class="text-xl font-semibold text-neutral pr-4">Welche Dateiformate und Anforderungen gelten für DTF-Druckdateien?</span>
@@ -417,7 +348,7 @@ import WhyChooseUsSections from '../components/WhyChooseUsSections.astro';
 				</div>
 
 				<!-- FAQ Item 5 -->
-				<div class="faq-item group border border-base-300/30 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-primary/30 overflow-hidden">
+				<div class="faq-item group border border-base-300/30 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-accent/30 overflow-hidden">
 					<input type="checkbox" id="faq-5" class="faq-toggle" />
 					<label for="faq-5" class="faq-label flex items-center justify-between cursor-pointer p-6 bg-base-200/50 transition-all duration-300">
 						<span class="text-xl font-semibold text-neutral pr-4">Wie funktioniert der DTF-Druckprozess im Detail?</span>
@@ -443,7 +374,7 @@ import WhyChooseUsSections from '../components/WhyChooseUsSections.astro';
 				</div>
 
 				<!-- FAQ Item 6 -->
-				<div class="faq-item group border border-base-300/30 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-primary/30 overflow-hidden">
+				<div class="faq-item group border border-base-300/30 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-accent/30 overflow-hidden">
 					<input type="checkbox" id="faq-6" class="faq-toggle" />
 					<label for="faq-6" class="faq-label flex items-center justify-between cursor-pointer p-6 bg-base-200/50 transition-all duration-300">
 						<span class="text-xl font-semibold text-neutral pr-4">Wie lange hält ein DTF-Druck und welche Faktoren beeinflussen die Haltbarkeit?</span>
@@ -485,7 +416,7 @@ import WhyChooseUsSections from '../components/WhyChooseUsSections.astro';
 				</div>
 
 				<!-- FAQ Item 7 -->
-				<div class="faq-item group border border-base-300/30 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-primary/30 overflow-hidden">
+				<div class="faq-item group border border-base-300/30 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-accent/30 overflow-hidden">
 					<input type="checkbox" id="faq-7" class="faq-toggle" />
 					<label for="faq-7" class="faq-label flex items-center justify-between cursor-pointer p-6 bg-base-200/50 transition-all duration-300">
 						<span class="text-xl font-semibold text-neutral pr-4">Was bedeutet "Freigröße" bei DTF-Transfers und welche Vorteile bietet sie?</span>
@@ -510,7 +441,7 @@ import WhyChooseUsSections from '../components/WhyChooseUsSections.astro';
 				</div>
 
 				<!-- FAQ Item 8 -->
-				<div class="faq-item group border border-base-300/30 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-primary/30 overflow-hidden">
+				<div class="faq-item group border border-base-300/30 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-accent/30 overflow-hidden">
 					<input type="checkbox" id="faq-8" class="faq-toggle" />
 					<label for="faq-8" class="faq-label flex items-center justify-between cursor-pointer p-6 bg-base-200/50 transition-all duration-300">
 						<span class="text-xl font-semibold text-neutral pr-4">Warum ist Freigröße günstiger als feste Größen?</span>
@@ -638,3 +569,82 @@ import WhyChooseUsSections from '../components/WhyChooseUsSections.astro';
 		})} />
 	</section>
 </Layout>
+
+<style>
+	/* Ensure hero section covers body gradient */
+	.hero-bg-cover {
+		background-color: #1a1a1a !important;
+		position: relative;
+		z-index: 1;
+	}
+
+	/* Extend hero background upward to cover negative margin area */
+	.hero-bg-cover::before {
+		content: '';
+		position: absolute;
+		top: -7.5rem;
+		left: 0;
+		right: 0;
+		height: 7.5rem;
+		background: url('/images/landing-page/still-life-cmyk-toners-composition.jpg') center top/cover no-repeat;
+		background-color: #1a1a1a;
+		z-index: -1;
+	}
+
+	/* 3D Hover Effect for Service Cards */
+	.hover-3d {
+		perspective: 1000px;
+	}
+
+	.hover-3d .card {
+		transition: transform 0.3s ease, box-shadow 0.3s ease;
+		transform-style: preserve-3d;
+	}
+
+	.hover-3d:hover .card {
+		transform: translateY(-10px) rotateX(5deg) rotateY(5deg);
+		box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+	}
+
+	/* Smooth transition for card elements */
+	.hover-3d .card * {
+		transition: transform 0.3s ease;
+	}
+
+	/* Gradient Border for Hero Button - keeps milkglass effect */
+	.hero-gradient-border {
+		position: relative;
+		border: 2px solid transparent;
+		background-clip: padding-box;
+	}
+
+	.hero-gradient-border::before {
+		content: '';
+		position: absolute;
+		inset: -2px;
+		border-radius: inherit;
+		padding: 2px;
+		background: linear-gradient(to bottom, rgba(255, 220, 150, 1), rgba(251, 146, 60, 1));
+		-webkit-mask: 
+			linear-gradient(#fff 0 0) content-box, 
+			linear-gradient(#fff 0 0);
+		-webkit-mask-composite: xor;
+		mask: 
+			linear-gradient(#fff 0 0) content-box, 
+			linear-gradient(#fff 0 0);
+		mask-composite: exclude;
+		z-index: -1;
+		pointer-events: none;
+	}
+
+	/* 3D Hover Effect for Hero Button */
+	.hero a.btn:first-child {
+		transition: transform 0.3s ease, box-shadow 0.3s ease;
+		transform-style: preserve-3d;
+	}
+
+	.hero a.btn:first-child:hover {
+		transform: rotateX(10deg) scale(1.05);
+		box-shadow: 0 15px 30px rgba(251, 146, 60, 0.3);
+	}
+</style>

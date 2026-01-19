@@ -73,6 +73,40 @@ if (session) {
               placeholder="Confirm Password"
             />
           </div>
+
+          <div class="divider text-xs text-base-content/50">Geschäftsdaten</div>
+
+          <div>
+            <label for="umsatzsteuernummer" class="sr-only">Umsatzsteuernummer (USt-IdNr.)</label>
+            <input
+              id="umsatzsteuernummer"
+              name="umsatzsteuernummer"
+              type="text"
+              required
+              class="input input-bordered w-full rounded-md"
+              placeholder="Umsatzsteuernummer (z.B. DE123456789)"
+              pattern="DE[0-9]{9}"
+              title="Deutsche USt-IdNr. im Format DE + 9 Ziffern"
+            />
+            <p class="text-xs text-base-content/70 mt-1 px-2">
+              Format: DE gefolgt von 9 Ziffern (z.B. DE123456789)
+            </p>
+          </div>
+
+          <div class="form-control">
+            <label class="label cursor-pointer justify-start gap-3">
+              <input
+                type="checkbox"
+                id="gewerbebetreiber"
+                name="gewerbebetreiber"
+                required
+                class="checkbox checkbox-primary"
+              />
+              <span class="label-text">
+                Ich bestätige, dass ich Gewerbetreibender bin und diese Plattform ausschließlich für gewerbliche Zwecke nutze. <span class="text-error">*</span>
+              </span>
+            </label>
+          </div>
         </div>
 
         <div id="error-message" class="alert alert-error hidden">
@@ -117,6 +151,9 @@ if (session) {
   // Password validation regex
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{12,}$/;
 
+  // German VAT number validation regex (DE + 9 digits)
+  const vatRegex = /^DE[0-9]{9}$/;
+
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
@@ -131,6 +168,8 @@ if (session) {
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
     const confirmPassword = formData.get('confirmPassword') as string;
+    const umsatzsteuernummer = (formData.get('umsatzsteuernummer') as string)?.trim().toUpperCase();
+    const gewerbebetreiber = formData.get('gewerbebetreiber') === 'on';
 
     try {
       // Validate passwords match
@@ -145,10 +184,26 @@ if (session) {
         );
       }
 
+      // Validate Gewerbebetreiber checkbox
+      if (!gewerbebetreiber) {
+        throw new Error('Sie müssen bestätigen, dass Sie Gewerbetreibender sind.');
+      }
+
+      // Validate German VAT number format
+      if (!umsatzsteuernummer) {
+        throw new Error('Bitte geben Sie Ihre Umsatzsteuernummer ein.');
+      }
+
+      if (!vatRegex.test(umsatzsteuernummer)) {
+        throw new Error('Die Umsatzsteuernummer muss im Format DE + 9 Ziffern sein (z.B. DE123456789).');
+      }
+
       const result = await authClient.signUp.email({
         email,
         password,
         name,
+        gewerbebetreiber,
+        umsatzsteuernummer,
       });
 
       if (result.error) {

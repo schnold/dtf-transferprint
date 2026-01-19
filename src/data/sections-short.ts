@@ -1,7 +1,7 @@
 // Short marketing-focused sections data for landing page
 export const shortSections = [
 	{
-		title: "Was macht dtf-transferprint aus?",
+		title: "Was macht Selini-Shirt aus?",
 		description: "Professionelle DTF-Technologie für brillante Ergebnisse auf allen Textilien. Flexibel, haltbar und makellos – so einfach ist moderner Textildruck.",
 		image: "/images/landing-page/2826813.jpg",
 		imageAlt: "DTF-Druck Technologie von dtf-transferprint - Professionelle Direct-to-Film Transferfolien",

@@ -126,6 +126,18 @@ export const auth = betterAuth({
         type: "boolean",
         defaultValue: false,
       },
+      gewerbebetreiber: {
+        type: "boolean",
+        defaultValue: false,
+      },
+      umsatzsteuernummer: {
+        type: "string",
+        required: false,
+      },
+      discountPercent: {
+        type: "number",
+        defaultValue: 0,
+      },
     },
   },
 

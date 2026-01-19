@@ -28,6 +28,9 @@ export interface UserData {
   accountLocked: boolean;
   createdAt: Date;
   lastLoginAt: Date | null;
+  gewerbebetreiber: boolean;
+  umsatzsteuernummer: string | null;
+  discountPercent: number;
 }
 
 export async function getAnalytics(): Promise<AnalyticsData> {
@@ -80,7 +83,10 @@ export async function getAllUsers(): Promise<UserData[]> {
         "isAdmin",
         "accountLocked",
         "createdAt",
-        "lastLoginAt"
+        "lastLoginAt",
+        "gewerbebetreiber",
+        "umsatzsteuernummer",
+        "discountPercent"
       FROM "user"
       ORDER BY "createdAt" DESC
     `);
@@ -94,7 +100,64 @@ export async function getAllUsers(): Promise<UserData[]> {
       accountLocked: row.accountLocked,
       createdAt: new Date(row.createdAt),
       lastLoginAt: row.lastLoginAt ? new Date(row.lastLoginAt) : null,
+      gewerbebetreiber: row.gewerbebetreiber ?? false,
+      umsatzsteuernummer: row.umsatzsteuernummer ?? null,
+      discountPercent: parseFloat(row.discountPercent) || 0,
     }));
+  } finally {
+    client.release();
+  }
+}
+
+export async function getUserById(userId: string): Promise<UserData | null> {
+  const client = await pool.connect();
+  try {
+    const result = await client.query(`
+      SELECT
+        id,
+        name,
+        email,
+        "emailVerified",
+        "isAdmin",
+        "accountLocked",
+        "createdAt",
+        "lastLoginAt",
+        "gewerbebetreiber",
+        "umsatzsteuernummer",
+        "discountPercent"
+      FROM "user"
+      WHERE id = $1
+    `, [userId]);
+
+    if (result.rows.length === 0) return null;
+
+    const row = result.rows[0];
+    return {
+      id: row.id,
+      name: row.name,
+      email: row.email,
+      emailVerified: row.emailVerified,
+      isAdmin: row.isAdmin,
+      accountLocked: row.accountLocked,
+      createdAt: new Date(row.createdAt),
+      lastLoginAt: row.lastLoginAt ? new Date(row.lastLoginAt) : null,
+      gewerbebetreiber: row.gewerbebetreiber ?? false,
+      umsatzsteuernummer: row.umsatzsteuernummer ?? null,
+      discountPercent: parseFloat(row.discountPercent) || 0,
+    };
+  } finally {
+    client.release();
+  }
+}
+
+export async function updateUserDiscount(userId: string, discountPercent: number): Promise<void> {
+  const client = await pool.connect();
+  try {
+    await client.query(`
+      UPDATE "user"
+      SET "discountPercent" = $2
+      WHERE id = $1
+    `, [userId, discountPercent]);
   } finally {
     client.release();
   }
