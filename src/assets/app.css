@@ -214,6 +214,11 @@
   /* Modern FAQ Styles */
   .faq-item {
     position: relative;
+    background-color: #1f2937 !important; /* dark gray */
+  }
+  
+  .faq-item .faq-label {
+    background-color: #1f2937 !important; /* dark gray */
   }
 
   .faq-toggle {
@@ -267,16 +272,22 @@
   }
 
   .faq-icon {
+    color: var(--color-accent-dark);
     transition: color 0.3s ease;
     flex-shrink: 0;
   }
 
   .faq-label:hover .faq-icon {
-    opacity: 0.8;
+    color: var(--color-accent);
   }
 
   .faq-icon svg {
     color: inherit;
+  }
+
+  /* Service Cards Dark Background */
+  #services .card.bg-gray-800 {
+    background-color: #1f2937 !important; /* dark gray */
   }
 
   /* DaisyUI Hover 3D Component */
