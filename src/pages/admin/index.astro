@@ -75,35 +75,35 @@ const sessionRate = analytics.totalSessions > 0
   </div>
 
   <!-- Quick Actions -->
-  <div class="card bg-gradient-to-br from-primary/5 to-secondary/5 shadow-xl mb-8 border border-primary/10">
+  <div class="card bg-gradient-to-br from-base-100 to-base-200/30 shadow-xl mb-8 border border-base-300/30">
     <div class="card-body">
       <h3 class="card-title text-lg mb-4 flex items-center gap-2">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-primary">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6" style="color: var(--color-yellow-accent-dark);">
           <path stroke-linecap="round" stroke-linejoin="round" d="m3.75 13.5 10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75Z" />
         </svg>
         Schnellaktionen
       </h3>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-        <a href="/admin/users" class="btn btn-outline btn-primary gap-2 justify-start">
+        <a href="/admin/users" class="btn btn-admin-outline gap-2 justify-start">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
             <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
           </svg>
           Benutzer verwalten
         </a>
-        <button class="btn btn-outline btn-info gap-2 justify-start" onclick="location.reload()">
+        <button class="btn btn-admin-outline gap-2 justify-start" onclick="location.reload()">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
             <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
           </svg>
           Dashboard aktualisieren
         </button>
-        <a href="/admin/settings" class="btn btn-outline btn-accent gap-2 justify-start">
+        <a href="/admin/settings" class="btn btn-admin-outline gap-2 justify-start">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
             <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z" />
             <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
           </svg>
           Einstellungen
         </a>
-        <a href="/" class="btn btn-outline gap-2 justify-start">
+        <a href="/" class="btn btn-admin-outline gap-2 justify-start">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
             <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
           </svg>
@@ -124,8 +124,8 @@ const sessionRate = analytics.totalSessions > 0
               <p class="text-3xl font-bold text-base-content mb-1">{stat.value}</p>
               <p class="text-xs text-base-content/50">{stat.description}</p>
             </div>
-            <div class={`w-12 h-12 rounded-lg bg-${stat.color}/10 flex items-center justify-center flex-shrink-0`}>
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class={`w-6 h-6 text-${stat.color}`}>
+            <div class="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0" style="background-color: rgba(74, 93, 58, 0.1);">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6" style="color: var(--color-metrics-text);">
                 <path stroke-linecap="round" stroke-linejoin="round" d={stat.icon} />
               </svg>
             </div>
@@ -145,16 +145,16 @@ const sessionRate = analytics.totalSessions > 0
           <div>
             <div class="flex justify-between items-center mb-2">
               <span class="text-sm text-base-content/70">Verifizierte Benutzer</span>
-              <span class="text-sm font-semibold text-success">{analytics.verifiedUsers} ({verificationRate}%)</span>
+              <span class="text-sm font-semibold" style="color: var(--color-metrics-text);">{analytics.verifiedUsers} ({verificationRate}%)</span>
             </div>
-            <progress class="progress progress-success w-full" value={verificationRate} max="100"></progress>
+            <progress class="progress w-full" style="--progress-color: var(--color-metrics-text);" value={verificationRate} max="100"></progress>
           </div>
           <div>
             <div class="flex justify-between items-center mb-2">
               <span class="text-sm text-base-content/70">Nicht verifiziert</span>
-              <span class="text-sm font-semibold text-warning">{analytics.unverifiedUsers} ({100 - verificationRate}%)</span>
+              <span class="text-sm font-semibold" style="color: var(--color-yellow-accent-dark);">{analytics.unverifiedUsers} ({100 - verificationRate}%)</span>
             </div>
-            <progress class="progress progress-warning w-full" value={100 - verificationRate} max="100"></progress>
+            <progress class="progress w-full" style="--progress-color: var(--color-yellow-accent-dark);" value={100 - verificationRate} max="100"></progress>
           </div>
         </div>
       </div>
@@ -168,9 +168,9 @@ const sessionRate = analytics.totalSessions > 0
           <div>
             <div class="flex justify-between items-center mb-2">
               <span class="text-sm text-base-content/70">Aktive Sessions</span>
-              <span class="text-sm font-semibold text-info">{analytics.activeSessions} ({sessionRate}%)</span>
+              <span class="text-sm font-semibold" style="color: var(--color-metrics-text);">{analytics.activeSessions} ({sessionRate}%)</span>
             </div>
-            <progress class="progress progress-info w-full" value={sessionRate} max="100"></progress>
+            <progress class="progress w-full" style="--progress-color: var(--color-metrics-text);" value={sessionRate} max="100"></progress>
           </div>
           <div class="stats stats-vertical lg:stats-horizontal w-full bg-base-200/50">
             <div class="stat py-3 px-4">
@@ -180,7 +180,7 @@ const sessionRate = analytics.totalSessions > 0
             </div>
             <div class="stat py-3 px-4">
               <div class="stat-title text-xs">Aktiv</div>
-              <div class="stat-value text-2xl text-info">{analytics.activeSessions}</div>
+              <div class="stat-value text-2xl" style="color: var(--color-metrics-text);">{analytics.activeSessions}</div>
               <div class="stat-desc text-xs">Eingeloggt</div>
             </div>
           </div>

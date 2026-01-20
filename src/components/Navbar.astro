@@ -360,7 +360,7 @@ const remainingCategories = categoriesWithProducts.slice(3);
 								</li>
 							)}
 							<li>
-								<a href="/auth/account?tab=orders" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-base-200 transition-colors">
+								<a href="/orders" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-base-200 transition-colors">
 									<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-base-content/70">
 										<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
 									</svg>
@@ -673,6 +673,31 @@ const remainingCategories = categoriesWithProducts.slice(3);
 		transition-delay: 0s;
 	}
 
+	/* Close dropdowns when scrolling */
+	.navbar-scrolling .mega-dropdown:hover .mega-dropdown-content,
+	.navbar-scrolling .mega-dropdown-content,
+	.navbar-scrolling .mega-dropdown-content:hover {
+		opacity: 0 !important;
+		visibility: hidden !important;
+		pointer-events: none !important;
+	}
+
+	.navbar-scrolling .user-dropdown:hover .user-dropdown-content,
+	.navbar-scrolling .user-dropdown-content,
+	.navbar-scrolling .user-dropdown-content:hover {
+		opacity: 0 !important;
+		visibility: hidden !important;
+		pointer-events: none !important;
+	}
+
+	.navbar-scrolling .cart-dropdown:hover .cart-dropdown-content,
+	.navbar-scrolling .cart-dropdown-content,
+	.navbar-scrolling .cart-dropdown-content:hover {
+		opacity: 0 !important;
+		visibility: hidden !important;
+		pointer-events: none !important;
+	}
+
 	/* Shift Produkte dropdown slightly to the right */
 	.mega-dropdown-produkte .mega-dropdown-content {
 		left: 50%;
@@ -932,6 +957,47 @@ const remainingCategories = categoriesWithProducts.slice(3);
 
 		const updateNavbar = () => {
 			const currentScrollY = window.scrollY;
+			
+			// Close all dropdowns when scrolling
+			if (Math.abs(currentScrollY - lastScrollY) > 0) {
+				// Add class to force close dropdowns via CSS
+				navbarContainer.classList.add('navbar-scrolling');
+				
+				// Close mobile menu dropdown (DaisyUI) by blurring focus
+				const mobileMenuDropdown = document.querySelector('.dropdown.dropdown-end.md\\:hidden');
+				if (mobileMenuDropdown) {
+					const label = mobileMenuDropdown.querySelector('label[tabindex="0"]') as HTMLElement;
+					if (label) {
+						label.blur();
+					}
+					const dropdownContent = mobileMenuDropdown.querySelector('.dropdown-content') as HTMLElement;
+					if (dropdownContent) {
+						dropdownContent.blur();
+					}
+					// Also remove focus from the dropdown container
+					(mobileMenuDropdown as HTMLElement).blur();
+				}
+
+				// Close cart dropdown (DaisyUI) by blurring focus
+				const cartDropdown = document.querySelector('.cart-dropdown');
+				if (cartDropdown) {
+					const button = cartDropdown.querySelector('button[tabindex="0"]') as HTMLElement;
+					if (button) {
+						button.blur();
+					}
+					const dropdownContent = cartDropdown.querySelector('.cart-dropdown-content') as HTMLElement;
+					if (dropdownContent) {
+						dropdownContent.blur();
+					}
+					// Also remove focus from the dropdown container
+					(cartDropdown as HTMLElement).blur();
+				}
+				
+				// Remove the scrolling class after a short delay to allow hover to work again
+				setTimeout(() => {
+					navbarContainer.classList.remove('navbar-scrolling');
+				}, 150);
+			}
 			
 			// Only hide/show if scrolled past a threshold (e.g., 50px)
 			if (Math.abs(currentScrollY - lastScrollY) < 5) {

@@ -635,7 +635,19 @@ export async function createOrder(
   userId: string,
   shippingAddressId: string,
   billingAddressId: string,
-  discountCode?: string
+  options?: {
+    discountCode?: string;
+    userDiscountPercent?: number;
+    paypalOrderId?: string;
+    paypalCaptureId?: string;
+    shippingProfileId?: string;
+    shippingCost?: number;
+    subtotal?: number;
+    userDiscountAmount?: number;
+    campaignDiscountAmount?: number;
+    taxAmount?: number;
+    total?: number;
+  }
 ): Promise<Order> {
   const client = await pool.connect();
   try {
@@ -650,57 +662,103 @@ export async function createOrder(
       throw new Error('Cart is empty');
     }
 
-    let subtotal = 0;
-    for (const item of cartResult.rows) {
-      const itemSubtotal = parseFloat(item.unitPrice) * item.quantity;
+    // If amounts are provided (from PayPal session), use them
+    // Otherwise calculate them (for backward compatibility)
+    let subtotal = options?.subtotal ?? 0;
+    let userDiscountAmount = options?.userDiscountAmount ?? 0;
+    let campaignDiscountAmount = options?.campaignDiscountAmount ?? 0;
+    let shippingCost = options?.shippingCost ?? 0;
+    let taxAmount = options?.taxAmount ?? 0;
+    let total = options?.total ?? 0;
 
-      // Add zusatzleistungen total for this cart item
-      const servicesResult = await client.query(
-        'SELECT SUM(price) as total FROM "cartItemZusatzleistungen" WHERE "cartItemId" = $1',
-        [item.id]
-      );
-      const servicesTotal = parseFloat(servicesResult.rows[0]?.total || 0);
+    if (!options?.subtotal) {
+      // Calculate subtotal if not provided
+      for (const item of cartResult.rows) {
+        const itemSubtotal = parseFloat(item.unitPrice) * item.quantity;
 
-      subtotal += itemSubtotal + servicesTotal;
-    }
+        // Add zusatzleistungen total for this cart item
+        const servicesResult = await client.query(
+          'SELECT SUM(price) as total FROM "cartItemZusatzleistungen" WHERE "cartItemId" = $1',
+          [item.id]
+        );
+        const servicesTotal = parseFloat(servicesResult.rows[0]?.total || 0);
 
-    let discountAmount = 0;
-    let discountId = null;
-    let shippingCost = 5.99;
+        subtotal += itemSubtotal + servicesTotal;
+      }
 
-    if (discountCode) {
-      const cartItems = await getCart(userId);
-      const validation = await validateDiscount(discountCode, userId, cartItems);
-      if (validation.valid && validation.discount) {
-        const discount = validation.discount;
-        discountId = discount.id;
+      // Apply user discount if provided
+      const userDiscountPercent = options?.userDiscountPercent ?? 0;
+      userDiscountAmount = subtotal * (userDiscountPercent / 100);
+      const subtotalAfterUserDiscount = subtotal - userDiscountAmount;
 
-        if (discount.discountType === 'free_shipping') {
-          shippingCost = 0;
-        } else {
-          discountAmount = await calculateDiscount(discount, subtotal);
+      // Apply campaign discount if provided
+      let discountId = null;
+      if (options?.discountCode) {
+        const cartItems = await getCart(userId);
+        const validation = await validateDiscount(options.discountCode, userId, cartItems);
+        if (validation.valid && validation.discount) {
+          const discount = validation.discount;
+          discountId = discount.id;
+
+          if (discount.discountType === 'free_shipping') {
+            shippingCost = 0;
+          } else {
+            campaignDiscountAmount = await calculateDiscount(discount, subtotalAfterUserDiscount);
+          }
         }
       }
+
+      // Get shipping cost if not provided
+      if (!options?.shippingCost) {
+        if (options?.shippingProfileId) {
+          const shippingResult = await client.query(
+            'SELECT "basePrice", "freeShippingThreshold" FROM "shippingProfiles" WHERE id = $1',
+            [options.shippingProfileId]
+          );
+
+          if (shippingResult.rows.length > 0) {
+            const shipping = shippingResult.rows[0];
+            const freeShippingThreshold = shipping.freeShippingThreshold
+              ? parseFloat(shipping.freeShippingThreshold)
+              : null;
+
+            // Check if free shipping applies
+            const finalSubtotal = subtotalAfterUserDiscount - campaignDiscountAmount;
+            if (freeShippingThreshold && finalSubtotal >= freeShippingThreshold) {
+              shippingCost = 0;
+            } else {
+              shippingCost = parseFloat(shipping.basePrice);
+            }
+          }
+        } else {
+          shippingCost = 5.99; // Fallback default
+        }
+      }
+
+      // Calculate tax and total
+      const taxableAmount = subtotalAfterUserDiscount - campaignDiscountAmount + shippingCost;
+      taxAmount = taxableAmount * 0.19;
+      total = taxableAmount + taxAmount;
     }
 
-    const taxRate = 0.19;
-    const taxAmount = (subtotal - discountAmount + shippingCost) * taxRate;
-    const total = subtotal - discountAmount + shippingCost + taxAmount;
-
+    const totalDiscountAmount = userDiscountAmount + campaignDiscountAmount;
     const orderNumber = `ORD-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
 
     const orderResult = await client.query(`
       INSERT INTO orders (
         id, "orderNumber", "userId", subtotal, "discountAmount",
         "shippingCost", "taxAmount", total, "discountCode", "discountId",
-        "shippingAddressId", "billingAddressId"
+        "shippingAddressId", "billingAddressId", "userDiscountPercent",
+        "paypalOrderId", "paypalCaptureId", "shippingProfileId"
       ) VALUES (
-        gen_random_uuid()::text, $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11
+        gen_random_uuid()::text, $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15
       ) RETURNING *
     `, [
-      orderNumber, userId, subtotal, discountAmount,
-      shippingCost, taxAmount, total, discountCode, discountId,
-      shippingAddressId, billingAddressId
+      orderNumber, userId, subtotal, totalDiscountAmount,
+      shippingCost, taxAmount, total, options?.discountCode || null, null,
+      shippingAddressId, billingAddressId, options?.userDiscountPercent || 0,
+      options?.paypalOrderId || null, options?.paypalCaptureId || null,
+      options?.shippingProfileId || null
     ]);
 
     const order = orderResult.rows[0];

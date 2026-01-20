@@ -1,7 +1,10 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npx @better-auth/cli generate:*)"
+      "Bash(npx @better-auth/cli generate:*)",
+      "Bash(dir \"C:\\\\Users\\\\lukas\\\\Desktop\\\\Projects\\\\dtf-transferprint\\\\src\\\\pages\")",
+      "Bash(npm install:*)",
+      "Bash(npm run migrate:*)"
     ]
   }
 }

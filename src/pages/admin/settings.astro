@@ -49,13 +49,14 @@ const formatPrice = (price: number) => {
 					<div class="flex items-start justify-between mb-3">
 						<div class="flex-1">
 							<h3 class="card-title text-lg">{service.name}</h3>
-							<div class="text-2xl font-bold text-primary mt-2">{formatPrice(service.price)}</div>
+							<div class="text-2xl font-bold mt-2" style="color: var(--color-metrics-text);">{formatPrice(service.price)}</div>
 						</div>
 						<div class="form-control">
 							<label class="label cursor-pointer gap-2">
 								<input
 									type="checkbox"
-									class="toggle toggle-sm toggle-success"
+									class="toggle toggle-sm"
+									style="--toggle-color: var(--color-metrics-text);"
 									checked={service.isActive}
 									onchange={`toggleStatus('${service.id}', this.checked)`}
 								/>
@@ -145,7 +146,7 @@ const formatPrice = (price: number) => {
 
 				<div class="form-control">
 					<label class="label cursor-pointer gap-2 justify-start">
-						<input type="checkbox" id="service-is-active" name="isActive" class="checkbox checkbox-primary" checked />
+						<input type="checkbox" id="service-is-active" name="isActive" class="checkbox" style="--checkbox-color: var(--color-metrics-text);" checked />
 						<span class="label-text font-medium">Aktiv</span>
 					</label>
 					<label class="label">

@@ -1,0 +1,101 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navbar from '../../components/Navbar.astro';
+
+const user = Astro.locals.user;
+
+if (!user) {
+  return Astro.redirect('/');
+}
+
+const title = 'Zahlung wird verarbeitet - DTF Transfer Print';
+const description = 'Ihre Zahlung wird verarbeitet';
+
+const paypalOrderId = Astro.url.searchParams.get('token');
+
+if (!paypalOrderId) {
+  return Astro.redirect('/cart');
+}
+---
+
+<Layout title={title} description={description}>
+  <Navbar />
+
+  <div class="min-h-screen bg-gradient-to-br from-primary/10 via-base-100 to-secondary/10">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div class="max-w-2xl mx-auto">
+        <div class="bg-base-100 border border-base-300/50 rounded-lg p-8 text-center">
+          <div class="mb-6">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-4">
+              <span class="loading loading-spinner loading-lg text-primary"></span>
+            </div>
+            <h1 class="text-2xl font-semibold text-neutral mb-2">Zahlung wird verarbeitet</h1>
+            <p class="text-neutral/60">Bitte warten Sie, während wir Ihre Zahlung verarbeiten...</p>
+          </div>
+
+          <div id="processing-status" class="text-sm text-neutral/60">
+            <p>Ihre PayPal-Zahlung wird erfasst...</p>
+          </div>
+
+          <div id="error-container" class="hidden mt-4">
+            <div class="alert alert-error">
+              <span id="error-message"></span>
+            </div>
+            <div class="mt-4 space-x-2">
+              <a href="/cart" class="btn btn-secondary">Zurück zum Warenkorb</a>
+              <button id="retry-btn" class="btn btn-primary">Erneut versuchen</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script define:vars={{ paypalOrderId }}>
+    async function capturePayment() {
+      const statusEl = document.getElementById('processing-status');
+      const errorContainer = document.getElementById('error-container');
+      const errorMessage = document.getElementById('error-message');
+
+      try {
+        statusEl.textContent = 'Zahlung wird erfasst...';
+
+        const response = await fetch('/api/checkout/capture-paypal-payment', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            paypalOrderId: paypalOrderId,
+          }),
+        });
+
+        const result = await response.json();
+
+        if (!result.success) {
+          throw new Error(result.error?.message || 'Fehler bei der Zahlungserfassung');
+        }
+
+        // Success - redirect to order confirmation
+        statusEl.textContent = 'Zahlung erfolgreich! Sie werden weitergeleitet...';
+
+        setTimeout(() => {
+          window.location.href = `/order/${result.data.orderNumber}`;
+        }, 1000);
+      } catch (error) {
+        console.error('Payment capture error:', error);
+        errorMessage.textContent = error.message;
+        errorContainer.classList.remove('hidden');
+        statusEl.classList.add('hidden');
+      }
+    }
+
+    // Retry button
+    document.getElementById('retry-btn')?.addEventListener('click', () => {
+      document.getElementById('error-container').classList.add('hidden');
+      document.getElementById('processing-status').classList.remove('hidden');
+      capturePayment();
+    });
+
+    // Auto-capture on page load
+    capturePayment();
+  </script>
+</Layout>

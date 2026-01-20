@@ -214,7 +214,6 @@
   /* Modern FAQ Styles */
   .faq-item {
     position: relative;
-    background-color: transparent;
   }
 
   .faq-toggle {
@@ -231,7 +230,6 @@
     max-height: 0;
     opacity: 0;
     transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
-    background-color: transparent;
   }
 
   .faq-toggle:checked ~ .faq-content {
@@ -241,7 +239,7 @@
 
   /* Ensure content stays within border when expanded */
   .faq-content > div {
-    background-color: transparent;
+    /* Background color set via Tailwind classes */
   }
 
   /* Icon states - default (plus visible) */
@@ -269,13 +267,12 @@
   }
 
   .faq-icon {
-    color: var(--color-accent-dark);
     transition: color 0.3s ease;
     flex-shrink: 0;
   }
 
   .faq-label:hover .faq-icon {
-    color: var(--color-accent);
+    opacity: 0.8;
   }
 
   .faq-icon svg {
@@ -526,6 +523,81 @@
   /* Menu hover with darker accent */
   .menu-link-hover:hover {
     color: var(--color-accent-dark) !important;
+  }
+
+  /* Progress bar with custom color */
+  .progress[style*="--progress-color"] {
+    background-color: rgba(166, 166, 166, 0.2);
+  }
+
+  .progress[style*="--progress-color"]::-moz-progress-bar {
+    background-color: var(--progress-color);
+  }
+
+  .progress[style*="--progress-color"]::-webkit-progress-value {
+    background-color: var(--progress-color);
+  }
+
+  .progress[style*="--progress-color"]::-webkit-progress-bar {
+    background-color: rgba(166, 166, 166, 0.2);
+  }
+
+  /* Toggle with custom color */
+  .toggle[style*="--toggle-color"]:checked {
+    background-color: var(--toggle-color) !important;
+    border-color: var(--toggle-color) !important;
+  }
+
+  /* Checkbox with custom color */
+  .checkbox[style*="--checkbox-color"]:checked {
+    background-color: var(--checkbox-color) !important;
+    border-color: var(--checkbox-color) !important;
+  }
+
+  /* Admin button styles */
+  .btn-admin-primary {
+    background-color: var(--color-yellow-accent-dark);
+    color: white;
+    border: none;
+    transition: all 0.2s ease;
+  }
+
+  .btn-admin-primary:hover {
+    background-color: var(--color-yellow-accent);
+    color: #1c1917;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(184, 168, 5, 0.3);
+  }
+
+  .btn-admin-outline {
+    background-color: transparent;
+    color: var(--color-yellow-accent-dark);
+    border: 2px solid var(--color-yellow-accent-dark);
+    transition: all 0.2s ease;
+  }
+
+  .btn-admin-outline:hover {
+    background-color: var(--color-yellow-accent-dark);
+    color: white;
+    border-color: var(--color-yellow-accent-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(184, 168, 5, 0.3);
+  }
+
+  /* Admin alert/banner with yellow accent */
+  .alert-admin {
+    background-color: rgba(242, 227, 7, 0.1);
+    border-color: var(--color-yellow-accent-dark);
+  }
+
+  .alert-admin svg {
+    color: var(--color-yellow-accent-dark);
+  }
+
+  /* Admin active tab */
+  .admin-tab-active {
+    color: var(--color-yellow-accent-dark) !important;
+    border-bottom-color: var(--color-yellow-accent-dark) !important;
   }
 }
 

@@ -46,15 +46,15 @@ try {
         </div>
         <div class="stat bg-gradient-to-br from-base-100 to-base-200/30 border border-base-300/30 shadow-md rounded-xl p-4 hover:shadow-lg transition-shadow">
           <div class="stat-title text-xs">Active</div>
-          <div class="stat-value text-2xl text-success">{products.rows.filter(p => p.isActive).length}</div>
+          <div class="stat-value text-2xl" style="color: var(--color-metrics-text);">{products.rows.filter(p => p.isActive).length}</div>
         </div>
         <div class="stat bg-gradient-to-br from-base-100 to-base-200/30 border border-base-300/30 shadow-md rounded-xl p-4 hover:shadow-lg transition-shadow">
           <div class="stat-title text-xs">Inactive</div>
-          <div class="stat-value text-2xl text-error">{products.rows.filter(p => !p.isActive).length}</div>
+          <div class="stat-value text-2xl" style="color: #EF4444;">{products.rows.filter(p => !p.isActive).length}</div>
         </div>
         <div class="stat bg-gradient-to-br from-base-100 to-base-200/30 border border-base-300/30 shadow-md rounded-xl p-4 hover:shadow-lg transition-shadow">
           <div class="stat-title text-xs">Featured</div>
-          <div class="stat-value text-2xl text-info">{products.rows.filter(p => p.isFeatured).length}</div>
+          <div class="stat-value text-2xl" style="color: var(--color-yellow-accent-dark);">{products.rows.filter(p => p.isFeatured).length}</div>
         </div>
       </div>
 
@@ -94,7 +94,7 @@ try {
                     <td>
                       <div class="flex flex-wrap gap-1">
                         {product.isBlockout && <span class="badge badge-secondary badge-xs">Blockout</span>}
-                        {product.acceptsFileUpload && <span class="badge badge-info badge-xs">Upload</span>}
+                        {product.acceptsFileUpload && <span class="badge badge-xs" style="background-color: var(--color-yellow-accent); color: #1c1917; border-color: var(--color-yellow-accent);">Upload</span>}
                         {product.priceCalculationMethod && product.priceCalculationMethod !== 'per_piece' && (
                           <span class="badge badge-outline badge-xs">{product.priceCalculationMethod.replace('per_', '')}</span>
                         )}
@@ -105,7 +105,7 @@ try {
                         <span class={`badge badge-xs ${product.isActive ? 'badge-success' : 'badge-error'}`}>
                           {product.isActive ? 'Active' : 'Inactive'}
                         </span>
-                        {product.isFeatured && <span class="badge badge-info badge-xs">Featured</span>}
+                        {product.isFeatured && <span class="badge badge-xs" style="background-color: var(--color-yellow-accent); color: #1c1917; border-color: var(--color-yellow-accent);">Featured</span>}
                       </div>
                     </td>
                     <td>

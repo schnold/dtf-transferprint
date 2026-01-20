@@ -1,0 +1,407 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import { pool } from '../lib/db';
+
+const user = Astro.locals.user;
+
+if (!user) {
+  return Astro.redirect('/');
+}
+
+const title = 'Kasse - DTF Transfer Print';
+const description = 'Schließen Sie Ihre Bestellung ab';
+
+// Get PayPal Client ID from environment
+const paypalClientId = import.meta.env.PAYPAL_CLIENT_ID;
+const paypalMode = import.meta.env.PAYPAL_MODE || 'sandbox';
+
+// Fetch user discount
+const client = await pool.connect();
+let userDiscountPercent = 0;
+
+try {
+  const userResult = await client.query(
+    'SELECT "discountPercent" FROM "user" WHERE id = $1',
+    [user.id]
+  );
+  userDiscountPercent = parseFloat(userResult.rows[0]?.discountPercent || 0);
+} finally {
+  client.release();
+}
+
+// Fetch cart
+let cartItems: any[] = [];
+let subtotal = 0;
+
+const response = await fetch(`${Astro.url.origin}/api/cart/get`, {
+  headers: {
+    'Cookie': Astro.request.headers.get('Cookie') || '',
+  },
+});
+
+if (response.ok) {
+  const result = await response.json();
+  if (result.success) {
+    cartItems = result.data.items || [];
+    subtotal = result.data.subtotal || 0;
+  }
+}
+
+// Fetch active shipping profiles
+const shippingClient = await pool.connect();
+let shippingProfiles: any[] = [];
+let selectedShippingId: string | null = null;
+
+try {
+  const profilesResult = await shippingClient.query(
+    'SELECT * FROM "shippingProfiles" WHERE "isActive" = true ORDER BY "displayOrder"'
+  );
+  shippingProfiles = profilesResult.rows;
+
+  // Get user's selected shipping profile
+  const selectionResult = await shippingClient.query(
+    'SELECT "shippingProfileId" FROM "userCartShipping" WHERE "userId" = $1',
+    [user.id]
+  );
+
+  if (selectionResult.rows.length > 0) {
+    selectedShippingId = selectionResult.rows[0].shippingProfileId;
+  } else {
+    // Use default
+    const defaultProfile = shippingProfiles.find((p) => p.isDefault);
+    selectedShippingId = defaultProfile?.id || shippingProfiles[0]?.id;
+  }
+} finally {
+  shippingClient.release();
+}
+
+const formatPrice = (price: number) => {
+  return new Intl.NumberFormat('de-DE', {
+    style: 'currency',
+    currency: 'EUR',
+  }).format(price);
+};
+---
+
+<Layout title={title} description={description}>
+  <script
+    src={`https://www.paypal.com/sdk/js?client-id=${paypalClientId}&currency=EUR&intent=capture`}
+    data-sdk-integration-source="button-factory"
+  ></script>
+
+  <Navbar />
+
+  <div class="min-h-screen bg-gradient-to-br from-primary/10 via-base-100 to-secondary/10">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 max-w-6xl">
+      {
+        cartItems.length === 0 ? (
+          <div class="min-h-[60vh] flex items-center justify-center">
+            <div class="text-center max-w-md space-y-4">
+              <h2 class="text-2xl font-semibold text-neutral">Ihr Warenkorb ist leer</h2>
+              <p class="text-neutral/60">Fügen Sie Produkte hinzu, um zur Kasse zu gehen.</p>
+              <a href="/products" class="btn btn-primary mt-4">
+                Produkte ansehen
+              </a>
+            </div>
+          </div>
+        ) : (
+          <div class="space-y-8">
+            <div class="flex items-baseline justify-between border-b border-base-300/50 pb-6">
+              <div>
+                <h1 class="text-3xl font-semibold text-neutral mb-1">Kasse</h1>
+                <p class="text-sm text-neutral/60">Schließen Sie Ihre Bestellung ab</p>
+              </div>
+              <a
+                href="/cart"
+                class="text-sm text-primary hover:text-primary-focus transition-colors"
+              >
+                Zurück zum Warenkorb
+              </a>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              {/* Order Summary */}
+              <div class="lg:col-span-2 space-y-6">
+                {/* Cart Items */}
+                <div class="bg-base-100 border border-base-300/50 rounded-lg p-6">
+                  <h2 class="text-lg font-semibold mb-4">Bestellübersicht</h2>
+                  <div class="space-y-3">
+                    {cartItems.map((item) => (
+                      <div class="flex gap-4 py-3 border-b border-base-300/30 last:border-0">
+                        {item.productImage && (
+                          <img
+                            src={item.productImage}
+                            alt={item.productName}
+                            class="w-16 h-16 object-cover rounded"
+                          />
+                        )}
+                        <div class="flex-1">
+                          <h3 class="font-medium text-sm">{item.productName}</h3>
+                          <p class="text-xs text-neutral/60">Menge: {item.quantity}</p>
+                          {item.zusatzleistungen && item.zusatzleistungen.length > 0 && (
+                            <p class="text-xs text-neutral/60">
+                              + {item.zusatzleistungen.length} Zusatzleistung(en)
+                            </p>
+                          )}
+                        </div>
+                        <div class="text-right">
+                          <p class="font-medium">{formatPrice(item.lineTotal)}</p>
+                          {item.currentSavings > 0 && (
+                            <p class="text-xs text-success">
+                              -{formatPrice(item.currentSavings)} gespart
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Shipping Method */}
+                <div class="bg-base-100 border border-base-300/50 rounded-lg p-6">
+                  <h2 class="text-lg font-semibold mb-4">Versandart</h2>
+                  <div class="space-y-2">
+                    {shippingProfiles.map((profile) => (
+                      <label class="flex items-center justify-between p-3 border border-base-300 rounded-lg cursor-pointer hover:bg-base-200/50 transition-colors">
+                        <div class="flex items-center gap-3">
+                          <input
+                            type="radio"
+                            name="shipping"
+                            value={profile.id}
+                            checked={profile.id === selectedShippingId}
+                            class="radio radio-primary radio-sm"
+                          />
+                          <div>
+                            <p class="font-medium text-sm">{profile.name}</p>
+                            {profile.description && (
+                              <p class="text-xs text-neutral/60">{profile.description}</p>
+                            )}
+                            {profile.estimatedDays && (
+                              <p class="text-xs text-neutral/60">
+                                Lieferung in ca. {profile.estimatedDays} Werktagen
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                        <div class="text-right">
+                          <p class="font-medium">{formatPrice(profile.basePrice)}</p>
+                          {profile.freeShippingThreshold && (
+                            <p class="text-xs text-neutral/60">
+                              Kostenlos ab {formatPrice(profile.freeShippingThreshold)}
+                            </p>
+                          )}
+                        </div>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Discount Code */}
+                <div class="bg-base-100 border border-base-300/50 rounded-lg p-6">
+                  <h2 class="text-lg font-semibold mb-4">Rabattcode</h2>
+                  <div class="flex gap-2">
+                    <input
+                      type="text"
+                      id="discount-code-input"
+                      placeholder="Rabattcode eingeben"
+                      class="input input-bordered flex-1"
+                    />
+                    <button id="apply-discount-btn" class="btn btn-secondary">
+                      Anwenden
+                    </button>
+                  </div>
+                  <div id="discount-message" class="mt-2 text-sm"></div>
+                </div>
+              </div>
+
+              {/* Payment Section */}
+              <div class="lg:col-span-1">
+                <div class="bg-base-100 border border-base-300/50 rounded-lg p-6 sticky top-4">
+                  <h2 class="text-lg font-semibold mb-4">Zusammenfassung</h2>
+
+                  <div id="order-summary" class="space-y-2 mb-4">
+                    <div class="flex justify-between text-sm">
+                      <span class="text-neutral/60">Zwischensumme</span>
+                      <span id="summary-subtotal">{formatPrice(subtotal)}</span>
+                    </div>
+
+                    {userDiscountPercent > 0 && (
+                      <div class="flex justify-between text-sm text-success">
+                        <span>Ihr Rabatt ({userDiscountPercent}%)</span>
+                        <span id="summary-user-discount">
+                          -{formatPrice(subtotal * (userDiscountPercent / 100))}
+                        </span>
+                      </div>
+                    )}
+
+                    <div id="campaign-discount-row" class="hidden flex justify-between text-sm text-success">
+                      <span id="campaign-discount-label">Kampagnenrabatt</span>
+                      <span id="summary-campaign-discount">-€0.00</span>
+                    </div>
+
+                    <div class="flex justify-between text-sm">
+                      <span class="text-neutral/60">Versand</span>
+                      <span id="summary-shipping">{formatPrice(0)}</span>
+                    </div>
+
+                    <div class="flex justify-between text-sm">
+                      <span class="text-neutral/60">MwSt. (19%)</span>
+                      <span id="summary-tax">{formatPrice(0)}</span>
+                    </div>
+
+                    <div class="border-t border-base-300 pt-2 mt-2">
+                      <div class="flex justify-between font-semibold text-lg">
+                        <span>Gesamt</span>
+                        <span id="summary-total">{formatPrice(subtotal)}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div id="paypal-button-container" class="mt-6"></div>
+                  <div id="payment-error" class="mt-4 text-sm text-error hidden"></div>
+                  <div id="payment-loading" class="hidden">
+                    <div class="flex items-center justify-center py-4">
+                      <span class="loading loading-spinner loading-md"></span>
+                      <span class="ml-2 text-sm">Verarbeite Zahlung...</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )
+      }
+    </div>
+  </div>
+
+  <script define:vars={{ userDiscountPercent, subtotal }}>
+    let appliedDiscountCode = null;
+
+    // Calculate and update summary
+    function updateSummary() {
+      const userDiscount = subtotal * (userDiscountPercent / 100);
+      const subtotalAfterUserDiscount = subtotal - userDiscount;
+
+      // For now, just show initial calculation
+      // Campaign discount will be validated server-side
+      const shipping = 0; // Will be calculated server-side
+      const taxableAmount = subtotalAfterUserDiscount + shipping;
+      const tax = taxableAmount * 0.19;
+      const total = taxableAmount + tax;
+
+      document.getElementById('summary-tax').textContent = formatPrice(tax);
+      document.getElementById('summary-total').textContent = formatPrice(total);
+    }
+
+    function formatPrice(price) {
+      return new Intl.NumberFormat('de-DE', {
+        style: 'currency',
+        currency: 'EUR',
+      }).format(price);
+    }
+
+    // Apply discount code
+    document.getElementById('apply-discount-btn')?.addEventListener('click', async () => {
+      const input = document.getElementById('discount-code-input');
+      const code = input.value.trim();
+      const messageEl = document.getElementById('discount-message');
+
+      if (!code) {
+        messageEl.textContent = 'Bitte geben Sie einen Rabattcode ein.';
+        messageEl.className = 'mt-2 text-sm text-error';
+        return;
+      }
+
+      appliedDiscountCode = code;
+      messageEl.textContent = 'Code wird beim Checkout validiert.';
+      messageEl.className = 'mt-2 text-sm text-info';
+    });
+
+    // PayPal Checkout
+    async function createPayPalOrder() {
+      const loadingEl = document.getElementById('payment-loading');
+      const errorEl = document.getElementById('payment-error');
+
+      loadingEl.classList.remove('hidden');
+      errorEl.classList.add('hidden');
+
+      try {
+        const response = await fetch('/api/checkout/create-paypal-order', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            discountCode: appliedDiscountCode,
+          }),
+        });
+
+        const result = await response.json();
+
+        if (!result.success) {
+          throw new Error(result.error?.message || 'Failed to create PayPal order');
+        }
+
+        return result.data.paypalOrderId;
+      } catch (error) {
+        errorEl.textContent = error.message;
+        errorEl.classList.remove('hidden');
+        throw error;
+      } finally {
+        loadingEl.classList.add('hidden');
+      }
+    }
+
+    function onPayPalApprove(data) {
+      window.location.href = `/checkout/success?token=${data.orderID}`;
+    }
+
+    // Initialize summary
+    updateSummary();
+
+    // Initialize PayPal Buttons
+    if (window.paypal) {
+      window.paypal
+        .Buttons({
+          style: {
+            layout: 'vertical',
+            color: 'gold',
+            shape: 'rect',
+            label: 'paypal',
+          },
+          createOrder: async function () {
+            try {
+              return await createPayPalOrder();
+            } catch (error) {
+              console.error('Error creating PayPal order:', error);
+              const errorEl = document.getElementById('payment-error');
+              errorEl.textContent = error.message || 'Fehler beim Erstellen der PayPal-Bestellung';
+              errorEl.classList.remove('hidden');
+              throw error;
+            }
+          },
+          onApprove: function (data, actions) {
+            onPayPalApprove(data);
+          },
+          onCancel: function (data) {
+            window.location.href = '/checkout/cancel';
+          },
+          onError: function (err) {
+            console.error('PayPal error:', err);
+            const errorEl = document.getElementById('payment-error');
+            errorEl.textContent =
+              'Ein Fehler ist bei der PayPal-Zahlung aufgetreten. Bitte versuchen Sie es erneut.';
+            errorEl.classList.remove('hidden');
+          },
+        })
+        .render('#paypal-button-container');
+    } else {
+      // Fallback if PayPal SDK fails to load
+      const paypalContainer = document.getElementById('paypal-button-container');
+      paypalContainer.innerHTML = `
+        <div class="alert alert-error">
+          <span>PayPal konnte nicht geladen werden. Bitte laden Sie die Seite neu.</span>
+        </div>
+      `;
+    }
+  </script>
+</Layout>

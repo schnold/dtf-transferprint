@@ -10,10 +10,11 @@
     "migrate": "tsx scripts/run-migrations.ts"
   },
   "dependencies": {
-    "@astrojs/node": "^9.5.1",
+    "@astrojs/netlify": "^6.6.3",
     "@aws-sdk/client-s3": "^3.966.0",
     "@aws-sdk/lib-storage": "^3.966.0",
     "@lucide/astro": "^0.562.0",
+    "@paypal/checkout-server-sdk": "^1.0.3",
     "@tabler/icons": "^3.36.1",
     "@types/nodemailer": "^7.0.4",
     "@upstash/redis": "^1.36.1",
@@ -28,6 +29,7 @@
     "pg": "^8.16.3",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
+    "resend": "^6.8.0",
     "sharp": "^0.34.5",
     "tslib": "^2.8.1"
   },

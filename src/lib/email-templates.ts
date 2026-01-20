@@ -14,15 +14,35 @@ interface PasswordResetEmailData extends EmailTemplateData {
   resetUrl: string;
 }
 
+interface OrderConfirmationEmailData extends EmailTemplateData {
+  orderNumber: string;
+  orderDate: string;
+  orderTotal: string;
+  orderItems: Array<{
+    name: string;
+    quantity: number;
+    price: string;
+  }>;
+  subtotal: string;
+  discountAmount?: string;
+  discountCode?: string;
+  userDiscountPercent?: number;
+  shippingCost: string;
+  taxAmount: string;
+  trackingUrl?: string;
+  orderUrl: string;
+}
+
+// CI-conform email styles using the brand color palette
 const EMAIL_STYLES = `
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&family=Inter:wght@400;600;700&display=swap');
 
     body {
       margin: 0;
       padding: 0;
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-      background-color: #f5f5f5;
+      background-color: #f2f2f2;
     }
 
     .email-container {
@@ -32,7 +52,7 @@ const EMAIL_STYLES = `
     }
 
     .header {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, #D95829 0%, #C04A1F 100%);
       padding: 40px 30px;
       text-align: center;
     }
@@ -42,24 +62,26 @@ const EMAIL_STYLES = `
       margin: 0;
       font-size: 28px;
       font-weight: 700;
+      font-family: 'DM Sans', sans-serif;
       letter-spacing: -0.5px;
     }
 
     .content {
       padding: 40px 30px;
-      color: #333333;
+      color: #595959;
       line-height: 1.6;
     }
 
     .content h2 {
-      color: #1a1a1a;
+      color: #262626;
       font-size: 24px;
       font-weight: 600;
+      font-family: 'DM Sans', sans-serif;
       margin: 0 0 20px 0;
     }
 
     .content p {
-      color: #555555;
+      color: #595959;
       font-size: 16px;
       margin: 0 0 20px 0;
     }
@@ -67,18 +89,21 @@ const EMAIL_STYLES = `
     .button {
       display: inline-block;
       padding: 16px 32px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(to bottom, #595959 0%, #262626 100%);
       color: #ffffff !important;
       text-decoration: none;
-      border-radius: 8px;
+      border-radius: 12px;
       font-weight: 600;
       font-size: 16px;
+      font-family: 'DM Sans', sans-serif;
       margin: 20px 0;
-      transition: transform 0.2s;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s, box-shadow 0.2s;
     }
 
     .button:hover {
       transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
     }
 
     .button-container {
@@ -88,7 +113,7 @@ const EMAIL_STYLES = `
 
     .security-notice {
       background-color: #f8f9fa;
-      border-left: 4px solid #667eea;
+      border-left: 4px solid #D95829;
       padding: 15px 20px;
       margin: 25px 0;
       border-radius: 4px;
@@ -97,26 +122,45 @@ const EMAIL_STYLES = `
     .security-notice p {
       margin: 0;
       font-size: 14px;
-      color: #666666;
+      color: #595959;
+    }
+
+    .info-box {
+      background-color: #f8f9fa;
+      padding: 20px;
+      border-radius: 8px;
+      margin: 25px 0;
+    }
+
+    .info-box p {
+      margin: 0 0 15px 0;
+    }
+
+    .info-box p:last-child {
+      margin: 0;
     }
 
     .footer {
       background-color: #f8f9fa;
       padding: 30px;
       text-align: center;
-      color: #999999;
+      color: #A6A6A6;
       font-size: 13px;
       border-top: 1px solid #e5e5e5;
     }
 
     .footer a {
-      color: #667eea;
+      color: #D95829;
       text-decoration: none;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
     }
 
     .footer p {
       margin: 5px 0;
-      color: #999999;
+      color: #A6A6A6;
     }
 
     .divider {
@@ -126,9 +170,13 @@ const EMAIL_STYLES = `
     }
 
     .link {
-      color: #667eea;
+      color: #D95829;
       text-decoration: none;
       word-break: break-all;
+    }
+
+    .link:hover {
+      text-decoration: underline;
     }
 
     @media only screen and (max-width: 600px) {
@@ -159,7 +207,7 @@ const EMAIL_STYLES = `
 function getBaseTemplate(content: string, unsubscribeUrl: string): string {
   return `
     <!DOCTYPE html>
-    <html lang="en">
+    <html lang="de">
     <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -177,13 +225,13 @@ function getBaseTemplate(content: string, unsubscribeUrl: string): string {
 
         <div class="footer">
           <p><strong>DTF Transfer Print</strong></p>
-          <p>High-quality direct-to-film transfer printing services</p>
+          <p>Hochwertige Direct-to-Film Transferdruck-Dienstleistungen</p>
           <div class="divider"></div>
           <p>
-            <a href="${unsubscribeUrl}">Unsubscribe</a> from these emails
+            <a href="${unsubscribeUrl}">Von E-Mails abmelden</a>
           </p>
           <p style="margin-top: 15px;">
-            This email was sent to you because you created an account with DTF Transfer Print.
+            Diese E-Mail wurde Ihnen gesendet, weil Sie ein Konto bei DTF Transfer Print erstellt haben.
           </p>
         </div>
       </div>
@@ -201,26 +249,26 @@ export function generateVerificationEmail(data: VerificationEmailData): {
 
   const content = `
     <div class="content">
-      <h2>Verify Your Email Address</h2>
+      <h2>Verifizieren Sie Ihre E-Mail-Adresse</h2>
 
-      <p>Hi ${data.userName},</p>
+      <p>Hallo ${data.userName},</p>
 
-      <p>Thank you for signing up with DTF Transfer Print! To complete your registration and start using your account, please verify your email address.</p>
+      <p>Vielen Dank für Ihre Registrierung bei DTF Transfer Print! Um Ihre Registrierung abzuschließen und Ihr Konto zu nutzen, verifizieren Sie bitte Ihre E-Mail-Adresse.</p>
 
       <div class="button-container">
-        <a href="${data.verificationUrl}" class="button">Verify Email Address</a>
+        <a href="${data.verificationUrl}" class="button">E-Mail-Adresse verifizieren</a>
       </div>
 
-      <p>This verification link will expire in 24 hours for security reasons.</p>
+      <p>Dieser Verifizierungslink ist aus Sicherheitsgründen 24 Stunden gültig.</p>
 
       <div class="security-notice">
-        <p><strong>🔒 Security Note:</strong> If you didn't create an account with DTF Transfer Print, you can safely ignore this email.</p>
+        <p><strong>🔒 Sicherheitshinweis:</strong> Wenn Sie kein Konto bei DTF Transfer Print erstellt haben, können Sie diese E-Mail ignorieren.</p>
       </div>
 
       <div class="divider"></div>
 
-      <p style="font-size: 14px; color: #999999;">
-        If the button doesn't work, copy and paste this link into your browser:<br>
+      <p style="font-size: 14px; color: #A6A6A6;">
+        Falls der Button nicht funktioniert, kopieren Sie diesen Link in Ihren Browser:<br>
         <a href="${data.verificationUrl}" class="link">${data.verificationUrl}</a>
       </p>
     </div>
@@ -229,22 +277,22 @@ export function generateVerificationEmail(data: VerificationEmailData): {
   const html = getBaseTemplate(content, unsubscribeUrl);
 
   const text = `
-Hi ${data.userName},
+Hallo ${data.userName},
 
-Thank you for signing up with DTF Transfer Print! To complete your registration and start using your account, please verify your email address.
+Vielen Dank für Ihre Registrierung bei DTF Transfer Print! Um Ihre Registrierung abzuschließen und Ihr Konto zu nutzen, verifizieren Sie bitte Ihre E-Mail-Adresse.
 
-Verify your email by clicking this link:
+Verifizieren Sie Ihre E-Mail, indem Sie auf diesen Link klicken:
 ${data.verificationUrl}
 
-This verification link will expire in 24 hours for security reasons.
+Dieser Verifizierungslink ist aus Sicherheitsgründen 24 Stunden gültig.
 
-Security Note: If you didn't create an account with DTF Transfer Print, you can safely ignore this email.
+Sicherheitshinweis: Wenn Sie kein Konto bei DTF Transfer Print erstellt haben, können Sie diese E-Mail ignorieren.
 
 ---
 DTF Transfer Print
-High-quality direct-to-film transfer printing services
+Hochwertige Direct-to-Film Transferdruck-Dienstleistungen
 
-Unsubscribe: ${unsubscribeUrl}
+Abmelden: ${unsubscribeUrl}
   `.trim();
 
   return { html, text };
@@ -259,36 +307,36 @@ export function generatePasswordResetEmail(data: PasswordResetEmailData): {
 
   const content = `
     <div class="content">
-      <h2>Reset Your Password</h2>
+      <h2>Passwort zurücksetzen</h2>
 
-      <p>Hi ${data.userName},</p>
+      <p>Hallo ${data.userName},</p>
 
-      <p>We received a request to reset your password for your DTF Transfer Print account. Click the button below to create a new password:</p>
+      <p>Wir haben eine Anfrage zum Zurücksetzen Ihres Passworts für Ihr DTF Transfer Print Konto erhalten. Klicken Sie auf den Button unten, um ein neues Passwort zu erstellen:</p>
 
       <div class="button-container">
-        <a href="${data.resetUrl}" class="button">Reset Password</a>
+        <a href="${data.resetUrl}" class="button">Passwort zurücksetzen</a>
       </div>
 
-      <p>This password reset link will expire in 1 hour for security reasons.</p>
+      <p>Dieser Link zum Zurücksetzen des Passworts ist aus Sicherheitsgründen 1 Stunde gültig.</p>
 
       <div class="security-notice">
-        <p><strong>🔒 Security Note:</strong> If you didn't request a password reset, please ignore this email. Your password will remain unchanged. Consider changing your password if you're concerned about account security.</p>
+        <p><strong>🔒 Sicherheitshinweis:</strong> Wenn Sie kein Zurücksetzen des Passworts angefordert haben, ignorieren Sie diese E-Mail bitte. Ihr Passwort bleibt unverändert. Erwägen Sie eine Passwortänderung, wenn Sie Bedenken bezüglich der Kontosicherheit haben.</p>
       </div>
 
       <div class="divider"></div>
 
-      <p style="font-size: 14px; color: #999999;">
-        If the button doesn't work, copy and paste this link into your browser:<br>
+      <p style="font-size: 14px; color: #A6A6A6;">
+        Falls der Button nicht funktioniert, kopieren Sie diesen Link in Ihren Browser:<br>
         <a href="${data.resetUrl}" class="link">${data.resetUrl}</a>
       </p>
 
-      <p style="font-size: 14px; color: #999999; margin-top: 20px;">
-        For security reasons, we recommend:
+      <p style="font-size: 14px; color: #A6A6A6; margin-top: 20px;">
+        Aus Sicherheitsgründen empfehlen wir:
       </p>
-      <ul style="font-size: 14px; color: #999999; margin-top: 10px;">
-        <li>Using a strong, unique password</li>
-        <li>Not sharing your password with anyone</li>
-        <li>Enabling two-factor authentication (coming soon)</li>
+      <ul style="font-size: 14px; color: #A6A6A6; margin-top: 10px;">
+        <li>Ein starkes, einzigartiges Passwort zu verwenden</li>
+        <li>Ihr Passwort mit niemandem zu teilen</li>
+        <li>Zwei-Faktor-Authentifizierung zu aktivieren (demnächst verfügbar)</li>
       </ul>
     </div>
   `;
@@ -296,26 +344,26 @@ export function generatePasswordResetEmail(data: PasswordResetEmailData): {
   const html = getBaseTemplate(content, unsubscribeUrl);
 
   const text = `
-Hi ${data.userName},
+Hallo ${data.userName},
 
-We received a request to reset your password for your DTF Transfer Print account. Click the link below to create a new password:
+Wir haben eine Anfrage zum Zurücksetzen Ihres Passworts für Ihr DTF Transfer Print Konto erhalten. Klicken Sie auf den Link unten, um ein neues Passwort zu erstellen:
 
 ${data.resetUrl}
 
-This password reset link will expire in 1 hour for security reasons.
+Dieser Link zum Zurücksetzen des Passworts ist aus Sicherheitsgründen 1 Stunde gültig.
 
-Security Note: If you didn't request a password reset, please ignore this email. Your password will remain unchanged.
+Sicherheitshinweis: Wenn Sie kein Zurücksetzen des Passworts angefordert haben, ignorieren Sie diese E-Mail bitte. Ihr Passwort bleibt unverändert.
 
-For security reasons, we recommend:
-- Using a strong, unique password
-- Not sharing your password with anyone
-- Enabling two-factor authentication (coming soon)
+Aus Sicherheitsgründen empfehlen wir:
+- Ein starkes, einzigartiges Passwort zu verwenden
+- Ihr Passwort mit niemandem zu teilen
+- Zwei-Faktor-Authentifizierung zu aktivieren (demnächst verfügbar)
 
 ---
 DTF Transfer Print
-High-quality direct-to-film transfer printing services
+Hochwertige Direct-to-Film Transferdruck-Dienstleistungen
 
-Unsubscribe: ${unsubscribeUrl}
+Abmelden: ${unsubscribeUrl}
   `.trim();
 
   return { html, text };
@@ -330,28 +378,28 @@ export function generateWelcomeEmail(data: EmailTemplateData): {
 
   const content = `
     <div class="content">
-      <h2>Welcome to DTF Transfer Print! 🎉</h2>
+      <h2>Willkommen bei DTF Transfer Print!</h2>
 
-      <p>Hi ${data.userName},</p>
+      <p>Hallo ${data.userName},</p>
 
-      <p>Thank you for verifying your email! Your account is now fully activated and ready to use.</p>
+      <p>Vielen Dank für die Verifizierung Ihrer E-Mail! Ihr Konto ist jetzt vollständig aktiviert und einsatzbereit.</p>
 
-      <p>Here's what you can do next:</p>
+      <p>Das können Sie als Nächstes tun:</p>
 
-      <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; margin: 25px 0;">
-        <p style="margin: 0 0 15px 0;"><strong>✨ Explore Our Services</strong><br>Browse our wide range of DTF transfer printing options</p>
-        <p style="margin: 0 0 15px 0;"><strong>🎨 Upload Your Designs</strong><br>Start creating custom transfers with your artwork</p>
-        <p style="margin: 0;"><strong>📦 Track Your Orders</strong><br>Monitor all your orders from your account dashboard</p>
+      <div class="info-box">
+        <p><strong>✨ Erkunden Sie unsere Dienstleistungen</strong><br>Durchsuchen Sie unser breites Angebot an DTF-Transferdruck-Optionen</p>
+        <p><strong>🎨 Laden Sie Ihre Designs hoch</strong><br>Beginnen Sie mit der Erstellung individueller Transfers mit Ihren Kunstwerken</p>
+        <p><strong>📦 Verfolgen Sie Ihre Bestellungen</strong><br>Überwachen Sie alle Ihre Bestellungen über Ihr Konto-Dashboard</p>
       </div>
 
       <div class="button-container">
-        <a href="${data.baseUrl}/products" class="button">Browse Products</a>
+        <a href="${data.baseUrl}/products" class="button">Produkte durchsuchen</a>
       </div>
 
       <div class="divider"></div>
 
-      <p style="font-size: 14px; color: #999999;">
-        Need help getting started? Check out our <a href="${data.baseUrl}/eigenschaften" class="link">features page</a> or contact our support team.
+      <p style="font-size: 14px; color: #A6A6A6;">
+        Benötigen Sie Hilfe beim Einstieg? Schauen Sie sich unsere <a href="${data.baseUrl}/eigenschaften" class="link">Funktionsseite</a> an oder kontaktieren Sie unser Support-Team.
       </p>
     </div>
   `;
@@ -359,30 +407,30 @@ export function generateWelcomeEmail(data: EmailTemplateData): {
   const html = getBaseTemplate(content, unsubscribeUrl);
 
   const text = `
-Hi ${data.userName},
+Hallo ${data.userName},
 
-Thank you for verifying your email! Your account is now fully activated and ready to use.
+Vielen Dank für die Verifizierung Ihrer E-Mail! Ihr Konto ist jetzt vollständig aktiviert und einsatzbereit.
 
-Here's what you can do next:
+Das können Sie als Nächstes tun:
 
-✨ Explore Our Services
-Browse our wide range of DTF transfer printing options
+✨ Erkunden Sie unsere Dienstleistungen
+Durchsuchen Sie unser breites Angebot an DTF-Transferdruck-Optionen
 
-🎨 Upload Your Designs
-Start creating custom transfers with your artwork
+🎨 Laden Sie Ihre Designs hoch
+Beginnen Sie mit der Erstellung individueller Transfers mit Ihren Kunstwerken
 
-📦 Track Your Orders
-Monitor all your orders from your account dashboard
+📦 Verfolgen Sie Ihre Bestellungen
+Überwachen Sie alle Ihre Bestellungen über Ihr Konto-Dashboard
 
-Get started: ${data.baseUrl}/products
+Erste Schritte: ${data.baseUrl}/products
 
-Need help? Visit our features page: ${data.baseUrl}/eigenschaften
+Benötigen Sie Hilfe? Besuchen Sie unsere Funktionsseite: ${data.baseUrl}/eigenschaften
 
 ---
 DTF Transfer Print
-High-quality direct-to-film transfer printing services
+Hochwertige Direct-to-Film Transferdruck-Dienstleistungen
 
-Unsubscribe: ${unsubscribeUrl}
+Abmelden: ${unsubscribeUrl}
   `.trim();
 
   return { html, text };

@@ -1,0 +1,59 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navbar from '../../components/Navbar.astro';
+
+const title = 'Zahlung abgebrochen - DTF Transfer Print';
+const description = 'Ihre Zahlung wurde abgebrochen';
+---
+
+<Layout title={title} description={description}>
+  <Navbar />
+
+  <div class="min-h-screen bg-gradient-to-br from-primary/10 via-base-100 to-secondary/10">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div class="max-w-2xl mx-auto">
+        <div class="bg-base-100 border border-base-300/50 rounded-lg p-8 text-center">
+          <div class="mb-6">
+            <div
+              class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-warning/10 mb-4"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-8 w-8 text-warning"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                />
+              </svg>
+            </div>
+            <h1 class="text-2xl font-semibold text-neutral mb-2">Zahlung abgebrochen</h1>
+            <p class="text-neutral/60">
+              Sie haben die Zahlung abgebrochen. Keine Sorge, Ihr Warenkorb bleibt erhalten.
+            </p>
+          </div>
+
+          <div class="space-y-3">
+            <a href="/checkout" class="btn btn-primary btn-block">Zurück zur Kasse</a>
+            <a href="/cart" class="btn btn-ghost btn-block">Warenkorb ansehen</a>
+            <a href="/products" class="btn btn-ghost btn-block">Weiter einkaufen</a>
+          </div>
+
+          <div class="mt-6 p-4 bg-base-200 rounded-lg">
+            <p class="text-sm text-neutral/60">
+              Haben Sie Fragen oder Probleme mit der Zahlung?
+              <a href="/contact" class="text-primary hover:text-primary-focus underline"
+                >Kontaktieren Sie uns</a
+              >
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>

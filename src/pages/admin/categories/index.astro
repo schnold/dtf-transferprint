@@ -81,15 +81,15 @@ try {
       </div>
       <div class="stat">
         <div class="stat-title">Aktiv</div>
-        <div class="stat-value text-success">{categories.filter(c => c.isActive).length}</div>
+        <div class="stat-value" style="color: var(--color-metrics-text);">{categories.filter(c => c.isActive).length}</div>
       </div>
       <div class="stat">
         <div class="stat-title">Inaktiv</div>
-        <div class="stat-value text-error">{categories.filter(c => !c.isActive).length}</div>
+        <div class="stat-value" style="color: #EF4444;">{categories.filter(c => !c.isActive).length}</div>
       </div>
       <div class="stat">
         <div class="stat-title">Hauptkategorien</div>
-        <div class="stat-value text-info">{categories.filter(c => !c.parentId).length}</div>
+        <div class="stat-value" style="color: var(--color-yellow-accent-dark);">{categories.filter(c => !c.parentId).length}</div>
       </div>
     </div>
 
@@ -142,7 +142,7 @@ try {
                   </td>
                   <td>
                     {parseInt(category.product_count) > 0 ? (
-                      <span class="badge badge-success">{category.product_count} Produkte</span>
+                      <span class="badge" style="background-color: rgba(74, 93, 58, 0.2); color: var(--color-metrics-text); border-color: var(--color-metrics-text);">{category.product_count} Produkte</span>
                     ) : (
                       <span class="badge badge-ghost">Keine Produkte</span>
                     )}
@@ -152,7 +152,7 @@ try {
                   </td>
                   <td>
                     {category.isActive ? (
-                      <span class="badge badge-success">Aktiv</span>
+                      <span class="badge" style="background-color: rgba(74, 93, 58, 0.2); color: var(--color-metrics-text); border-color: var(--color-metrics-text);">Aktiv</span>
                     ) : (
                       <span class="badge badge-error">Inaktiv</span>
                     )}

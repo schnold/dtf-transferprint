@@ -12,6 +12,7 @@ const description = 'Überprüfen Sie Ihren Warenkorb und schließen Sie Ihre Be
 let cartItems: any[] = [];
 let subtotal = 0;
 let totalSavings = 0;
+let userDiscountPercent = 0;
 
 if (user) {
 	const response = await fetch(`${Astro.url.origin}/api/cart/get`, {
@@ -27,6 +28,18 @@ if (user) {
 			subtotal = result.data.subtotal || 0;
 			totalSavings = cartItems.reduce((sum, item) => sum + (item.currentSavings || 0), 0);
 		}
+	}
+
+	// Fetch user discount percentage
+	const client = await pool.connect();
+	try {
+		const userResult = await client.query(
+			'SELECT "discountPercent" FROM "user" WHERE id = $1',
+			[user.id]
+		);
+		userDiscountPercent = parseFloat(userResult.rows[0]?.discountPercent || 0);
+	} finally {
+		client.release();
 	}
 }
 
@@ -217,6 +230,18 @@ const formatPrice = (price: number) => {
 												<div class="flex justify-between items-center text-sm bg-success/5 -mx-6 px-6 py-3 rounded">
 													<span class="text-success font-medium">Sie sparen</span>
 													<span class="text-success font-semibold" id="total-savings">{formatPrice(totalSavings)}</span>
+												</div>
+											)}
+
+											{userDiscountPercent > 0 && (
+												<div class="flex justify-between items-center text-sm bg-primary/5 -mx-6 px-6 py-3 rounded">
+													<div class="flex items-center gap-2">
+														<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+															<path stroke-linecap="round" stroke-linejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+														</svg>
+														<span class="text-primary font-medium">Ihr Rabatt ({userDiscountPercent}%)</span>
+													</div>
+													<span class="text-primary font-semibold">-{formatPrice(subtotal * (userDiscountPercent / 100))}</span>
 												</div>
 											)}
 										</div>

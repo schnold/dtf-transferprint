@@ -1,0 +1,268 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import { pool } from '../lib/db';
+
+const user = Astro.locals.user;
+
+if (!user) {
+  return Astro.redirect('/');
+}
+
+const title = 'Meine Bestellungen - DTF Transfer Print';
+const description = 'Übersicht Ihrer Bestellungen';
+
+// Fetch user orders
+const client = await pool.connect();
+let orders: any[] = [];
+
+try {
+  const ordersResult = await client.query(
+    `
+    SELECT
+      o.*,
+      COUNT(oi.id) as "itemCount"
+    FROM orders o
+    LEFT JOIN "orderItems" oi ON o.id = oi."orderId"
+    WHERE o."userId" = $1
+    GROUP BY o.id
+    ORDER BY o."createdAt" DESC
+  `,
+    [user.id]
+  );
+
+  orders = ordersResult.rows.map((row) => ({
+    ...row,
+    subtotal: parseFloat(row.subtotal),
+    discountAmount: parseFloat(row.discountAmount),
+    shippingCost: parseFloat(row.shippingCost),
+    taxAmount: parseFloat(row.taxAmount),
+    total: parseFloat(row.total),
+    itemCount: parseInt(row.itemCount),
+  }));
+} finally {
+  client.release();
+}
+
+const formatPrice = (price: number) => {
+  return new Intl.NumberFormat('de-DE', {
+    style: 'currency',
+    currency: 'EUR',
+  }).format(price);
+};
+
+const formatDate = (date: Date) => {
+  return new Intl.DateTimeFormat('de-DE', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+  }).format(new Date(date));
+};
+
+const getStatusBadge = (status: string) => {
+  switch (status) {
+    case 'pending':
+      return 'badge-warning';
+    case 'processing':
+      return 'badge-info';
+    case 'shipped':
+      return 'badge-primary';
+    case 'delivered':
+      return 'badge-success';
+    case 'cancelled':
+      return 'badge-error';
+    default:
+      return 'badge-ghost';
+  }
+};
+
+const getStatusLabel = (status: string) => {
+  switch (status) {
+    case 'pending':
+      return 'In Bearbeitung';
+    case 'processing':
+      return 'Wird bearbeitet';
+    case 'shipped':
+      return 'Versandt';
+    case 'delivered':
+      return 'Geliefert';
+    case 'cancelled':
+      return 'Storniert';
+    default:
+      return status;
+  }
+};
+
+const getPaymentStatusBadge = (status: string) => {
+  switch (status) {
+    case 'paid':
+      return 'badge-success';
+    case 'pending':
+      return 'badge-warning';
+    case 'failed':
+      return 'badge-error';
+    case 'refunded':
+      return 'badge-info';
+    default:
+      return 'badge-ghost';
+  }
+};
+
+const getPaymentStatusLabel = (status: string) => {
+  switch (status) {
+    case 'paid':
+      return 'Bezahlt';
+    case 'pending':
+      return 'Ausstehend';
+    case 'failed':
+      return 'Fehlgeschlagen';
+    case 'refunded':
+      return 'Rückerstattet';
+    default:
+      return status;
+  }
+};
+---
+
+<Layout title={title} description={description}>
+  <Navbar />
+
+  <div class="min-h-screen bg-gradient-to-br from-primary/10 via-base-100 to-secondary/10">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 max-w-6xl">
+      {/* Header */}
+      <div class="flex items-baseline justify-between border-b border-base-300/50 pb-6 mb-8">
+        <div>
+          <h1 class="text-3xl font-semibold text-neutral mb-1">Meine Bestellungen</h1>
+          <p class="text-sm text-neutral/60">
+            {orders.length} {orders.length === 1 ? 'Bestellung' : 'Bestellungen'}
+          </p>
+        </div>
+        <a href="/products" class="text-sm text-primary hover:text-primary-focus transition-colors">
+          Weiter einkaufen
+        </a>
+      </div>
+
+      {
+        orders.length === 0 ? (
+          <div class="min-h-[60vh] flex items-center justify-center">
+            <div class="text-center max-w-md space-y-4">
+              <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-base-200 mb-2">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-8 w-8 text-neutral/40"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                  />
+                </svg>
+              </div>
+              <h2 class="text-2xl font-semibold text-neutral">Keine Bestellungen gefunden</h2>
+              <p class="text-neutral/60">Sie haben noch keine Bestellungen aufgegeben.</p>
+              <a href="/products" class="btn btn-primary mt-4">
+                Jetzt einkaufen
+              </a>
+            </div>
+          </div>
+        ) : (
+          <div class="space-y-4">
+            {orders.map((order) => (
+              <div class="bg-base-100 border border-base-300/50 rounded-lg hover:border-base-300 transition-all">
+                <div class="p-6">
+                  <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
+                    <div>
+                      <div class="flex items-center gap-3 mb-2">
+                        <h3 class="font-semibold text-lg">
+                          Bestellung #{order.orderNumber}
+                        </h3>
+                        <span class={`badge ${getStatusBadge(order.status)}`}>
+                          {getStatusLabel(order.status)}
+                        </span>
+                        <span class={`badge ${getPaymentStatusBadge(order.paymentStatus)}`}>
+                          {getPaymentStatusLabel(order.paymentStatus)}
+                        </span>
+                      </div>
+                      <p class="text-sm text-neutral/60">
+                        Bestellt am {formatDate(order.createdAt)}
+                      </p>
+                    </div>
+                    <div class="flex items-center gap-4">
+                      <div class="text-right">
+                        <p class="text-2xl font-semibold text-primary">{formatPrice(order.total)}</p>
+                        <p class="text-xs text-neutral/60">{order.itemCount} Artikel</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm mb-4">
+                    <div>
+                      <p class="text-neutral/60 mb-1">Zwischensumme</p>
+                      <p class="font-medium">{formatPrice(order.subtotal)}</p>
+                    </div>
+                    {order.discountAmount > 0 && (
+                      <div>
+                        <p class="text-neutral/60 mb-1">Rabatt</p>
+                        <p class="font-medium text-success">-{formatPrice(order.discountAmount)}</p>
+                        {order.discountCode && (
+                          <p class="text-xs text-neutral/60">Code: {order.discountCode}</p>
+                        )}
+                      </div>
+                    )}
+                    <div>
+                      <p class="text-neutral/60 mb-1">Versand</p>
+                      <p class="font-medium">{formatPrice(order.shippingCost)}</p>
+                    </div>
+                  </div>
+
+                  {order.paypalCaptureId && (
+                    <div class="mb-4 p-3 bg-base-200 rounded text-xs">
+                      <p class="text-neutral/60">PayPal Transaktions-ID:</p>
+                      <p class="font-mono">{order.paypalCaptureId}</p>
+                    </div>
+                  )}
+
+                  {order.trackingNumber && (
+                    <div class="mb-4 p-3 bg-info/10 rounded text-sm">
+                      <p class="text-neutral/60 mb-1">Sendungsverfolgung:</p>
+                      <div class="flex items-center gap-2">
+                        <p class="font-mono font-medium">{order.trackingNumber}</p>
+                        {order.trackingUrl && (
+                          <a
+                            href={order.trackingUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="text-primary hover:text-primary-focus"
+                          >
+                            Verfolgen
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  <div class="flex justify-end gap-2">
+                    <a href={`/order/${order.orderNumber}`} class="btn btn-sm btn-ghost">
+                      Details ansehen
+                    </a>
+                    {order.paymentStatus === 'paid' && order.status !== 'cancelled' && (
+                      <button class="btn btn-sm btn-ghost" disabled>
+                        Support kontaktieren
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )
+      }
+    </div>
+  </div>
+</Layout>

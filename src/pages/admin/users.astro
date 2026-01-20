@@ -27,22 +27,22 @@ users.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).get
   <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
     <div class="stat bg-gradient-to-br from-base-100 to-base-200/30 border border-base-300/30 rounded-xl shadow-md hover:shadow-lg transition-shadow">
       <div class="stat-title">Gesamt</div>
-      <div class="stat-value text-primary">{users.length}</div>
+      <div class="stat-value" style="color: var(--color-metrics-text);">{users.length}</div>
       <div class="stat-desc">Registrierte Benutzer</div>
     </div>
     <div class="stat bg-gradient-to-br from-base-100 to-base-200/30 border border-base-300/30 rounded-xl shadow-md hover:shadow-lg transition-shadow">
       <div class="stat-title">Verifiziert</div>
-      <div class="stat-value text-success">{users.filter(u => u.emailVerified).length}</div>
+      <div class="stat-value" style="color: var(--color-metrics-text);">{users.filter(u => u.emailVerified).length}</div>
       <div class="stat-desc">E-Mail bestätigt</div>
     </div>
     <div class="stat bg-gradient-to-br from-base-100 to-base-200/30 border border-base-300/30 rounded-xl shadow-md hover:shadow-lg transition-shadow">
       <div class="stat-title">Admins</div>
-      <div class="stat-value text-warning">{users.filter(u => u.isAdmin).length}</div>
+      <div class="stat-value" style="color: var(--color-yellow-accent-dark);">{users.filter(u => u.isAdmin).length}</div>
       <div class="stat-desc">Mit Admin-Rechten</div>
     </div>
     <div class="stat bg-gradient-to-br from-base-100 to-base-200/30 border border-base-300/30 rounded-xl shadow-md hover:shadow-lg transition-shadow">
       <div class="stat-title">Gesperrt</div>
-      <div class="stat-value text-error">{users.filter(u => u.accountLocked).length}</div>
+      <div class="stat-value" style="color: #EF4444;">{users.filter(u => u.accountLocked).length}</div>
       <div class="stat-desc">Konto gesperrt</div>
     </div>
   </div>
