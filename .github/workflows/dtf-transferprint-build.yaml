@@ -1,0 +1,70 @@
+# To better understand this file read this:
+# https://docs.ionos.space/docs/github-actions-customization/
+
+name: "Deploy Now: Execute Build"
+
+on:
+  workflow_call:
+    inputs:
+      site-url:
+        required: true
+        type: string
+      branch-id:
+        required: true
+        type: string
+
+env:
+  DEPLOYMENT_FOLDER: dist
+
+jobs:
+# Please do not rename this job
+  build-project:
+    name: build dtf-transferprint
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: 'recursive'
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: v22.x
+
+      - name: Build Node assets
+        env:
+          BETTER_AUTH_SECRET: yPLFG+be2N4NQQ9kpMXtLvZ/UXpFwCOJ6VaVlAVIpMQ=
+          BETTER_AUTH_URL: https://www.selini-shirt.de
+          BLOCK_PASSWORD: admin123
+          CI: true
+          NEON_API: napi_wdnn9l02sjis57yrf44e9e2ej8hbhp3vstayelbntkbm2636bex2hdll8x09bhl9
+          NEON_DATABASE: postgresql://neondb_owner:npg_9CZ8MjGaUtHg@ep-wandering-wind-ag97u7kw-pooler.c-2.eu-central-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
+          PAYPAL_CLIENT_ID: AXOfxlRMH2M1tn56WF9kuhVLN4svLu7VKGeRUjGdRr5Hgqa5OQ_Z4C7kygmckHjHMqTdnI2AOPP6mz9m
+          PAYPAL_CLIENT_SECRET: EGKh25hvbrMPpl9eikbcHjzgyX26x75AIDtWF1VLv1pcIksZfCHTyj6K0cuJ2yC8Xo1uhd5DrElMz16e
+          PAYPAL_MODE: sandbox
+          PUBLIC_BETTER_AUTH_URL: https://www.selini-shirt.de
+          R2_ACCESS_KEY: ade42bd7d9112476c2d1a9b6fa162b6a
+          R2_ACCESS_TOKEN: 2RtL0iEVKM4BUMlhGYF5WRW2faKU-LBqAjJz_IEP
+          R2_API_KEY: https://88231b4cb151e6b2718a7f2c41113eb2.eu.r2.cloudflarestorage.com/dtf
+          R2_SECRET_KEY: 907ef26a4ca489d537463c59f2852ecc97b307cdf46bd3aa044f144e7cfdf627
+          RESEND_API_KEY: re_Tp8YXcqK_7Ap1jan5hjBeJGW4iACMPvKL
+          SITE_URL: ${{ inputs.site-url }}
+          UPSTASH_REDIS_REST_TOKEN: ASBUAAImcDFlYjk2YTYwZjJjMDQ0Y2ZkODY0YjNiMzFjYzc5ZDg5OXAxODI3Ng
+          UPSTASH_REDIS_REST_URL: https://finer-terrapin-8276.upstash.io
+        run: |
+          npm ci
+          npm run build
+
+# Please do not touch the following action
+      - name: Store deployment content
+        uses: ionos-deploy-now/artifact-action@v1
+        with:
+          api-key: ${{ secrets.IONOS_API_KEY }}
+          service-host: api-eu.ionos.space
+          project-id: 22104bd0-3d12-4829-baf3-e37126f2aa4a
+          branch-id: ${{ inputs.branch-id }}
+          version: ${{ github.sha }}
+          folder: ${{ env.DEPLOYMENT_FOLDER }}
+          config-file: .deploy-now/dtf-transferprint/config.yaml
+          action: upload
