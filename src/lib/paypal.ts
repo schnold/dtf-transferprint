@@ -37,8 +37,9 @@ interface OrderBreakdown {
 export async function createPayPalOrder(breakdown: OrderBreakdown) {
   const client = getPayPalClient();
 
-  // Calculate item total (subtotal - discounts)
-  const itemTotal = breakdown.subtotal - breakdown.userDiscountAmount - breakdown.campaignDiscountAmount;
+  // PayPal expects: item_total + shipping + tax_total - discount = total
+  // item_total should be the original subtotal (before discounts)
+  const totalDiscount = breakdown.userDiscountAmount + breakdown.campaignDiscountAmount;
 
   const request = new paypal.orders.OrdersCreateRequest();
   request.prefer('return=representation');
@@ -52,7 +53,7 @@ export async function createPayPalOrder(breakdown: OrderBreakdown) {
           breakdown: {
             item_total: {
               currency_code: 'EUR',
-              value: itemTotal.toFixed(2),
+              value: breakdown.subtotal.toFixed(2),
             },
             shipping: {
               currency_code: 'EUR',
@@ -64,7 +65,7 @@ export async function createPayPalOrder(breakdown: OrderBreakdown) {
             },
             discount: {
               currency_code: 'EUR',
-              value: (breakdown.userDiscountAmount + breakdown.campaignDiscountAmount).toFixed(2),
+              value: totalDiscount.toFixed(2),
             },
           },
         },

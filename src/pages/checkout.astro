@@ -497,31 +497,126 @@ const formatPrice = (price: number) => {
     </form>
   </dialog>
 
-  <script define:vars={{ userDiscountPercent, subtotal }}>
+  <script define:vars={{ userDiscountPercent, subtotal, selectedShippingId }}>
     let appliedDiscountCode = null;
+    let currentShippingCost = 0;
+    let currentShippingProfile = null;
+
+    // Escape HTML to prevent XSS
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // Calculate shipping cost based on profile and subtotal
+    function calculateShippingCost(profile, subtotalAmount) {
+      if (!profile) return 0;
+
+      const userDiscount = subtotalAmount * (userDiscountPercent / 100);
+      const subtotalAfterDiscount = subtotalAmount - userDiscount;
+
+      // Parse numeric values safely
+      const basePrice = parseFloat(profile.basePrice) || 0;
+      const freeShippingThreshold = profile.freeShippingThreshold ? parseFloat(profile.freeShippingThreshold) : null;
+
+      if (freeShippingThreshold && subtotalAfterDiscount >= freeShippingThreshold) {
+        return 0;
+      }
+      return basePrice;
+    }
 
     // Calculate and update summary
     function updateSummary() {
       const userDiscount = subtotal * (userDiscountPercent / 100);
       const subtotalAfterUserDiscount = subtotal - userDiscount;
 
-      // For now, just show initial calculation
       // Campaign discount will be validated server-side
-      const shipping = 0; // Will be calculated server-side
-      const taxableAmount = subtotalAfterUserDiscount + shipping;
+      const taxableAmount = subtotalAfterUserDiscount + currentShippingCost;
       const tax = taxableAmount * 0.19;
       const total = taxableAmount + tax;
 
-      document.getElementById('summary-tax').textContent = formatPrice(tax);
-      document.getElementById('summary-total').textContent = formatPrice(total);
+      const shippingEl = document.getElementById('summary-shipping');
+      if (shippingEl) {
+        if (currentShippingCost === 0 && currentShippingProfile?.freeShippingThreshold) {
+          shippingEl.innerHTML = '<span class="text-success font-semibold">Kostenlos</span>';
+        } else {
+          shippingEl.textContent = formatPrice(currentShippingCost);
+        }
+      }
+
+      const taxEl = document.getElementById('summary-tax');
+      const totalEl = document.getElementById('summary-total');
+
+      if (taxEl) taxEl.textContent = formatPrice(tax);
+      if (totalEl) totalEl.textContent = formatPrice(total);
     }
 
     function formatPrice(price) {
+      // Ensure price is a valid number
+      const numPrice = parseFloat(price) || 0;
       return new Intl.NumberFormat('de-DE', {
         style: 'currency',
         currency: 'EUR',
-      }).format(price);
+      }).format(numPrice);
     }
+
+    // Load selected shipping profile and calculate cost
+    async function loadShippingCost() {
+      try {
+        const response = await fetch('/api/cart/shipping/select');
+        const result = await response.json();
+
+        if (result.success && result.data) {
+          currentShippingProfile = result.data;
+          currentShippingCost = calculateShippingCost(currentShippingProfile, subtotal);
+          updateSummary();
+        }
+      } catch (error) {
+        console.error('Error loading shipping cost:', error);
+      }
+    }
+
+    // Handle shipping method change
+    async function handleShippingChange(shippingId) {
+      // Validate UUID format
+      const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+      if (!uuidRegex.test(shippingId)) {
+        console.error('Invalid shipping profile ID format');
+        return;
+      }
+
+      try {
+        // Save selection to database
+        const response = await fetch('/api/cart/shipping/select', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ shippingProfileId: shippingId }),
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          // Reload shipping cost
+          await loadShippingCost();
+        } else {
+          console.error('Failed to update shipping selection:', result.error?.message);
+        }
+      } catch (error) {
+        console.error('Error updating shipping selection:', error);
+      }
+    }
+
+    // Initialize shipping cost on page load
+    loadShippingCost();
+
+    // Add event listeners to shipping radio buttons
+    document.querySelectorAll('input[name="shipping"]').forEach((radio) => {
+      radio.addEventListener('change', (e) => {
+        const shippingId = e.target.value;
+        handleShippingChange(shippingId);
+      });
+    });
 
     // Handle address form submission
     document.getElementById('address-form')?.addEventListener('submit', async (e) => {
@@ -579,6 +674,20 @@ const formatPrice = (price: number) => {
         return;
       }
 
+      // Validate code format (alphanumeric, hyphens, underscores only)
+      if (!/^[a-zA-Z0-9_-]+$/.test(code)) {
+        messageEl.textContent = 'Ungültiges Format. Nur Buchstaben, Zahlen, - und _ erlaubt.';
+        messageEl.className = 'mt-2 text-sm text-error';
+        return;
+      }
+
+      // Limit code length to prevent abuse
+      if (code.length > 50) {
+        messageEl.textContent = 'Rabattcode ist zu lang.';
+        messageEl.className = 'mt-2 text-sm text-error';
+        return;
+      }
+
       appliedDiscountCode = code;
       messageEl.textContent = 'Code wird beim Checkout validiert.';
       messageEl.className = 'mt-2 text-sm text-info';
@@ -598,6 +707,14 @@ const formatPrice = (price: number) => {
       }
 
       const addressId = selectedAddressInput.value;
+
+      // Validate UUID format
+      const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+      if (!uuidRegex.test(addressId)) {
+        errorEl.textContent = 'Ungültige Adress-ID.';
+        errorEl.classList.remove('hidden');
+        throw new Error('Invalid address ID');
+      }
 
       loadingEl.classList.remove('hidden');
       errorEl.classList.add('hidden');

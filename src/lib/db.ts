@@ -1,12 +1,57 @@
 import { Pool } from "pg";
 import "dotenv/config";
 
+// Neon PostgreSQL connection pool with secure SSL configuration
 const pool = new Pool({
   connectionString: process.env.NEON_DATABASE,
-  ssl: {
-    rejectUnauthorized: false,
+  // Neon requires SSL, and we trust their certificates
+  ssl: process.env.NODE_ENV === 'production' ? true : {
+    rejectUnauthorized: false, // Only disabled in development for easier local testing
   },
 });
+
+// Allowlist of trusted shipping carrier domains for tracking URLs
+const TRUSTED_TRACKING_DOMAINS = [
+  'dhl.de',
+  'dhl.com',
+  'deutschepost.de',
+  'dpd.de',
+  'dpd.com',
+  'hermes.de',
+  'hermes-europe.de',
+  'gls-group.eu',
+  'ups.com',
+  'fedex.com',
+  'usps.com',
+  '17track.net', // Popular tracking aggregator
+  'track.global', // Another tracking aggregator
+];
+
+/**
+ * Validates that a tracking URL is from a trusted shipping carrier
+ * Prevents open redirect and phishing attacks
+ */
+function validateTrackingUrl(url: string): boolean {
+  try {
+    const parsedUrl = new URL(url);
+
+    // Must be HTTPS
+    if (parsedUrl.protocol !== 'https:') {
+      return false;
+    }
+
+    // Check if hostname matches any trusted domain (including subdomains)
+    const hostname = parsedUrl.hostname.toLowerCase();
+    const isAllowed = TRUSTED_TRACKING_DOMAINS.some(domain =>
+      hostname === domain || hostname.endsWith('.' + domain)
+    );
+
+    return isAllowed;
+  } catch {
+    // Invalid URL format
+    return false;
+  }
+}
 
 export interface AnalyticsData {
   totalUsers: number;
@@ -670,6 +715,7 @@ export async function createOrder(
     let shippingCost = options?.shippingCost ?? 0;
     let taxAmount = options?.taxAmount ?? 0;
     let total = options?.total ?? 0;
+    let discountId: string | null = null;
 
     if (!options?.subtotal) {
       // Calculate subtotal if not provided
@@ -692,7 +738,6 @@ export async function createOrder(
       const subtotalAfterUserDiscount = subtotal - userDiscountAmount;
 
       // Apply campaign discount if provided
-      let discountId = null;
       if (options?.discountCode) {
         const cartItems = await getCart(userId);
         const validation = await validateDiscount(options.discountCode, userId, cartItems);
@@ -739,6 +784,17 @@ export async function createOrder(
       const taxableAmount = subtotalAfterUserDiscount - campaignDiscountAmount + shippingCost;
       taxAmount = taxableAmount * 0.19;
       total = taxableAmount + taxAmount;
+    } else {
+      // When using pre-calculated amounts (PayPal flow), still need to look up discount ID
+      if (options?.discountCode && !discountId) {
+        const discountResult = await client.query(
+          'SELECT id FROM discounts WHERE code = $1',
+          [options.discountCode]
+        );
+        if (discountResult.rows.length > 0) {
+          discountId = discountResult.rows[0].id;
+        }
+      }
     }
 
     const totalDiscountAmount = userDiscountAmount + campaignDiscountAmount;
@@ -945,6 +1001,257 @@ export async function updateOrderStatus(
       INSERT INTO "orderStatusHistory" (id, "orderId", status, note, "createdByUserId")
       VALUES (gen_random_uuid()::text, $1, $2, $3, $4)
     `, [orderId, status, note, updatedByUserId]);
+
+    await client.query('COMMIT');
+  } catch (error) {
+    await client.query('ROLLBACK');
+    throw error;
+  } finally {
+    client.release();
+  }
+}
+
+// Admin Order Management Functions
+export async function getAllOrders(filters?: {
+  status?: string;
+  fulfillmentStatus?: string;
+  paymentStatus?: string;
+  limit?: number;
+  offset?: number;
+}): Promise<{ orders: any[], totalCount: number }> {
+  const client = await pool.connect();
+  try {
+    const whereConditions: string[] = [];
+    const params: any[] = [];
+    let paramIndex = 1;
+
+    if (filters?.status && filters.status !== 'all') {
+      whereConditions.push(`o.status = $${paramIndex++}`);
+      params.push(filters.status);
+    }
+
+    if (filters?.fulfillmentStatus && filters.fulfillmentStatus !== 'all') {
+      whereConditions.push(`o."fulfillmentStatus" = $${paramIndex++}`);
+      params.push(filters.fulfillmentStatus);
+    }
+
+    if (filters?.paymentStatus && filters.paymentStatus !== 'all') {
+      whereConditions.push(`o."paymentStatus" = $${paramIndex++}`);
+      params.push(filters.paymentStatus);
+    }
+
+    const whereClause = whereConditions.length > 0
+      ? `WHERE ${whereConditions.join(' AND ')}`
+      : '';
+
+    // Get total count
+    const countResult = await client.query(`
+      SELECT COUNT(*) as total
+      FROM orders o
+      ${whereClause}
+    `, params);
+    const totalCount = parseInt(countResult.rows[0].total);
+
+    // Get orders with user info
+    const limit = filters?.limit || 50;
+    const offset = filters?.offset || 0;
+
+    params.push(limit);
+    params.push(offset);
+
+    const result = await client.query(`
+      SELECT
+        o.*,
+        u.name as "userName",
+        u.email as "userEmail",
+        COUNT(oi.id) as "itemCount",
+        CONCAT(
+          sa."firstName", ' ', sa."lastName", ', ',
+          sa."addressLine1", ', ',
+          sa."postalCode", ' ', sa.city
+        ) as "shippingAddressFormatted"
+      FROM orders o
+      LEFT JOIN "user" u ON o."userId" = u.id
+      LEFT JOIN "orderItems" oi ON o.id = oi."orderId"
+      LEFT JOIN "userAddresses" sa ON o."shippingAddressId" = sa.id
+      ${whereClause}
+      GROUP BY o.id, u.id, sa.id
+      ORDER BY o."createdAt" DESC
+      LIMIT $${paramIndex++} OFFSET $${paramIndex}
+    `, params);
+
+    const orders = result.rows.map(row => ({
+      ...row,
+      subtotal: parseFloat(row.subtotal),
+      discountAmount: parseFloat(row.discountAmount),
+      shippingCost: parseFloat(row.shippingCost),
+      taxAmount: parseFloat(row.taxAmount),
+      total: parseFloat(row.total),
+      itemCount: parseInt(row.itemCount) || 0,
+    }));
+
+    return { orders, totalCount };
+  } finally {
+    client.release();
+  }
+}
+
+export async function getOrderWithDetails(orderId: string): Promise<{
+  order: any;
+  user: any;
+  items: any[];
+  statusHistory: any[];
+  shippingAddress: any;
+  billingAddress: any;
+} | null> {
+  const client = await pool.connect();
+  try {
+    // Get order
+    const orderResult = await client.query(`
+      SELECT * FROM orders WHERE id = $1 OR "orderNumber" = $1
+    `, [orderId]);
+
+    if (orderResult.rows.length === 0) return null;
+    const order = orderResult.rows[0];
+
+    // Get user
+    const userResult = await client.query(`
+      SELECT id, name, email, "isAdmin", "discountPercent"
+      FROM "user"
+      WHERE id = $1
+    `, [order.userId]);
+    const user = userResult.rows[0] || null;
+
+    // Get order items
+    const itemsResult = await client.query(`
+      SELECT * FROM "orderItems" WHERE "orderId" = $1
+    `, [order.id]);
+
+    // Get status history
+    const historyResult = await client.query(`
+      SELECT
+        osh.*,
+        u.name as "createdByUserName"
+      FROM "orderStatusHistory" osh
+      LEFT JOIN "user" u ON osh."createdByUserId" = u.id
+      WHERE osh."orderId" = $1
+      ORDER BY osh."createdAt" DESC
+    `, [order.id]);
+
+    // Get addresses
+    const shippingAddressResult = await client.query(`
+      SELECT * FROM "userAddresses" WHERE id = $1
+    `, [order.shippingAddressId]);
+
+    const billingAddressResult = await client.query(`
+      SELECT * FROM "userAddresses" WHERE id = $1
+    `, [order.billingAddressId]);
+
+    return {
+      order: {
+        ...order,
+        subtotal: parseFloat(order.subtotal),
+        discountAmount: parseFloat(order.discountAmount),
+        shippingCost: parseFloat(order.shippingCost),
+        taxAmount: parseFloat(order.taxAmount),
+        total: parseFloat(order.total),
+      },
+      user,
+      items: itemsResult.rows.map(item => ({
+        ...item,
+        unitPrice: parseFloat(item.unitPrice),
+        totalPrice: parseFloat(item.totalPrice),
+      })),
+      statusHistory: historyResult.rows,
+      shippingAddress: shippingAddressResult.rows[0] || null,
+      billingAddress: billingAddressResult.rows[0] || null,
+    };
+  } finally {
+    client.release();
+  }
+}
+
+export async function updateOrderStatusWithTracking(
+  orderId: string,
+  status: string,
+  options?: {
+    fulfillmentStatus?: string;
+    trackingNumber?: string;
+    trackingUrl?: string;
+    note?: string;
+    updatedByUserId?: string;
+    sendEmail?: boolean;
+  }
+): Promise<void> {
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN');
+
+    // Validate tracking info for shipped status
+    if (status === 'shipped') {
+      if (!options?.trackingNumber || !options?.trackingUrl) {
+        throw new Error('Tracking number and URL are required for shipped status');
+      }
+      // Validate tracking URL is from a trusted carrier (prevents phishing)
+      if (!validateTrackingUrl(options.trackingUrl)) {
+        throw new Error('Tracking URL must be HTTPS and from a trusted shipping carrier');
+      }
+    }
+
+    const updateFields: string[] = ['"updatedAt" = CURRENT_TIMESTAMP'];
+    const params: any[] = [orderId];
+    let paramIndex = 2;
+
+    // Update status if provided
+    if (status) {
+      updateFields.push(`status = $${paramIndex++}`);
+      params.push(status);
+
+      // Set timestamp based on status
+      if (status === 'shipped') {
+        updateFields.push(`"shippedAt" = $${paramIndex++}`);
+        params.push(new Date());
+      } else if (status === 'delivered') {
+        updateFields.push(`"deliveredAt" = $${paramIndex++}`);
+        params.push(new Date());
+      } else if (status === 'cancelled') {
+        updateFields.push(`"cancelledAt" = $${paramIndex++}`);
+        params.push(new Date());
+      }
+    }
+
+    // Update fulfillment status if provided
+    if (options?.fulfillmentStatus) {
+      updateFields.push(`"fulfillmentStatus" = $${paramIndex++}`);
+      params.push(options.fulfillmentStatus);
+    }
+
+    // Update tracking info if provided
+    if (options?.trackingNumber) {
+      updateFields.push(`"trackingNumber" = $${paramIndex++}`);
+      params.push(options.trackingNumber);
+    }
+
+    if (options?.trackingUrl) {
+      updateFields.push(`"trackingUrl" = $${paramIndex++}`);
+      params.push(options.trackingUrl);
+    }
+
+    // Update order
+    await client.query(`
+      UPDATE orders
+      SET ${updateFields.join(', ')}
+      WHERE id = $1
+    `, params);
+
+    // Insert status history
+    const notifiedCustomer = options?.sendEmail !== false;
+    await client.query(`
+      INSERT INTO "orderStatusHistory" (
+        id, "orderId", status, note, "notifiedCustomer", "createdByUserId"
+      )
+      VALUES (gen_random_uuid()::text, $1, $2, $3, $4, $5)
+    `, [orderId, status, options?.note || null, notifiedCustomer, options?.updatedByUserId || null]);
 
     await client.query('COMMIT');
   } catch (error) {

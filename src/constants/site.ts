@@ -16,7 +16,7 @@ export const SITE_CONFIG = {
 	
 	// Contact Information
 	contact: {
-		email: "info@dtf-transferprint.de",
+		email: "info@selini-shirt.de",
 		phone: "+49123456789",
 	},
 	

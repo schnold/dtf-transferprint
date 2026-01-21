@@ -9,10 +9,12 @@ import {
   generateWelcomeEmail,
 } from "./email-templates";
 
+// Neon PostgreSQL connection pool with secure SSL configuration
 const pool = new Pool({
   connectionString: process.env.NEON_DATABASE,
-  ssl: {
-    rejectUnauthorized: false,
+  // Neon requires SSL, and we trust their certificates
+  ssl: process.env.NODE_ENV === 'production' ? true : {
+    rejectUnauthorized: false, // Only disabled in development for easier local testing
   },
 });
 

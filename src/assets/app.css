@@ -617,6 +617,94 @@
     background-color: var(--color-accent-dark) !important;
   }
 
+  /* Checkout page radio buttons - unified darker styling for better contrast */
+  /* Targets all radio buttons on the checkout page (address and shipping) */
+  #address-list .radio-primary:checked,
+  #address-list .radio:checked,
+  input[type="radio"][name="address"].radio-primary:checked,
+  input[type="radio"][name="address"].radio:checked,
+  input[type="radio"][name="shipping"].radio-primary:checked,
+  input[type="radio"][name="shipping"].radio:checked {
+    border-color: var(--color-secondary) !important;
+    background-color: var(--color-secondary) !important;
+  }
+
+  #address-list .radio-primary:checked::before,
+  #address-list .radio:checked::before,
+  input[type="radio"][name="address"].radio-primary:checked::before,
+  input[type="radio"][name="address"].radio:checked::before,
+  input[type="radio"][name="shipping"].radio-primary:checked::before,
+  input[type="radio"][name="shipping"].radio:checked::before {
+    background-color: #4a4a4a !important;
+  }
+
+  #address-list .radio-primary:checked:hover,
+  #address-list .radio:checked:hover,
+  input[type="radio"][name="address"].radio-primary:checked:hover,
+  input[type="radio"][name="address"].radio:checked:hover,
+  input[type="radio"][name="shipping"].radio-primary:checked:hover,
+  input[type="radio"][name="shipping"].radio:checked:hover {
+    border-color: var(--color-secondary-dark) !important;
+    background-color: var(--color-secondary-dark) !important;
+  }
+
+  #address-list .radio-primary:checked:hover::before,
+  #address-list .radio:checked:hover::before,
+  input[type="radio"][name="address"].radio-primary:checked:hover::before,
+  input[type="radio"][name="address"].radio:checked:hover::before,
+  input[type="radio"][name="shipping"].radio-primary:checked:hover::before,
+  input[type="radio"][name="shipping"].radio:checked:hover::before {
+    background-color: #404040 !important;
+  }
+
+  /* Shipping profile radio buttons - dark gray fill when selected */
+  #shipping-profiles-list .radio-primary:checked,
+  #shipping-profiles-list .radio:checked {
+    border-color: var(--color-secondary) !important;
+    background-color: var(--color-secondary) !important;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+  }
+
+  #shipping-profiles-list .radio-primary:checked::before,
+  #shipping-profiles-list .radio:checked::before {
+    background-color: var(--color-secondary) !important;
+    transition: background-color 0.3s ease;
+  }
+
+  #shipping-profiles-list .radio-primary:checked:hover,
+  #shipping-profiles-list .radio:checked:hover {
+    border-color: var(--color-secondary-dark) !important;
+    background-color: var(--color-secondary-dark) !important;
+  }
+
+  #shipping-profiles-list .radio-primary:checked:hover::before,
+  #shipping-profiles-list .radio:checked:hover::before {
+    background-color: var(--color-secondary-dark) !important;
+  }
+
+  /* Green animation on click/active state */
+  #shipping-profiles-list .radio:active,
+  #shipping-profiles-list .radio-primary:active {
+    border-color: var(--color-accent) !important;
+    background-color: var(--color-accent) !important;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+  }
+
+  #shipping-profiles-list .radio:active::before,
+  #shipping-profiles-list .radio-primary:active::before {
+    background-color: white !important;
+    transition: background-color 0.15s ease;
+  }
+
+  /* Smooth transition from green to dark gray after click */
+  #shipping-profiles-list .radio {
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+  }
+
+  #shipping-profiles-list .radio::before {
+    transition: background-color 0.3s ease;
+  }
+
   .radio:focus,
   .radio-primary:focus {
     outline-color: var(--color-accent) !important;

@@ -1,5 +1,24 @@
 import { generateUnsubscribeToken } from './email';
 
+/**
+ * HTML escape function to prevent XSS in email templates
+ * Escapes &, <, >, ", ', /, and backticks
+ */
+function escapeHtml(text: string | number | undefined | null): string {
+  if (text === undefined || text === null) {
+    return '';
+  }
+
+  return String(text)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#x27;')
+    .replace(/\//g, '&#x2F;')
+    .replace(/`/g, '&#x60;');
+}
+
 interface OrderConfirmationEmailData {
   userName: string;
   userId: string;
@@ -32,17 +51,17 @@ export function generateOrderConfirmationEmail(
   const unsubscribeToken = generateUnsubscribeToken(data.userId);
   const unsubscribeUrl = `${data.baseUrl}/auth/unsubscribe?token=${unsubscribeToken}`;
 
-  // Build order items list
+  // Build order items list with HTML escaping for security
   const orderItemsHTML = data.orderItems
     .map(
       (item) => `
     <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #e5e5e5;">
       <div>
-        <p style="margin: 0; font-weight: 600; color: #262626;">${item.name}</p>
-        <p style="margin: 5px 0 0 0; font-size: 14px; color: #A6A6A6;">Menge: ${item.quantity}</p>
+        <p style="margin: 0; font-weight: 600; color: #262626;">${escapeHtml(item.name)}</p>
+        <p style="margin: 5px 0 0 0; font-size: 14px; color: #A6A6A6;">Menge: ${escapeHtml(item.quantity)}</p>
       </div>
       <div style="text-align: right;">
-        <p style="margin: 0; font-weight: 600; color: #262626;">${item.price}</p>
+        <p style="margin: 0; font-weight: 600; color: #262626;">${escapeHtml(item.price)}</p>
       </div>
     </div>
   `
@@ -50,7 +69,7 @@ export function generateOrderConfirmationEmail(
     .join('');
 
   const orderItemsText = data.orderItems
-    .map((item) => `${item.name} x${item.quantity} - ${item.price}`)
+    .map((item) => `${escapeHtml(item.name)} x${escapeHtml(item.quantity)} - ${escapeHtml(item.price)}`)
     .join('\\n');
 
   let userDiscountHTML = '';
@@ -58,10 +77,10 @@ export function generateOrderConfirmationEmail(
   if (data.userDiscountPercent && data.userDiscountPercent > 0) {
     userDiscountHTML = `
         <div style="display: flex; justify-content: space-between; padding: 8px 0; color: #22C55E;">
-          <span>Ihr Rabatt (${data.userDiscountPercent}%):</span>
-          <span style="font-weight: 600;">-${data.discountAmount}</span>
+          <span>Ihr Rabatt (${escapeHtml(data.userDiscountPercent)}%):</span>
+          <span style="font-weight: 600;">-${escapeHtml(data.discountAmount)}</span>
         </div>`;
-    userDiscountText = `\\nIhr Rabatt (${data.userDiscountPercent}%): -${data.discountAmount}`;
+    userDiscountText = `\\nIhr Rabatt (${escapeHtml(data.userDiscountPercent)}%): -${escapeHtml(data.discountAmount)}`;
   }
 
   let campaignDiscountHTML = '';
@@ -69,24 +88,24 @@ export function generateOrderConfirmationEmail(
   if (data.discountCode && data.discountAmount) {
     campaignDiscountHTML = `
         <div style="display: flex; justify-content: space-between; padding: 8px 0; color: #22C55E;">
-          <span>Rabatt (${data.discountCode}):</span>
-          <span style="font-weight: 600;">-${data.discountAmount}</span>
+          <span>Rabatt (${escapeHtml(data.discountCode)}):</span>
+          <span style="font-weight: 600;">-${escapeHtml(data.discountAmount)}</span>
         </div>`;
-    campaignDiscountText = `\\nRabatt (${data.discountCode}): -${data.discountAmount}`;
+    campaignDiscountText = `\\nRabatt (${escapeHtml(data.discountCode)}): -${escapeHtml(data.discountAmount)}`;
   }
 
   const content = `
     <div class="content">
       <h2>Bestellbestätigung</h2>
 
-      <p>Hallo ${data.userName},</p>
+      <p>Hallo ${escapeHtml(data.userName)},</p>
 
       <p>Vielen Dank für Ihre Bestellung! Wir haben Ihre Zahlung erhalten und bearbeiten Ihre Bestellung.</p>
 
       <div class="info-box">
-        <p><strong>Bestellnummer:</strong> ${data.orderNumber}</p>
-        <p><strong>Bestelldatum:</strong> ${data.orderDate}</p>
-        <p><strong>Gesamtbetrag:</strong> ${data.orderTotal}</p>
+        <p><strong>Bestellnummer:</strong> ${escapeHtml(data.orderNumber)}</p>
+        <p><strong>Bestelldatum:</strong> ${escapeHtml(data.orderDate)}</p>
+        <p><strong>Gesamtbetrag:</strong> ${escapeHtml(data.orderTotal)}</p>
       </div>
 
       <h3 style="margin: 30px 0 20px 0; color: #262626; font-size: 20px; font-weight: 600;">Bestellte Artikel</h3>
@@ -98,21 +117,21 @@ export function generateOrderConfirmationEmail(
       <div style="margin: 30px 0; padding: 20px; background-color: #f8f9fa; border-radius: 8px;">
         <div style="display: flex; justify-content: space-between; padding: 8px 0;">
           <span style="color: #595959;">Zwischensumme:</span>
-          <span style="font-weight: 600; color: #262626;">${data.subtotal}</span>
+          <span style="font-weight: 600; color: #262626;">${escapeHtml(data.subtotal)}</span>
         </div>
         ${userDiscountHTML}
         ${campaignDiscountHTML}
         <div style="display: flex; justify-content: space-between; padding: 8px 0;">
           <span style="color: #595959;">Versand:</span>
-          <span style="font-weight: 600; color: #262626;">${data.shippingCost}</span>
+          <span style="font-weight: 600; color: #262626;">${escapeHtml(data.shippingCost)}</span>
         </div>
         <div style="display: flex; justify-content: space-between; padding: 8px 0;">
           <span style="color: #595959;">MwSt. (19%):</span>
-          <span style="font-weight: 600; color: #262626;">${data.taxAmount}</span>
+          <span style="font-weight: 600; color: #262626;">${escapeHtml(data.taxAmount)}</span>
         </div>
         <div style="display: flex; justify-content: space-between; padding: 12px 0; border-top: 2px solid #D95829; margin-top: 10px;">
           <span style="font-weight: 700; color: #262626; font-size: 18px;">Gesamt:</span>
-          <span style="font-weight: 700; color: #D95829; font-size: 18px;">${data.orderTotal}</span>
+          <span style="font-weight: 700; color: #D95829; font-size: 18px;">${escapeHtml(data.orderTotal)}</span>
         </div>
       </div>
 
@@ -136,25 +155,25 @@ export function generateOrderConfirmationEmail(
   const html = getBaseTemplate(content, unsubscribeUrl);
 
   const text = `
-Hallo ${data.userName},
+Hallo ${escapeHtml(data.userName)},
 
 Vielen Dank für Ihre Bestellung! Wir haben Ihre Zahlung erhalten und bearbeiten Ihre Bestellung.
 
 Bestelldetails:
 ---------------
-Bestellnummer: ${data.orderNumber}
-Bestelldatum: ${data.orderDate}
-Gesamtbetrag: ${data.orderTotal}
+Bestellnummer: ${escapeHtml(data.orderNumber)}
+Bestelldatum: ${escapeHtml(data.orderDate)}
+Gesamtbetrag: ${escapeHtml(data.orderTotal)}
 
 Bestellte Artikel:
 ${orderItemsText}
 
 Preisübersicht:
-Zwischensumme: ${data.subtotal}${userDiscountText}${campaignDiscountText}
-Versand: ${data.shippingCost}
-MwSt. (19%): ${data.taxAmount}
+Zwischensumme: ${escapeHtml(data.subtotal)}${userDiscountText}${campaignDiscountText}
+Versand: ${escapeHtml(data.shippingCost)}
+MwSt. (19%): ${escapeHtml(data.taxAmount)}
 ---
-Gesamt: ${data.orderTotal}
+Gesamt: ${escapeHtml(data.orderTotal)}
 
 Bestellung ansehen: ${data.orderUrl}
 

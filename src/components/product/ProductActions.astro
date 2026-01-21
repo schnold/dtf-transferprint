@@ -323,6 +323,38 @@ const formatPrice = (price: number) => {
 			updateTotal();
 		});
 
+		// Show success toast notification
+		const showSuccessToast = (message: string) => {
+			// Create toast container if it doesn't exist
+			let toastContainer = document.getElementById('toast-container');
+			if (!toastContainer) {
+				toastContainer = document.createElement('div');
+				toastContainer.id = 'toast-container';
+				toastContainer.className = 'fixed top-20 right-4 z-[200] space-y-2';
+				document.body.appendChild(toastContainer);
+			}
+
+			// Create toast element
+			const toast = document.createElement('div');
+			toast.className = 'alert alert-success shadow-lg flex items-center gap-2 px-4 py-3 rounded-lg min-w-[300px] animate-slide-in';
+			toast.innerHTML = `
+				<svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+				</svg>
+				<span class="text-sm font-medium">${message}</span>
+			`;
+
+			toastContainer.appendChild(toast);
+
+			// Remove toast after 3 seconds
+			setTimeout(() => {
+				toast.classList.add('animate-fade-out');
+				setTimeout(() => {
+					toast.remove();
+				}, 300);
+			}, 3000);
+		};
+
 		const addToCartBtn = document.getElementById('add-to-cart-btn') as HTMLButtonElement;
 		
 		addToCartBtn?.addEventListener('click', async () => {
@@ -397,38 +429,14 @@ const formatPrice = (price: number) => {
 					addToCartBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg> Hinzugefügt!';
 					addToCartBtn.classList.add('btn-success');
 
-					// Update cart badge immediately with returned count
-					const cartCountBadge = document.getElementById('cart-count-badge');
-					const cartIconButton = document.getElementById('cart-icon-button');
+					// Show success toast notification
+					showSuccessToast(`${productName} wurde zum Warenkorb hinzugefügt`);
 
-					if (cartCountBadge) {
-						cartCountBadge.textContent = result.data.cartCount.toString();
-						cartCountBadge.style.display = 'flex';
-					} else if (cartIconButton && result.data.cartCount > 0) {
-						// Create badge if it doesn't exist
-						const newBadge = document.createElement('span');
-						newBadge.id = 'cart-count-badge';
-						newBadge.className = 'absolute -top-2 -right-2 bg-orange-500 text-white text-xs font-bold rounded-full min-w-[1.25rem] h-5 px-1 flex items-center justify-center shadow-md';
-						newBadge.textContent = result.data.cartCount.toString();
-						cartIconButton.appendChild(newBadge);
-					}
-
-					// Update cart icon styling
-					if (cartIconButton && result.data.cartCount > 0) {
-						cartIconButton.classList.remove('border-accent');
-						cartIconButton.classList.add('border-orange-400');
-
-						const svgIcon = cartIconButton.querySelector('svg');
-						if (svgIcon) {
-							svgIcon.classList.remove('text-accent');
-							svgIcon.classList.add('text-orange-600');
-						}
-					}
-
-					// Dispatch event to update full cart UI
+					// Dispatch event to update full cart UI - this will handle badge and icon updates
 					window.dispatchEvent(new CustomEvent('cartItemAdded', {
 						detail: {
-							cartCount: result.data.cartCount
+							cartCount: result.data.cartCount,
+							productName: productName
 						}
 					}));
 
@@ -468,5 +476,34 @@ const formatPrice = (price: number) => {
 
 	.no-spinner {
 		-moz-appearance: textfield;
+	}
+
+	/* Toast animations */
+	@keyframes slideIn {
+		from {
+			transform: translateX(100%);
+			opacity: 0;
+		}
+		to {
+			transform: translateX(0);
+			opacity: 1;
+		}
+	}
+
+	@keyframes fadeOut {
+		from {
+			opacity: 1;
+		}
+		to {
+			opacity: 0;
+		}
+	}
+
+	.animate-slide-in {
+		animation: slideIn 0.3s ease-out;
+	}
+
+	.animate-fade-out {
+		animation: fadeOut 0.3s ease-out;
 	}
 </style>

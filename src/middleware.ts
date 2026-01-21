@@ -74,18 +74,22 @@ export const onRequest = defineMiddleware(async (context, next) => {
 
         // Check if account is locked
         if (user.accountLocked) {
-          console.warn(`[SECURITY] Locked account attempted admin access: ${session.user.email}`);
+          console.warn(`[SECURITY] Locked account attempted admin access: User ID ${session.user.id}`);
           return new Response("Unauthorized: Account is locked", { status: 403 });
         }
 
         // Verify admin status from database (not from session)
         if (!user.isAdmin) {
-          console.warn(`[SECURITY] Non-admin user attempted admin access: ${session.user.email} from IP: ${context.request.headers.get("x-forwarded-for") || context.clientAddress}`);
+          // Log security incident without exposing full email (use ID instead)
+          console.warn(`[SECURITY] Non-admin attempted admin access: User ID ${session.user.id}, Path: ${context.url.pathname}`);
           return new Response("Unauthorized: Admin access required", { status: 403 });
         }
 
-        // Log admin access
-        console.log(`[ADMIN ACCESS] User: ${session.user.email}, Path: ${context.url.pathname}, IP: ${context.request.headers.get("x-forwarded-for") || context.clientAddress}`);
+        // Log admin access without exposing sensitive PII
+        // In production, send these to a secure audit log service
+        if (process.env.NODE_ENV === 'development') {
+          console.log(`[ADMIN ACCESS] User ID: ${session.user.id}, Path: ${context.url.pathname}`);
+        }
       } finally {
         client.release();
       }

@@ -1,9 +1,10 @@
 import type { APIRoute } from 'astro';
 import { pool } from '../../../lib/db';
+import { validateString, ValidationRules, sanitizeString } from '../../../lib/validation';
 
 /**
  * POST /api/addresses/create
- * Create a new address for the user
+ * Create a new address for the user with input validation
  */
 export const POST: APIRoute = async ({ request, locals }) => {
   const client = await pool.connect();
@@ -38,16 +39,44 @@ export const POST: APIRoute = async ({ request, locals }) => {
       phone,
     } = body;
 
-    // Validation
-    if (!firstName || !lastName || !addressLine1 || !city || !postalCode || !country) {
+    // Validate and sanitize inputs
+    const validations = [
+      validateString(firstName, 'First name', ValidationRules.NAME),
+      validateString(lastName, 'Last name', ValidationRules.NAME),
+      validateString(company, 'Company', ValidationRules.COMPANY),
+      validateString(addressLine1, 'Address line 1', ValidationRules.ADDRESS_LINE),
+      validateString(addressLine2, 'Address line 2', { maxLength: 255 }),
+      validateString(city, 'City', ValidationRules.CITY),
+      validateString(stateProvince, 'State/Province', { maxLength: 100 }),
+      validateString(postalCode, 'Postal code', ValidationRules.POSTAL_CODE),
+      validateString(phone, 'Phone', ValidationRules.PHONE),
+    ];
+
+    // Check for validation errors
+    const errors = validations.filter(v => !v.valid);
+    if (errors.length > 0) {
       return new Response(
         JSON.stringify({
           success: false,
-          error: { message: 'Required fields missing' },
+          error: { message: errors[0].error || 'Validation failed' },
         }),
         { status: 400 }
       );
     }
+
+    // Sanitize string inputs
+    const sanitizedData = {
+      firstName: sanitizeString(firstName),
+      lastName: sanitizeString(lastName),
+      company: company ? sanitizeString(company) : null,
+      addressLine1: sanitizeString(addressLine1),
+      addressLine2: addressLine2 ? sanitizeString(addressLine2) : null,
+      city: sanitizeString(city),
+      stateProvince: stateProvince ? sanitizeString(stateProvince) : null,
+      postalCode: sanitizeString(postalCode),
+      country: (country || 'DE').toUpperCase(),
+      phone: phone ? sanitizeString(phone) : null,
+    };
 
     // If this is set as default, unset other defaults
     if (isDefault) {
@@ -71,16 +100,16 @@ export const POST: APIRoute = async ({ request, locals }) => {
         userId,
         addressType || 'both',
         isDefault || false,
-        firstName,
-        lastName,
-        company || null,
-        addressLine1,
-        addressLine2 || null,
-        city,
-        stateProvince || null,
-        postalCode,
-        country || 'DE',
-        phone || null,
+        sanitizedData.firstName,
+        sanitizedData.lastName,
+        sanitizedData.company,
+        sanitizedData.addressLine1,
+        sanitizedData.addressLine2,
+        sanitizedData.city,
+        sanitizedData.stateProvince,
+        sanitizedData.postalCode,
+        sanitizedData.country,
+        sanitizedData.phone,
       ]
     );
 

@@ -4,47 +4,61 @@ import { capturePayPalOrder } from '../../../lib/paypal';
 import { createOrder } from '../../../lib/db';
 import { sendEmail } from '../../../lib/email';
 import { generateOrderConfirmationEmail } from '../../../lib/order-email-template';
+import { checkRateLimit, RateLimits, getRateLimitHeaders } from '../../../lib/rate-limiter';
 
 /**
  * POST /api/checkout/capture-paypal-payment
  * Captures a PayPal payment and creates the order record
  * Implements idempotency and security checks
+ * Protected by rate limiting to prevent abuse
  */
 export const POST: APIRoute = async ({ request, locals }) => {
+  const user = locals.user;
+  const userId = user?.id;
+
+  if (!userId) {
+    return new Response(
+      JSON.stringify({
+        success: false,
+        error: { message: 'Unauthorized - Please log in' },
+      }),
+      { status: 401 }
+    );
+  }
+
+  // Rate limiting check
+  const rateLimit = checkRateLimit(userId, RateLimits.PAYMENT_CAPTURE);
+  if (!rateLimit.allowed) {
+    return new Response(
+      JSON.stringify({
+        success: false,
+        error: {
+          message: 'Too many payment capture requests. Please try again later.',
+          retryAfter: rateLimit.retryAfter,
+        },
+      }),
+      {
+        status: 429,
+        headers: {
+          'Content-Type': 'application/json',
+          ...getRateLimitHeaders(rateLimit),
+        },
+      }
+    );
+  }
+
   const client = await pool.connect();
 
   try {
-    const user = locals.user;
-    const userId = user?.id;
-
-    if (!userId) {
-      return new Response(
-        JSON.stringify({
-          success: false,
-          error: { message: 'Unauthorized - Please log in' },
-        }),
-        { status: 401 }
-      );
-    }
 
     const body = await request.json();
-    const { paypalOrderId, addressId } = body;
+    const { paypalOrderId } = body;
 
     if (!paypalOrderId) {
       return new Response(
         JSON.stringify({
           success: false,
           error: { message: 'PayPal order ID is required' },
-        }),
-        { status: 400 }
-      );
-    }
-
-    if (!addressId) {
-      return new Response(
-        JSON.stringify({
-          success: false,
-          error: { message: 'Address is required' },
         }),
         { status: 400 }
       );
@@ -70,6 +84,19 @@ export const POST: APIRoute = async ({ request, locals }) => {
     }
 
     const session = sessionResult.rows[0];
+
+    // Get addressId from session
+    const addressId = session.addressId;
+
+    if (!addressId) {
+      return new Response(
+        JSON.stringify({
+          success: false,
+          error: { message: 'Address not found in session. Please restart checkout.' },
+        }),
+        { status: 400 }
+      );
+    }
 
     // Verify session belongs to authenticated user
     if (session.userId !== userId) {
@@ -279,7 +306,10 @@ export const POST: APIRoute = async ({ request, locals }) => {
           text,
         });
 
-        console.log('✅ Order confirmation email sent to:', user.email);
+        // Log email sent without exposing PII
+        if (process.env.NODE_ENV === 'development') {
+          console.log(`✅ Order confirmation email sent for order: ${order.orderNumber}`);
+        }
       } catch (emailError) {
         // Don't fail the order if email fails
         console.error('❌ Failed to send order confirmation email:', emailError);

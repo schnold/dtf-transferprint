@@ -12,10 +12,6 @@ export const POST: APIRoute = async ({ request, locals }) => {
     const body = await request.json();
     const { productId, quantity, widthMm, heightMm, uploadedFileUrl, uploadedFileName, fileMetadata, zusatzleistungIds } = body;
 
-    // Debug logging
-    console.log('[CART ADD] locals.user:', locals.user);
-    console.log('[CART ADD] locals.session:', locals.session);
-
     // Get user from locals (set by middleware)
     const user = locals.user;
     const userId = user?.id;

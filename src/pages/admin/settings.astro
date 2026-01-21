@@ -295,28 +295,54 @@ const formatPrice = (price: number) => {
 		}
 	};
 
+	// Show confirmation modal
+	const showConfirmModal = (title: string, message: string, onConfirm: () => void) => {
+		const modal = document.getElementById('confirm-modal') as HTMLDialogElement;
+		const titleEl = document.getElementById('confirm-title');
+		const messageEl = document.getElementById('confirm-message');
+		const confirmBtn = document.getElementById('confirm-button');
+
+		if (titleEl) titleEl.textContent = title;
+		if (messageEl) messageEl.textContent = message;
+
+		// Remove old listeners by cloning the button
+		if (confirmBtn) {
+			const newBtn = confirmBtn.cloneNode(true) as HTMLButtonElement;
+			confirmBtn.parentNode?.replaceChild(newBtn, confirmBtn);
+			
+			newBtn.addEventListener('click', () => {
+				modal.close();
+				onConfirm();
+			});
+		}
+
+		modal?.showModal();
+	};
+
 	// Delete service
 	(window as any).deleteService = async (serviceId: string) => {
-		if (!confirm('Möchten Sie diese Zusatzleistung wirklich löschen?')) {
-			return;
-		}
+		showConfirmModal(
+			'Zusatzleistung löschen',
+			'Möchten Sie diese Zusatzleistung wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.',
+			async () => {
+				try {
+					const response = await fetch(`/api/admin/zusatzleistungen/${serviceId}`, {
+						method: 'DELETE',
+					});
 
-		try {
-			const response = await fetch(`/api/admin/zusatzleistungen/${serviceId}`, {
-				method: 'DELETE',
-			});
+					const result = await response.json();
 
-			const result = await response.json();
-
-			if (result.success) {
-				alert('Zusatzleistung gelöscht!');
-				window.location.reload();
-			} else {
-				alert('Fehler: ' + result.error.message);
+					if (result.success) {
+						alert('Zusatzleistung gelöscht!');
+						window.location.reload();
+					} else {
+						alert('Fehler: ' + result.error.message);
+					}
+				} catch (error) {
+					console.error('Error deleting service:', error);
+					alert('Fehler beim Löschen der Zusatzleistung');
+				}
 			}
-		} catch (error) {
-			console.error('Error deleting service:', error);
-			alert('Fehler beim Löschen der Zusatzleistung');
-		}
+		);
 	};
 </script>

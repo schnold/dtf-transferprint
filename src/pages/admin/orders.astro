@@ -1,0 +1,377 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import { getAllOrders } from '../../lib/db';
+
+// Fetch all orders
+const { orders, totalCount } = await getAllOrders({ limit: 100 });
+
+// Calculate counts for each status
+const inProgressCount = orders.filter(o => o.status === 'processing' && o.fulfillmentStatus === 'unfulfilled').length;
+const readyCount = orders.filter(o => o.status === 'processing' && o.fulfillmentStatus === 'fulfilled').length;
+const shippedCount = orders.filter(o => o.status === 'shipped').length;
+const deliveredCount = orders.filter(o => o.status === 'delivered').length;
+
+const formatPrice = (price: number) => {
+	return new Intl.NumberFormat('de-DE', {
+		style: 'currency',
+		currency: 'EUR'
+	}).format(price);
+};
+
+const formatDate = (date: string) => {
+	return new Intl.DateTimeFormat('de-DE', {
+		day: '2-digit',
+		month: '2-digit',
+		year: 'numeric',
+		hour: '2-digit',
+		minute: '2-digit',
+	}).format(new Date(date));
+};
+---
+
+<AdminLayout title="Bestellungen verwalten" currentPage="orders">
+	<!-- Page Header -->
+	<div class="mb-6">
+		<h2 class="text-3xl font-bold text-base-content mb-2">Bestellungen</h2>
+		<p class="text-base-content/60">Verwalten Sie alle Bestellungen und deren Status</p>
+	</div>
+
+	<!-- Stats -->
+	<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+		<div class="stat bg-gradient-to-br from-base-100 to-base-200/30 border border-base-300/30 rounded-lg">
+			<div class="stat-title">Gesamt</div>
+			<div class="stat-value text-2xl">{totalCount}</div>
+		</div>
+		<div class="stat bg-gradient-to-br from-base-100 to-base-200/30 border border-base-300/30 rounded-lg">
+			<div class="stat-title">In Bearbeitung</div>
+			<div class="stat-value text-2xl text-info">{inProgressCount}</div>
+		</div>
+		<div class="stat bg-gradient-to-br from-base-100 to-base-200/30 border border-base-300/30 rounded-lg">
+			<div class="stat-title">Versendet</div>
+			<div class="stat-value text-2xl text-primary">{shippedCount}</div>
+		</div>
+		<div class="stat bg-gradient-to-br from-base-100 to-base-200/30 border border-base-300/30 rounded-lg">
+			<div class="stat-title">Abgeschlossen</div>
+			<div class="stat-value text-2xl text-success">{deliveredCount}</div>
+		</div>
+	</div>
+
+	<!-- Tab Navigation -->
+	<div role="tablist" class="tabs tabs-boxed mb-6 bg-base-200">
+		<a role="tab" class="tab tab-active" data-filter="all">Alle ({totalCount})</a>
+		<a role="tab" class="tab" data-filter="processing-unfulfilled">In Bearbeitung ({inProgressCount})</a>
+		<a role="tab" class="tab" data-filter="processing-fulfilled">Versandfertig ({readyCount})</a>
+		<a role="tab" class="tab" data-filter="shipped">Versendet ({shippedCount})</a>
+		<a role="tab" class="tab" data-filter="delivered">Abgeschlossen ({deliveredCount})</a>
+	</div>
+
+	<!-- Orders Table -->
+	<div class="overflow-x-auto bg-base-100 rounded-lg shadow-md border border-base-300/50">
+		<table class="table table-sm">
+			<thead class="bg-gradient-to-r from-base-200/50 to-base-100/50">
+				<tr>
+					<th>Bestellung</th>
+					<th>Kunde</th>
+					<th>Artikel</th>
+					<th>Gesamt</th>
+					<th>Status</th>
+					<th>Datum</th>
+					<th>Aktionen</th>
+				</tr>
+			</thead>
+			<tbody id="orders-table-body">
+				{orders.map((order) => {
+					const filterClass = order.status === 'processing' && order.fulfillmentStatus === 'unfulfilled'
+						? 'filter-processing-unfulfilled'
+						: order.status === 'processing' && order.fulfillmentStatus === 'fulfilled'
+						? 'filter-processing-fulfilled'
+						: order.status === 'shipped'
+						? 'filter-shipped'
+						: order.status === 'delivered'
+						? 'filter-delivered'
+						: '';
+
+					const statusBadge = order.status === 'processing' && order.fulfillmentStatus === 'unfulfilled'
+						? 'badge-info'
+						: order.status === 'processing' && order.fulfillmentStatus === 'fulfilled'
+						? 'badge-warning'
+						: order.status === 'shipped'
+						? 'badge-primary'
+						: order.status === 'delivered'
+						? 'badge-success'
+						: 'badge-ghost';
+
+					const statusText = order.status === 'processing' && order.fulfillmentStatus === 'unfulfilled'
+						? 'In Bearbeitung'
+						: order.status === 'processing' && order.fulfillmentStatus === 'fulfilled'
+						? 'Versandfertig'
+						: order.status === 'shipped'
+						? 'Versendet'
+						: order.status === 'delivered'
+						? 'Abgeschlossen'
+						: order.status;
+
+					return (
+						<tr class={`hover ${filterClass}`} data-order-id={order.id}>
+							<td>
+								<div class="font-semibold text-neutral">{order.orderNumber}</div>
+								{order.paymentStatus === 'paid' && (
+									<span class="badge badge-xs badge-success">Bezahlt</span>
+								)}
+							</td>
+							<td>
+								<div class="font-medium">{order.userName || 'N/A'}</div>
+								<div class="text-xs text-base-content/60">{order.userEmail || 'N/A'}</div>
+							</td>
+							<td>{order.itemCount} Artikel</td>
+							<td class="font-semibold">{formatPrice(order.total)}</td>
+							<td>
+								<span class={`badge ${statusBadge} badge-sm`}>{statusText}</span>
+							</td>
+							<td class="text-sm">{formatDate(order.createdAt)}</td>
+							<td>
+								<div class="dropdown dropdown-end">
+									<label tabindex="0" class="btn btn-ghost btn-xs">
+										<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+											<path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z" />
+										</svg>
+									</label>
+									<ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52 border border-base-300">
+										<li><a onclick={`updateStatus('${order.id}', 'processing', 'unfulfilled')`}>Mark as In Bearbeitung</a></li>
+										<li><a onclick={`updateStatus('${order.id}', 'processing', 'fulfilled')`}>Mark as Versandfertig</a></li>
+										<li><a onclick={`openTrackingModal('${order.id}', '${order.orderNumber}')`}>Mark as Versendet</a></li>
+										<li><a onclick={`updateStatus('${order.id}', 'delivered')`}>Mark as Abgeschlossen</a></li>
+									</ul>
+								</div>
+							</td>
+						</tr>
+					);
+				})}
+			</tbody>
+		</table>
+	</div>
+
+	<!-- Tracking Modal -->
+	<dialog id="tracking-modal" class="modal">
+		<div class="modal-box max-w-md">
+			<form method="dialog">
+				<button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+			</form>
+			<h3 class="font-bold text-lg mb-4">Bestellung als versendet markieren</h3>
+			<form id="tracking-form" class="space-y-4">
+				<input type="hidden" id="tracking-order-id" />
+				<div class="form-control">
+					<label class="label">
+						<span class="label-text">Bestellnummer</span>
+					</label>
+					<input type="text" id="tracking-order-number" class="input input-bordered" disabled />
+				</div>
+				<div class="form-control">
+					<label class="label">
+						<span class="label-text">Tracking-Nummer *</span>
+					</label>
+					<input type="text" id="tracking-number" class="input input-bordered" required placeholder="z.B. 1234567890" />
+				</div>
+				<div class="form-control">
+					<label class="label">
+						<span class="label-text">Tracking-URL *</span>
+					</label>
+					<input type="url" id="tracking-url" class="input input-bordered" required placeholder="https://..." />
+					<label class="label">
+						<span class="label-text-alt">Muss mit https:// beginnen</span>
+					</label>
+				</div>
+				<div class="form-control">
+					<label class="label">
+						<span class="label-text">Notiz (optional)</span>
+					</label>
+					<textarea id="tracking-note" class="textarea textarea-bordered" placeholder="Interne Notiz..."></textarea>
+				</div>
+				<div class="form-control">
+					<label class="label cursor-pointer justify-start gap-3">
+						<input type="checkbox" id="send-email" class="checkbox" checked />
+						<span class="label-text">Kunde per E-Mail benachrichtigen</span>
+					</label>
+				</div>
+				<div class="modal-action">
+					<button type="button" class="btn btn-ghost" onclick="document.getElementById('tracking-modal').close()">Abbrechen</button>
+					<button type="submit" class="btn btn-admin-primary">Speichern und E-Mail senden</button>
+				</div>
+			</form>
+		</div>
+		<form method="dialog" class="modal-backdrop">
+			<button>close</button>
+		</form>
+	</dialog>
+
+	<!-- Success Toast (hidden by default) -->
+	<div id="success-toast" class="toast toast-top toast-end hidden">
+		<div class="alert alert-success">
+			<span id="success-message">Status erfolgreich aktualisiert</span>
+		</div>
+	</div>
+
+	<!-- Error Toast (hidden by default) -->
+	<div id="error-toast" class="toast toast-top toast-end hidden">
+		<div class="alert alert-error">
+			<span id="error-message">Fehler beim Aktualisieren</span>
+		</div>
+	</div>
+</AdminLayout>
+
+<script>
+	// Tab filtering
+	const tabs = document.querySelectorAll('.tab');
+	const rows = document.querySelectorAll('#orders-table-body tr');
+
+	tabs.forEach(tab => {
+		tab.addEventListener('click', (e) => {
+			e.preventDefault();
+
+			// Update active tab
+			tabs.forEach(t => t.classList.remove('tab-active'));
+			tab.classList.add('tab-active');
+
+			const filter = tab.getAttribute('data-filter');
+
+			// Filter rows
+			rows.forEach(row => {
+				if (filter === 'all') {
+					row.style.display = '';
+				} else {
+					if (row.classList.contains(`filter-${filter}`)) {
+						row.style.display = '';
+					} else {
+						row.style.display = 'none';
+					}
+				}
+			});
+		});
+	});
+
+	// Open tracking modal
+	window.openTrackingModal = (orderId: string, orderNumber: string) => {
+		const modal = document.getElementById('tracking-modal') as HTMLDialogElement;
+		const orderIdInput = document.getElementById('tracking-order-id') as HTMLInputElement;
+		const orderNumberInput = document.getElementById('tracking-order-number') as HTMLInputElement;
+		const trackingNumberInput = document.getElementById('tracking-number') as HTMLInputElement;
+		const trackingUrlInput = document.getElementById('tracking-url') as HTMLInputElement;
+		const noteInput = document.getElementById('tracking-note') as HTMLTextAreaElement;
+
+		orderIdInput.value = orderId;
+		orderNumberInput.value = orderNumber;
+		trackingNumberInput.value = '';
+		trackingUrlInput.value = '';
+		noteInput.value = '';
+
+		modal.showModal();
+	};
+
+	// Handle tracking form submission
+	const trackingForm = document.getElementById('tracking-form');
+	trackingForm?.addEventListener('submit', async (e) => {
+		e.preventDefault();
+
+		const orderId = (document.getElementById('tracking-order-id') as HTMLInputElement).value;
+		const trackingNumber = (document.getElementById('tracking-number') as HTMLInputElement).value;
+		const trackingUrl = (document.getElementById('tracking-url') as HTMLInputElement).value;
+		const note = (document.getElementById('tracking-note') as HTMLTextAreaElement).value;
+		const sendEmail = (document.getElementById('send-email') as HTMLInputElement).checked;
+
+		if (!trackingUrl.startsWith('https://')) {
+			showError('Tracking-URL muss mit https:// beginnen');
+			return;
+		}
+
+		try {
+			const response = await fetch(`/api/admin/orders/${orderId}/status`, {
+				method: 'PATCH',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({
+					status: 'shipped',
+					trackingNumber,
+					trackingUrl,
+					note,
+					sendEmail,
+				}),
+			});
+
+			const data = await response.json();
+
+			if (data.success) {
+				showSuccess('Bestellung als versendet markiert');
+				(document.getElementById('tracking-modal') as HTMLDialogElement).close();
+				setTimeout(() => location.reload(), 1500);
+			} else {
+				showError(data.error?.message || 'Fehler beim Aktualisieren');
+			}
+		} catch (error) {
+			console.error('Error updating status:', error);
+			showError('Fehler beim Aktualisieren');
+		}
+	});
+
+	// Update status (for non-shipped statuses)
+	window.updateStatus = async (orderId: string, status: string, fulfillmentStatus?: string) => {
+		if (!confirm('Möchten Sie den Status wirklich ändern?')) return;
+
+		try {
+			const response = await fetch(`/api/admin/orders/${orderId}/status`, {
+				method: 'PATCH',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({
+					status,
+					fulfillmentStatus,
+					sendEmail: true,
+				}),
+			});
+
+			const data = await response.json();
+
+			if (data.success) {
+				showSuccess('Status erfolgreich aktualisiert');
+				setTimeout(() => location.reload(), 1500);
+			} else {
+				showError(data.error?.message || 'Fehler beim Aktualisieren');
+			}
+		} catch (error) {
+			console.error('Error updating status:', error);
+			showError('Fehler beim Aktualisieren');
+		}
+	};
+
+	// Show success toast
+	function showSuccess(message: string) {
+		const toast = document.getElementById('success-toast');
+		const messageEl = document.getElementById('success-message');
+		if (toast && messageEl) {
+			messageEl.textContent = message;
+			toast.classList.remove('hidden');
+			setTimeout(() => toast.classList.add('hidden'), 3000);
+		}
+	}
+
+	// Show error toast
+	function showError(message: string) {
+		const toast = document.getElementById('error-toast');
+		const messageEl = document.getElementById('error-message');
+		if (toast && messageEl) {
+			messageEl.textContent = message;
+			toast.classList.remove('hidden');
+			setTimeout(() => toast.classList.add('hidden'), 3000);
+		}
+	}
+</script>
+
+<style>
+	.btn-admin-primary {
+		background-color: var(--color-yellow-accent-dark);
+		color: white;
+		border-color: var(--color-yellow-accent-dark);
+	}
+
+	.btn-admin-primary:hover {
+		background-color: var(--color-metrics-text);
+		border-color: var(--color-metrics-text);
+	}
+</style>

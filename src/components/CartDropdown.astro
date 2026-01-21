@@ -39,15 +39,15 @@ const formatPrice = (price: number) => {
 		<button
 			tabindex="0"
 			class="w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all duration-200 cursor-pointer relative"
-			style="border-color: var(--color-metrics-text);"
+			style="border-color: #4B5563;"
 			aria-label="Shopping cart"
 			id="cart-icon-button"
 		>
-			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 transition-colors" style="color: var(--color-metrics-text);">
+			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 transition-colors" style="color: #4B5563;">
 				<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
 			</svg>
 			{hasCartItems && (
-				<span class="absolute -top-2 -right-2 bg-accent text-accent-content text-xs font-bold rounded-full min-w-[1.25rem] h-5 px-1 flex items-center justify-center shadow-md" id="cart-count-badge">
+				<span class="absolute -top-2 -right-2 bg-accent text-accent-content text-xs font-bold rounded-full min-w-[1.25rem] h-5 px-1 flex items-center justify-center shadow-md animate-badge-appear" id="cart-count-badge">
 					{cartItems.length}
 				</span>
 			)}
@@ -191,16 +191,32 @@ const formatPrice = (price: number) => {
 	<button
 		id="cart-login-prompt"
 		class="w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all duration-200 cursor-pointer"
-		style="border-color: var(--color-metrics-text);"
+		style="border-color: #4B5563;"
 		aria-label="Shopping cart - Login required"
 	>
-		<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4" style="color: var(--color-metrics-text);">
+		<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4" style="color: #4B5563;">
 			<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
 		</svg>
 	</button>
 )}
 
 <style>
+	/* Badge appear animation */
+	@keyframes badgeAppear {
+		from {
+			transform: scale(0);
+			opacity: 0;
+		}
+		to {
+			transform: scale(1);
+			opacity: 1;
+		}
+	}
+
+	.animate-badge-appear {
+		animation: badgeAppear 0.3s ease-out;
+	}
+
 	/* Cart dropdown styles with hover bridge */
 	.cart-dropdown {
 		position: relative;
@@ -401,31 +417,49 @@ const formatPrice = (price: number) => {
 	const attachCartItemListeners = () => {
 		// Quantity decrease buttons
 		document.querySelectorAll('.quantity-decrease').forEach((button) => {
-			button.addEventListener('click', (e) => {
+			button.addEventListener('click', async (e) => {
 				e.preventDefault();
-				const cartItemId = (e.currentTarget as HTMLElement).getAttribute('data-cart-item-id');
+				const buttonElement = e.currentTarget as HTMLElement;
+				const cartItemId = buttonElement.getAttribute('data-cart-item-id');
 				if (!cartItemId) return;
 
 				const quantityElement = document.querySelector(`[data-cart-item-id="${cartItemId}"] .cart-item-quantity`);
 				const currentQuantity = parseInt(quantityElement?.textContent || '1');
-				
+
 				if (currentQuantity > 1) {
-					updateCartItemQuantity(cartItemId, currentQuantity - 1);
+					// Disable buttons during update
+					const cartItemElement = document.querySelector(`[data-cart-item-id="${cartItemId}"]`);
+					const buttons = cartItemElement?.querySelectorAll('button');
+					buttons?.forEach(btn => (btn as HTMLButtonElement).disabled = true);
+
+					await updateCartItemQuantity(cartItemId, currentQuantity - 1);
+
+					// Re-enable buttons after update
+					buttons?.forEach(btn => (btn as HTMLButtonElement).disabled = false);
 				}
 			});
 		});
 
 		// Quantity increase buttons
 		document.querySelectorAll('.quantity-increase').forEach((button) => {
-			button.addEventListener('click', (e) => {
+			button.addEventListener('click', async (e) => {
 				e.preventDefault();
-				const cartItemId = (e.currentTarget as HTMLElement).getAttribute('data-cart-item-id');
+				const buttonElement = e.currentTarget as HTMLElement;
+				const cartItemId = buttonElement.getAttribute('data-cart-item-id');
 				if (!cartItemId) return;
 
 				const quantityElement = document.querySelector(`[data-cart-item-id="${cartItemId}"] .cart-item-quantity`);
 				const currentQuantity = parseInt(quantityElement?.textContent || '1');
-				
-				updateCartItemQuantity(cartItemId, currentQuantity + 1);
+
+				// Disable buttons during update
+				const cartItemElement = document.querySelector(`[data-cart-item-id="${cartItemId}"]`);
+				const buttons = cartItemElement?.querySelectorAll('button');
+				buttons?.forEach(btn => (btn as HTMLButtonElement).disabled = true);
+
+				await updateCartItemQuantity(cartItemId, currentQuantity + 1);
+
+				// Re-enable buttons after update
+				buttons?.forEach(btn => (btn as HTMLButtonElement).disabled = false);
 			});
 		});
 
@@ -442,7 +476,7 @@ const formatPrice = (price: number) => {
 		});
 	};
 
-	const updateCartUI = async () => {
+	const updateCartUI = async (showAnimation = false) => {
 		try {
 			const response = await fetch('/api/cart/get');
 			const result = await response.json();
@@ -453,29 +487,46 @@ const formatPrice = (price: number) => {
 				// Update cart count badge
 				const cartCountBadge = document.getElementById('cart-count-badge');
 				const cartIconButton = document.getElementById('cart-icon-button');
-				
+
 				if (count > 0) {
 					if (cartCountBadge) {
 						cartCountBadge.textContent = count.toString();
 						cartCountBadge.style.display = 'flex';
+
+						// Add bounce animation if requested
+						if (showAnimation) {
+							cartCountBadge.classList.add('animate-bounce');
+							setTimeout(() => {
+								cartCountBadge.classList.remove('animate-bounce');
+							}, 1000);
+						}
 					} else {
-						// Create badge if it doesn't exist
+						// Create badge if it doesn't exist - ALWAYS use accent (green) color
 						if (cartIconButton) {
 							const newBadge = document.createElement('span');
 							newBadge.id = 'cart-count-badge';
 							newBadge.className = 'absolute -top-2 -right-2 bg-accent text-accent-content text-xs font-bold rounded-full min-w-[1.25rem] h-5 px-1 flex items-center justify-center shadow-md';
 							newBadge.textContent = count.toString();
 							cartIconButton.appendChild(newBadge);
+
+							// Add bounce animation if requested
+							if (showAnimation) {
+								newBadge.classList.add('animate-bounce');
+								setTimeout(() => {
+									newBadge.classList.remove('animate-bounce');
+								}, 1000);
+							}
 						}
 					}
-					
-					// Update cart icon styling
+
+					// Update cart icon styling - ALWAYS keep dark gray color
 					if (cartIconButton) {
-						// Icon always stays dark green
 						const svgIcon = cartIconButton.querySelector('svg');
 						if (svgIcon) {
-							svgIcon.style.color = 'var(--color-metrics-text)';
+							svgIcon.style.color = '#4B5563';
 						}
+						// Ensure border stays dark gray
+						cartIconButton.style.borderColor = '#4B5563';
 					}
 
 					// Re-render cart items
@@ -484,15 +535,14 @@ const formatPrice = (price: number) => {
 					if (cartCountBadge) {
 						cartCountBadge.style.display = 'none';
 					}
-					
+
 					// Update cart icon styling to default
 					if (cartIconButton) {
-						// Border always stays accent color
 						const svgIcon = cartIconButton.querySelector('svg');
 						if (svgIcon) {
-							svgIcon.classList.remove('text-orange-600');
-							svgIcon.style.color = 'var(--color-metrics-text)';
+							svgIcon.style.color = '#4B5563';
 						}
+						cartIconButton.style.borderColor = '#4B5563';
 					}
 
 					// Clear cart items
@@ -514,6 +564,38 @@ const formatPrice = (price: number) => {
 	};
 
 	const updateCartItemQuantity = async (cartItemId: string, newQuantity: number) => {
+		// Optimistic UI update - update immediately
+		const cartItemElement = document.querySelector(`[data-cart-item-id="${cartItemId}"]`);
+		const quantityElement = cartItemElement?.querySelector('.cart-item-quantity');
+		const lineTotalElement = cartItemElement?.querySelector('.cart-item-total');
+		const oldQuantity = quantityElement ? parseInt(quantityElement.textContent || '1') : newQuantity;
+
+		// Get unit price from the item
+		const unitPriceElement = cartItemElement?.querySelector('.cart-item-unit-price');
+		const unitPriceText = unitPriceElement?.textContent || '0';
+		const unitPrice = parseFloat(unitPriceText.replace(/[^0-9,]/g, '').replace(',', '.')) || 0;
+
+		// Calculate new line total
+		const newLineTotal = unitPrice * newQuantity;
+		const oldLineTotal = unitPrice * oldQuantity;
+
+		// Apply optimistic updates
+		if (quantityElement) {
+			quantityElement.textContent = newQuantity.toString();
+		}
+		if (lineTotalElement) {
+			lineTotalElement.textContent = formatPrice(newLineTotal);
+		}
+
+		// Update subtotal optimistically
+		const cartSubtotalElement = document.getElementById('cart-subtotal');
+		if (cartSubtotalElement) {
+			const currentSubtotalText = cartSubtotalElement.textContent || '0';
+			const currentSubtotalValue = parseFloat(currentSubtotalText.replace(/[^0-9,]/g, '').replace(',', '.')) || 0;
+			const newSubtotalValue = currentSubtotalValue - oldLineTotal + newLineTotal;
+			cartSubtotalElement.textContent = formatPrice(newSubtotalValue);
+		}
+
 		try {
 			const response = await fetch('/api/cart/update', {
 				method: 'PUT',
@@ -524,12 +606,38 @@ const formatPrice = (price: number) => {
 			const result = await response.json();
 
 			if (result.success) {
-				// Update cart UI without page reload
-				await updateCartUI();
+				// Update cart UI without page reload to get accurate server data
+				await updateCartUI(false);
 			} else {
+				// Revert optimistic updates on error
+				if (quantityElement) {
+					quantityElement.textContent = oldQuantity.toString();
+				}
+				if (lineTotalElement) {
+					lineTotalElement.textContent = formatPrice(oldLineTotal);
+				}
+				if (cartSubtotalElement) {
+					const currentSubtotalText = cartSubtotalElement.textContent || '0';
+					const currentSubtotalValue = parseFloat(currentSubtotalText.replace(/[^0-9,]/g, '').replace(',', '.')) || 0;
+					const revertedSubtotal = currentSubtotalValue - newLineTotal + oldLineTotal;
+					cartSubtotalElement.textContent = formatPrice(revertedSubtotal);
+				}
 				alert(result.error?.message || 'Fehler beim Aktualisieren des Warenkorbs');
 			}
 		} catch (error) {
+			// Revert optimistic updates on error
+			if (quantityElement) {
+				quantityElement.textContent = oldQuantity.toString();
+			}
+			if (lineTotalElement) {
+				lineTotalElement.textContent = formatPrice(oldLineTotal);
+			}
+			if (cartSubtotalElement) {
+				const currentSubtotalText = cartSubtotalElement.textContent || '0';
+				const currentSubtotalValue = parseFloat(currentSubtotalText.replace(/[^0-9,]/g, '').replace(',', '.')) || 0;
+				const revertedSubtotal = currentSubtotalValue - newLineTotal + oldLineTotal;
+				cartSubtotalElement.textContent = formatPrice(revertedSubtotal);
+			}
 			console.error('Error updating cart item:', error);
 			alert('Fehler beim Aktualisieren des Warenkorbs');
 		}
@@ -577,15 +685,15 @@ const formatPrice = (price: number) => {
 
 	// Listen for cart updates from other parts of the app
 	window.addEventListener('cartItemAdded', async () => {
-		// Update cart UI without page reload
-		await updateCartUI();
+		// Update cart UI without page reload with animation
+		await updateCartUI(true);
 	});
-	
+
 	// Also listen for page load to ensure cart is up to date
 	window.addEventListener('load', () => {
 		const cartIconButton = document.getElementById('cart-icon-button');
 		if (cartIconButton) {
-			updateCartUI();
+			updateCartUI(false);
 		}
 	});
 </script>

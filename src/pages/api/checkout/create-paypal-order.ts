@@ -2,31 +2,92 @@ import type { APIRoute } from 'astro';
 import { pool } from '../../../lib/db';
 import { createPayPalOrder } from '../../../lib/paypal';
 import { validateDiscount, calculateDiscount } from '../../../lib/db';
+import { checkRateLimit, RateLimits, getRateLimitHeaders } from '../../../lib/rate-limiter';
 
 /**
  * POST /api/checkout/create-paypal-order
  * Creates a PayPal order with server-side price calculation
  * Applies user discount and optional campaign discount code
+ * Protected by rate limiting to prevent abuse
  */
 export const POST: APIRoute = async ({ request, locals }) => {
+  const user = locals.user;
+  const userId = user?.id;
+
+  if (!userId) {
+    return new Response(
+      JSON.stringify({
+        success: false,
+        error: { message: 'Unauthorized - Please log in' },
+      }),
+      { status: 401 }
+    );
+  }
+
+  // Rate limiting check
+  const rateLimit = checkRateLimit(userId, RateLimits.PAYMENT_CREATE);
+  if (!rateLimit.allowed) {
+    return new Response(
+      JSON.stringify({
+        success: false,
+        error: {
+          message: 'Too many payment requests. Please try again later.',
+          retryAfter: rateLimit.retryAfter,
+        },
+      }),
+      {
+        status: 429,
+        headers: {
+          'Content-Type': 'application/json',
+          ...getRateLimitHeaders(rateLimit),
+        },
+      }
+    );
+  }
+
   const client = await pool.connect();
 
   try {
-    const user = locals.user;
-    const userId = user?.id;
 
-    if (!userId) {
+    const body = await request.json();
+    const { discountCode, addressId } = body;
+
+    // Validate addressId is provided
+    if (!addressId) {
       return new Response(
         JSON.stringify({
           success: false,
-          error: { message: 'Unauthorized - Please log in' },
+          error: { message: 'Address is required' },
         }),
-        { status: 401 }
+        { status: 400 }
       );
     }
 
-    const body = await request.json();
-    const { discountCode } = body;
+    // Verify the address belongs to the user
+    const addressResult = await client.query(
+      'SELECT id, "userId" FROM "userAddresses" WHERE id = $1',
+      [addressId]
+    );
+
+    if (addressResult.rows.length === 0) {
+      return new Response(
+        JSON.stringify({
+          success: false,
+          error: { message: 'Selected address not found' },
+        }),
+        { status: 404 }
+      );
+    }
+
+    if (addressResult.rows[0].userId !== userId) {
+      return new Response(
+        JSON.stringify({
+          success: false,
+          error: { message: 'Unauthorized - This address does not belong to you' },
+        }),
+        { status: 403 }
+      );
+    }
 
     // Fetch user with discount percentage
     const userResult = await client.query(
@@ -225,8 +286,9 @@ export const POST: APIRoute = async ({ request, locals }) => {
       total,
     });
 
-    // Store session in database with 3-hour expiration
-    const expiresAt = new Date(Date.now() + 3 * 60 * 60 * 1000); // 3 hours
+    // Store session in database with 1-hour expiration for security
+    // Shorter expiration reduces window for session replay attacks and stale pricing
+    const expiresAt = new Date(Date.now() + 1 * 60 * 60 * 1000); // 1 hour
 
     await client.query(
       `
@@ -234,6 +296,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
         id,
         "paypalOrderId",
         "userId",
+        "addressId",
         "cartSnapshot",
         subtotal,
         "userDiscountPercent",
@@ -248,12 +311,13 @@ export const POST: APIRoute = async ({ request, locals }) => {
         "expiresAt"
       ) VALUES (
         gen_random_uuid()::text,
-        $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14
+        $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15
       )
     `,
       [
         paypalOrder.id,
         userId,
+        addressId,
         JSON.stringify(cartSnapshot),
         subtotal,
         userDiscountPercent,
