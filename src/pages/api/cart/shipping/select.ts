@@ -25,6 +25,18 @@ export const POST: APIRoute = async ({ request, locals }) => {
       });
     }
 
+    // Validate UUID format to prevent injection attacks
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    if (!uuidRegex.test(shippingProfileId)) {
+      return new Response(JSON.stringify({
+        success: false,
+        error: { message: 'Invalid shipping profile ID format' }
+      }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
     const client = await pool.connect();
     try {
       // Verify the shipping profile exists and is active

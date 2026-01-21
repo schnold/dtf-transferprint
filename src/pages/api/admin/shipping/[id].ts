@@ -92,6 +92,59 @@ export const PUT: APIRoute = async ({ params, request, locals }) => {
       displayOrder
     } = data;
 
+    // Validate numeric values to prevent exploits
+    if (basePrice !== null && basePrice !== undefined) {
+      const parsedBasePrice = parseFloat(basePrice);
+      if (isNaN(parsedBasePrice) || parsedBasePrice < 0 || parsedBasePrice > 999999.99) {
+        return new Response(JSON.stringify({
+          success: false,
+          error: { message: 'Base price must be a valid positive number (max 999999.99)' }
+        }), {
+          status: 400,
+          headers: { 'Content-Type': 'application/json' }
+        });
+      }
+    }
+
+    if (freeShippingThreshold !== null && freeShippingThreshold !== undefined) {
+      const parsedThreshold = parseFloat(freeShippingThreshold);
+      if (isNaN(parsedThreshold) || parsedThreshold < 0 || parsedThreshold > 999999.99) {
+        return new Response(JSON.stringify({
+          success: false,
+          error: { message: 'Free shipping threshold must be a valid positive number (max 999999.99)' }
+        }), {
+          status: 400,
+          headers: { 'Content-Type': 'application/json' }
+        });
+      }
+    }
+
+    if (estimatedDays !== null && estimatedDays !== undefined) {
+      const parsedDays = parseInt(estimatedDays);
+      if (isNaN(parsedDays) || parsedDays < 1 || parsedDays > 365) {
+        return new Response(JSON.stringify({
+          success: false,
+          error: { message: 'Estimated days must be a valid number between 1 and 365' }
+        }), {
+          status: 400,
+          headers: { 'Content-Type': 'application/json' }
+        });
+      }
+    }
+
+    if (displayOrder !== null && displayOrder !== undefined) {
+      const parsedOrder = parseInt(displayOrder);
+      if (isNaN(parsedOrder) || parsedOrder < 0 || parsedOrder > 9999) {
+        return new Response(JSON.stringify({
+          success: false,
+          error: { message: 'Display order must be a valid number between 0 and 9999' }
+        }), {
+          status: 400,
+          headers: { 'Content-Type': 'application/json' }
+        });
+      }
+    }
+
     const client = await pool.connect();
     try {
       await client.query('BEGIN');
@@ -247,32 +300,62 @@ export const DELETE: APIRoute = async ({ params, locals }) => {
   try {
     const client = await pool.connect();
     try {
-      // Check if profile is default
+      await client.query('BEGIN');
+
+      // Check if profile exists
       const checkResult = await client.query('SELECT "isDefault" FROM "shippingProfiles" WHERE id = $1', [id]);
 
       if (checkResult.rows.length === 0) {
+        await client.query('ROLLBACK');
         return new Response(JSON.stringify({ success: false, error: { message: 'Profile not found' } }), {
           status: 404,
           headers: { 'Content-Type': 'application/json' }
         });
       }
 
-      if (checkResult.rows[0].isDefault) {
+      // Ensure at least one profile will remain after deletion
+      const countResult = await client.query('SELECT COUNT(*) as count FROM "shippingProfiles"');
+      const profileCount = parseInt(countResult.rows[0].count);
+
+      if (profileCount <= 1) {
+        await client.query('ROLLBACK');
         return new Response(JSON.stringify({
           success: false,
-          error: { message: 'Cannot delete default shipping profile' }
+          error: { message: 'Cannot delete the last shipping profile. At least one profile must exist.' }
         }), {
           status: 400,
           headers: { 'Content-Type': 'application/json' }
         });
       }
 
+      const isDefault = checkResult.rows[0].isDefault;
+
+      // Delete the profile
       await client.query('DELETE FROM "shippingProfiles" WHERE id = $1', [id]);
+
+      // If we deleted the default profile, set another profile as default
+      if (isDefault) {
+        await client.query(`
+          UPDATE "shippingProfiles"
+          SET "isDefault" = true
+          WHERE id = (
+            SELECT id FROM "shippingProfiles"
+            WHERE "isActive" = true
+            ORDER BY "displayOrder" ASC, "createdAt" ASC
+            LIMIT 1
+          )
+        `);
+      }
+
+      await client.query('COMMIT');
 
       return new Response(JSON.stringify({ success: true }), {
         status: 200,
         headers: { 'Content-Type': 'application/json' }
       });
+    } catch (error) {
+      await client.query('ROLLBACK');
+      throw error;
     } finally {
       client.release();
     }

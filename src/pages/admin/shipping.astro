@@ -34,7 +34,7 @@ const formatPrice = (price: number) => {
 			<h2 class="text-3xl font-bold text-base-content mb-2">Versandprofile</h2>
 			<p class="text-base-content/60">Verwalten Sie Ihre Versandoptionen und Preise</p>
 		</div>
-		<button class="btn btn-admin-primary gap-2" onclick="openCreateModal()">
+		<button class="btn btn-muted-green gap-2" onclick="openCreateModal()">
 			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
 				<path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
 			</svg>
@@ -59,7 +59,6 @@ const formatPrice = (price: number) => {
 								<input
 									type="checkbox"
 									class="toggle toggle-sm"
-									style="--toggle-color: var(--color-metrics-text);"
 									checked={profile.isActive}
 									onchange={`toggleStatus('${profile.id}', this.checked)`}
 								/>
@@ -108,7 +107,7 @@ const formatPrice = (price: number) => {
 			</svg>
 			<h3 class="text-xl font-semibold text-base-content mb-2">Keine Versandprofile</h3>
 			<p class="text-base-content/60 mb-4">Erstellen Sie Ihr erstes Versandprofil</p>
-			<button class="btn btn-admin-primary" onclick="openCreateModal()">Profil erstellen</button>
+			<button class="btn btn-muted-green" onclick="openCreateModal()">Profil erstellen</button>
 		</div>
 	)}
 
@@ -201,7 +200,78 @@ const formatPrice = (price: number) => {
 			<button>close</button>
 		</form>
 	</dialog>
+
+	<!-- Confirmation Modal -->
+	<dialog id="confirm-modal" class="modal">
+		<div class="modal-box max-w-md">
+			<h3 class="font-bold text-lg mb-2" id="confirm-title">Bestätigung</h3>
+			<p class="text-base-content/70 mb-6" id="confirm-message">Möchten Sie fortfahren?</p>
+			<div class="flex gap-3 justify-end">
+				<button class="btn btn-ghost" onclick="document.getElementById('confirm-modal').close()">Abbrechen</button>
+				<button id="confirm-button" class="btn btn-error">Löschen</button>
+			</div>
+		</div>
+		<form method="dialog" class="modal-backdrop">
+			<button>close</button>
+		</form>
+	</dialog>
 </AdminLayout>
+
+<style>
+	/* Muted green button - uses dark green color */
+	.btn-muted-green {
+		background-color: var(--color-metrics-text) !important;
+		color: white !important;
+		border: none !important;
+		transition: all 0.2s ease;
+	}
+
+	.btn-muted-green:hover {
+		background-color: #3a4a2e !important;
+		color: white !important;
+		transform: translateY(-1px);
+		box-shadow: 0 4px 12px rgba(74, 93, 58, 0.3);
+	}
+
+	.btn-muted-green:focus {
+		background-color: var(--color-metrics-text) !important;
+		box-shadow: 0 0 0 2px rgba(74, 93, 58, 0.2);
+	}
+
+	/* Radio button with light green accent color */
+	.radio:checked:not(.radio-success):not(.radio-warning):not(.radio-error):not(.radio-info) {
+		border-color: var(--color-accent) !important;
+		background-color: var(--color-accent) !important;
+	}
+
+	.radio:checked:not(.radio-success):not(.radio-warning):not(.radio-error):not(.radio-info)::before {
+		background-color: white !important;
+	}
+
+	.radio:checked:not(.radio-success):not(.radio-warning):not(.radio-error):not(.radio-info):hover {
+		border-color: var(--color-accent-dark) !important;
+		background-color: var(--color-accent-dark) !important;
+	}
+
+	.radio-primary:checked {
+		border-color: var(--color-accent) !important;
+		background-color: var(--color-accent) !important;
+	}
+
+	.radio-primary:checked::before {
+		background-color: white !important;
+	}
+
+	.radio-primary:checked:hover {
+		border-color: var(--color-accent-dark) !important;
+		background-color: var(--color-accent-dark) !important;
+	}
+
+	.radio:focus,
+	.radio-primary:focus {
+		outline-color: var(--color-accent) !important;
+	}
+</style>
 
 <script>
 	const formatPrice = (price: number) => {
@@ -276,36 +346,62 @@ const formatPrice = (price: number) => {
 		}
 	};
 
+	// Show confirmation modal
+	const showConfirmModal = (title: string, message: string, onConfirm: () => void) => {
+		const modal = document.getElementById('confirm-modal') as HTMLDialogElement;
+		const titleEl = document.getElementById('confirm-title');
+		const messageEl = document.getElementById('confirm-message');
+		const confirmBtn = document.getElementById('confirm-button');
+
+		if (titleEl) titleEl.textContent = title;
+		if (messageEl) messageEl.textContent = message;
+
+		// Remove old listeners by cloning the button
+		if (confirmBtn) {
+			const newBtn = confirmBtn.cloneNode(true) as HTMLButtonElement;
+			confirmBtn.parentNode?.replaceChild(newBtn, confirmBtn);
+			
+			newBtn.addEventListener('click', () => {
+				modal.close();
+				onConfirm();
+			});
+		}
+
+		modal?.showModal();
+	};
+
 	// Delete profile
 	(window as any).deleteProfile = async (profileId: string) => {
-		if (!confirm('Möchten Sie dieses Versandprofil wirklich löschen?')) {
-			return;
-		}
+		showConfirmModal(
+			'Versandprofil löschen',
+			'Möchten Sie dieses Versandprofil wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.',
+			async () => {
+				try {
+					const response = await fetch(`/api/admin/shipping/${profileId}`, {
+						method: 'DELETE',
+					});
 
-		try {
-			const response = await fetch(`/api/admin/shipping/${profileId}`, {
-				method: 'DELETE',
-			});
+					const result = await response.json();
 
-			const result = await response.json();
+					if (result.success) {
+						// Remove from DOM
+						const card = document.querySelector(`[data-profile-id="${profileId}"]`);
+						card?.remove();
 
-			if (result.success) {
-				// Remove from DOM
-				const card = document.querySelector(`[data-profile-id="${profileId}"]`);
-				card?.remove();
-
-				// Check if we need to show empty state
-				const container = document.getElementById('profiles-container');
-				if (container && container.children.length === 0) {
-					location.reload();
+						// Check if we need to show empty state
+						const container = document.getElementById('profiles-container');
+						if (container && container.children.length === 0) {
+							location.reload();
+						}
+					} else {
+						alert(result.error?.message || 'Fehler beim Löschen');
+					}
+				} catch (error) {
+					console.error('Error deleting profile:', error);
+					alert('Fehler beim Löschen des Profils');
 				}
-			} else {
-				alert(result.error?.message || 'Fehler beim Löschen');
 			}
-		} catch (error) {
-			console.error('Error deleting profile:', error);
-			alert('Fehler beim Löschen des Profils');
-		}
+		);
 	};
 
 	// Handle form submission

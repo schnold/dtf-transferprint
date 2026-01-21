@@ -338,18 +338,38 @@ const formatPrice = (price: number) => {
 		transition: all 0.2s ease;
 	}
 
-	/* Radio buttons in accent orange */
-	.radio:checked {
-		border-color: var(--color-accent);
-		background-color: var(--color-accent);
+	/* Radio buttons in light green accent */
+	.radio:checked:not(.radio-success):not(.radio-warning):not(.radio-error):not(.radio-info) {
+		border-color: var(--color-accent) !important;
+		background-color: var(--color-accent) !important;
 	}
 
-	.radio:checked::before {
-		background-color: white;
+	.radio:checked:not(.radio-success):not(.radio-warning):not(.radio-error):not(.radio-info)::before {
+		background-color: white !important;
 	}
 
-	.radio:focus {
-		outline-color: var(--color-accent);
+	.radio:checked:not(.radio-success):not(.radio-warning):not(.radio-error):not(.radio-info):hover {
+		border-color: var(--color-accent-dark) !important;
+		background-color: var(--color-accent-dark) !important;
+	}
+
+	.radio-primary:checked {
+		border-color: var(--color-accent) !important;
+		background-color: var(--color-accent) !important;
+	}
+
+	.radio-primary:checked::before {
+		background-color: white !important;
+	}
+
+	.radio-primary:checked:hover {
+		border-color: var(--color-accent-dark) !important;
+		background-color: var(--color-accent-dark) !important;
+	}
+
+	.radio:focus,
+	.radio-primary:focus {
+		outline-color: var(--color-accent) !important;
 	}
 </style>
 

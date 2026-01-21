@@ -474,26 +474,26 @@
     padding-left: 1.25rem !important;
   }
 
-  /* Switch/Toggle styling - clean CI colors when activated */
-  .toggle:checked {
-    background-color: var(--color-primary) !important;
-    border-color: var(--color-primary) !important;
+  /* Switch/Toggle styling - light green accent when activated */
+  .toggle:checked:not(.toggle-success):not(.toggle-warning):not(.toggle-error):not(.toggle-secondary):not([style*="--toggle-color"]) {
+    background-color: var(--color-accent) !important;
+    border-color: var(--color-accent) !important;
   }
 
-  .toggle:checked:hover {
-    background-color: var(--color-primary-dark) !important;
-    border-color: var(--color-primary-dark) !important;
+  .toggle:checked:not(.toggle-success):not(.toggle-warning):not(.toggle-error):not(.toggle-secondary):not([style*="--toggle-color"]):hover {
+    background-color: var(--color-accent-dark) !important;
+    border-color: var(--color-accent-dark) !important;
   }
 
-  /* Clean CI color variants */
+  /* Primary toggle variant uses light green accent */
   .toggle-primary:checked {
-    background-color: var(--color-primary) !important;
-    border-color: var(--color-primary) !important;
+    background-color: var(--color-accent) !important;
+    border-color: var(--color-accent) !important;
   }
 
   .toggle-primary:checked:hover {
-    background-color: var(--color-primary-dark) !important;
-    border-color: var(--color-primary-dark) !important;
+    background-color: var(--color-accent-dark) !important;
+    border-color: var(--color-accent-dark) !important;
   }
 
   .toggle-success:checked {
@@ -512,13 +512,13 @@
   }
 
   .toggle-info:checked {
-    background-color: var(--color-primary) !important;
-    border-color: var(--color-primary) !important;
+    background-color: var(--color-accent) !important;
+    border-color: var(--color-accent) !important;
   }
 
   .toggle-info:checked:hover {
-    background-color: var(--color-primary-dark) !important;
-    border-color: var(--color-primary-dark) !important;
+    background-color: var(--color-accent-dark) !important;
+    border-color: var(--color-accent-dark) !important;
   }
 
   .toggle-secondary:checked {
@@ -565,6 +565,63 @@
     border-color: var(--checkbox-color) !important;
   }
 
+  /* Checkbox with light green accent color - applies to base and primary variants */
+  .checkbox:checked:not(.checkbox-success):not(.checkbox-warning):not(.checkbox-error):not(.checkbox-info):not([style*="--checkbox-color"]) {
+    background-color: var(--color-accent) !important;
+    border-color: var(--color-accent) !important;
+  }
+
+  .checkbox:checked:not(.checkbox-success):not(.checkbox-warning):not(.checkbox-error):not(.checkbox-info):not([style*="--checkbox-color"]):hover {
+    background-color: var(--color-accent-dark) !important;
+    border-color: var(--color-accent-dark) !important;
+  }
+
+  /* Primary checkbox variant explicitly uses accent color */
+  .checkbox-primary:checked {
+    background-color: var(--color-accent) !important;
+    border-color: var(--color-accent) !important;
+  }
+
+  .checkbox-primary:checked:hover {
+    background-color: var(--color-accent-dark) !important;
+    border-color: var(--color-accent-dark) !important;
+  }
+
+  /* Radio button with light green accent color - applies to base and primary variants */
+  .radio:checked:not(.radio-success):not(.radio-warning):not(.radio-error):not(.radio-info) {
+    border-color: var(--color-accent) !important;
+    background-color: var(--color-accent) !important;
+  }
+
+  .radio:checked:not(.radio-success):not(.radio-warning):not(.radio-error):not(.radio-info)::before {
+    background-color: white !important;
+  }
+
+  .radio:checked:not(.radio-success):not(.radio-warning):not(.radio-error):not(.radio-info):hover {
+    border-color: var(--color-accent-dark) !important;
+    background-color: var(--color-accent-dark) !important;
+  }
+
+  /* Primary radio variant explicitly uses accent color */
+  .radio-primary:checked {
+    border-color: var(--color-accent) !important;
+    background-color: var(--color-accent) !important;
+  }
+
+  .radio-primary:checked::before {
+    background-color: white !important;
+  }
+
+  .radio-primary:checked:hover {
+    border-color: var(--color-accent-dark) !important;
+    background-color: var(--color-accent-dark) !important;
+  }
+
+  .radio:focus,
+  .radio-primary:focus {
+    outline-color: var(--color-accent) !important;
+  }
+
   /* Admin button styles */
   .btn-admin-primary {
     background-color: var(--color-yellow-accent-dark);
@@ -609,6 +666,26 @@
   .admin-tab-active {
     color: var(--color-yellow-accent-dark) !important;
     border-bottom-color: var(--color-yellow-accent-dark) !important;
+  }
+
+  /* Muted green button - uses dark green color */
+  .btn-muted-green {
+    background-color: var(--color-metrics-text) !important;
+    color: white !important;
+    border: none !important;
+    transition: all 0.2s ease;
+  }
+
+  .btn-muted-green:hover {
+    background-color: #3a4a2e !important;
+    color: white !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(74, 93, 58, 0.3);
+  }
+
+  .btn-muted-green:focus {
+    background-color: var(--color-metrics-text) !important;
+    box-shadow: 0 0 0 2px rgba(74, 93, 58, 0.2);
   }
 }
 

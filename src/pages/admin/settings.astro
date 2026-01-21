@@ -56,7 +56,6 @@ const formatPrice = (price: number) => {
 								<input
 									type="checkbox"
 									class="toggle toggle-sm"
-									style="--toggle-color: var(--color-metrics-text);"
 									checked={service.isActive}
 									onchange={`toggleStatus('${service.id}', this.checked)`}
 								/>
@@ -159,6 +158,21 @@ const formatPrice = (price: number) => {
 					<button type="submit" class="btn btn-admin-primary">Speichern</button>
 				</div>
 			</form>
+		</div>
+		<form method="dialog" class="modal-backdrop">
+			<button>close</button>
+		</form>
+	</dialog>
+
+	<!-- Confirmation Modal -->
+	<dialog id="confirm-modal" class="modal">
+		<div class="modal-box max-w-md">
+			<h3 class="font-bold text-lg mb-2" id="confirm-title">Bestätigung</h3>
+			<p class="text-base-content/70 mb-6" id="confirm-message">Möchten Sie fortfahren?</p>
+			<div class="flex gap-3 justify-end">
+				<button class="btn btn-ghost" onclick="document.getElementById('confirm-modal').close()">Abbrechen</button>
+				<button id="confirm-button" class="btn btn-error">Löschen</button>
+			</div>
 		</div>
 		<form method="dialog" class="modal-backdrop">
 			<button>close</button>

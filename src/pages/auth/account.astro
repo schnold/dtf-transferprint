@@ -33,6 +33,40 @@ try {
   client.release();
 }
 
+// Fetch active shipping profiles and user's selection
+let shippingProfiles: any[] = [];
+let selectedShippingId: string | null = null;
+const shippingClient = await pool.connect();
+try {
+  // Get all active shipping profiles
+  const profilesResult = await shippingClient.query(
+    'SELECT * FROM "shippingProfiles" WHERE "isActive" = true ORDER BY "displayOrder", "createdAt"'
+  );
+  shippingProfiles = profilesResult.rows.map(row => ({
+    ...row,
+    basePrice: parseFloat(row.basePrice),
+    freeShippingThreshold: row.freeShippingThreshold ? parseFloat(row.freeShippingThreshold) : null,
+  }));
+
+  // Get user's selected shipping profile
+  const selectionResult = await shippingClient.query(
+    'SELECT "shippingProfileId" FROM "userCartShipping" WHERE "userId" = $1',
+    [user.id]
+  );
+
+  if (selectionResult.rows.length > 0) {
+    selectedShippingId = selectionResult.rows[0].shippingProfileId;
+  } else {
+    // Use default if no selection exists
+    const defaultProfile = shippingProfiles.find((p) => p.isDefault);
+    selectedShippingId = defaultProfile?.id || shippingProfiles[0]?.id;
+  }
+} catch (error) {
+  console.error('Error fetching shipping profiles:', error);
+} finally {
+  shippingClient.release();
+}
+
 // Get the active tab from URL params, default to 'orders'
 const url = new URL(Astro.request.url);
 const activeTab = url.searchParams.get('tab') || 'orders';
@@ -459,6 +493,85 @@ const activeTab = url.searchParams.get('tab') || 'orders';
                 </div>
               </div>
 
+              <!-- Shipping Preferences -->
+              <div class="card bg-base-200/50 shadow-md border border-base-300/30">
+                <div class="card-body p-4">
+                  <h2 class="card-title text-lg mb-3 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-primary">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 0 1-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 0 0-3.213-9.193 2.056 2.056 0 0 0-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 0 0-10.026 0 1.106 1.106 0 0 0-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" />
+                    </svg>
+                    Bevorzugte Versandart
+                  </h2>
+                  <p class="text-sm text-base-content/60 mb-4">Wählen Sie Ihre bevorzugte Versandart für zukünftige Bestellungen. Diese Einstellung wird automatisch beim Checkout vorausgewählt.</p>
+
+                  {shippingProfiles.length === 0 ? (
+                    <div class="text-center py-8">
+                      <div class="w-12 h-12 mx-auto mb-3 rounded-full bg-base-300/50 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-base-content/40">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 0 1-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 0 0-3.213-9.193 2.056 2.056 0 0 0-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 0 0-10.026 0 1.106 1.106 0 0 0-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" />
+                        </svg>
+                      </div>
+                      <p class="text-sm text-base-content/60">Keine Versandarten verfügbar.</p>
+                    </div>
+                  ) : (
+                    <div class="space-y-2" id="shipping-profiles-list">
+                      {shippingProfiles.map((profile) => (
+                        <label class="flex items-center justify-between p-3 border border-base-300 rounded-lg cursor-pointer hover:bg-base-200/50 transition-colors">
+                          <div class="flex items-center gap-3 flex-1">
+                            <input
+                              type="radio"
+                              name="shipping-profile"
+                              value={profile.id}
+                              checked={profile.id === selectedShippingId}
+                              class="radio radio-primary radio-sm"
+                              onchange={`updateShippingPreference('${profile.id}')`}
+                            />
+                            <div class="flex-1">
+                              <div class="flex items-baseline gap-2">
+                                <p class="font-medium text-base-content">{profile.name}</p>
+                                {profile.isDefault && (
+                                  <span class="badge badge-primary badge-xs">Standard</span>
+                                )}
+                              </div>
+                              {profile.description && (
+                                <p class="text-xs text-base-content/60 mt-0.5">{profile.description}</p>
+                              )}
+                              <div class="flex items-center gap-3 mt-1 text-xs text-base-content/60">
+                                {profile.estimatedDays && (
+                                  <span>Lieferung in ca. {profile.estimatedDays} {profile.estimatedDays === 1 ? 'Tag' : 'Tagen'}</span>
+                                )}
+                                {profile.freeShippingThreshold && (
+                                  <span>• Kostenlos ab {new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(profile.freeShippingThreshold)}</span>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                          <div class="text-right ml-3">
+                            <p class="font-semibold text-base-content">
+                              {new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(profile.basePrice)}
+                            </p>
+                          </div>
+                        </label>
+                      ))}
+                    </div>
+                  )}
+
+                  <div id="shipping-success-message" class="hidden mt-3 alert alert-success py-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-5 w-5" fill="none" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span class="text-sm">Versandpräferenz erfolgreich aktualisiert!</span>
+                  </div>
+
+                  <div id="shipping-error-message" class="hidden mt-3 alert alert-error py-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-5 w-5" fill="none" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span class="text-sm" id="shipping-error-text">Fehler beim Aktualisieren der Versandpräferenz</span>
+                  </div>
+                </div>
+              </div>
+
               <!-- Security Alert -->
               <div class="alert alert-info shadow-md py-3">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-5 h-5">
@@ -478,142 +591,506 @@ const activeTab = url.searchParams.get('tab') || 'orders';
   </div>
 
   <!-- Add Address Modal -->
-  <dialog id="add-address-modal" class="modal">
-    <div class="modal-box max-w-2xl">
-      <form method="dialog">
-        <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-      </form>
-      <h3 class="font-bold text-lg mb-4">Neue Adresse hinzufügen</h3>
-      <form id="add-address-form" class="space-y-4">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div class="form-control">
-            <label class="label"><span class="label-text">Vorname *</span></label>
-            <input type="text" name="firstName" class="input input-bordered" required />
+  <dialog id="add-address-modal" class="modal modal-bottom sm:modal-middle">
+    <div class="modal-box max-w-3xl shadow-2xl border border-base-300/50">
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between pb-5 mb-7 border-b border-base-300/20">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-primary">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
           </div>
-          <div class="form-control">
-            <label class="label"><span class="label-text">Nachname *</span></label>
-            <input type="text" name="lastName" class="input input-bordered" required />
-          </div>
-          <div class="form-control md:col-span-2">
-            <label class="label"><span class="label-text">Firma (optional)</span></label>
-            <input type="text" name="company" class="input input-bordered" />
-          </div>
-          <div class="form-control md:col-span-2">
-            <label class="label"><span class="label-text">Straße und Hausnummer *</span></label>
-            <input type="text" name="addressLine1" class="input input-bordered" required />
-          </div>
-          <div class="form-control md:col-span-2">
-            <label class="label"><span class="label-text">Adresszusatz (optional)</span></label>
-            <input type="text" name="addressLine2" class="input input-bordered" />
-          </div>
-          <div class="form-control">
-            <label class="label"><span class="label-text">PLZ *</span></label>
-            <input type="text" name="postalCode" class="input input-bordered" required />
-          </div>
-          <div class="form-control">
-            <label class="label"><span class="label-text">Stadt *</span></label>
-            <input type="text" name="city" class="input input-bordered" required />
-          </div>
-          <div class="form-control">
-            <label class="label"><span class="label-text">Bundesland (optional)</span></label>
-            <input type="text" name="stateProvince" class="input input-bordered" />
-          </div>
-          <div class="form-control">
-            <label class="label"><span class="label-text">Land *</span></label>
-            <select name="country" class="select select-bordered" required>
-              <option value="DE">Deutschland</option>
-              <option value="AT">Österreich</option>
-              <option value="CH">Schweiz</option>
-            </select>
-          </div>
-          <div class="form-control md:col-span-2">
-            <label class="label"><span class="label-text">Telefon (optional)</span></label>
-            <input type="tel" name="phone" class="input input-bordered" />
+          <div>
+            <h3 class="font-bold text-xl text-base-content">Neue Adresse hinzufügen</h3>
+            <p class="text-sm text-base-content/60 mt-0.5">Fügen Sie eine neue Liefer- oder Rechnungsadresse hinzu</p>
           </div>
         </div>
-        <div class="form-control">
-          <label class="label cursor-pointer justify-start gap-3">
-            <input type="checkbox" name="isDefault" class="checkbox" />
-            <span class="label-text">Als Standardadresse festlegen</span>
-          </label>
+        <form method="dialog">
+          <button class="btn btn-sm btn-circle btn-ghost hover:bg-base-300 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </form>
+      </div>
+
+      <form id="add-address-form" class="space-y-7">
+        <!-- Personal Information Section -->
+        <div>
+          <div class="mb-5">
+            <h4 class="text-sm font-semibold text-base-content uppercase tracking-wide mb-1">Persönliche Daten</h4>
+            <p class="text-xs text-base-content/60">Geben Sie Ihre persönlichen Informationen ein</p>
+          </div>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-4">
+            <div class="form-control">
+              <div class="mb-2">
+                <label class="text-sm font-medium text-base-content">Vorname <span class="text-error">*</span></label>
+              </div>
+              <input type="text" name="firstName" class="input input-bordered focus:input-primary transition-all" placeholder="Max" required />
+            </div>
+            <div class="form-control">
+              <div class="mb-2">
+                <label class="text-sm font-medium text-base-content">Nachname <span class="text-error">*</span></label>
+              </div>
+              <input type="text" name="lastName" class="input input-bordered focus:input-primary transition-all" placeholder="Mustermann" required />
+            </div>
+          </div>
+          
+          <div class="form-control mt-4">
+            <div class="mb-2">
+              <label class="text-sm font-medium text-base-content">Firma <span class="text-xs text-base-content/50">(Optional)</span></label>
+            </div>
+            <input type="text" name="company" class="input input-bordered focus:input-primary transition-all" placeholder="Firma GmbH" />
+          </div>
         </div>
-        <div class="modal-action">
-          <button type="button" class="btn" onclick="document.getElementById('add-address-modal').close()">Abbrechen</button>
-          <button type="submit" class="btn btn-primary">Hinzufügen</button>
+
+        <!-- Address Information Section -->
+        <div>
+          <div class="mb-5">
+            <h4 class="text-sm font-semibold text-base-content uppercase tracking-wide mb-1">Adressinformationen</h4>
+            <p class="text-xs text-base-content/60">Geben Sie Ihre vollständige Lieferadresse ein</p>
+          </div>
+          
+          <div class="space-y-4">
+            <div class="form-control">
+              <div class="mb-2">
+                <label class="text-sm font-medium text-base-content">Straße und Hausnummer <span class="text-error">*</span></label>
+              </div>
+              <input type="text" name="addressLine1" class="input input-bordered focus:input-primary transition-all" placeholder="Musterstraße 123" required />
+            </div>
+            
+            <div class="form-control">
+              <div class="mb-2">
+                <label class="text-sm font-medium text-base-content">Adresszusatz <span class="text-xs text-base-content/50">(Optional)</span></label>
+                <p class="text-xs text-base-content/50 mt-0.5">z.B. Stockwerk, Appartment</p>
+              </div>
+              <input type="text" name="addressLine2" class="input input-bordered focus:input-primary transition-all" placeholder="2. Stock, Wohnung 5" />
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-4">
+              <div class="form-control">
+                <div class="mb-2">
+                  <label class="text-sm font-medium text-base-content">Postleitzahl <span class="text-error">*</span></label>
+                </div>
+                <input type="text" name="postalCode" class="input input-bordered focus:input-primary transition-all" placeholder="12345" required />
+              </div>
+              <div class="form-control">
+                <div class="mb-2">
+                  <label class="text-sm font-medium text-base-content">Stadt <span class="text-error">*</span></label>
+                </div>
+                <input type="text" name="city" class="input input-bordered focus:input-primary transition-all" placeholder="Berlin" required />
+              </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-4">
+              <div class="form-control">
+                <div class="mb-2">
+                  <label class="text-sm font-medium text-base-content">Bundesland <span class="text-xs text-base-content/50">(Optional)</span></label>
+                </div>
+                <input type="text" name="stateProvince" class="input input-bordered focus:input-primary transition-all" placeholder="Berlin" />
+              </div>
+              <div class="form-control">
+                <div class="mb-2">
+                  <label class="text-sm font-medium text-base-content">Land <span class="text-error">*</span></label>
+                </div>
+                <select name="country" class="select select-bordered focus:select-primary transition-all" required>
+                  <option value="DE">🇩🇪 Deutschland</option>
+                  <option value="AT">🇦🇹 Österreich</option>
+                  <option value="CH">🇨🇭 Schweiz</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contact Information Section -->
+        <div>
+          <div class="mb-5">
+            <h4 class="text-sm font-semibold text-base-content uppercase tracking-wide mb-1">Kontaktinformationen</h4>
+            <p class="text-xs text-base-content/60">Für Rückfragen zur Lieferung</p>
+          </div>
+          
+          <div class="form-control">
+            <div class="mb-2">
+              <label class="text-sm font-medium text-base-content">Telefon <span class="text-xs text-base-content/50">(Optional)</span></label>
+              <p class="text-xs text-base-content/50 mt-0.5">Für Lieferbenachrichtigungen</p>
+            </div>
+            <input type="tel" name="phone" class="input input-bordered focus:input-primary transition-all" placeholder="+49 123 456789" />
+          </div>
+        </div>
+
+        <!-- Options Section -->
+        <div>
+          <div class="mb-5">
+            <h4 class="text-sm font-semibold text-base-content uppercase tracking-wide mb-1">Einstellungen</h4>
+            <p class="text-xs text-base-content/60">Legen Sie die Standardoptionen fest</p>
+          </div>
+          
+          <div class="bg-base-200/30 rounded-lg p-4 border border-base-300/30">
+            <label class="label cursor-pointer justify-start gap-3 py-1">
+              <input type="checkbox" name="isDefault" class="checkbox checkbox-primary" />
+              <div>
+                <span class="text-sm font-medium text-base-content">Als Standardadresse festlegen</span>
+                <p class="text-xs text-base-content/50 mt-1">Diese Adresse wird automatisch beim Checkout ausgewählt</p>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Modal Footer -->
+        <div class="flex gap-3 pt-6 border-t border-base-300/30">
+          <button type="button" class="btn btn-ghost flex-1" onclick="document.getElementById('add-address-modal').close()">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+            Abbrechen
+          </button>
+          <button type="submit" class="btn btn-primary flex-1 gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+            </svg>
+            Hinzufügen
+          </button>
         </div>
       </form>
     </div>
+    <form method="dialog" class="modal-backdrop">
+      <button>close</button>
+    </form>
   </dialog>
 
   <!-- Edit Address Modal -->
-  <dialog id="edit-address-modal" class="modal">
-    <div class="modal-box max-w-2xl">
-      <form method="dialog">
-        <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-      </form>
-      <h3 class="font-bold text-lg mb-4">Adresse bearbeiten</h3>
-      <form id="edit-address-form" class="space-y-4">
+  <dialog id="edit-address-modal" class="modal modal-bottom sm:modal-middle">
+    <div class="modal-box max-w-3xl shadow-2xl border border-base-300/50">
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between mb-7 pb-5 border-b border-base-300/20">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-primary">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+            </svg>
+          </div>
+          <div>
+            <h3 class="font-bold text-xl text-base-content">Adresse bearbeiten</h3>
+            <p class="text-sm text-base-content/60 mt-0.5">Aktualisieren Sie Ihre Adressinformationen</p>
+          </div>
+        </div>
+        <form method="dialog">
+          <button class="btn btn-sm btn-circle btn-ghost hover:bg-base-300 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </form>
+      </div>
+
+      <form id="edit-address-form" class="space-y-7">
         <input type="hidden" name="id" />
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div class="form-control">
-            <label class="label"><span class="label-text">Vorname *</span></label>
-            <input type="text" name="firstName" class="input input-bordered" required />
+        
+        <!-- Personal Information Section -->
+        <div>
+          <div class="mb-5">
+            <h4 class="text-sm font-semibold text-base-content uppercase tracking-wide mb-1">Persönliche Daten</h4>
+            <p class="text-xs text-base-content/60">Geben Sie Ihre persönlichen Informationen ein</p>
           </div>
-          <div class="form-control">
-            <label class="label"><span class="label-text">Nachname *</span></label>
-            <input type="text" name="lastName" class="input input-bordered" required />
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-4">
+            <div class="form-control">
+              <div class="mb-2">
+                <label class="text-sm font-medium text-base-content">Vorname <span class="text-error">*</span></label>
+              </div>
+              <input type="text" name="firstName" class="input input-bordered focus:input-primary transition-all" placeholder="Max" required />
+            </div>
+            <div class="form-control">
+              <div class="mb-2">
+                <label class="text-sm font-medium text-base-content">Nachname <span class="text-error">*</span></label>
+              </div>
+              <input type="text" name="lastName" class="input input-bordered focus:input-primary transition-all" placeholder="Mustermann" required />
+            </div>
           </div>
-          <div class="form-control md:col-span-2">
-            <label class="label"><span class="label-text">Firma (optional)</span></label>
-            <input type="text" name="company" class="input input-bordered" />
-          </div>
-          <div class="form-control md:col-span-2">
-            <label class="label"><span class="label-text">Straße und Hausnummer *</span></label>
-            <input type="text" name="addressLine1" class="input input-bordered" required />
-          </div>
-          <div class="form-control md:col-span-2">
-            <label class="label"><span class="label-text">Adresszusatz (optional)</span></label>
-            <input type="text" name="addressLine2" class="input input-bordered" />
-          </div>
-          <div class="form-control">
-            <label class="label"><span class="label-text">PLZ *</span></label>
-            <input type="text" name="postalCode" class="input input-bordered" required />
-          </div>
-          <div class="form-control">
-            <label class="label"><span class="label-text">Stadt *</span></label>
-            <input type="text" name="city" class="input input-bordered" required />
-          </div>
-          <div class="form-control">
-            <label class="label"><span class="label-text">Bundesland (optional)</span></label>
-            <input type="text" name="stateProvince" class="input input-bordered" />
-          </div>
-          <div class="form-control">
-            <label class="label"><span class="label-text">Land *</span></label>
-            <select name="country" class="select select-bordered" required>
-              <option value="DE">Deutschland</option>
-              <option value="AT">Österreich</option>
-              <option value="CH">Schweiz</option>
-            </select>
-          </div>
-          <div class="form-control md:col-span-2">
-            <label class="label"><span class="label-text">Telefon (optional)</span></label>
-            <input type="tel" name="phone" class="input input-bordered" />
+          
+          <div class="form-control mt-4">
+            <div class="mb-2">
+              <label class="text-sm font-medium text-base-content">Firma <span class="text-xs text-base-content/50">(Optional)</span></label>
+            </div>
+            <input type="text" name="company" class="input input-bordered focus:input-primary transition-all" placeholder="Firma GmbH" />
           </div>
         </div>
-        <div class="form-control">
-          <label class="label cursor-pointer justify-start gap-3">
-            <input type="checkbox" name="isDefault" class="checkbox" />
-            <span class="label-text">Als Standardadresse festlegen</span>
-          </label>
+
+        <!-- Address Information Section -->
+        <div>
+          <div class="mb-5">
+            <h4 class="text-sm font-semibold text-base-content uppercase tracking-wide mb-1">Adressinformationen</h4>
+            <p class="text-xs text-base-content/60">Geben Sie Ihre vollständige Lieferadresse ein</p>
+          </div>
+          
+          <div class="space-y-4">
+            <div class="form-control">
+              <div class="mb-2">
+                <label class="text-sm font-medium text-base-content">Straße und Hausnummer <span class="text-error">*</span></label>
+              </div>
+              <input type="text" name="addressLine1" class="input input-bordered focus:input-primary transition-all" placeholder="Musterstraße 123" required />
+            </div>
+            
+            <div class="form-control">
+              <div class="mb-2">
+                <label class="text-sm font-medium text-base-content">Adresszusatz <span class="text-xs text-base-content/50">(Optional)</span></label>
+                <p class="text-xs text-base-content/50 mt-0.5">z.B. Stockwerk, Appartment</p>
+              </div>
+              <input type="text" name="addressLine2" class="input input-bordered focus:input-primary transition-all" placeholder="2. Stock, Wohnung 5" />
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-4">
+              <div class="form-control">
+                <div class="mb-2">
+                  <label class="text-sm font-medium text-base-content">Postleitzahl <span class="text-error">*</span></label>
+                </div>
+                <input type="text" name="postalCode" class="input input-bordered focus:input-primary transition-all" placeholder="12345" required />
+              </div>
+              <div class="form-control">
+                <div class="mb-2">
+                  <label class="text-sm font-medium text-base-content">Stadt <span class="text-error">*</span></label>
+                </div>
+                <input type="text" name="city" class="input input-bordered focus:input-primary transition-all" placeholder="Berlin" required />
+              </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-4">
+              <div class="form-control">
+                <div class="mb-2">
+                  <label class="text-sm font-medium text-base-content">Bundesland <span class="text-xs text-base-content/50">(Optional)</span></label>
+                </div>
+                <input type="text" name="stateProvince" class="input input-bordered focus:input-primary transition-all" placeholder="Berlin" />
+              </div>
+              <div class="form-control">
+                <div class="mb-2">
+                  <label class="text-sm font-medium text-base-content">Land <span class="text-error">*</span></label>
+                </div>
+                <select name="country" class="select select-bordered focus:select-primary transition-all" required>
+                  <option value="DE">🇩🇪 Deutschland</option>
+                  <option value="AT">🇦🇹 Österreich</option>
+                  <option value="CH">🇨🇭 Schweiz</option>
+                </select>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="modal-action">
-          <button type="button" class="btn" onclick="document.getElementById('edit-address-modal').close()">Abbrechen</button>
-          <button type="submit" class="btn btn-primary">Speichern</button>
+
+        <!-- Contact Information Section -->
+        <div>
+          <div class="mb-5">
+            <h4 class="text-sm font-semibold text-base-content uppercase tracking-wide mb-1">Kontaktinformationen</h4>
+            <p class="text-xs text-base-content/60">Für Rückfragen zur Lieferung</p>
+          </div>
+          
+          <div class="form-control">
+            <div class="mb-2">
+              <label class="text-sm font-medium text-base-content">Telefon <span class="text-xs text-base-content/50">(Optional)</span></label>
+              <p class="text-xs text-base-content/50 mt-0.5">Für Lieferbenachrichtigungen</p>
+            </div>
+            <input type="tel" name="phone" class="input input-bordered focus:input-primary transition-all" placeholder="+49 123 456789" />
+          </div>
+        </div>
+
+        <!-- Options Section -->
+        <div>
+          <div class="mb-5">
+            <h4 class="text-sm font-semibold text-base-content uppercase tracking-wide mb-1">Einstellungen</h4>
+            <p class="text-xs text-base-content/60">Legen Sie die Standardoptionen fest</p>
+          </div>
+          
+          <div class="bg-base-200/30 rounded-lg p-4 border border-base-300/30">
+            <label class="label cursor-pointer justify-start gap-3 py-1">
+              <input type="checkbox" name="isDefault" class="checkbox checkbox-primary" />
+              <div>
+                <span class="text-sm font-medium text-base-content">Als Standardadresse festlegen</span>
+                <p class="text-xs text-base-content/50 mt-1">Diese Adresse wird automatisch beim Checkout ausgewählt</p>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Modal Footer -->
+        <div class="flex gap-3 pt-6 border-t border-base-300/30">
+          <button type="button" class="btn btn-ghost flex-1" onclick="document.getElementById('edit-address-modal').close()">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+            Abbrechen
+          </button>
+          <button type="submit" class="btn btn-primary flex-1 gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+            </svg>
+            Speichern
+          </button>
         </div>
       </form>
     </div>
+    <form method="dialog" class="modal-backdrop">
+      <button>close</button>
+    </form>
   </dialog>
 </Layout>
+
+<style>
+  /* Modern Modal Animations */
+  .modal[open] .modal-box {
+    animation: modal-slide-in 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  @keyframes modal-slide-in {
+    from {
+      transform: translateY(-20px) scale(0.95);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+    }
+  }
+
+  /* Enhanced Modal Backdrop */
+  .modal-backdrop {
+    backdrop-filter: blur(4px);
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+
+  /* Enhanced Input Borders */
+  .modal-box .input,
+  .modal-box .select,
+  .modal-box .textarea {
+    border-width: 1.5px;
+    border-color: hsl(var(--bc) / 0.15);
+  }
+
+  .modal-box .input:hover,
+  .modal-box .select:hover,
+  .modal-box .textarea:hover {
+    border-color: hsl(var(--bc) / 0.25);
+  }
+
+  /* Input Focus Enhancements */
+  .modal-box .input:focus,
+  .modal-box .select:focus,
+  .modal-box .textarea:focus {
+    transform: translateY(-1px);
+    border-width: 1.5px;
+    border-color: hsl(var(--p) / 0.6);
+    box-shadow: 0 0 0 3px hsl(var(--p) / 0.1), 0 2px 8px rgba(0, 0, 0, 0.08);
+    outline: none;
+  }
+
+  /* Smooth Transitions */
+  .input,
+  .select,
+  .textarea,
+  .btn {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Enhanced Checkbox */
+  .checkbox:checked {
+    animation: checkbox-pop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  @keyframes checkbox-pop {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.2);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  /* Checkbox with light green accent in modals */
+  .modal-box .checkbox:checked:not(.checkbox-success):not(.checkbox-warning):not(.checkbox-error):not(.checkbox-info) {
+    background-color: var(--color-accent) !important;
+    border-color: var(--color-accent) !important;
+  }
+
+  .modal-box .checkbox:checked:not(.checkbox-success):not(.checkbox-warning):not(.checkbox-error):not(.checkbox-info):hover {
+    background-color: var(--color-accent-dark) !important;
+    border-color: var(--color-accent-dark) !important;
+  }
+
+  .modal-box .checkbox-primary:checked {
+    background-color: var(--color-accent) !important;
+    border-color: var(--color-accent) !important;
+  }
+
+  .modal-box .checkbox-primary:checked:hover {
+    background-color: var(--color-accent-dark) !important;
+    border-color: var(--color-accent-dark) !important;
+  }
+
+  /* Radio button with light green accent in modals */
+  .modal-box .radio:checked:not(.radio-success):not(.radio-warning):not(.radio-error):not(.radio-info) {
+    border-color: var(--color-accent) !important;
+    background-color: var(--color-accent) !important;
+  }
+
+  .modal-box .radio:checked:not(.radio-success):not(.radio-warning):not(.radio-error):not(.radio-info)::before {
+    background-color: white !important;
+  }
+
+  .modal-box .radio:checked:not(.radio-success):not(.radio-warning):not(.radio-error):not(.radio-info):hover {
+    border-color: var(--color-accent-dark) !important;
+    background-color: var(--color-accent-dark) !important;
+  }
+
+  .modal-box .radio-primary:checked {
+    border-color: var(--color-accent) !important;
+    background-color: var(--color-accent) !important;
+  }
+
+  .modal-box .radio-primary:checked::before {
+    background-color: white !important;
+  }
+
+  .modal-box .radio-primary:checked:hover {
+    border-color: var(--color-accent-dark) !important;
+    background-color: var(--color-accent-dark) !important;
+  }
+
+  .modal-box .radio:focus,
+  .modal-box .radio-primary:focus {
+    outline-color: var(--color-accent) !important;
+  }
+
+  /* Section Dividers */
+  .h-px {
+    background: linear-gradient(90deg, transparent, currentColor, transparent);
+  }
+
+  /* Form Section Styling */
+  .modal-box form > div:not(:last-child) {
+    position: relative;
+  }
+
+  /* Section Headers */
+  .modal-box form h4 {
+    letter-spacing: 0.05em;
+  }
+
+  /* Grid Gap Consistency */
+  .modal-box .grid {
+    gap: 1rem;
+  }
+
+  .modal-box .grid.gap-x-4 {
+    column-gap: 1rem;
+  }
+
+  .modal-box .grid.gap-y-4 {
+    row-gap: 1rem;
+  }
+</style>
 
 <script>
   import { authClient } from '../../lib/auth-client';
@@ -759,6 +1236,49 @@ const activeTab = url.searchParams.get('tab') || 'orders';
     } catch (error) {
       console.error('Error deleting address:', error);
       alert('Fehler beim Löschen der Adresse');
+    }
+  };
+
+  // Update shipping preference
+  window.updateShippingPreference = async (shippingProfileId: string) => {
+    const successMessage = document.getElementById('shipping-success-message');
+    const errorMessage = document.getElementById('shipping-error-message');
+    const errorText = document.getElementById('shipping-error-text');
+
+    // Hide any existing messages
+    successMessage?.classList.add('hidden');
+    errorMessage?.classList.add('hidden');
+
+    try {
+      const response = await fetch('/api/cart/shipping/select', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ shippingProfileId }),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        // Show success message
+        successMessage?.classList.remove('hidden');
+        
+        // Hide success message after 3 seconds
+        setTimeout(() => {
+          successMessage?.classList.add('hidden');
+        }, 3000);
+      } else {
+        // Show error message
+        if (errorText) {
+          errorText.textContent = result.error?.message || 'Fehler beim Aktualisieren der Versandpräferenz';
+        }
+        errorMessage?.classList.remove('hidden');
+      }
+    } catch (error) {
+      console.error('Error updating shipping preference:', error);
+      if (errorText) {
+        errorText.textContent = 'Fehler beim Aktualisieren der Versandpräferenz';
+      }
+      errorMessage?.classList.remove('hidden');
     }
   };
 </script>
