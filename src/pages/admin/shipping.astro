@@ -34,7 +34,7 @@ const formatPrice = (price: number) => {
 			<h2 class="text-3xl font-bold text-base-content mb-2">Versandprofile</h2>
 			<p class="text-base-content/60">Verwalten Sie Ihre Versandoptionen und Preise</p>
 		</div>
-		<button class="btn btn-primary gap-2" onclick="openCreateModal()">
+		<button class="btn btn-admin-primary gap-2" onclick="openCreateModal()">
 			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
 				<path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
 			</svg>
@@ -51,14 +51,15 @@ const formatPrice = (price: number) => {
 						<div class="flex-1">
 							<h3 class="card-title text-lg">{profile.name}</h3>
 							{profile.isDefault && (
-								<span class="badge badge-primary badge-sm mt-1">Standard</span>
+								<span class="badge badge-sm mt-1" style="background-color: var(--color-yellow-accent); color: #1c1917; border-color: var(--color-yellow-accent);">Standard</span>
 							)}
 						</div>
 						<div class="form-control">
 							<label class="label cursor-pointer gap-2">
 								<input
 									type="checkbox"
-									class="toggle toggle-sm toggle-success"
+									class="toggle toggle-sm"
+									style="--toggle-color: var(--color-metrics-text);"
 									checked={profile.isActive}
 									onchange={`toggleStatus('${profile.id}', this.checked)`}
 								/>
@@ -76,7 +77,7 @@ const formatPrice = (price: number) => {
 						{profile.freeShippingThreshold && (
 							<div class="flex justify-between">
 								<span class="text-base-content/60">Kostenlos ab:</span>
-								<span class="font-semibold text-success">{formatPrice(profile.freeShippingThreshold)}</span>
+								<span class="font-semibold" style="color: var(--color-metrics-text);">{formatPrice(profile.freeShippingThreshold)}</span>
 							</div>
 						)}
 						{profile.estimatedDays && (
@@ -107,7 +108,7 @@ const formatPrice = (price: number) => {
 			</svg>
 			<h3 class="text-xl font-semibold text-base-content mb-2">Keine Versandprofile</h3>
 			<p class="text-base-content/60 mb-4">Erstellen Sie Ihr erstes Versandprofil</p>
-			<button class="btn btn-primary" onclick="openCreateModal()">Profil erstellen</button>
+			<button class="btn btn-admin-primary" onclick="openCreateModal()">Profil erstellen</button>
 		</div>
 	)}
 
@@ -175,14 +176,14 @@ const formatPrice = (price: number) => {
 					<div class="form-control">
 						<label class="label cursor-pointer gap-2">
 							<span class="label-text font-medium">Aktiv</span>
-							<input type="checkbox" id="profile-is-active" name="isActive" class="checkbox checkbox-primary" checked />
+							<input type="checkbox" id="profile-is-active" name="isActive" class="checkbox" style="--checkbox-color: var(--color-metrics-text);" checked />
 						</label>
 					</div>
 
 					<div class="form-control">
 						<label class="label cursor-pointer gap-2">
 							<span class="label-text font-medium">Standard</span>
-							<input type="checkbox" id="profile-is-default" name="isDefault" class="checkbox checkbox-primary" />
+							<input type="checkbox" id="profile-is-default" name="isDefault" class="checkbox" style="--checkbox-color: var(--color-metrics-text);" />
 						</label>
 						<label class="label">
 							<span class="label-text-alt">Wird automatisch ausgewählt</span>
@@ -192,7 +193,7 @@ const formatPrice = (price: number) => {
 
 				<div class="modal-action">
 					<button type="button" class="btn btn-ghost" onclick="document.getElementById('profile-modal').close()">Abbrechen</button>
-					<button type="submit" class="btn btn-primary">Speichern</button>
+					<button type="submit" class="btn btn-admin-primary">Speichern</button>
 				</div>
 			</form>
 		</div>

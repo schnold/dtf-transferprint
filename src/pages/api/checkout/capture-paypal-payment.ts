@@ -28,13 +28,23 @@ export const POST: APIRoute = async ({ request, locals }) => {
     }
 
     const body = await request.json();
-    const { paypalOrderId } = body;
+    const { paypalOrderId, addressId } = body;
 
     if (!paypalOrderId) {
       return new Response(
         JSON.stringify({
           success: false,
           error: { message: 'PayPal order ID is required' },
+        }),
+        { status: 400 }
+      );
+    }
+
+    if (!addressId) {
+      return new Response(
+        JSON.stringify({
+          success: false,
+          error: { message: 'Address is required' },
         }),
         { status: 400 }
       );
@@ -99,52 +109,41 @@ export const POST: APIRoute = async ({ request, locals }) => {
       );
     }
 
-    // Get user's default addresses or first available
+    // Get the selected address and verify it belongs to the user
     const addressResult = await client.query(
       `
-      SELECT id, "addressType" FROM "userAddresses"
-      WHERE "userId" = $1
-      ORDER BY "isDefault" DESC, "createdAt" DESC
-      LIMIT 2
+      SELECT id, "addressType", "userId" FROM "userAddresses"
+      WHERE id = $1
     `,
-      [userId]
+      [addressId]
     );
 
-    let shippingAddressId = null;
-    let billingAddressId = null;
-
-    for (const addr of addressResult.rows) {
-      if (
-        (addr.addressType === 'shipping' || addr.addressType === 'both') &&
-        !shippingAddressId
-      ) {
-        shippingAddressId = addr.id;
-      }
-      if (
-        (addr.addressType === 'billing' || addr.addressType === 'both') &&
-        !billingAddressId
-      ) {
-        billingAddressId = addr.id;
-      }
-    }
-
-    // If no addresses, use the same one for both
-    if (!shippingAddressId && addressResult.rows.length > 0) {
-      shippingAddressId = addressResult.rows[0].id;
-    }
-    if (!billingAddressId && addressResult.rows.length > 0) {
-      billingAddressId = addressResult.rows[0].id;
-    }
-
-    if (!shippingAddressId || !billingAddressId) {
+    if (addressResult.rows.length === 0) {
       return new Response(
         JSON.stringify({
           success: false,
-          error: { message: 'No addresses found. Please add a shipping and billing address.' },
+          error: { message: 'Selected address not found.' },
         }),
-        { status: 400 }
+        { status: 404 }
       );
     }
+
+    const selectedAddress = addressResult.rows[0];
+
+    // Verify address belongs to user
+    if (selectedAddress.userId !== userId) {
+      return new Response(
+        JSON.stringify({
+          success: false,
+          error: { message: 'Unauthorized - This address does not belong to you' },
+        }),
+        { status: 403 }
+      );
+    }
+
+    // Use the selected address for both shipping and billing
+    const shippingAddressId = selectedAddress.id;
+    const billingAddressId = selectedAddress.id;
 
     // Capture PayPal payment
     let captureResult;

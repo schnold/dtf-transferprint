@@ -48,6 +48,22 @@ if (response.ok) {
   }
 }
 
+// Fetch user addresses
+const addressClient = await pool.connect();
+let userAddresses: any[] = [];
+let hasAddresses = false;
+
+try {
+  const addressResult = await addressClient.query(
+    'SELECT * FROM "userAddresses" WHERE "userId" = $1 ORDER BY "isDefault" DESC, "createdAt" DESC',
+    [user.id]
+  );
+  userAddresses = addressResult.rows;
+  hasAddresses = userAddresses.length > 0;
+} finally {
+  addressClient.release();
+}
+
 // Fetch active shipping profiles
 const shippingClient = await pool.connect();
 let shippingProfiles: any[] = [];
@@ -120,6 +136,26 @@ const formatPrice = (price: number) => {
               </a>
             </div>
 
+            {/* Address Warning Banner */}
+            {!hasAddresses && (
+              <div class="alert alert-warning">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="stroke-current shrink-0 h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                  />
+                </svg>
+                <span>Bitte fügen Sie eine Lieferadresse hinzu, um die Bestellung abzuschließen.</span>
+              </div>
+            )}
+
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
               {/* Order Summary */}
               <div class="lg:col-span-2 space-y-6">
@@ -155,6 +191,61 @@ const formatPrice = (price: number) => {
                         </div>
                       </div>
                     ))}
+                  </div>
+                </div>
+
+                {/* Shipping Address */}
+                <div class="bg-base-100 border border-base-300/50 rounded-lg p-6">
+                  <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-lg font-semibold">Lieferadresse</h2>
+                    <button
+                      id="add-address-btn"
+                      class="btn btn-sm btn-primary"
+                      onclick="document.getElementById('address-modal').showModal()"
+                    >
+                      + Neue Adresse
+                    </button>
+                  </div>
+
+                  <div id="address-list" class="space-y-3">
+                    {
+                      hasAddresses ? (
+                        userAddresses.map((address, index) => (
+                          <label class="flex items-start gap-3 p-4 border border-base-300 rounded-lg cursor-pointer hover:bg-base-200/50 transition-colors">
+                            <input
+                              type="radio"
+                              name="address"
+                              value={address.id}
+                              checked={index === 0}
+                              class="radio radio-primary radio-sm mt-1"
+                            />
+                            <div class="flex-1">
+                              <p class="font-medium">
+                                {address.firstName} {address.lastName}
+                                {address.isDefault && (
+                                  <span class="badge badge-sm badge-primary ml-2">Standard</span>
+                                )}
+                              </p>
+                              {address.company && (
+                                <p class="text-sm text-neutral/60">{address.company}</p>
+                              )}
+                              <p class="text-sm">{address.addressLine1}</p>
+                              {address.addressLine2 && (
+                                <p class="text-sm">{address.addressLine2}</p>
+                              )}
+                              <p class="text-sm">
+                                {address.postalCode} {address.city}
+                              </p>
+                              <p class="text-sm text-neutral/60">{address.country}</p>
+                            </div>
+                          </label>
+                        ))
+                      ) : (
+                        <p class="text-sm text-neutral/60 text-center py-4">
+                          Keine Adressen vorhanden. Bitte fügen Sie eine Adresse hinzu.
+                        </p>
+                      )
+                    }
                   </div>
                 </div>
 
@@ -275,6 +366,137 @@ const formatPrice = (price: number) => {
     </div>
   </div>
 
+  {/* Address Modal */}
+  <dialog id="address-modal" class="modal">
+    <div class="modal-box w-11/12 max-w-2xl">
+      <h3 class="font-bold text-lg mb-4">Neue Adresse hinzufügen</h3>
+      <form id="address-form" class="space-y-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Vorname *</span>
+            </label>
+            <input
+              type="text"
+              name="firstName"
+              required
+              class="input input-bordered"
+              placeholder="Max"
+            />
+          </div>
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Nachname *</span>
+            </label>
+            <input
+              type="text"
+              name="lastName"
+              required
+              class="input input-bordered"
+              placeholder="Mustermann"
+            />
+          </div>
+        </div>
+
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text">Firma (optional)</span>
+          </label>
+          <input type="text" name="company" class="input input-bordered" placeholder="Firma GmbH" />
+        </div>
+
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text">Straße und Hausnummer *</span>
+          </label>
+          <input
+            type="text"
+            name="addressLine1"
+            required
+            class="input input-bordered"
+            placeholder="Musterstraße 123"
+          />
+        </div>
+
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text">Adresszusatz (optional)</span>
+          </label>
+          <input
+            type="text"
+            name="addressLine2"
+            class="input input-bordered"
+            placeholder="2. Stock, Wohnung 5"
+          />
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Postleitzahl *</span>
+            </label>
+            <input
+              type="text"
+              name="postalCode"
+              required
+              class="input input-bordered"
+              placeholder="12345"
+            />
+          </div>
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Stadt *</span>
+            </label>
+            <input
+              type="text"
+              name="city"
+              required
+              class="input input-bordered"
+              placeholder="Berlin"
+            />
+          </div>
+        </div>
+
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text">Telefon (optional)</span>
+          </label>
+          <input type="tel" name="phone" class="input input-bordered" placeholder="+49 123 456789" />
+        </div>
+
+        <div class="form-control">
+          <label class="label cursor-pointer justify-start gap-2">
+            <input type="checkbox" name="isDefault" class="checkbox checkbox-primary" />
+            <span class="label-text">Als Standardadresse festlegen</span>
+          </label>
+        </div>
+
+        <div class="form-control">
+          <label class="label cursor-pointer justify-start gap-2">
+            <input type="checkbox" name="useBothAddresses" class="checkbox checkbox-primary" checked />
+            <span class="label-text">Auch als Rechnungsadresse verwenden</span>
+          </label>
+        </div>
+
+        <div id="address-form-error" class="text-error text-sm hidden"></div>
+
+        <div class="modal-action">
+          <button
+            type="button"
+            class="btn"
+            onclick="document.getElementById('address-modal').close()"
+          >
+            Abbrechen
+          </button>
+          <button type="submit" class="btn btn-primary">Adresse speichern</button>
+        </div>
+      </form>
+    </div>
+    <form method="dialog" class="modal-backdrop">
+      <button>close</button>
+    </form>
+  </dialog>
+
   <script define:vars={{ userDiscountPercent, subtotal }}>
     let appliedDiscountCode = null;
 
@@ -301,6 +523,50 @@ const formatPrice = (price: number) => {
       }).format(price);
     }
 
+    // Handle address form submission
+    document.getElementById('address-form')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const form = e.target;
+      const formData = new FormData(form);
+      const errorEl = document.getElementById('address-form-error');
+
+      const addressData = {
+        firstName: formData.get('firstName'),
+        lastName: formData.get('lastName'),
+        company: formData.get('company') || null,
+        addressLine1: formData.get('addressLine1'),
+        addressLine2: formData.get('addressLine2') || null,
+        city: formData.get('city'),
+        postalCode: formData.get('postalCode'),
+        country: 'DE',
+        phone: formData.get('phone') || null,
+        isDefault: formData.get('isDefault') === 'on',
+        addressType: formData.get('useBothAddresses') === 'on' ? 'both' : 'shipping',
+      };
+
+      try {
+        const response = await fetch('/api/addresses/create', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(addressData),
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          // Close modal and reload page to show new address
+          document.getElementById('address-modal').close();
+          window.location.reload();
+        } else {
+          errorEl.textContent = result.error?.message || 'Fehler beim Speichern der Adresse';
+          errorEl.classList.remove('hidden');
+        }
+      } catch (error) {
+        errorEl.textContent = 'Fehler beim Speichern der Adresse';
+        errorEl.classList.remove('hidden');
+      }
+    });
+
     // Apply discount code
     document.getElementById('apply-discount-btn')?.addEventListener('click', async () => {
       const input = document.getElementById('discount-code-input');
@@ -323,6 +589,16 @@ const formatPrice = (price: number) => {
       const loadingEl = document.getElementById('payment-loading');
       const errorEl = document.getElementById('payment-error');
 
+      // Get selected address
+      const selectedAddressInput = document.querySelector('input[name="address"]:checked');
+      if (!selectedAddressInput) {
+        errorEl.textContent = 'Bitte wählen Sie eine Lieferadresse aus.';
+        errorEl.classList.remove('hidden');
+        throw new Error('No address selected');
+      }
+
+      const addressId = selectedAddressInput.value;
+
       loadingEl.classList.remove('hidden');
       errorEl.classList.add('hidden');
 
@@ -332,6 +608,7 @@ const formatPrice = (price: number) => {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             discountCode: appliedDiscountCode,
+            addressId: addressId,
           }),
         });
 

@@ -33,7 +33,7 @@ const formatPrice = (price: number) => {
 			<h2 class="text-3xl font-bold text-base-content mb-2">Zusatzleistungen</h2>
 			<p class="text-base-content/60">Verwalten Sie Ihre zusätzlichen Services und Dienstleistungen</p>
 		</div>
-		<button class="btn btn-primary gap-2" onclick="openCreateModal()">
+		<button class="btn btn-admin-primary gap-2" onclick="openCreateModal()">
 			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
 				<path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
 			</svg>
@@ -93,7 +93,7 @@ const formatPrice = (price: number) => {
 			</svg>
 			<h3 class="text-xl font-semibold text-base-content mb-2">Keine Zusatzleistungen</h3>
 			<p class="text-base-content/60 mb-4">Erstellen Sie Ihre erste Zusatzleistung</p>
-			<button class="btn btn-primary" onclick="openCreateModal()">Zusatzleistung erstellen</button>
+			<button class="btn btn-admin-primary" onclick="openCreateModal()">Zusatzleistung erstellen</button>
 		</div>
 	)}
 
@@ -156,7 +156,7 @@ const formatPrice = (price: number) => {
 
 				<div class="modal-action">
 					<button type="button" class="btn btn-ghost" onclick="document.getElementById('service-modal').close()">Abbrechen</button>
-					<button type="submit" class="btn btn-primary">Speichern</button>
+					<button type="submit" class="btn btn-admin-primary">Speichern</button>
 				</div>
 			</form>
 		</div>
