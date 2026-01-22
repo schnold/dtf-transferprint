@@ -3,9 +3,9 @@ import { pool } from '../../../../lib/db';
 
 export const POST: APIRoute = async ({ request, locals }) => {
   try {
-    // Check if user is admin
-    const session = locals.session;
-    if (!session?.user?.isAdmin) {
+    // Check if user is admin - use locals.user directly (set by middleware)
+    const user = locals.user;
+    if (!user?.isAdmin) {
       return new Response(
         JSON.stringify({
           success: false,

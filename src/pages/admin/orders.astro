@@ -66,7 +66,7 @@ const formatDate = (date: string) => {
 	</div>
 
 	<!-- Orders Table -->
-	<div class="overflow-x-auto bg-base-100 rounded-lg shadow-md border border-base-300/50">
+	<div class="orders-table-wrapper bg-base-100 rounded-lg shadow-md border border-base-300/50">
 		<table class="table table-sm">
 			<thead class="bg-gradient-to-r from-base-200/50 to-base-100/50">
 				<tr>
@@ -130,18 +130,50 @@ const formatDate = (date: string) => {
 							</td>
 							<td class="text-sm">{formatDate(order.createdAt)}</td>
 							<td>
-								<div class="dropdown dropdown-end">
-									<label tabindex="0" class="btn btn-ghost btn-xs">
-										<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
-											<path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z" />
+								<div class="flex gap-1">
+									<!-- In Bearbeitung -->
+									<button
+										class="btn btn-ghost btn-xs tooltip"
+										data-tip="In Bearbeitung"
+										onclick={`updateStatus('${order.id}', 'processing', 'unfulfilled')`}
+									>
+										<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-info">
+											<path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
 										</svg>
-									</label>
-									<ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52 border border-base-300">
-										<li><a onclick={`updateStatus('${order.id}', 'processing', 'unfulfilled')`}>Mark as In Bearbeitung</a></li>
-										<li><a onclick={`updateStatus('${order.id}', 'processing', 'fulfilled')`}>Mark as Versandfertig</a></li>
-										<li><a onclick={`openTrackingModal('${order.id}', '${order.orderNumber}')`}>Mark as Versendet</a></li>
-										<li><a onclick={`updateStatus('${order.id}', 'delivered')`}>Mark as Abgeschlossen</a></li>
-									</ul>
+									</button>
+
+									<!-- Versandfertig -->
+									<button
+										class="btn btn-ghost btn-xs tooltip"
+										data-tip="Versandfertig"
+										onclick={`updateStatus('${order.id}', 'processing', 'fulfilled')`}
+									>
+										<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-warning">
+											<path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
+										</svg>
+									</button>
+
+									<!-- Versendet -->
+									<button
+										class="btn btn-ghost btn-xs tooltip"
+										data-tip="Versendet"
+										onclick={`openTrackingModal('${order.id}', '${order.orderNumber}')`}
+									>
+										<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-primary">
+											<path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.125-.504 1.125-1.125V11.25m-18 0v-1.5a1.5 1.5 0 011.5-1.5h1.5m-3 4.5h18m0 0v3.75a1.5 1.5 0 01-1.5 1.5H6a1.5 1.5 0 01-1.5-1.5V12m15 0V9.75a1.5 1.5 0 00-1.5-1.5h-12a1.5 1.5 0 00-1.5 1.5V12" />
+										</svg>
+									</button>
+
+									<!-- Abgeschlossen -->
+									<button
+										class="btn btn-ghost btn-xs tooltip"
+										data-tip="Abgeschlossen"
+										onclick={`updateStatus('${order.id}', 'delivered')`}
+									>
+										<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-success">
+											<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+										</svg>
+									</button>
 								</div>
 							</td>
 						</tr>
@@ -373,5 +405,9 @@ const formatDate = (date: string) => {
 	.btn-admin-primary:hover {
 		background-color: var(--color-metrics-text);
 		border-color: var(--color-metrics-text);
+	}
+
+	.orders-table-wrapper {
+		overflow-x: auto;
 	}
 </style>

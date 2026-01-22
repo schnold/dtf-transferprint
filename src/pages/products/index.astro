@@ -11,7 +11,7 @@ try {
       p.*,
       c.name as "categoryName",
       c.slug as "categorySlug",
-      (SELECT url FROM "productImages" WHERE "productId" = p.id AND "isPrimary" = true LIMIT 1) as "primaryImage"
+      (SELECT url FROM "productImages" WHERE "productId" = p.id ORDER BY "isPrimary" DESC, "displayOrder" LIMIT 1) as "primaryImage"
     FROM products p
     LEFT JOIN categories c ON p."categoryId" = c.id
     WHERE p."isActive" = true

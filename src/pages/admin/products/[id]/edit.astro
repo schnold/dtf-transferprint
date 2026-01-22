@@ -69,14 +69,19 @@ try {
   .tab-label-modern {
     @apply px-5 py-3 rounded-xl flex items-center gap-2 font-semibold text-sm
            border-2 border-transparent
-           transition-all duration-300 hover:border-base-300
+           transition-all duration-300
            select-none whitespace-nowrap;
-    background-color: rgba(229, 229, 229, 0.5);
-    color: rgba(89, 89, 89, 0.7);
+    background-color: rgba(156, 163, 175, 0.3);
+    color: rgba(107, 114, 128, 0.8);
   }
 
   .tab-label-modern:hover {
-    background-color: rgba(166, 166, 166, 0.6);
+    background-color: rgba(156, 163, 175, 0.4);
+  }
+
+  .tab-radio-modern input:checked + .tab-label-modern {
+    background-color: rgba(75, 85, 99, 1);
+    color: rgba(255, 255, 255, 1);
   }
 
   /* Modern Input Fields with Better Visibility */
@@ -181,12 +186,6 @@ try {
         </svg>
         Ansehen
       </a>
-      <button id="deleteBtn" class="btn btn-error btn-outline gap-2">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-        </svg>
-        Löschen
-      </button>
     </div>
   </div>
 
@@ -194,25 +193,25 @@ try {
   <div class="stats stats-vertical lg:stats-horizontal shadow-lg w-full mb-6 border border-base-300/50">
     <div class="stat place-items-center">
       <div class="stat-title">Grundpreis</div>
-      <div class="stat-value text-primary">{parseFloat(product.basePrice).toFixed(2)}€</div>
+      <div class="stat-value text-gray-600">{parseFloat(product.basePrice).toFixed(2)}€</div>
       <div class="stat-desc">{product.priceCalculationMethod === 'per_piece' ? 'Pro Stück' : product.priceCalculationMethod === 'per_meter' ? 'Pro Meter' : 'Pro m²'}</div>
     </div>
 
     <div class="stat place-items-center">
       <div class="stat-title">Kategorie</div>
-      <div class="stat-value text-2xl">{categories.rows.find(cat => cat.id === product.categoryId)?.name || 'N/A'}</div>
+      <div class="stat-value text-2xl text-gray-600">{categories.rows.find(cat => cat.id === product.categoryId)?.name || 'N/A'}</div>
       <div class="stat-desc">{product.sku || 'Keine SKU'}</div>
     </div>
 
     <div class="stat place-items-center">
       <div class="stat-title">Preisstaffeln</div>
-      <div class="stat-value text-secondary">{priceTiers.rows.length}</div>
+      <div class="stat-value text-gray-600">{priceTiers.rows.length}</div>
       <div class="stat-desc">Staffeln konfiguriert</div>
     </div>
 
     <div class="stat place-items-center">
       <div class="stat-title">Bilder</div>
-      <div class="stat-value text-accent">{productImages.rows.length}</div>
+      <div class="stat-value text-gray-600">{productImages.rows.length}</div>
       <div class="stat-desc">{productImages.rows.filter(img => img.isPrimary).length} Primärbild</div>
     </div>
   </div>
@@ -224,7 +223,7 @@ try {
       <div role="tablist" class="flex gap-2 flex-wrap">
         <label class="tab-radio-modern">
           <input type="radio" name="product_tabs" value="basic" class="hidden peer" checked />
-          <span class="tab-label-modern peer-checked:bg-primary peer-checked:text-primary-content peer-checked:shadow-lg">
+          <span class="tab-label-modern">
             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
               <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clip-rule="evenodd"/>
             </svg>
@@ -233,7 +232,7 @@ try {
         </label>
         <label class="tab-radio-modern">
           <input type="radio" name="product_tabs" value="pricing" class="hidden peer" />
-          <span class="tab-label-modern peer-checked:bg-secondary peer-checked:text-secondary-content peer-checked:shadow-lg">
+          <span class="tab-label-modern">
             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
               <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z"/>
               <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clip-rule="evenodd"/>
@@ -243,7 +242,7 @@ try {
         </label>
         <label class="tab-radio-modern">
           <input type="radio" name="product_tabs" value="images" class="hidden peer" />
-          <span class="tab-label-modern peer-checked:bg-accent peer-checked:text-accent-content peer-checked:shadow-lg">
+          <span class="tab-label-modern">
             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
               <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/>
             </svg>
@@ -252,7 +251,7 @@ try {
         </label>
         <label class="tab-radio-modern">
           <input type="radio" name="product_tabs" value="files" class="hidden peer" />
-          <span class="tab-label-modern peer-checked:bg-info peer-checked:text-info-content peer-checked:shadow-lg">
+          <span class="tab-label-modern">
             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
               <path fill-rule="evenodd" d="M8 4a3 3 0 00-3 3v4a5 5 0 0010 0V7a1 1 0 112 0v4a7 7 0 11-14 0V7a5 5 0 0110 0v4a3 3 0 11-6 0V7a1 1 0 012 0v4a1 1 0 102 0V7a3 3 0 00-3-3z" clip-rule="evenodd"/>
             </svg>
@@ -261,7 +260,7 @@ try {
         </label>
         <label class="tab-radio-modern">
           <input type="radio" name="product_tabs" value="dtf" class="hidden peer" />
-          <span class="tab-label-modern peer-checked:bg-success peer-checked:text-success-content peer-checked:shadow-lg">
+          <span class="tab-label-modern">
             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
               <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"/>
             </svg>
@@ -270,7 +269,7 @@ try {
         </label>
         <label class="tab-radio-modern">
           <input type="radio" name="product_tabs" value="seo" class="hidden peer" />
-          <span class="tab-label-modern peer-checked:bg-warning peer-checked:text-warning-content peer-checked:shadow-lg">
+          <span class="tab-label-modern">
             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
               <path fill-rule="evenodd" d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z" clip-rule="evenodd"/>
             </svg>
@@ -279,7 +278,7 @@ try {
         </label>
         <label class="tab-radio-modern">
           <input type="radio" name="product_tabs" value="specs" class="hidden peer" />
-          <span class="tab-label-modern peer-checked:bg-error peer-checked:text-error-content peer-checked:shadow-lg">
+          <span class="tab-label-modern">
             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
               <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/>
               <path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"/>
@@ -309,7 +308,7 @@ try {
                       <span class="badge badge-error badge-xs">Pflicht</span>
                     </span>
                   </label>
-                  <input type="text" name="name" required class="input-modern h-12 text-base" value={product.name} placeholder="z.B. DTF Transfer Premium" />
+                  <input type="text" name="name" required form="productForm" class="input-modern h-12 text-base" value={product.name} placeholder="z.B. DTF Transfer Premium" />
                 </div>
 
                 <!-- Slug -->
@@ -320,7 +319,7 @@ try {
                       <span class="badge badge-error badge-xs">Pflicht</span>
                     </span>
                   </label>
-                  <input type="text" name="slug" required class="input-modern h-12 text-base font-mono" value={product.slug} placeholder="dtf-transfer-premium" />
+                  <input type="text" name="slug" required form="productForm" class="input-modern h-12 text-base font-mono" value={product.slug} placeholder="dtf-transfer-premium" />
                 </div>
 
                 <!-- Category -->
@@ -331,7 +330,7 @@ try {
                       <span class="badge badge-error badge-xs">Pflicht</span>
                     </span>
                   </label>
-                  <select name="categoryId" required class="select-modern h-12 text-base">
+                  <select name="categoryId" required form="productForm" class="select-modern h-12 text-base">
                     <option value="">Kategorie auswählen...</option>
                     {categories.rows.map((cat) => (
                       <option value={cat.id} selected={cat.id === product.categoryId}>{cat.name}</option>
@@ -347,7 +346,7 @@ try {
                       <span class="badge badge-ghost badge-xs">Optional</span>
                     </span>
                   </label>
-                  <input type="text" name="sku" class="input-modern h-12 text-base" value={product.sku || ''} placeholder="SKU-12345" />
+                  <input type="text" name="sku" form="productForm" class="input-modern h-12 text-base" value={product.sku || ''} placeholder="SKU-12345" />
                 </div>
               </div>
             </div>
@@ -370,7 +369,7 @@ try {
                     </span>
                     <span class="label-text-alt badge badge-info badge-sm">Für Karten</span>
                   </label>
-                  <textarea name="shortDescription" required class="textarea-modern h-24 text-base resize-none" placeholder="Kurze, prägnante Beschreibung für Produktkarten...">{product.shortDescription}</textarea>
+                  <textarea name="shortDescription" required form="productForm" class="textarea-modern h-24 text-base resize-none" placeholder="Kurze, prägnante Beschreibung für Produktkarten...">{product.shortDescription}</textarea>
                 </div>
 
                 <!-- Full Description -->
@@ -382,7 +381,7 @@ try {
                     </span>
                     <span class="label-text-alt badge badge-info badge-sm">Für Detailseite</span>
                   </label>
-                  <textarea name="description" required class="textarea-modern h-36 text-base resize-none" placeholder="Detaillierte Produktbeschreibung...">{product.description}</textarea>
+                  <textarea name="description" required form="productForm" class="textarea-modern h-36 text-base resize-none" placeholder="Detaillierte Produktbeschreibung...">{product.description}</textarea>
                 </div>
               </div>
             </div>
@@ -397,28 +396,28 @@ try {
               </h3>
               <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 <label class="flex items-center gap-4 p-4 rounded-xl bg-base-200/60 border-2 border-base-300/40 hover:bg-base-200 hover:border-base-300 cursor-pointer transition-all">
-                  <input type="checkbox" name="isActive" class="toggle toggle-success toggle-lg" checked={product.isActive} />
+                  <input type="checkbox" name="isActive" form="productForm" class="toggle toggle-success toggle-lg" checked={product.isActive} />
                   <div class="flex-1">
                     <div class="font-bold text-base">Aktiv</div>
                     <div class="text-xs text-base-content/60 mt-0.5">Sichtbar für Kunden</div>
                   </div>
                 </label>
                 <label class="flex items-center gap-4 p-4 rounded-xl bg-base-200/60 border-2 border-base-300/40 hover:bg-base-200 hover:border-base-300 cursor-pointer transition-all">
-                  <input type="checkbox" name="isFeatured" class="toggle toggle-primary toggle-lg" checked={product.isFeatured} />
+                  <input type="checkbox" name="isFeatured" form="productForm" class="toggle toggle-primary toggle-lg" checked={product.isFeatured} />
                   <div class="flex-1">
                     <div class="font-bold text-base">Empfohlen</div>
                     <div class="text-xs text-base-content/60 mt-0.5">Als Featured anzeigen</div>
                   </div>
                 </label>
                 <label class="flex items-center gap-4 p-4 rounded-xl bg-base-200/60 border-2 border-base-300/40 hover:bg-base-200 hover:border-base-300 cursor-pointer transition-all">
-                  <input type="checkbox" name="trackInventory" class="toggle toggle-warning toggle-lg" checked={product.trackInventory} />
+                  <input type="checkbox" name="trackInventory" form="productForm" class="toggle toggle-warning toggle-lg" checked={product.trackInventory} />
                   <div class="flex-1">
                     <div class="font-bold text-base">Lagerbestand</div>
                     <div class="text-xs text-base-content/60 mt-0.5">Bestand verfolgen</div>
                   </div>
                 </label>
                 <label class="flex items-center gap-4 p-4 rounded-xl bg-base-200/60 border-2 border-base-300/40 hover:bg-base-200 hover:border-base-300 cursor-pointer transition-all">
-                  <input type="checkbox" name="requiresShipping" class="toggle toggle-lg" checked={product.requiresShipping} />
+                  <input type="checkbox" name="requiresShipping" form="productForm" class="toggle toggle-lg" checked={product.requiresShipping} />
                   <div class="flex-1">
                     <div class="font-bold text-base">Versand</div>
                     <div class="text-xs text-base-content/60 mt-0.5">Benötigt Versand</div>
@@ -448,7 +447,7 @@ try {
                     </span>
                   </label>
                   <div class="join w-full">
-                    <input type="number" name="basePrice" step="0.01" required class="input-modern h-12 text-base font-bold join-item flex-1" value={parseFloat(product.basePrice)} />
+                    <input type="number" name="basePrice" step="0.01" required form="productForm" class="input-modern h-12 text-base font-bold join-item flex-1" value={parseFloat(product.basePrice)} />
                     <span class="btn btn-neutral join-item h-12">€</span>
                   </div>
                 </div>
@@ -461,7 +460,7 @@ try {
                     </span>
                   </label>
                   <div class="join w-full">
-                    <input type="number" name="compareAtPrice" step="0.01" class="input-modern h-12 text-base join-item flex-1" value={product.compareAtPrice ? parseFloat(product.compareAtPrice) : ''} placeholder="UVP" />
+                    <input type="number" name="compareAtPrice" step="0.01" form="productForm" class="input-modern h-12 text-base join-item flex-1" value={product.compareAtPrice ? parseFloat(product.compareAtPrice) : ''} placeholder="UVP" />
                     <span class="btn btn-neutral join-item h-12">€</span>
                   </div>
                 </div>
@@ -470,7 +469,7 @@ try {
                   <label class="label pb-2">
                     <span class="label-text font-bold text-base">Berechnungsmethode</span>
                   </label>
-                  <select name="priceCalculationMethod" class="select-modern h-12 text-base">
+                  <select name="priceCalculationMethod" form="productForm" class="select-modern h-12 text-base">
                     <option value="per_piece" selected={product.priceCalculationMethod === 'per_piece'}>Pro Stück</option>
                     <option value="per_meter" selected={product.priceCalculationMethod === 'per_meter'}>Pro Meter</option>
                     <option value="per_area" selected={product.priceCalculationMethod === 'per_area'}>Pro Fläche (m²)</option>
@@ -515,34 +514,34 @@ try {
                             <label class="label">
                               <span class="label-text font-medium text-sm">Min. Menge</span>
                             </label>
-                            <input type="number" name="tier_minQty[]" value={tier.minQuantity} required class="input input-bordered input-sm tier-minQty" />
+                            <input type="number" name="tier_minQty[]" form="productForm" value={tier.minQuantity} required class="input input-bordered input-sm tier-minQty" />
                           </div>
                           <div class="form-control">
                             <label class="label">
                               <span class="label-text font-medium text-sm">Max. Menge</span>
                               <span class="label-text-alt text-xs">Leer lassen für ∞</span>
                             </label>
-                            <input type="number" name="tier_maxQty[]" value={tier.maxQuantity || ''} class="input input-bordered input-sm tier-maxQty" placeholder="∞" />
+                            <input type="number" name="tier_maxQty[]" form="productForm" value={tier.maxQuantity || ''} class="input input-bordered input-sm tier-maxQty" placeholder="∞" />
                           </div>
                           <div class="form-control">
                             <label class="label">
                               <span class="label-text font-medium text-sm">Rabatt %</span>
                             </label>
-                            <input type="number" name="tier_discount[]" value={parseFloat(tier.discountPercent)} step="0.01" required class="input input-bordered input-sm tier-discount" />
+                            <input type="number" name="tier_discount[]" form="productForm" value={parseFloat(tier.discountPercent)} step="0.01" required class="input input-bordered input-sm tier-discount" />
                           </div>
                           <div class="form-control">
                             <label class="label">
                               <span class="label-text font-medium text-sm">Preis (€)</span>
                               <span class="label-text-alt text-xs">Auto-berechnet</span>
                             </label>
-                            <input type="number" name="tier_price[]" value={parseFloat(tier.pricePerUnit)} step="0.01" required class="input input-bordered input-sm tier-price bg-base-200" readonly />
+                            <input type="number" name="tier_price[]" form="productForm" value={parseFloat(tier.pricePerUnit)} step="0.01" required class="input input-bordered input-sm tier-price bg-base-200" readonly />
                           </div>
                           <div class="form-control">
                             <label class="label">
                               <span class="label-text font-medium text-sm">Reihenfolge</span>
                             </label>
                             <div class="join w-full">
-                              <input type="number" name="tier_order[]" value={tier.displayOrder} required class="input input-bordered input-sm join-item flex-1 tier-order" />
+                              <input type="number" name="tier_order[]" form="productForm" value={tier.displayOrder} required class="input input-bordered input-sm join-item flex-1 tier-order" />
                               <button type="button" class="btn btn-error btn-sm join-item remove-tier">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -562,34 +561,34 @@ try {
                           <label class="label">
                             <span class="label-text font-medium text-sm">Min. Menge</span>
                           </label>
-                          <input type="number" name="tier_minQty[]" value="0" required class="input input-bordered input-sm tier-minQty" />
+                          <input type="number" name="tier_minQty[]" form="productForm" value="0" required class="input input-bordered input-sm tier-minQty" />
                         </div>
                         <div class="form-control">
                           <label class="label">
                             <span class="label-text font-medium text-sm">Max. Menge</span>
                             <span class="label-text-alt text-xs">Leer lassen für ∞</span>
                           </label>
-                          <input type="number" name="tier_maxQty[]" class="input input-bordered input-sm tier-maxQty" placeholder="∞" />
+                          <input type="number" name="tier_maxQty[]" form="productForm" class="input input-bordered input-sm tier-maxQty" placeholder="∞" />
                         </div>
                         <div class="form-control">
                           <label class="label">
                             <span class="label-text font-medium text-sm">Rabatt %</span>
                           </label>
-                          <input type="number" name="tier_discount[]" value="0" step="0.01" required class="input input-bordered input-sm tier-discount" />
+                          <input type="number" name="tier_discount[]" form="productForm" value="0" step="0.01" required class="input input-bordered input-sm tier-discount" />
                         </div>
                         <div class="form-control">
                           <label class="label">
                             <span class="label-text font-medium text-sm">Preis (€)</span>
                             <span class="label-text-alt text-xs">Auto-berechnet</span>
                           </label>
-                          <input type="number" name="tier_price[]" value={parseFloat(product.basePrice)} step="0.01" required class="input input-bordered input-sm tier-price bg-base-200" readonly />
+                          <input type="number" name="tier_price[]" form="productForm" value={parseFloat(product.basePrice)} step="0.01" required class="input input-bordered input-sm tier-price bg-base-200" readonly />
                         </div>
                         <div class="form-control">
                           <label class="label">
                             <span class="label-text font-medium text-sm">Reihenfolge</span>
                           </label>
                           <div class="join w-full">
-                            <input type="number" name="tier_order[]" value="1" required class="input input-bordered input-sm join-item flex-1 tier-order" />
+                            <input type="number" name="tier_order[]" form="productForm" value="1" required class="input input-bordered input-sm join-item flex-1 tier-order" />
                             <button type="button" class="btn btn-error btn-sm join-item remove-tier">
                               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -630,7 +629,7 @@ try {
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div class="form-control">
                   <label class="label cursor-pointer justify-start gap-3 p-4 bg-base-100 rounded-xl border border-base-300/50 hover:bg-base-200/80 hover:border-base-300 transition-all duration-200 shadow-sm">
-                    <input type="checkbox" name="isBlockout" class="toggle toggle-primary" checked={product.isBlockout} />
+                    <input type="checkbox" name="isBlockout" form="productForm" class="toggle toggle-primary" checked={product.isBlockout} />
                     <div class="flex-1">
                       <span class="label-text font-semibold">Blockout-Produkt</span>
                       <p class="text-xs text-base-content/60 mt-1">Spezieller Blockout-DTF-Transfer</p>
@@ -642,7 +641,7 @@ try {
                   <label class="label">
                     <span class="label-text font-semibold">Drucktechnologie</span>
                   </label>
-                  <input type="text" name="printTechnology" value={product.printTechnology || 'DTF'} class="input input-bordered" />
+                  <input type="text" name="printTechnology" form="productForm" value={product.printTechnology || 'DTF'} class="input input-bordered" />
                 </div>
               </div>
             </div>
@@ -654,7 +653,7 @@ try {
               <h2 class="card-title text-lg mb-4 text-base-content">Datei-Upload-Einstellungen</h2>
               <div class="form-control mb-4">
                 <label class="label cursor-pointer justify-start gap-3 p-4 bg-base-100 rounded-lg border border-base-300 hover:bg-base-200 transition-colors">
-                  <input type="checkbox" id="acceptsFileUpload" name="acceptsFileUpload" class="toggle toggle-secondary" checked={product.acceptsFileUpload} />
+                  <input type="checkbox" id="acceptsFileUpload" name="acceptsFileUpload" form="productForm" class="toggle toggle-secondary" checked={product.acceptsFileUpload} />
                   <div class="flex-1">
                     <span class="label-text font-semibold">Datei-Upload erlauben</span>
                     <p class="text-xs text-base-content/60 mt-1">Kunden können Design-Dateien hochladen</p>
@@ -668,14 +667,14 @@ try {
                     <label class="label">
                       <span class="label-text font-semibold">Max. Dateigröße (MB)</span>
                     </label>
-                    <input type="number" name="maxFileSizeMb" value={product.maxFileSizeMb || 255} class="input input-bordered" />
+                    <input type="number" name="maxFileSizeMb" form="productForm" value={product.maxFileSizeMb || 255} class="input input-bordered" />
                   </div>
 
                   <div class="form-control">
                     <label class="label">
                       <span class="label-text font-semibold">Erlaubte Dateitypen</span>
                     </label>
-                    <input type="text" name="allowedFileTypes" value={product.allowedFileTypes || 'PDF'} class="input input-bordered" placeholder="PDF, PNG, JPG" />
+                    <input type="text" name="allowedFileTypes" form="productForm" value={product.allowedFileTypes || 'PDF'} class="input input-bordered" placeholder="PDF, PNG, JPG" />
                     <label class="label">
                       <span class="label-text-alt">Kommagetrennte Liste von Dateierweiterungen</span>
                     </label>
@@ -689,21 +688,21 @@ try {
                     <label class="label">
                       <span class="label-text font-semibold">Max. Breite (mm)</span>
                     </label>
-                    <input type="number" name="maxWidthMm" value={product.maxWidthMm || ''} class="input input-bordered" placeholder="560" />
+                    <input type="number" name="maxWidthMm" form="productForm" value={product.maxWidthMm || ''} class="input input-bordered" placeholder="560" />
                   </div>
 
                   <div class="form-control">
                     <label class="label">
                       <span class="label-text font-semibold">Min. Höhe (mm)</span>
                     </label>
-                    <input type="number" name="minHeightMm" value={product.minHeightMm || ''} class="input input-bordered" placeholder="100" />
+                    <input type="number" name="minHeightMm" form="productForm" value={product.minHeightMm || ''} class="input input-bordered" placeholder="100" />
                   </div>
 
                   <div class="form-control">
                     <label class="label">
                       <span class="label-text font-semibold">Max. Höhe (mm)</span>
                     </label>
-                    <input type="number" name="maxHeightMm" value={product.maxHeightMm || ''} class="input input-bordered" placeholder="5000" />
+                    <input type="number" name="maxHeightMm" form="productForm" value={product.maxHeightMm || ''} class="input input-bordered" placeholder="5000" />
                   </div>
                 </div>
 
@@ -735,7 +734,7 @@ try {
                     </label>
                     <input
                       type="number"
-                      name="requiredDpi"
+                      name="requiredDpi" form="productForm"
                       value={product.requiredDpi || 300}
                       class="input input-bordered"
                       min="72"
@@ -760,7 +759,7 @@ try {
                     </label>
                     <input
                       type="number"
-                      name="requiredMinWidth"
+                      name="requiredMinWidth" form="productForm"
                       value={product.requiredMinWidth || ''}
                       class="input input-bordered"
                       min="1"
@@ -784,7 +783,7 @@ try {
                     </label>
                     <input
                       type="number"
-                      name="requiredMinHeight"
+                      name="requiredMinHeight" form="productForm"
                       value={product.requiredMinHeight || ''}
                       class="input input-bordered"
                       min="1"
@@ -860,7 +859,7 @@ try {
                     </span>
                   </span>
                 </label>
-                <input type="text" name="metaTitle" class="input input-bordered input-lg focus:input-success transition-all" value={product.metaTitle || ''} placeholder="Leer lassen, um Produktnamen zu verwenden" maxlength="60" />
+                <input type="text" name="metaTitle" form="productForm" class="input input-bordered input-lg focus:input-success transition-all" value={product.metaTitle || ''} placeholder="Leer lassen, um Produktnamen zu verwenden" maxlength="60" />
                 <label class="label">
                   <span class="label-text-alt badge badge-info badge-sm gap-1">
                     <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
@@ -887,7 +886,7 @@ try {
                     </span>
                   </span>
                 </label>
-                <textarea name="metaDescription" class="textarea textarea-bordered textarea-lg h-28 focus:textarea-success transition-all" placeholder="Leer lassen, um Kurzbeschreibung zu verwenden" maxlength="160">{product.metaDescription || ''}</textarea>
+                <textarea name="metaDescription" form="productForm" class="textarea textarea-bordered textarea-lg h-28 focus:textarea-success transition-all" placeholder="Leer lassen, um Kurzbeschreibung zu verwenden" maxlength="160">{product.metaDescription || ''}</textarea>
                 <label class="label">
                   <span class="label-text-alt badge badge-info badge-sm gap-1">
                     <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
@@ -1326,34 +1325,34 @@ try {
             <label class="label">
               <span class="label-text font-medium text-sm">Min. Menge</span>
             </label>
-            <input type="number" name="tier_minQty[]" value="${tierCount * 5}" required class="input input-bordered input-sm tier-minQty" />
+            <input type="number" name="tier_minQty[]" form="productForm" value="${tierCount * 5}" required class="input input-bordered input-sm tier-minQty" />
           </div>
           <div class="form-control">
             <label class="label">
               <span class="label-text font-medium text-sm">Max. Menge</span>
               <span class="label-text-alt text-xs">Leer lassen für ∞</span>
             </label>
-            <input type="number" name="tier_maxQty[]" class="input input-bordered input-sm tier-maxQty" placeholder="∞" />
+            <input type="number" name="tier_maxQty[]" form="productForm" class="input input-bordered input-sm tier-maxQty" placeholder="∞" />
           </div>
           <div class="form-control">
             <label class="label">
               <span class="label-text font-medium text-sm">Rabatt %</span>
             </label>
-            <input type="number" name="tier_discount[]" value="10" step="0.01" required class="input input-bordered input-sm tier-discount" />
+            <input type="number" name="tier_discount[]" form="productForm" value="10" step="0.01" required class="input input-bordered input-sm tier-discount" />
           </div>
           <div class="form-control">
             <label class="label">
               <span class="label-text font-medium text-sm">Preis (€)</span>
               <span class="label-text-alt text-xs">Auto-berechnet</span>
             </label>
-            <input type="number" name="tier_price[]" value="${calculateTierPrice(10, basePrice)}" step="0.01" required class="input input-bordered input-sm tier-price bg-base-200" readonly />
+            <input type="number" name="tier_price[]" form="productForm" value="${calculateTierPrice(10, basePrice)}" step="0.01" required class="input input-bordered input-sm tier-price bg-base-200" readonly />
           </div>
           <div class="form-control">
             <label class="label">
               <span class="label-text font-medium text-sm">Reihenfolge</span>
             </label>
             <div class="join w-full">
-              <input type="number" name="tier_order[]" value="${tierCount}" required class="input input-bordered input-sm join-item flex-1 tier-order" />
+              <input type="number" name="tier_order[]" form="productForm" value="${tierCount}" required class="input input-bordered input-sm join-item flex-1 tier-order" />
               <button type="button" class="btn btn-error btn-sm join-item remove-tier">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -1399,25 +1398,29 @@ try {
 
     // Collect data from all tabs, not just the form
     const getValue = (name) => {
-      // Try to find the field - could be input, textarea, or select
-      const input = document.querySelector(`[name="${name}"]`);
-      if (!input) {
-        console.warn(`[Form] Field not found: ${name}`);
-        // Try to find it in the form specifically
-        const formInput = document.getElementById('productForm')?.querySelector(`[name="${name}"]`);
-        if (formInput) {
-          console.log(`[Form] Found ${name} in form`);
-          const value = formInput.value || (formInput.type === 'checkbox' ? formInput.checked : '');
-          return value === '' ? null : value;
+      // Use form.elements which is more reliable for form-associated elements
+      const form = document.getElementById('productForm');
+      const element = form?.elements[name];
+
+      if (!element) {
+        console.warn(`[Form] Field not found in form.elements: ${name}`);
+        // Fallback to querySelector
+        const input = document.querySelector(`[name="${name}"]`);
+        if (!input) {
+          console.error(`[Form] Field not found anywhere: ${name}`);
+          return null;
         }
-        return null;
+        console.log(`[Form] Found ${name} via querySelector, type=${input.type}`);
+        if (input.type === 'checkbox') return input.checked;
+        const value = input.value;
+        return (value === null || value === undefined || value === '') ? null : value;
       }
-      if (input.type === 'checkbox') return input.checked;
-      // Handle textarea, select, and input fields
-      const value = input.value || '';
-      // Don't trim for description fields - they might have intentional whitespace
-      // Only return null if truly empty
-      return value === '' ? null : value;
+
+      console.log(`[Form] getValue('${name}'): found in form.elements, type=${element.type || 'textarea/select'}, value length=${element.value?.length}`);
+      if (element.type === 'checkbox') return element.checked;
+      const value = element.value;
+      console.log(`[Form] getValue('${name}'): value='${value?.substring(0, 50)}...' returning ${value ? 'value (len=' + value.length + ')' : 'null'}`);
+      return (value === null || value === undefined || value === '') ? null : value;
     };
 
     const getAllValues = (name) => {
@@ -1735,29 +1738,6 @@ try {
       }
     } catch (error) {
       alert('Fehler beim Speichern der Spezifikationen: ' + error.message);
-    }
-  });
-
-  // Delete button
-  document.getElementById('deleteBtn')?.addEventListener('click', async () => {
-    if (!confirm('Sind Sie sicher, dass Sie dieses Produkt deaktivieren möchten? Dies wird es im Frontend ausblenden.')) {
-      return;
-    }
-
-    try {
-      const response = await fetch(`/api/admin/products/${productId}`, {
-        method: 'DELETE',
-      });
-
-      const result = await response.json();
-
-      if (result.success) {
-        window.location.href = '/admin/products';
-      } else {
-        throw new Error(result.error.message);
-      }
-    } catch (error) {
-      alert('Fehler beim Löschen des Produkts: ' + error.message);
     }
   });
 </script>

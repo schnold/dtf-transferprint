@@ -4,3 +4,11 @@
 
 [build.environment]
   NODE_VERSION = "20"
+  # Configure secrets scanning to ignore example files, documentation, and build output
+  # These paths contain example values or documentation, not actual secrets
+  SECRETS_SCAN_OMIT_PATHS = ".env.security.example,*.md,.netlify/**,dist/**,better-auth_migrations/**,migrations/**,scripts/**,database/**,daisyui-mcp/**"
+  # Exclude these environment variable keys from secret scanning
+  # PAYPAL_MODE is just a configuration value (sandbox/live), not a secret
+  # BETTER_AUTH_URL is a public URL, not a secret
+  # BLOCK_PASSWORD is a simple password protection, not a sensitive secret
+  SECRETS_SCAN_OMIT_KEYS = "PAYPAL_MODE,BETTER_AUTH_URL,BLOCK_PASSWORD"

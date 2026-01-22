@@ -17,7 +17,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
 
     if (!blockPassword) {
       console.error("[BLOCK_AUTH] ERROR: BLOCK_PASSWORD environment variable is not set!");
-      console.error("[BLOCK_AUTH] Please create a .env file in the project root with: BLOCK_PASSWORD=admin123");
+      console.error("[BLOCK_AUTH] Please set the BLOCK_PASSWORD environment variable in your .env file");
       return new Response(
         JSON.stringify({ error: "Passwortschutz nicht konfiguriert" }),
         { status: 500, headers: { "Content-Type": "application/json" } }

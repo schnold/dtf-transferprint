@@ -5,7 +5,10 @@
       "Bash(dir \"C:\\\\Users\\\\lukas\\\\Desktop\\\\Projects\\\\dtf-transferprint\\\\src\\\\pages\")",
       "Bash(npm install:*)",
       "Bash(npm run migrate:*)",
-      "Bash(npm run dev:*)"
+      "Bash(npm run dev:*)",
+      "Bash(npm run astro:*)",
+      "Bash(npm run build:*)",
+      "Bash(awk:*)"
     ]
   }
 }

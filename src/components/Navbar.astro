@@ -7,19 +7,53 @@ import { pool } from '../lib/db';
 
 const user = Astro.locals.user;
 
-// Optimized query: Fetch all categories with their products in ONE query using JSON aggregation
+// Optimized query: Fetch ALL categories hierarchically with their products in ONE query using recursive CTE
 const client = await pool.connect();
 let categoriesWithProducts = [];
+let categoryHierarchy = [];
 try {
 	const result = await client.query(`
+		WITH RECURSIVE category_tree AS (
+			-- Base case: root categories (hierarchy level 0)
+			SELECT
+				c.id,
+				c.name,
+				c.slug,
+				c."displayOrder",
+				c."parentId",
+				c.icon,
+				c.description,
+				0 as level,
+				ARRAY[c."displayOrder", 0, 0, 0] as sort_path
+			FROM categories c
+			WHERE c."isActive" = true AND c."parentId" IS NULL
+
+			UNION ALL
+
+			-- Recursive case: child categories
+			SELECT
+				c.id,
+				c.name,
+				c.slug,
+				c."displayOrder",
+				c."parentId",
+				c.icon,
+				c.description,
+				ct.level + 1,
+				ct.sort_path[1:ct.level+1] || ARRAY[c."displayOrder"] || ARRAY[0, 0, 0]
+			FROM categories c
+			INNER JOIN category_tree ct ON c."parentId" = ct.id
+			WHERE c."isActive" = true
+		)
 		SELECT
-			c.id,
-			c.name,
-			c.slug,
-			c."displayOrder",
-			c."parentId",
-			c.icon,
-			c.description,
+			ct.id,
+			ct.name,
+			ct.slug,
+			ct."displayOrder",
+			ct."parentId",
+			ct.icon,
+			ct.description,
+			ct.level,
 			COALESCE(
 				json_agg(
 					json_build_object(
@@ -34,27 +68,26 @@ try {
 				) FILTER (WHERE p.id IS NOT NULL),
 				'[]'::json
 			) as products
-		FROM categories c
-		LEFT JOIN products p ON c.id = p."categoryId" AND p."isActive" = true
-		WHERE c."isActive" = true AND c."parentId" IS NULL
-		GROUP BY c.id, c.name, c.slug, c."displayOrder", c."parentId", c.icon, c.description
-		ORDER BY c."displayOrder", c.name
+		FROM category_tree ct
+		LEFT JOIN products p ON ct.id = p."categoryId" AND p."isActive" = true
+		GROUP BY ct.id, ct.name, ct.slug, ct."displayOrder", ct."parentId", ct.icon, ct.description, ct.level, ct.sort_path
+		ORDER BY ct.sort_path, ct.name
 	`);
 
 	categoriesWithProducts = result.rows.map(cat => ({
 		...cat,
-		products: (Array.isArray(cat.products) ? cat.products : []).slice(0, 10).map(p => ({
+		products: (Array.isArray(cat.products) ? cat.products : []).map(p => ({
 			...p,
 			basePrice: parseFloat(p.basePrice || 0),
 		})),
+		level: parseInt(cat.level || 0)
 	}));
+
+	// Organize categories by hierarchy
+	categoryHierarchy = categoriesWithProducts;
 } finally {
 	client.release();
 }
-
-// Split categories into sections for mega menu display (max 3 columns)
-const displayCategories = categoriesWithProducts.slice(0, 3);
-const remainingCategories = categoriesWithProducts.slice(3);
 ---
 
 <!-- Navbar -->
@@ -71,8 +104,8 @@ const remainingCategories = categoriesWithProducts.slice(3);
 		</div>
 		<div class="navbar-center hidden md:flex flex-1 min-w-0 justify-center">
 			<ul class="flex flex-row flex-wrap gap-0.5 sm:gap-1 px-1 max-w-4xl justify-center md:justify-start mega-menu">
-				<!-- Produkte Mega Menu (Dynamic Categories) -->
-				{categoriesWithProducts.length > 0 && (
+				<!-- Produkte Mega Menu (Dynamic Categories - Hierarchical) -->
+				{categoryHierarchy.length > 0 && (
 					<li class="dropdown mega-dropdown mega-dropdown-produkte flex-shrink-0 relative">
 						<label class="text-neutral/80 hover:text-neutral hover:bg-white/10 px-2 sm:px-3 lg:px-4 py-2 rounded-md transition-all duration-200 cursor-pointer flex items-center gap-1.5 text-sm lg:text-base font-medium">
 							<span>Produkte</span>
@@ -80,71 +113,63 @@ const remainingCategories = categoriesWithProducts.slice(3);
 								<path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
 							</svg>
 						</label>
-						<div class="mega-dropdown-content absolute top-full mt-2 bg-base-100 rounded-2xl shadow-2xl border border-base-300/30 p-6 max-w-[750px] opacity-0 invisible transform translate-y-2 transition-all duration-300 ease-out z-50">
-							<div class="grid grid-cols-2 xl:grid-cols-3 gap-5">
-								<!-- Dynamically render first 3 categories -->
-								{displayCategories.map((category) => (
-									category.products.length > 0 && (
-										<div>
-											<h3 class="font-bold text-neutral mb-3 text-base flex items-center gap-2">
-												<CategoryIcon icon={category.icon || 'folder'} />
-												{category.name}
-											</h3>
-											<ul class="space-y-2">
-												{category.products.map((product) => (
-													<li>
-														<a href={`/product/${product.slug}`} class="text-neutral/70 menu-link-hover text-sm py-1.5 transition-colors block break-words">
-															{product.name}
-														</a>
-													</li>
-												))}
-											</ul>
-										</div>
-									)
-								))}
-
-								<!-- Show remaining categories as links if any -->
-								{remainingCategories.length > 0 && (
+						<div class="mega-dropdown-content absolute top-full mt-2 bg-base-100 rounded-2xl shadow-2xl border border-base-300/30 p-6 max-w-[900px] opacity-0 invisible transform translate-y-2 transition-all duration-300 ease-out z-50 max-h-[80vh] overflow-y-auto">
+							<div class="grid grid-cols-2 gap-6">
+								<!-- Render all categories hierarchically in grid columns -->
+								{categoryHierarchy.map((category) => (
 									<div>
-										<h3 class="font-bold text-neutral mb-3 text-base flex items-center gap-2">
-											<CategoryIcon icon="folder" />
-											Weitere Kategorien
-										</h3>
-										<ul class="space-y-2">
-											{remainingCategories.map((category) => (
-												<li>
-													<a href={`/categories/${category.slug}`} class="text-neutral/70 menu-link-hover text-sm py-1.5 transition-colors block break-words">
+										{/* Level 0: Main Category Headers */}
+										{category.level === 0 && (
+											<>
+												<h3 class="font-bold text-neutral mb-3 text-base flex items-center gap-2">
+													<CategoryIcon icon={category.icon || 'folder'} />
+													<a href={`/categories/${category.slug}`} class="hover:text-primary transition-colors">
 														{category.name}
 													</a>
-												</li>
-											))}
-										</ul>
-										<div class="mt-6 pt-4 border-t border-base-300/20">
-											<a href="/products/" class="btn btn-primary btn-sm w-full">Alle Produkte ansehen</a>
-										</div>
-									</div>
-								)}
+												</h3>
+												{category.products.length > 0 && (
+													<ul class="space-y-2 mb-4">
+														{category.products.map((product) => (
+															<li>
+																<a href={`/product/${product.slug}`} class="text-neutral/70 menu-link-hover text-sm py-1.5 transition-colors block break-words">
+																	{product.name}
+																</a>
+															</li>
+														))}
+													</ul>
+												)}
+											</>
+										)}
 
-								<!-- If we have less than 3 categories, show a "View All" column -->
-								{displayCategories.length < 3 && remainingCategories.length === 0 && (
-									<div>
-										<h3 class="font-bold text-neutral mb-3 text-base flex items-center gap-2">
-											<CategoryIcon icon="folder" />
-											Mustermappen & Info
-										</h3>
-										<ul class="space-y-2">
-											<li><a href="/mustermappe/" class="text-neutral/70 menu-link-hover text-sm py-1.5 transition-colors block break-words">
-												Basic Mustermappe
-											</a></li>
-											<li><a href="/blockout/" class="text-neutral/70 menu-link-hover text-sm py-1.5 transition-colors block break-words">
-												Blockout Mustermappe
-											</a></li>
-										</ul>
-										<div class="mt-6 pt-4 border-t border-base-300/20">
-											<a href="/products/" class="btn btn-primary btn-sm w-full">Alle Produkte ansehen</a>
-										</div>
+										{/* Level 1+: Subcategories (indented) */}
+										{category.level > 0 && (
+											<div class="mt-3" style={`margin-left: ${category.level * 1}rem;`}>
+												<h4 class="font-semibold text-neutral/90 mb-2 text-sm flex items-center gap-2">
+													<CategoryIcon icon={category.icon || 'folder'} />
+													<a href={`/categories/${category.slug}`} class="hover:text-primary transition-colors">
+														{category.name}
+													</a>
+												</h4>
+												{category.products.length > 0 && (
+													<ul class="space-y-1.5 ml-6">
+														{category.products.map((product) => (
+															<li>
+																<a href={`/product/${product.slug}`} class="text-neutral/60 menu-link-hover text-xs py-1 transition-colors block break-words">
+																	{product.name}
+																</a>
+															</li>
+														))}
+													</ul>
+												)}
+											</div>
+										)}
 									</div>
-								)}
+								))}
+							</div>
+
+							<!-- View All Products Button -->
+							<div class="mt-6 pt-4 border-t border-base-300/20">
+								<a href="/products/" class="btn btn-primary btn-sm w-full">Alle Produkte ansehen</a>
 							</div>
 						</div>
 					</li>
@@ -409,7 +434,7 @@ const remainingCategories = categoriesWithProducts.slice(3);
 				</label>
 				<div tabindex="0" class="dropdown-content mt-3 bg-base-100 rounded-2xl shadow-2xl border border-base-300/30 p-6 w-[calc(100vw-2rem)] max-w-sm max-h-[calc(100vh-8rem)] overflow-y-auto overflow-x-hidden z-50">
 					<div class="space-y-4">
-						<!-- Produkte Section (Collapsible) -->
+						<!-- Produkte Section (Collapsible) - Hierarchical -->
 						<details class="mobile-menu-section" open>
 							<summary class="font-bold text-neutral text-lg flex items-center justify-between cursor-pointer py-2">
 								<span class="flex items-center gap-2">
@@ -423,24 +448,54 @@ const remainingCategories = categoriesWithProducts.slice(3);
 								</svg>
 							</summary>
 							<div class="mt-3 space-y-4 pl-2">
-								{categoriesWithProducts.map((category) => (
-									category.products.length > 0 && (
-										<div>
-											<h4 class="font-semibold text-neutral mb-2 text-sm flex items-center gap-2">
-												<CategoryIcon icon={category.icon || 'folder'} />
-												{category.name}
-											</h4>
-											<ul class="space-y-2 pl-6">
-												{category.products.map((product) => (
-													<li>
-														<a href={`/product/${product.slug}`} class="text-neutral/70 menu-link-hover text-sm py-1 transition-colors block">
-															{product.name}
-														</a>
-													</li>
-												))}
-											</ul>
-										</div>
-									)
+								{categoryHierarchy.map((category) => (
+									<div style={category.level > 0 ? `margin-left: ${category.level * 1}rem;` : ""}>
+										{/* Level 0: Main Categories */}
+										{category.level === 0 && (
+											<>
+												<h4 class="font-semibold text-neutral mb-2 text-sm flex items-center gap-2">
+													<CategoryIcon icon={category.icon || 'folder'} />
+													<a href={`/categories/${category.slug}`} class="hover:text-primary transition-colors">
+														{category.name}
+													</a>
+												</h4>
+												{category.products.length > 0 && (
+													<ul class="space-y-2 pl-6 mb-3">
+														{category.products.slice(0, 8).map((product) => (
+															<li>
+																<a href={`/product/${product.slug}`} class="text-neutral/70 menu-link-hover text-sm py-1 transition-colors block">
+																	{product.name}
+																</a>
+															</li>
+														))}
+													</ul>
+												)}
+											</>
+										)}
+
+										{/* Level 1+: Subcategories */}
+										{category.level > 0 && (
+											<>
+												<h5 class="font-medium text-neutral/80 mb-2 text-xs flex items-center gap-2">
+													<CategoryIcon icon={category.icon || 'folder'} />
+													<a href={`/categories/${category.slug}`} class="hover:text-primary transition-colors">
+														{category.name}
+													</a>
+												</h5>
+												{category.products.length > 0 && (
+													<ul class="space-y-1.5 pl-6 mb-3">
+														{category.products.slice(0, 6).map((product) => (
+															<li>
+																<a href={`/product/${product.slug}`} class="text-neutral/60 menu-link-hover text-xs py-1 transition-colors block">
+																	{product.name}
+																</a>
+															</li>
+														))}
+													</ul>
+												)}
+											</>
+										)}
+									</div>
 								))}
 								<div class="pt-2">
 									<a href="/products/" class="btn btn-primary btn-sm w-full">Alle Produkte ansehen</a>
@@ -807,17 +862,17 @@ const remainingCategories = categoriesWithProducts.slice(3);
 			width: 750px;
 			max-width: calc(100vw - 2rem);
 		}
-		
-		/* Produkte dropdown: 750px (matches max-w-[750px]) */
+
+		/* Produkte dropdown: 900px for hierarchical layout (matches max-w-[900px]) */
 		.mega-dropdown-produkte .mega-dropdown-content {
-			width: 750px;
+			width: 900px;
 		}
-		
+
 		/* Dienstleistungen dropdown: 600px (matches max-w-[600px]) */
 		.mega-dropdown-dienstleistungen .mega-dropdown-content {
 			width: 600px;
 		}
-		
+
 		/* Informationen dropdown: 750px (matches max-w-[750px]) */
 		.mega-dropdown-informationen .mega-dropdown-content {
 			width: 750px;
