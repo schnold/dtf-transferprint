@@ -942,5 +942,10 @@ const formatPrice = (price: number) => {
 		if (currentSubtotal > 0) {
 			loadShippingProfiles();
 		}
+
+		// Listen for cart item added event from other pages
+		window.addEventListener('cartItemAdded', async () => {
+			await updateCartUI();
+		});
 	});
 </script>

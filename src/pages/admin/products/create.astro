@@ -234,7 +234,7 @@ try {
         <div class="flex justify-between items-center mb-4">
           <div>
             <h2 class="card-title text-lg text-base-content">Preisstaffeln</h2>
-            <p class="text-sm text-base-content/60 mt-1">Die erste Staffel ist der Grundpreis (0% Rabatt). Weitere Staffeln berechnen sich automatisch.</p>
+            <p class="text-sm text-base-content/60 mt-1">Die erste Staffel ist der Grundpreis (0% Rabatt). Weitere Staffeln berechnen sich automatisch. Jede Staffel gilt ab der Mindestmenge und ist unbegrenzt.</p>
           </div>
           <button type="button" id="addTierBtn" class="btn btn-primary btn-sm gap-2 shadow-md hover:shadow-lg transition-shadow">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -248,19 +248,12 @@ try {
           <!-- Default tier -->
           <div class="tier-row card bg-base-100 border border-base-300/50 shadow-sm rounded-xl hover:shadow-md transition-shadow">
             <div class="card-body p-4">
-              <div class="grid grid-cols-1 md:grid-cols-5 gap-3">
+              <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
                 <div class="form-control">
                   <label class="label">
                     <span class="label-text font-medium text-sm">Min. Menge</span>
                   </label>
                   <input type="number" name="tier_minQty[]" value="0" required class="input input-bordered input-sm focus:input-primary transition-colors" />
-                </div>
-                <div class="form-control">
-                  <label class="label">
-                    <span class="label-text font-medium text-sm">Max. Menge</span>
-                    <span class="label-text-alt text-xs">Leer lassen für ∞</span>
-                  </label>
-                  <input type="number" name="tier_maxQty[]" value="4" class="input input-bordered input-sm focus:input-primary transition-colors" placeholder="∞" />
                 </div>
                 <div class="form-control">
                   <label class="label">
@@ -476,19 +469,12 @@ try {
     tier.className = 'tier-row card bg-base-100 border border-base-300/50 shadow-sm rounded-xl hover:shadow-md transition-shadow';
     tier.innerHTML = `
       <div class="card-body p-4">
-        <div class="grid grid-cols-1 md:grid-cols-5 gap-3">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
           <div class="form-control">
             <label class="label">
               <span class="label-text font-medium text-sm">Min. Menge</span>
             </label>
             <input type="number" name="tier_minQty[]" value="${tierCount * 5}" required class="input input-bordered input-sm focus:input-primary transition-colors" />
-          </div>
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text font-medium text-sm">Max. Menge</span>
-              <span class="label-text-alt text-xs">Leer lassen für ∞</span>
-            </label>
-            <input type="number" name="tier_maxQty[]" class="input input-bordered input-sm focus:input-primary transition-colors" placeholder="∞" />
           </div>
           <div class="form-control">
             <label class="label">
@@ -575,7 +561,6 @@ try {
 
     // Collect price tiers
     const minQties = formData.getAll('tier_minQty[]');
-    const maxQties = formData.getAll('tier_maxQty[]');
     const discounts = formData.getAll('tier_discount[]');
     const prices = formData.getAll('tier_price[]');
     const orders = formData.getAll('tier_order[]');
@@ -583,7 +568,7 @@ try {
     for (let i = 0; i < minQties.length; i++) {
       data.priceTiers.push({
         minQuantity: parseInt(minQties[i]),
-        maxQuantity: maxQties[i] ? parseInt(maxQties[i]) : null,
+        maxQuantity: null, // Always open-ended
         discountPercent: parseFloat(discounts[i]),
         pricePerUnit: parseFloat(prices[i]),
         displayOrder: parseInt(orders[i])

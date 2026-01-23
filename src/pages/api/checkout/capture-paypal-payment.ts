@@ -277,7 +277,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
           {
             userName: user.name,
             userId: user.id,
-            baseUrl: import.meta.env.BETTER_AUTH_URL || 'http://localhost:4321',
+            baseUrl: process.env.BETTER_AUTH_URL || 'http://localhost:4321',
             orderNumber: order.orderNumber,
             orderDate: formatDate(order.createdAt),
             orderTotal: formatPrice(parseFloat(order.total)),
@@ -294,7 +294,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
                 : undefined,
             shippingCost: formatPrice(parseFloat(order.shippingCost)),
             taxAmount: formatPrice(parseFloat(order.taxAmount)),
-            orderUrl: `${import.meta.env.BETTER_AUTH_URL || 'http://localhost:4321'}/order/${order.orderNumber}`,
+            orderUrl: `${process.env.BETTER_AUTH_URL || 'http://localhost:4321'}/order/${order.orderNumber}`,
           },
           getBaseTemplate
         );

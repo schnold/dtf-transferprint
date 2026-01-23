@@ -2,9 +2,9 @@ import paypal from '@paypal/checkout-server-sdk';
 
 // Configure PayPal environment
 function getPayPalEnvironment() {
-  const clientId = import.meta.env.PAYPAL_CLIENT_ID;
-  const clientSecret = import.meta.env.PAYPAL_CLIENT_SECRET;
-  const mode = import.meta.env.PAYPAL_MODE || 'sandbox';
+  const clientId = process.env.PAYPAL_CLIENT_ID;
+  const clientSecret = process.env.PAYPAL_CLIENT_SECRET;
+  const mode = process.env.PAYPAL_MODE || 'sandbox';
 
   if (!clientId || !clientSecret) {
     throw new Error('PayPal credentials not configured');
@@ -78,8 +78,8 @@ export async function createPayPalOrder(breakdown: OrderBreakdown) {
       landing_page: 'NO_PREFERENCE',
       shipping_preference: 'NO_SHIPPING',
       user_action: 'PAY_NOW',
-      return_url: `${import.meta.env.BETTER_AUTH_URL}/checkout/success`,
-      cancel_url: `${import.meta.env.BETTER_AUTH_URL}/checkout/cancel`,
+      return_url: `${process.env.BETTER_AUTH_URL || 'http://localhost:4321'}/checkout/success`,
+      cancel_url: `${process.env.BETTER_AUTH_URL || 'http://localhost:4321'}/checkout/cancel`,
     },
   });
 

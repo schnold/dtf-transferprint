@@ -493,7 +493,7 @@ try {
                     <h2 class="card-title text-2xl">Preisstaffeln</h2>
                     <span class="badge badge-accent">{priceTiers.rows.length} Staffeln</span>
                   </div>
-                  <p class="text-sm text-base-content/60 mt-1">Die erste Staffel ist der Grundpreis (0% Rabatt). Weitere Staffeln berechnen sich automatisch.</p>
+                  <p class="text-sm text-base-content/60 mt-1">Die erste Staffel ist der Grundpreis (0% Rabatt). Weitere Staffeln berechnen sich automatisch. Jede Staffel gilt ab der Mindestmenge und ist unbegrenzt.</p>
                 </div>
                 <button type="button" id="addTierBtn" class="btn btn-primary gap-2 shadow-md hover:shadow-lg transition-all">
                   <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -509,19 +509,12 @@ try {
                   priceTiers.rows.map((tier, index) => (
                     <div class="tier-row card bg-base-100 border border-base-300/50 shadow-sm rounded-xl hover:shadow-md transition-shadow">
                       <div class="card-body p-4">
-                        <div class="grid grid-cols-1 md:grid-cols-5 gap-3">
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
                           <div class="form-control">
                             <label class="label">
                               <span class="label-text font-medium text-sm">Min. Menge</span>
                             </label>
                             <input type="number" name="tier_minQty[]" form="productForm" value={tier.minQuantity} required class="input input-bordered input-sm tier-minQty" />
-                          </div>
-                          <div class="form-control">
-                            <label class="label">
-                              <span class="label-text font-medium text-sm">Max. Menge</span>
-                              <span class="label-text-alt text-xs">Leer lassen für ∞</span>
-                            </label>
-                            <input type="number" name="tier_maxQty[]" form="productForm" value={tier.maxQuantity || ''} class="input input-bordered input-sm tier-maxQty" placeholder="∞" />
                           </div>
                           <div class="form-control">
                             <label class="label">
@@ -556,19 +549,12 @@ try {
                 ) : (
                   <div class="tier-row card bg-base-100 border border-base-300/50 shadow-sm rounded-xl hover:shadow-md transition-shadow">
                     <div class="card-body p-4">
-                      <div class="grid grid-cols-1 md:grid-cols-5 gap-3">
+                      <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
                         <div class="form-control">
                           <label class="label">
                             <span class="label-text font-medium text-sm">Min. Menge</span>
                           </label>
                           <input type="number" name="tier_minQty[]" form="productForm" value="0" required class="input input-bordered input-sm tier-minQty" />
-                        </div>
-                        <div class="form-control">
-                          <label class="label">
-                            <span class="label-text font-medium text-sm">Max. Menge</span>
-                            <span class="label-text-alt text-xs">Leer lassen für ∞</span>
-                          </label>
-                          <input type="number" name="tier_maxQty[]" form="productForm" class="input input-bordered input-sm tier-maxQty" placeholder="∞" />
                         </div>
                         <div class="form-control">
                           <label class="label">
@@ -1252,7 +1238,6 @@ try {
 
       // Collect price tiers
       const minQties = getAllValues('tier_minQty[]');
-      const maxQties = getAllValues('tier_maxQty[]');
       const discounts = getAllValues('tier_discount[]');
       const prices = getAllValues('tier_price[]');
       const orders = getAllValues('tier_order[]');
@@ -1261,7 +1246,7 @@ try {
       for (let i = 0; i < minQties.length; i++) {
         priceTiers.push({
           minQuantity: parseInt(minQties[i]),
-          maxQuantity: maxQties[i] ? parseInt(maxQties[i]) : null,
+          maxQuantity: null, // Always open-ended
           discountPercent: parseFloat(discounts[i]),
           pricePerUnit: parseFloat(prices[i]),
           displayOrder: parseInt(orders[i])
@@ -1320,19 +1305,12 @@ try {
     tier.className = 'tier-row card bg-base-100 border border-base-300';
     tier.innerHTML = `
       <div class="card-body p-4">
-        <div class="grid grid-cols-1 md:grid-cols-5 gap-3">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
           <div class="form-control">
             <label class="label">
               <span class="label-text font-medium text-sm">Min. Menge</span>
             </label>
             <input type="number" name="tier_minQty[]" form="productForm" value="${tierCount * 5}" required class="input input-bordered input-sm tier-minQty" />
-          </div>
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text font-medium text-sm">Max. Menge</span>
-              <span class="label-text-alt text-xs">Leer lassen für ∞</span>
-            </label>
-            <input type="number" name="tier_maxQty[]" form="productForm" class="input input-bordered input-sm tier-maxQty" placeholder="∞" />
           </div>
           <div class="form-control">
             <label class="label">
@@ -1537,14 +1515,12 @@ try {
 
     // Collect price tiers
     const minQties = getAllValues('tier_minQty[]');
-    const maxQties = getAllValues('tier_maxQty[]');
     const discounts = getAllValues('tier_discount[]');
     const prices = getAllValues('tier_price[]');
     const orders = getAllValues('tier_order[]');
 
     console.log('[Form] Collecting price tiers:', {
       minQties,
-      maxQties,
       discounts,
       prices,
       orders
@@ -1553,7 +1529,7 @@ try {
     for (let i = 0; i < minQties.length; i++) {
       data.priceTiers.push({
         minQuantity: parseInt(minQties[i]),
-        maxQuantity: maxQties[i] ? parseInt(maxQties[i]) : null,
+        maxQuantity: null, // Always open-ended
         discountPercent: parseFloat(discounts[i]),
         pricePerUnit: parseFloat(prices[i]),
         displayOrder: parseInt(orders[i])
