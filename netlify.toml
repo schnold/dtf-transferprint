@@ -10,5 +10,6 @@
   # Exclude these environment variable keys from secret scanning
   # PAYPAL_MODE is just a configuration value (sandbox/live), not a secret
   # BETTER_AUTH_URL is a public URL, not a secret
+  # PUBLIC_BETTER_AUTH_URL is a public URL meant for client-side use, not a secret
   # BLOCK_PASSWORD is a simple password protection, not a sensitive secret
-  SECRETS_SCAN_OMIT_KEYS = "PAYPAL_MODE,BETTER_AUTH_URL,BLOCK_PASSWORD"
+  SECRETS_SCAN_OMIT_KEYS = "PAYPAL_MODE,BETTER_AUTH_URL,PUBLIC_BETTER_AUTH_URL,BLOCK_PASSWORD"
