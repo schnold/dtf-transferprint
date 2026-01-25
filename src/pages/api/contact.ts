@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro';
 import { sendEmail } from '../../lib/email';
 import { SITE_CONFIG } from '../../constants/site';
+import { createFormRequest } from '../../lib/db';
 
 export const prerender = false;
 
@@ -182,6 +183,23 @@ ${SITE_CONFIG.contact.phone}
       html: confirmationHtml,
       text: confirmationText,
     });
+
+    // Save request to database
+    try {
+      await createFormRequest({
+        formType: 'contact',
+        name,
+        email,
+        phone: phone || undefined,
+        subject,
+        message,
+        ipAddress: request.headers.get('x-forwarded-for') || undefined,
+        userAgent: request.headers.get('user-agent') || undefined,
+      });
+    } catch (dbError) {
+      // Log error but don't fail the request since emails were sent successfully
+      console.error('Failed to save contact request to database:', dbError);
+    }
 
     return new Response(
       JSON.stringify({

@@ -1303,4 +1303,503 @@ export async function createAddress(userId: string, addressData: Partial<Address
   }
 }
 
+// Form Request Management Interfaces
+export interface FormRequest {
+  id: string;
+  formType: string;
+  name: string;
+  email: string;
+  phone?: string;
+  subject: string;
+  message: string;
+  status: string;
+  priority: string;
+  assignedToUserId?: string;
+  userId?: string;
+  ipAddress?: string;
+  userAgent?: string;
+  createdAt: Date;
+  updatedAt: Date;
+  resolvedAt?: Date;
+}
+
+export interface FormRequestResponse {
+  id: string;
+  formRequestId: string;
+  responseType: string;
+  subject?: string;
+  message: string;
+  templateName?: string;
+  sentVia?: string;
+  sentToEmail?: string;
+  sentAt?: Date;
+  emailStatus?: string;
+  createdByUserId?: string;
+  isInternalNote: boolean;
+  createdAt: Date;
+}
+
+export interface EmailTemplate {
+  id: string;
+  name: string;
+  slug: string;
+  description?: string;
+  subject: string;
+  htmlBody: string;
+  textBody: string;
+  category?: string;
+  availableVariables?: string;
+  isActive: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface FormRequestFilters {
+  status?: string;
+  formType?: string;
+  assignedTo?: string;
+  dateFrom?: string;
+  dateTo?: string;
+  search?: string;
+  limit?: number;
+  offset?: number;
+}
+
+export interface FormRequestStats {
+  totalRequests: number;
+  pendingCount: number;
+  inProgressCount: number;
+  resolvedCount: number;
+  recentRequests: number; // last 7 days
+  avgResponseTimeHours?: number;
+}
+
+// Form Request Management Functions
+
+/**
+ * Create a new form request from a submission
+ */
+export async function createFormRequest(data: {
+  formType: string;
+  name: string;
+  email: string;
+  phone?: string;
+  subject: string;
+  message: string;
+  userId?: string;
+  ipAddress?: string;
+  userAgent?: string;
+}): Promise<string> {
+  const client = await pool.connect();
+  try {
+    const result = await client.query(
+      `INSERT INTO form_requests (
+        form_type, name, email, phone, subject, message,
+        user_id, ip_address, user_agent, status, priority
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, 'pending', 'normal')
+      RETURNING id`,
+      [
+        data.formType,
+        data.name,
+        data.email,
+        data.phone || null,
+        data.subject,
+        data.message,
+        data.userId || null,
+        data.ipAddress || null,
+        data.userAgent || null,
+      ]
+    );
+
+    return result.rows[0].id;
+  } finally {
+    client.release();
+  }
+}
+
+/**
+ * Get all form requests with optional filtering
+ */
+export async function getAllFormRequests(
+  filters?: FormRequestFilters
+): Promise<{ requests: FormRequest[]; totalCount: number }> {
+  const client = await pool.connect();
+  try {
+    // Build WHERE clause based on filters
+    const conditions: string[] = [];
+    const params: any[] = [];
+    let paramCount = 1;
+
+    if (filters?.status) {
+      conditions.push(`status = $${paramCount}`);
+      params.push(filters.status);
+      paramCount++;
+    }
+
+    if (filters?.formType) {
+      conditions.push(`form_type = $${paramCount}`);
+      params.push(filters.formType);
+      paramCount++;
+    }
+
+    if (filters?.assignedTo) {
+      conditions.push(`assigned_to_user_id = $${paramCount}`);
+      params.push(filters.assignedTo);
+      paramCount++;
+    }
+
+    if (filters?.dateFrom) {
+      conditions.push(`created_at >= $${paramCount}`);
+      params.push(filters.dateFrom);
+      paramCount++;
+    }
+
+    if (filters?.dateTo) {
+      conditions.push(`created_at <= $${paramCount}`);
+      params.push(filters.dateTo);
+      paramCount++;
+    }
+
+    if (filters?.search) {
+      conditions.push(`(
+        name ILIKE $${paramCount} OR
+        email ILIKE $${paramCount} OR
+        message ILIKE $${paramCount}
+      )`);
+      params.push(`%${filters.search}%`);
+      paramCount++;
+    }
+
+    const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
+
+    // Get total count
+    const countResult = await client.query(
+      `SELECT COUNT(*) as count FROM form_requests ${whereClause}`,
+      params
+    );
+    const totalCount = parseInt(countResult.rows[0].count);
+
+    // Get paginated results
+    const limit = filters?.limit || 100;
+    const offset = filters?.offset || 0;
+
+    const result = await client.query(
+      `SELECT * FROM form_requests
+       ${whereClause}
+       ORDER BY created_at DESC
+       LIMIT $${paramCount} OFFSET $${paramCount + 1}`,
+      [...params, limit, offset]
+    );
+
+    const requests: FormRequest[] = result.rows.map((row) => ({
+      id: row.id,
+      formType: row.form_type,
+      name: row.name,
+      email: row.email,
+      phone: row.phone,
+      subject: row.subject,
+      message: row.message,
+      status: row.status,
+      priority: row.priority,
+      assignedToUserId: row.assigned_to_user_id,
+      userId: row.user_id,
+      ipAddress: row.ip_address,
+      userAgent: row.user_agent,
+      createdAt: new Date(row.created_at),
+      updatedAt: new Date(row.updated_at),
+      resolvedAt: row.resolved_at ? new Date(row.resolved_at) : undefined,
+    }));
+
+    return { requests, totalCount };
+  } finally {
+    client.release();
+  }
+}
+
+/**
+ * Get a single form request by ID with response history
+ */
+export async function getFormRequestById(requestId: string): Promise<{
+  request: FormRequest;
+  responses: FormRequestResponse[];
+  assignedUser?: { id: string; name: string; email: string };
+} | null> {
+  const client = await pool.connect();
+  try {
+    // Get the request
+    const requestResult = await client.query(
+      `SELECT fr.*, u.name as assigned_user_name, u.email as assigned_user_email
+       FROM form_requests fr
+       LEFT JOIN "user" u ON fr.assigned_to_user_id = u.id
+       WHERE fr.id = $1`,
+      [requestId]
+    );
+
+    if (requestResult.rows.length === 0) return null;
+
+    const row = requestResult.rows[0];
+    const request: FormRequest = {
+      id: row.id,
+      formType: row.form_type,
+      name: row.name,
+      email: row.email,
+      phone: row.phone,
+      subject: row.subject,
+      message: row.message,
+      status: row.status,
+      priority: row.priority,
+      assignedToUserId: row.assigned_to_user_id,
+      userId: row.user_id,
+      ipAddress: row.ip_address,
+      userAgent: row.user_agent,
+      createdAt: new Date(row.created_at),
+      updatedAt: new Date(row.updated_at),
+      resolvedAt: row.resolved_at ? new Date(row.resolved_at) : undefined,
+    };
+
+    // Get responses
+    const responsesResult = await client.query(
+      `SELECT * FROM form_request_responses
+       WHERE form_request_id = $1
+       ORDER BY created_at ASC`,
+      [requestId]
+    );
+
+    const responses: FormRequestResponse[] = responsesResult.rows.map((r) => ({
+      id: r.id,
+      formRequestId: r.form_request_id,
+      responseType: r.response_type,
+      subject: r.subject,
+      message: r.message,
+      templateName: r.template_name,
+      sentVia: r.sent_via,
+      sentToEmail: r.sent_to_email,
+      sentAt: r.sent_at ? new Date(r.sent_at) : undefined,
+      emailStatus: r.email_status,
+      createdByUserId: r.created_by_user_id,
+      isInternalNote: r.is_internal_note,
+      createdAt: new Date(r.created_at),
+    }));
+
+    const assignedUser = row.assigned_to_user_id
+      ? {
+          id: row.assigned_to_user_id,
+          name: row.assigned_user_name,
+          email: row.assigned_user_email,
+        }
+      : undefined;
+
+    return { request, responses, assignedUser };
+  } finally {
+    client.release();
+  }
+}
+
+/**
+ * Update form request status and related fields
+ */
+export async function updateFormRequestStatus(
+  requestId: string,
+  status: string,
+  options?: {
+    assignedTo?: string;
+    priority?: string;
+    note?: string;
+    updatedByUserId?: string;
+  }
+): Promise<void> {
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN');
+
+    // Build update query dynamically based on provided options
+    const updates: string[] = ['status = $2'];
+    const params: any[] = [requestId, status];
+    let paramCount = 3;
+
+    if (status === 'resolved' || status === 'closed') {
+      updates.push(`resolved_at = CURRENT_TIMESTAMP`);
+    }
+
+    if (options?.assignedTo !== undefined) {
+      updates.push(`assigned_to_user_id = $${paramCount}`);
+      params.push(options.assignedTo);
+      paramCount++;
+
+      if (options.assignedTo) {
+        updates.push(`assigned_at = CURRENT_TIMESTAMP`);
+      }
+    }
+
+    if (options?.priority) {
+      updates.push(`priority = $${paramCount}`);
+      params.push(options.priority);
+      paramCount++;
+    }
+
+    // Update the request
+    await client.query(
+      `UPDATE form_requests
+       SET ${updates.join(', ')}, updated_at = CURRENT_TIMESTAMP
+       WHERE id = $1`,
+      params
+    );
+
+    // If note provided, create an internal response
+    if (options?.note) {
+      await client.query(
+        `INSERT INTO form_request_responses (
+          form_request_id, response_type, message,
+          is_internal_note, created_by_user_id
+        ) VALUES ($1, 'note', $2, true, $3)`,
+        [requestId, options.note, options.updatedByUserId || null]
+      );
+    }
+
+    await client.query('COMMIT');
+  } catch (error) {
+    await client.query('ROLLBACK');
+    throw error;
+  } finally {
+    client.release();
+  }
+}
+
+/**
+ * Create a response to a form request
+ */
+export async function createFormRequestResponse(data: {
+  formRequestId: string;
+  responseType: string;
+  subject?: string;
+  message: string;
+  templateName?: string;
+  sentToEmail?: string;
+  isInternalNote: boolean;
+  createdByUserId?: string;
+}): Promise<FormRequestResponse> {
+  const client = await pool.connect();
+  try {
+    const result = await client.query(
+      `INSERT INTO form_request_responses (
+        form_request_id, response_type, subject, message,
+        template_name, sent_to_email, sent_at, sent_via,
+        is_internal_note, created_by_user_id
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+      RETURNING *`,
+      [
+        data.formRequestId,
+        data.responseType,
+        data.subject || null,
+        data.message,
+        data.templateName || null,
+        data.sentToEmail || null,
+        data.isInternalNote ? null : new Date(),
+        data.isInternalNote ? null : 'resend',
+        data.isInternalNote,
+        data.createdByUserId || null,
+      ]
+    );
+
+    const row = result.rows[0];
+    return {
+      id: row.id,
+      formRequestId: row.form_request_id,
+      responseType: row.response_type,
+      subject: row.subject,
+      message: row.message,
+      templateName: row.template_name,
+      sentVia: row.sent_via,
+      sentToEmail: row.sent_to_email,
+      sentAt: row.sent_at ? new Date(row.sent_at) : undefined,
+      emailStatus: row.email_status,
+      createdByUserId: row.created_by_user_id,
+      isInternalNote: row.is_internal_note,
+      createdAt: new Date(row.created_at),
+    };
+  } finally {
+    client.release();
+  }
+}
+
+/**
+ * Get email templates
+ */
+export async function getEmailTemplates(filters?: {
+  category?: string;
+  isActive?: boolean;
+}): Promise<EmailTemplate[]> {
+  const client = await pool.connect();
+  try {
+    const conditions: string[] = [];
+    const params: any[] = [];
+    let paramCount = 1;
+
+    if (filters?.category) {
+      conditions.push(`category = $${paramCount}`);
+      params.push(filters.category);
+      paramCount++;
+    }
+
+    if (filters?.isActive !== undefined) {
+      conditions.push(`is_active = $${paramCount}`);
+      params.push(filters.isActive);
+      paramCount++;
+    }
+
+    const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
+
+    const result = await client.query(
+      `SELECT * FROM form_request_email_templates ${whereClause} ORDER BY name`,
+      params
+    );
+
+    return result.rows.map((row) => ({
+      id: row.id,
+      name: row.name,
+      slug: row.slug,
+      description: row.description,
+      subject: row.subject,
+      htmlBody: row.html_body,
+      textBody: row.text_body,
+      category: row.category,
+      availableVariables: row.available_variables,
+      isActive: row.is_active,
+      createdAt: new Date(row.created_at),
+      updatedAt: new Date(row.updated_at),
+    }));
+  } finally {
+    client.release();
+  }
+}
+
+/**
+ * Get form request statistics
+ */
+export async function getFormRequestStats(): Promise<FormRequestStats> {
+  const client = await pool.connect();
+  try {
+    const result = await client.query(`
+      SELECT
+        COUNT(*) as total_requests,
+        COUNT(*) FILTER (WHERE status = 'pending') as pending_count,
+        COUNT(*) FILTER (WHERE status = 'in_progress') as in_progress_count,
+        COUNT(*) FILTER (WHERE status = 'resolved') as resolved_count,
+        COUNT(*) FILTER (WHERE created_at > NOW() - INTERVAL '7 days') as recent_requests
+      FROM form_requests
+    `);
+
+    const row = result.rows[0];
+    return {
+      totalRequests: parseInt(row.total_requests),
+      pendingCount: parseInt(row.pending_count),
+      inProgressCount: parseInt(row.in_progress_count),
+      resolvedCount: parseInt(row.resolved_count),
+      recentRequests: parseInt(row.recent_requests),
+    };
+  } finally {
+    client.release();
+  }
+}
+
 export { pool };
