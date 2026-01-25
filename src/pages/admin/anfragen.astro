@@ -1,0 +1,463 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import { getAllFormRequests, getFormRequestStats } from '../../lib/db';
+
+// Server-side data fetching
+const requestsResult = await getAllFormRequests({ limit: 100 });
+const requests = requestsResult?.requests || [];
+const totalCount = requestsResult?.totalCount || 0;
+const stats = await getFormRequestStats();
+
+// Map subject codes to German labels
+const subjectLabels: Record<string, string> = {
+  'allgemein': 'Allgemeine Anfrage',
+  'beratung': 'Fachberatung',
+  'bestellung': 'Frage zur Bestellung',
+  'support': 'Technischer Support',
+  'b2b': 'B2B / Wiederverkäufer',
+  'sonstiges': 'Sonstiges'
+};
+---
+
+<AdminLayout title="Kontaktanfragen verwalten" currentPage="anfragen">
+  <!-- Stats Cards (4 columns) -->
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+    <div class="stat bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20 rounded-lg">
+      <div class="stat-title">Gesamt</div>
+      <div class="stat-value text-primary">{stats.totalRequests || 0}</div>
+      <div class="stat-desc">Alle Anfragen</div>
+    </div>
+    <div class="stat bg-gradient-to-br from-warning/10 to-warning/5 border border-warning/20 rounded-lg">
+      <div class="stat-title">Ausstehend</div>
+      <div class="stat-value text-warning">{stats.pendingRequests || 0}</div>
+      <div class="stat-desc">Warten auf Bearbeitung</div>
+    </div>
+    <div class="stat bg-gradient-to-br from-info/10 to-info/5 border border-info/20 rounded-lg">
+      <div class="stat-title">In Bearbeitung</div>
+      <div class="stat-value text-info">{stats.inProgressRequests || 0}</div>
+      <div class="stat-desc">Werden bearbeitet</div>
+    </div>
+    <div class="stat bg-gradient-to-br from-success/10 to-success/5 border border-success/20 rounded-lg">
+      <div class="stat-title">Gelöst</div>
+      <div class="stat-value text-success">{stats.resolvedRequests || 0}</div>
+      <div class="stat-desc">Abgeschlossen</div>
+    </div>
+  </div>
+
+  <!-- Filter Tabs -->
+  <div role="tablist" class="tabs tabs-boxed mb-6 bg-base-100">
+    <a role="tab" class="tab tab-active" data-filter="all">Alle</a>
+    <a role="tab" class="tab" data-filter="pending">Ausstehend</a>
+    <a role="tab" class="tab" data-filter="in_progress">In Bearbeitung</a>
+    <a role="tab" class="tab" data-filter="resolved">Gelöst</a>
+  </div>
+
+  <!-- Search Input -->
+  <div class="mb-4">
+    <input 
+      type="text" 
+      id="search-input" 
+      placeholder="Suchen nach Name, E-Mail oder Nachricht..."
+      class="input input-bordered w-full max-w-md" 
+    />
+  </div>
+
+  <!-- Requests Table -->
+  <div class="overflow-x-auto bg-base-100 rounded-lg shadow">
+    <table class="table table-sm">
+      <thead>
+        <tr>
+          <th>Datum</th>
+          <th>Name</th>
+          <th>E-Mail</th>
+          <th>Betreff</th>
+          <th>Status</th>
+          <th>Aktionen</th>
+        </tr>
+      </thead>
+      <tbody id="requests-tbody">
+        {requests.length === 0 ? (
+          <tr>
+            <td colspan="6" class="text-center py-8 text-base-content/60">
+              Keine Anfragen gefunden
+            </td>
+          </tr>
+        ) : (
+          requests.map((request: any) => (
+            <tr data-status={request.status} data-request-id={request.id}>
+              <td>{new Date(request.created_at).toLocaleDateString('de-DE', { 
+                day: '2-digit', 
+                month: '2-digit', 
+                year: 'numeric' 
+              })}</td>
+              <td>{request.name}</td>
+              <td>{request.email}</td>
+              <td>{subjectLabels[request.subject] || request.subject}</td>
+              <td>
+                <span class={`badge ${
+                  request.status === 'pending' ? 'badge-warning' :
+                  request.status === 'in_progress' ? 'badge-info' :
+                  request.status === 'resolved' ? 'badge-success' : 'badge-ghost'
+                }`}>
+                  {request.status === 'pending' ? 'Ausstehend' :
+                   request.status === 'in_progress' ? 'In Bearbeitung' :
+                   request.status === 'resolved' ? 'Gelöst' : request.status}
+                </span>
+              </td>
+              <td>
+                <div class="flex gap-2">
+                  <button onclick={`viewRequest('${request.id}')`} class="btn btn-xs btn-primary">
+                    Ansehen
+                  </button>
+                  {request.status !== 'resolved' && (
+                    <button onclick={`openReplyModal('${request.id}')`} class="btn btn-xs btn-secondary">
+                      Antworten
+                    </button>
+                  )}
+                </div>
+              </td>
+            </tr>
+          ))
+        )}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Request Detail Modal -->
+  <dialog id="request-detail-modal" class="modal">
+    <div class="modal-box max-w-3xl">
+      <h3 class="font-bold text-lg mb-4">Anfragedetails</h3>
+      <div id="modal-content" class="min-h-[200px]">
+        <!-- Content populated by JavaScript -->
+      </div>
+      <div class="modal-action">
+        <button id="reply-from-detail-btn" class="btn btn-primary">Antworten</button>
+        <button id="mark-in-progress-btn" class="btn btn-info">In Bearbeitung</button>
+        <button id="mark-resolved-btn" class="btn btn-success">Als gelöst markieren</button>
+        <form method="dialog">
+          <button class="btn">Schließen</button>
+        </form>
+      </div>
+    </div>
+    <form method="dialog" class="modal-backdrop">
+      <button>close</button>
+    </form>
+  </dialog>
+
+  <!-- Reply Modal -->
+  <dialog id="reply-modal" class="modal">
+    <div class="modal-box max-w-2xl">
+      <h3 class="font-bold text-lg mb-4">Antwort senden</h3>
+      <form id="reply-form">
+        <!-- Template selector -->
+        <label class="form-control mb-4">
+          <div class="label">
+            <span class="label-text">Vorlage wählen (optional)</span>
+          </div>
+          <select id="template-select" class="select select-bordered">
+            <option value="">Eigene Nachricht</option>
+            <!-- Populated dynamically from templates API -->
+          </select>
+        </label>
+
+        <!-- Subject -->
+        <label class="form-control mb-4">
+          <div class="label">
+            <span class="label-text">Betreff</span>
+          </div>
+          <input type="text" id="reply-subject" class="input input-bordered" required />
+        </label>
+
+        <!-- Message -->
+        <label class="form-control mb-4">
+          <div class="label">
+            <span class="label-text">Nachricht</span>
+          </div>
+          <textarea id="reply-message" class="textarea textarea-bordered h-40" required></textarea>
+        </label>
+
+        <!-- Internal note checkbox -->
+        <label class="label cursor-pointer justify-start gap-2 mb-4">
+          <input type="checkbox" id="is-internal-note" class="checkbox" />
+          <span class="label-text">Nur interne Notiz (wird nicht per E-Mail gesendet)</span>
+        </label>
+
+        <!-- Auto-resolve checkbox -->
+        <label class="label cursor-pointer justify-start gap-2 mb-4">
+          <input type="checkbox" id="auto-resolve" class="checkbox" />
+          <span class="label-text">Anfrage automatisch als "Gelöst" markieren</span>
+        </label>
+
+        <div class="modal-action">
+          <button type="submit" class="btn btn-primary">Senden</button>
+          <button type="button" onclick="document.getElementById('reply-modal').close()" class="btn">Abbrechen</button>
+        </div>
+      </form>
+    </div>
+    <form method="dialog" class="modal-backdrop">
+      <button>close</button>
+    </form>
+  </dialog>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast toast-end hidden">
+    <div id="toast-content" class="alert"></div>
+  </div>
+</AdminLayout>
+
+<script>
+  // JavaScript for filtering, search, modals, and form submission
+  let currentRequestId: string | null = null;
+
+  // Filter tabs
+  document.querySelectorAll('[data-filter]').forEach(tab => {
+    tab.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+      const filter = target.dataset.filter;
+      if (filter) {
+        filterRequests(filter);
+
+        // Update active tab
+        document.querySelectorAll('[data-filter]').forEach(t => t.classList.remove('tab-active'));
+        target.classList.add('tab-active');
+      }
+    });
+  });
+
+  function filterRequests(filter: string) {
+    const rows = document.querySelectorAll('#requests-tbody tr');
+    rows.forEach(row => {
+      const tr = row as HTMLTableRowElement;
+      if (filter === 'all' || tr.dataset.status === filter) {
+        tr.style.display = '';
+      } else {
+        tr.style.display = 'none';
+      }
+    });
+  }
+
+  // Search functionality
+  document.getElementById('search-input')?.addEventListener('input', (e) => {
+    const target = e.target as HTMLInputElement;
+    const query = target.value.toLowerCase();
+    const rows = document.querySelectorAll('#requests-tbody tr');
+    rows.forEach(row => {
+      const text = row.textContent?.toLowerCase() || '';
+      (row as HTMLElement).style.display = text.includes(query) ? '' : 'none';
+    });
+  });
+
+  // View request details
+  async function viewRequest(requestId: string) {
+    currentRequestId = requestId;
+    const response = await fetch(`/api/admin/form-requests/${requestId}`);
+    const result = await response.json();
+
+    if (result.success) {
+      const { request, responses } = result.data;
+
+      // Populate modal content
+      const modalContent = document.getElementById('modal-content');
+      if (modalContent) {
+        modalContent.innerHTML = `
+          <div class="mb-4">
+            <div class="grid grid-cols-2 gap-4 mb-4">
+              <div><strong>Name:</strong> ${escapeHtml(request.name)}</div>
+              <div><strong>E-Mail:</strong> ${escapeHtml(request.email)}</div>
+              <div><strong>Telefon:</strong> ${request.phone ? escapeHtml(request.phone) : '-'}</div>
+              <div><strong>Datum:</strong> ${new Date(request.created_at).toLocaleString('de-DE')}</div>
+            </div>
+            <div class="mb-4">
+              <strong>Betreff:</strong> ${escapeHtml(request.subject)}
+            </div>
+            <div class="p-4 bg-base-200 rounded-lg">
+              <strong>Nachricht:</strong>
+              <p class="mt-2 whitespace-pre-wrap">${escapeHtml(request.message)}</p>
+            </div>
+          </div>
+
+          ${responses && responses.length > 0 ? `
+            <div class="mt-6">
+              <h4 class="font-bold mb-4">Verlauf</h4>
+              <div class="space-y-4">
+                ${responses.map((r: any) => `
+                  <div class="p-4 border rounded-lg ${r.is_internal_note ? 'bg-warning/10 border-warning' : 'bg-base-200'}">
+                    <div class="flex justify-between mb-2">
+                      <span class="font-semibold">${r.is_internal_note ? '🔒 Interne Notiz' : '📧 E-Mail gesendet'}</span>
+                      <span class="text-sm opacity-70">${new Date(r.created_at).toLocaleString('de-DE')}</span>
+                    </div>
+                    ${r.subject ? `<div class="font-medium mb-1">${escapeHtml(r.subject)}</div>` : ''}
+                    <p class="whitespace-pre-wrap">${escapeHtml(r.message)}</p>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          ` : ''}
+        `;
+      }
+
+      // Set up button handlers
+      const replyBtn = document.getElementById('reply-from-detail-btn');
+      const inProgressBtn = document.getElementById('mark-in-progress-btn');
+      const resolvedBtn = document.getElementById('mark-resolved-btn');
+
+      if (replyBtn) {
+        replyBtn.onclick = () => {
+          document.getElementById('request-detail-modal')?.close();
+          openReplyModal(requestId);
+        };
+      }
+
+      if (inProgressBtn) {
+        inProgressBtn.onclick = () => changeStatus(requestId, 'in_progress');
+      }
+
+      if (resolvedBtn) {
+        resolvedBtn.onclick = () => changeStatus(requestId, 'resolved');
+      }
+
+      (document.getElementById('request-detail-modal') as HTMLDialogElement)?.showModal();
+    } else {
+      showToast('Fehler beim Laden der Anfrage', 'error');
+    }
+  }
+
+  // Open reply modal
+  async function openReplyModal(requestId: string) {
+    currentRequestId = requestId;
+
+    // Load templates
+    const templatesResponse = await fetch('/api/admin/form-requests/templates');
+    const templatesResult = await templatesResponse.json();
+
+    if (templatesResult.success) {
+      const select = document.getElementById('template-select') as HTMLSelectElement;
+      if (select) {
+        select.innerHTML = '<option value="">Eigene Nachricht</option>';
+        templatesResult.data.forEach((template: any) => {
+          const option = document.createElement('option');
+          option.value = template.id;
+          option.textContent = template.name;
+          option.dataset.subject = template.subject;
+          option.dataset.body = template.text_body;
+          select.appendChild(option);
+        });
+      }
+    }
+
+    // Get request details for subject
+    const requestResponse = await fetch(`/api/admin/form-requests/${requestId}`);
+    const requestResult = await requestResponse.json();
+
+    if (requestResult.success) {
+      const request = requestResult.data.request;
+      const subjectInput = document.getElementById('reply-subject') as HTMLInputElement;
+      if (subjectInput) {
+        subjectInput.value = `Re: ${request.subject}`;
+      }
+    }
+
+    (document.getElementById('reply-modal') as HTMLDialogElement)?.showModal();
+  }
+
+  // Template selection
+  document.getElementById('template-select')?.addEventListener('change', (e) => {
+    const target = e.target as HTMLSelectElement;
+    const selectedOption = target.selectedOptions[0];
+    if (selectedOption && selectedOption.value) {
+      const subjectInput = document.getElementById('reply-subject') as HTMLInputElement;
+      const messageInput = document.getElementById('reply-message') as HTMLTextAreaElement;
+      
+      if (subjectInput && selectedOption.dataset.subject) {
+        subjectInput.value = selectedOption.dataset.subject;
+      }
+      if (messageInput && selectedOption.dataset.body) {
+        messageInput.value = selectedOption.dataset.body;
+      }
+    }
+  });
+
+  // Submit reply
+  document.getElementById('reply-form')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const subjectInput = document.getElementById('reply-subject') as HTMLInputElement;
+    const messageInput = document.getElementById('reply-message') as HTMLTextAreaElement;
+    const internalNoteInput = document.getElementById('is-internal-note') as HTMLInputElement;
+    const autoResolveInput = document.getElementById('auto-resolve') as HTMLInputElement;
+
+    const subject = subjectInput.value;
+    const message = messageInput.value;
+    const isInternalNote = internalNoteInput.checked;
+    const autoResolve = autoResolveInput.checked;
+
+    const response = await fetch(`/api/admin/form-requests/${currentRequestId}/respond`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ subject, message, isInternalNote })
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      if (autoResolve && currentRequestId) {
+        await changeStatus(currentRequestId, 'resolved', false);
+      }
+
+      showToast('Antwort erfolgreich gesendet', 'success');
+      (document.getElementById('reply-modal') as HTMLDialogElement)?.close();
+      (document.getElementById('reply-form') as HTMLFormElement)?.reset();
+
+      // Reload page to update list
+      setTimeout(() => location.reload(), 1500);
+    } else {
+      showToast(result.error?.message || 'Fehler beim Senden', 'error');
+    }
+  });
+
+  // Change status
+  async function changeStatus(requestId: string, newStatus: string, reload = true) {
+    const response = await fetch(`/api/admin/form-requests/${requestId}/status`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status: newStatus })
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      showToast('Status aktualisiert', 'success');
+      if (reload) {
+        setTimeout(() => location.reload(), 1500);
+      }
+    } else {
+      showToast(result.error?.message || 'Fehler beim Aktualisieren', 'error');
+    }
+  }
+
+  // Toast notification
+  function showToast(message: string, type: 'info' | 'success' | 'error' = 'info') {
+    const toast = document.getElementById('toast');
+    const content = document.getElementById('toast-content');
+
+    if (toast && content) {
+      content.className = `alert alert-${type === 'error' ? 'error' : 'success'}`;
+      content.textContent = message;
+
+      toast.classList.remove('hidden');
+      setTimeout(() => toast.classList.add('hidden'), 3000);
+    }
+  }
+
+  // HTML escape utility
+  function escapeHtml(text: string): string {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  // Make functions globally accessible
+  (window as any).viewRequest = viewRequest;
+  (window as any).openReplyModal = openReplyModal;
+  (window as any).changeStatus = changeStatus;
+</script>
