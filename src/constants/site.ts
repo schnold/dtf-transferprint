@@ -4,6 +4,9 @@
  */
 
 export const SITE_CONFIG = {
+	// Site URL
+	url: "https://dtf-transferprint.de",
+
 	// Branding
 	brand: {
 		name: "DTF Transfer Print",
@@ -13,7 +16,7 @@ export const SITE_CONFIG = {
 			alt: "DTF Transfer Print Logo",
 		},
 	},
-	
+
 	// Contact Information
 	contact: {
 		email: "info@selini-shirt.de",

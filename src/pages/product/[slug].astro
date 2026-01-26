@@ -5,6 +5,7 @@ import ProductGallery from '../../components/product/ProductGallery.astro';
 import ProductInfo from '../../components/product/ProductInfo.astro';
 import ProductSpecs from '../../components/product/ProductSpecs.astro';
 import ProductActions from '../../components/product/ProductActions.astro';
+import ProductInquiryForm from '../../components/product/ProductInquiryForm.astro';
 import ProductReviews from '../../components/product/ProductReviews.astro';
 import { pool } from '@/lib/db';
 
@@ -379,13 +380,22 @@ const relatedProducts = relatedProductsResult.rows.map(p => ({
 					</p>
 				</div>
 
-				<ProductActions
-					productId={product.id}
-					productName={product.name}
-					productSlug={product.slug}
-					price={basePrice}
-					inStock={inStock}
-				/>
+				{/* Conditional: Show inquiry form or normal cart/checkout actions */}
+				{product.requiresInquiry ? (
+					<ProductInquiryForm
+						productId={product.id}
+						productName={product.name}
+						productSlug={product.slug}
+					/>
+				) : (
+					<ProductActions
+						productId={product.id}
+						productName={product.name}
+						productSlug={product.slug}
+						price={basePrice}
+						inStock={inStock}
+					/>
+				)}
 
 				<!-- Product Files (if public files available) -->
 				{productFiles.rows.length > 0 && (

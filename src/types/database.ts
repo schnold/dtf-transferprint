@@ -78,6 +78,7 @@ export interface Product {
   priceCalculationMethod?: 'per_piece' | 'per_area' | 'per_meter';
   isBlockout?: boolean;
   printTechnology?: string;
+  requiresInquiry?: boolean;
 
   // SEO
   searchKeywords?: string;
@@ -380,6 +381,7 @@ export interface ProductFormData {
   priceCalculationMethod?: 'per_piece' | 'per_area' | 'per_meter';
   isBlockout?: boolean;
   printTechnology?: string;
+  requiresInquiry?: boolean;
 
   // SEO
   searchKeywords?: string;

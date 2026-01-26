@@ -1,0 +1,236 @@
+---
+interface Props {
+	formType?: string;
+	sourcePageTitle?: string;
+	sourcePageUrl?: string;
+	productId?: string;
+	productName?: string;
+	compactMode?: boolean;
+}
+
+const {
+	formType = 'service_inquiry',
+	sourcePageTitle,
+	sourcePageUrl,
+	productId,
+	productName,
+	compactMode = false
+} = Astro.props;
+
+const currentUrl = sourcePageUrl || Astro.url.pathname;
+const pageTitle = sourcePageTitle || 'Dienstleistungsanfrage';
+---
+
+<div class={compactMode ? 'inquiry-form-compact' : 'inquiry-form-full'}>
+	<div class="bg-white rounded-2xl shadow-sm border border-base-300/30 p-6 md:p-8">
+		<h2 class="text-2xl md:text-3xl font-semibold text-neutral mb-2">
+			Kostenlose Anfrage stellen
+		</h2>
+		<p class="text-neutral/60 mb-6 text-sm">
+			Füllen Sie das Formular aus und wir melden uns schnellstmöglich mit einem individuellen Angebot bei Ihnen.
+		</p>
+
+		<form id="inquiry-form" class="space-y-4" data-form-type={formType} data-source-url={currentUrl} data-page-title={pageTitle} data-product-id={productId} data-product-name={productName}>
+			<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+				<div class="form-control">
+					<label class="label pb-2" for="inquiry-name">
+						<span class="label-text text-sm font-medium text-neutral/80">Name *</span>
+					</label>
+					<input
+						type="text"
+						id="inquiry-name"
+						name="name"
+						required
+						class="input input-bordered w-full bg-base-50 border-base-300/50 focus:border-primary focus:outline-none transition-all duration-200 h-12 text-base"
+						placeholder="Ihr Name"
+					/>
+				</div>
+
+				<div class="form-control">
+					<label class="label pb-2" for="inquiry-company">
+						<span class="label-text text-sm font-medium text-neutral/80">Firma</span>
+					</label>
+					<input
+						type="text"
+						id="inquiry-company"
+						name="company"
+						class="input input-bordered w-full bg-base-50 border-base-300/50 focus:border-primary focus:outline-none transition-all duration-200 h-12 text-base"
+						placeholder="Ihr Firmenname (optional)"
+					/>
+				</div>
+			</div>
+
+			<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+				<div class="form-control">
+					<label class="label pb-2" for="inquiry-email">
+						<span class="label-text text-sm font-medium text-neutral/80">E-Mail *</span>
+					</label>
+					<input
+						type="email"
+						id="inquiry-email"
+						name="email"
+						required
+						class="input input-bordered w-full bg-base-50 border-base-300/50 focus:border-primary focus:outline-none transition-all duration-200 h-12 text-base"
+						placeholder="ihre@email.de"
+					/>
+				</div>
+
+				<div class="form-control">
+					<label class="label pb-2" for="inquiry-phone">
+						<span class="label-text text-sm font-medium text-neutral/80">Telefon</span>
+					</label>
+					<input
+						type="tel"
+						id="inquiry-phone"
+						name="phone"
+						class="input input-bordered w-full bg-base-50 border-base-300/50 focus:border-primary focus:outline-none transition-all duration-200 h-12 text-base"
+						placeholder="+49 123 456789"
+					/>
+				</div>
+			</div>
+
+			<div class="form-control">
+				<label class="label pb-2" for="inquiry-subject">
+					<span class="label-text text-sm font-medium text-neutral/80">Betreff *</span>
+				</label>
+				<select
+					id="inquiry-subject"
+					name="subject"
+					required
+					class="select select-bordered w-full bg-base-50 border-base-300/50 focus:border-primary focus:outline-none transition-all duration-200 h-12 text-base"
+				>
+					<option value="">Bitte wählen Sie ein Thema</option>
+					<option value="angebot">Angebot anfordern</option>
+					<option value="beratung">Beratung gewünscht</option>
+					<option value="muster">Muster bestellen</option>
+					<option value="wiederverkäufer">Wiederverkäufer / B2B</option>
+					<option value="technische_frage">Technische Frage</option>
+					<option value="sonstiges">Sonstiges</option>
+				</select>
+			</div>
+
+			<div class="form-control">
+				<label class="label pb-2" for="inquiry-message">
+					<span class="label-text text-sm font-medium text-neutral/80">Ihre Anfrage *</span>
+				</label>
+				<textarea
+					id="inquiry-message"
+					name="message"
+					required
+					rows="6"
+					class="textarea textarea-bordered w-full bg-base-50 border-base-300/50 focus:border-primary focus:outline-none transition-all duration-200 text-base resize-none"
+					placeholder="Beschreiben Sie Ihr Projekt: Auflage, gewünschte Textilien, Motiv-Details, Zeitplan etc."
+				></textarea>
+			</div>
+
+			<div class="form-control mt-6">
+				<button
+					type="submit"
+					class="btn btn-primary btn-lg w-full h-12 text-base font-medium shadow-sm hover:shadow-md transition-all duration-200"
+					id="inquiry-submit-btn"
+				>
+					<span class="loading loading-spinner loading-sm hidden" id="inquiry-loading-spinner"></span>
+					<span id="inquiry-submit-text">Kostenlose Anfrage senden</span>
+				</button>
+			</div>
+
+			<div id="inquiry-form-message" class="hidden mt-4"></div>
+
+			<p class="text-xs text-neutral/60 mt-4 text-center">
+				Wir behandeln Ihre Daten vertraulich und geben sie nicht an Dritte weiter.
+			</p>
+		</form>
+	</div>
+</div>
+
+<script>
+	const form = document.getElementById('inquiry-form') as HTMLFormElement;
+	const submitBtn = document.getElementById('inquiry-submit-btn') as HTMLButtonElement;
+	const submitText = document.getElementById('inquiry-submit-text') as HTMLSpanElement;
+	const loadingSpinner = document.getElementById('inquiry-loading-spinner') as HTMLSpanElement;
+	const formMessage = document.getElementById('inquiry-form-message') as HTMLDivElement;
+
+	if (form) {
+		form.addEventListener('submit', async (e) => {
+			e.preventDefault();
+
+			// Reset message
+			formMessage.classList.add('hidden');
+			formMessage.classList.remove('alert-success', 'alert-error');
+
+			// Disable submit button and show loading
+			submitBtn.disabled = true;
+			submitText.textContent = 'Wird gesendet...';
+			loadingSpinner.classList.remove('hidden');
+
+			try {
+				const formData = new FormData(form);
+				const data = Object.fromEntries(formData);
+
+				// Add metadata
+				const formType = form.dataset.formType || 'service_inquiry';
+				const sourceUrl = form.dataset.sourceUrl || window.location.pathname;
+				const pageTitle = form.dataset.pageTitle || document.title;
+				const productId = form.dataset.productId;
+				const productName = form.dataset.productName;
+
+				const payload = {
+					...data,
+					formType,
+					sourceUrl,
+					pageTitle,
+					productId: productId || undefined,
+					productName: productName || undefined,
+				};
+
+				const response = await fetch('/api/inquiry', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify(payload),
+				});
+
+				const result = await response.json();
+
+				if (response.ok) {
+					// Success
+					formMessage.classList.add('alert', 'alert-success');
+					formMessage.innerHTML = `
+						<svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+						</svg>
+						<span>${result.message || 'Ihre Anfrage wurde erfolgreich gesendet. Wir melden uns schnellstmöglich bei Ihnen.'}</span>
+					`;
+					formMessage.classList.remove('hidden');
+					form.reset();
+				} else {
+					// Error
+					formMessage.classList.add('alert', 'alert-error');
+					formMessage.innerHTML = `
+						<svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+						</svg>
+						<span>${result.error || 'Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut oder kontaktieren Sie uns direkt.'}</span>
+					`;
+					formMessage.classList.remove('hidden');
+				}
+			} catch (error) {
+				// Network or other error
+				formMessage.classList.add('alert', 'alert-error');
+				formMessage.innerHTML = `
+					<svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+					</svg>
+					<span>Verbindungsfehler. Bitte überprüfen Sie Ihre Internetverbindung und versuchen Sie es erneut.</span>
+				`;
+				formMessage.classList.remove('hidden');
+			} finally {
+				// Re-enable submit button
+				submitBtn.disabled = false;
+				submitText.textContent = 'Kostenlose Anfrage senden';
+				loadingSpinner.classList.add('hidden');
+			}
+		});
+	}
+</script>

@@ -25,11 +25,11 @@ CREATE TABLE form_requests (
     priority VARCHAR(20) DEFAULT 'normal', -- 'low', 'normal', 'high', 'urgent'
 
     -- Assignment
-    assigned_to_user_id UUID REFERENCES "user"(id) ON DELETE SET NULL,
+    assigned_to_user_id TEXT REFERENCES "user"(id) ON DELETE SET NULL,
     assigned_at TIMESTAMP,
 
     -- Metadata
-    user_id UUID REFERENCES "user"(id) ON DELETE SET NULL, -- If submitted by logged-in user
+    user_id TEXT REFERENCES "user"(id) ON DELETE SET NULL, -- If submitted by logged-in user
     ip_address VARCHAR(45), -- For spam prevention
     user_agent TEXT,
 
@@ -78,7 +78,7 @@ CREATE TABLE form_request_responses (
     email_status VARCHAR(50), -- 'sent', 'delivered', 'bounced', 'failed'
 
     -- Admin tracking
-    created_by_user_id UUID REFERENCES "user"(id) ON DELETE SET NULL,
+    created_by_user_id TEXT REFERENCES "user"(id) ON DELETE SET NULL,
     is_internal_note BOOLEAN DEFAULT false, -- Internal notes not sent to customer
 
     -- Timestamps
@@ -117,7 +117,7 @@ CREATE TABLE form_request_email_templates (
     -- Timestamps
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    created_by_user_id UUID REFERENCES "user"(id) ON DELETE SET NULL
+    created_by_user_id TEXT REFERENCES "user"(id) ON DELETE SET NULL
 );
 
 CREATE INDEX idx_templates_slug ON form_request_email_templates(slug);

@@ -1316,6 +1316,8 @@ export interface FormRequest {
   priority: string;
   assignedToUserId?: string;
   userId?: string;
+  productId?: string;
+  productName?: string;
   ipAddress?: string;
   userAgent?: string;
   createdAt: Date;
@@ -1387,6 +1389,8 @@ export async function createFormRequest(data: {
   subject: string;
   message: string;
   userId?: string;
+  productId?: string;
+  productName?: string;
   ipAddress?: string;
   userAgent?: string;
 }): Promise<string> {
@@ -1395,8 +1399,8 @@ export async function createFormRequest(data: {
     const result = await client.query(
       `INSERT INTO form_requests (
         form_type, name, email, phone, subject, message,
-        user_id, ip_address, user_agent, status, priority
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, 'pending', 'normal')
+        user_id, product_id, product_name, ip_address, user_agent, status, priority
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, 'pending', 'normal')
       RETURNING id`,
       [
         data.formType,
@@ -1406,6 +1410,8 @@ export async function createFormRequest(data: {
         data.subject,
         data.message,
         data.userId || null,
+        data.productId || null,
+        data.productName || null,
         data.ipAddress || null,
         data.userAgent || null,
       ]
@@ -1503,6 +1509,8 @@ export async function getAllFormRequests(
       priority: row.priority,
       assignedToUserId: row.assigned_to_user_id,
       userId: row.user_id,
+      productId: row.product_id,
+      productName: row.product_name,
       ipAddress: row.ip_address,
       userAgent: row.user_agent,
       createdAt: new Date(row.created_at),
@@ -1550,6 +1558,8 @@ export async function getFormRequestById(requestId: string): Promise<{
       priority: row.priority,
       assignedToUserId: row.assigned_to_user_id,
       userId: row.user_id,
+      productId: row.product_id,
+      productName: row.product_name,
       ipAddress: row.ip_address,
       userAgent: row.user_agent,
       createdAt: new Date(row.created_at),

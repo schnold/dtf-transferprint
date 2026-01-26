@@ -29,17 +29,17 @@ const subjectLabels: Record<string, string> = {
     </div>
     <div class="stat bg-gradient-to-br from-warning/10 to-warning/5 border border-warning/20 rounded-lg">
       <div class="stat-title">Ausstehend</div>
-      <div class="stat-value text-warning">{stats.pendingRequests || 0}</div>
+      <div class="stat-value text-warning">{stats.pendingCount || 0}</div>
       <div class="stat-desc">Warten auf Bearbeitung</div>
     </div>
     <div class="stat bg-gradient-to-br from-info/10 to-info/5 border border-info/20 rounded-lg">
       <div class="stat-title">In Bearbeitung</div>
-      <div class="stat-value text-info">{stats.inProgressRequests || 0}</div>
+      <div class="stat-value text-info">{stats.inProgressCount || 0}</div>
       <div class="stat-desc">Werden bearbeitet</div>
     </div>
     <div class="stat bg-gradient-to-br from-success/10 to-success/5 border border-success/20 rounded-lg">
       <div class="stat-title">Gelöst</div>
-      <div class="stat-value text-success">{stats.resolvedRequests || 0}</div>
+      <div class="stat-value text-success">{stats.resolvedCount || 0}</div>
       <div class="stat-desc">Abgeschlossen</div>
     </div>
   </div>
@@ -50,6 +50,18 @@ const subjectLabels: Record<string, string> = {
     <a role="tab" class="tab" data-filter="pending">Ausstehend</a>
     <a role="tab" class="tab" data-filter="in_progress">In Bearbeitung</a>
     <a role="tab" class="tab" data-filter="resolved">Gelöst</a>
+    <a role="tab" class="tab" data-filter="contact" data-filter-type="formType">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline-block mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+      </svg>
+      Kontaktanfragen
+    </a>
+    <a role="tab" class="tab" data-filter="produktanfrage" data-filter-type="formType">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline-block mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+      </svg>
+      Produktanfragen
+    </a>
   </div>
 
   <!-- Search Input -->
@@ -84,15 +96,33 @@ const subjectLabels: Record<string, string> = {
           </tr>
         ) : (
           requests.map((request: any) => (
-            <tr data-status={request.status} data-request-id={request.id}>
-              <td>{new Date(request.created_at).toLocaleDateString('de-DE', { 
-                day: '2-digit', 
-                month: '2-digit', 
-                year: 'numeric' 
+            <tr data-status={request.status} data-request-id={request.id} data-form-type={request.formType}>
+              <td>{new Date(request.created_at).toLocaleDateString('de-DE', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
               })}</td>
               <td>{request.name}</td>
               <td>{request.email}</td>
-              <td>{subjectLabels[request.subject] || request.subject}</td>
+              <td>
+                <div class="flex items-center gap-2">
+                  {request.formType === 'produktanfrage' && (
+                    <span class="badge badge-sm badge-primary gap-1" title="Produktanfrage">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                      </svg>
+                    </span>
+                  )}
+                  {request.formType === 'contact' && (
+                    <span class="badge badge-sm badge-secondary gap-1" title="Kontaktanfrage">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                      </svg>
+                    </span>
+                  )}
+                  <span>{request.formType === 'produktanfrage' ? request.productName : (subjectLabels[request.subject] || request.subject)}</span>
+                </div>
+              </td>
               <td>
                 <span class={`badge ${
                   request.status === 'pending' ? 'badge-warning' :
@@ -190,7 +220,7 @@ const subjectLabels: Record<string, string> = {
 
         <div class="modal-action">
           <button type="submit" class="btn btn-primary">Senden</button>
-          <button type="button" onclick="document.getElementById('reply-modal').close()" class="btn">Abbrechen</button>
+          <button type="button" id="reply-modal-close-btn" class="btn">Abbrechen</button>
         </div>
       </form>
     </div>
@@ -214,8 +244,9 @@ const subjectLabels: Record<string, string> = {
     tab.addEventListener('click', (e) => {
       const target = e.target as HTMLElement;
       const filter = target.dataset.filter;
+      const filterType = target.dataset.filterType || 'status';
       if (filter) {
-        filterRequests(filter);
+        filterRequests(filter, filterType);
 
         // Update active tab
         document.querySelectorAll('[data-filter]').forEach(t => t.classList.remove('tab-active'));
@@ -224,15 +255,21 @@ const subjectLabels: Record<string, string> = {
     });
   });
 
-  function filterRequests(filter: string) {
+  function filterRequests(filter: string, filterType: string = 'status') {
     const rows = document.querySelectorAll('#requests-tbody tr');
     rows.forEach(row => {
       const tr = row as HTMLTableRowElement;
-      if (filter === 'all' || tr.dataset.status === filter) {
-        tr.style.display = '';
+      let shouldShow = false;
+
+      if (filter === 'all') {
+        shouldShow = true;
+      } else if (filterType === 'formType') {
+        shouldShow = tr.dataset.formType === filter;
       } else {
-        tr.style.display = 'none';
+        shouldShow = tr.dataset.status === filter;
       }
+
+      tr.style.display = shouldShow ? '' : 'none';
     });
   }
 
@@ -259,7 +296,40 @@ const subjectLabels: Record<string, string> = {
       // Populate modal content
       const modalContent = document.getElementById('modal-content');
       if (modalContent) {
+        // Check if this is a product inquiry or contact message
+        const isProductInquiry = request.form_type === 'produktanfrage';
+        const isContactMessage = request.form_type === 'contact';
+        
+        const productInfo = isProductInquiry && request.product_name ? `
+          <div class="alert alert-info mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <div>
+              <strong>Produktanfrage</strong>
+              <div class="text-sm mt-1">
+                <strong>Produkt:</strong> ${escapeHtml(request.product_name)}
+                ${request.product_id ? `<br><a href="/product/${request.product_id}" target="_blank" class="link link-primary">Produkt ansehen →</a>` : ''}
+              </div>
+            </div>
+          </div>
+        ` : '';
+        
+        const contactInfo = isContactMessage ? `
+          <div class="alert alert-secondary mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+            <div>
+              <strong>Kontaktanfrage</strong>
+              <div class="text-sm mt-1">Nachricht über das Kontaktformular</div>
+            </div>
+          </div>
+        ` : '';
+
         modalContent.innerHTML = `
+          ${productInfo}
+          ${contactInfo}
           <div class="mb-4">
             <div class="grid grid-cols-2 gap-4 mb-4">
               <div><strong>Name:</strong> ${escapeHtml(request.name)}</div>
@@ -303,7 +373,7 @@ const subjectLabels: Record<string, string> = {
 
       if (replyBtn) {
         replyBtn.onclick = () => {
-          document.getElementById('request-detail-modal')?.close();
+          (document.getElementById('request-detail-modal') as HTMLDialogElement)?.close();
           openReplyModal(requestId);
         };
       }
@@ -455,6 +525,11 @@ const subjectLabels: Record<string, string> = {
     div.textContent = text;
     return div.innerHTML;
   }
+
+  // Close reply modal button handler
+  document.getElementById('reply-modal-close-btn')?.addEventListener('click', () => {
+    (document.getElementById('reply-modal') as HTMLDialogElement)?.close();
+  });
 
   // Make functions globally accessible
   (window as any).viewRequest = viewRequest;
