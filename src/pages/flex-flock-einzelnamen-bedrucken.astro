@@ -1,0 +1,580 @@
+---
+import CompanyLayout from '../layouts/CompanyLayout.astro';
+import InquiryForm from '../components/InquiryForm.astro';
+import UseCasesSection from '../components/UseCasesSection.astro';
+import ContactCTASection from '../components/ContactCTASection.astro';
+
+const title = 'Flex & Flock Einzelnamen bedrucken – Textilien personalisieren | BySelini';
+const description = 'Einzelnamen mit Flex- & Flockfolie bedrucken ✓ Leuchtende Farben ✓ Ab 1 Stück ✓ Schnelle Produktion ✓ Perfekt für Trikots, Schulshirts & mehr ✓ Langlebig & waschbeständig ➤ Jetzt personalisieren!';
+---
+
+<CompanyLayout title={title} description={description}>
+	<!-- Hero Section -->
+	<div class="mb-12">
+		<h1 class="!mb-4">Flex- und Flockdruck – Einzelnamen personalisieren</h1>
+		<p class="text-lg text-neutral/80 !mb-6">
+			Sie möchten Kleidung oder Textilien persönlich gestalten? Dann ist das Bedrucken von Einzelnamen mit Flex- oder Flockfolie eine einfache, kostengünstige und schnelle Möglichkeit. Besonders für Sportmannschaften, Vereine, Schulen oder Firmen lassen sich so Textilien individuell markieren und zu echten Unikaten machen.
+		</p>
+
+		<div class="alert alert-success mb-8">
+			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+			</svg>
+			<div>
+				<h3 class="font-bold">✨ Individuelle Textilien mit persönlicher Note</h3>
+				<p class="mt-2">
+					Dank moderner Technologien wie DTF Transfers können wir Einzelnamen präzise, langlebig und in intensiven Farben auf Ihre Textilien übertragen. Das Ergebnis ist ein professionelles, robustes Druckbild, das sowohl im Alltag als auch bei sportlicher Nutzung überzeugt.
+				</p>
+			</div>
+		</div>
+	</div>
+
+	<!-- Quick Stats -->
+	<div class="stats stats-vertical lg:stats-horizontal shadow my-8 w-full">
+		<div class="stat">
+			<div class="stat-figure text-base-content">
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+				</svg>
+			</div>
+			<div class="stat-title">Farbauswahl</div>
+			<div class="stat-value text-base-content">Riesig</div>
+			<div class="stat-desc">Inkl. Effektfarben</div>
+		</div>
+
+		<div class="stat">
+			<div class="stat-figure text-base-content">
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+				</svg>
+			</div>
+			<div class="stat-title">Produktion</div>
+			<div class="stat-value text-base-content">Schnell</div>
+			<div class="stat-desc">Sofort einsatzbereit</div>
+		</div>
+
+		<div class="stat">
+			<div class="stat-figure text-base-content">
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+				</svg>
+			</div>
+			<div class="stat-title">Mindestmenge</div>
+			<div class="stat-value text-base-content">1 Stk</div>
+			<div class="stat-desc">Auch Einzelstücke</div>
+		</div>
+	</div>
+
+	<!-- Visual Example Section with Image Placeholder -->
+	<div class="card bg-base-200 border-4 border-dashed border-primary/30 shadow-xl my-8">
+		<div class="card-body items-center text-center">
+			<div class="w-full aspect-video bg-gradient-to-br from-base-300 to-base-200 rounded-lg flex items-center justify-center relative overflow-hidden">
+				<div class="absolute inset-0 bg-grid-pattern opacity-5"></div>
+				<div class="text-center z-10">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-16 h-16 mx-auto mb-4 text-primary/50">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+					</svg>
+					<p class="text-sm text-neutral/60 font-semibold uppercase tracking-wider">Bild-Platzhalter</p>
+					<p class="text-xs text-neutral/50 mt-1">Beispiele für Flex & Flock Einzelnamen</p>
+					<p class="text-xs text-neutral/40 mt-2">(Trikots, Shirts, Jacken mit Namen)</p>
+				</div>
+			</div>
+			<p class="text-sm text-neutral/70 mt-4 italic">📷 Hier werden später Beispielbilder von bedruckten Namen auf Textilien angezeigt</p>
+		</div>
+	</div>
+
+	<h2>Was ist Flex- und Flockdruck?</h2>
+	<p>
+		<strong>Flex- und Flockdruck</strong> sind bewährte Verfahren zur Textilveredelung, bei denen Einzelnamen, Schriftzüge, Zahlen oder einfache Motive mit speziellen Folien auf Textilien übertragen werden. Die Folie wird präzise zugeschnitten und mit einer Transferpresse dauerhaft auf das Material aufgebracht – das Ergebnis sind leuchtende, deckende Farben mit langer Haltbarkeit.
+	</p>
+	<p>
+		Diese Technik eignet sich perfekt für <strong>Sportmannschaften, Schulklassen, Vereine, Firmenbekleidung</strong> und alle, die Textilien individuell mit Namen personalisieren möchten. Dank der großen Auswahl an Folien – von klassischen Farben bis zu Neon, Metallic, Glitter und Glow-in-the-dark – lassen sich besondere Effekte erzielen.
+	</p>
+
+	<h2>So funktioniert die Technik</h2>
+	<div class="card bg-base-200 shadow-xl my-8">
+		<div class="card-body">
+			<h3 class="card-title">
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-base-content">
+					<path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 010 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 010-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z" />
+					<path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+				</svg>
+				Der Produktionsprozess im Detail
+			</h3>
+
+			<!-- Image Placeholder for Production -->
+			<div class="my-6 border-4 border-dashed border-secondary/30 rounded-lg p-6 bg-base-100">
+				<div class="aspect-video bg-gradient-to-br from-base-300 to-base-200 rounded-lg flex items-center justify-center">
+					<div class="text-center">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 mx-auto mb-3 text-secondary/50">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25m18 0A2.25 2.25 0 0018.75 3H5.25A2.25 2.25 0 003 5.25m18 0V12a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 12V5.25" />
+						</svg>
+						<p class="text-xs text-neutral/60 font-semibold">Bild: Schneideplotter</p>
+						<p class="text-xs text-neutral/40 mt-1">Produktionsansicht</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="space-y-4 mt-4">
+				<div class="flex gap-4 items-start">
+					<div class="badge badge-primary badge-lg">1</div>
+					<div class="flex-1">
+						<h4 class="font-semibold mb-1">Datei erstellen</h4>
+						<p class="text-sm text-neutral/80">
+							Für die Produktion wird eine <strong>Vektor-Datei</strong> benötigt. Diese kann direkt in Programmen wie Adobe Illustrator oder CorelDraw erstellt werden. <strong>Systemschriftarten enthalten bereits Schneidepfade</strong>, sodass keine zusätzliche Umwandlung nötig ist.
+						</p>
+					</div>
+				</div>
+
+				<div class="flex gap-4 items-start">
+					<div class="badge badge-primary badge-lg">2</div>
+					<div class="flex-1">
+						<h4 class="font-semibold mb-1">Schneiden</h4>
+						<p class="text-sm text-neutral/80">
+							Die <strong>Flex- oder Flockfolie</strong> in der gewünschten Farbe wird in einen Schneideplotter eingelegt. Der Plotter schneidet das Motiv exakt entlang der vorgegebenen Pfade.
+						</p>
+					</div>
+				</div>
+
+				<div class="flex gap-4 items-start">
+					<div class="badge badge-primary badge-lg">3</div>
+					<div class="flex-1">
+						<h4 class="font-semibold mb-1">Entgittern</h4>
+						<p class="text-sm text-neutral/80">
+							Überflüssiges Material wird entfernt, sodass nur die eigentliche Beschriftung auf der Trägerfolie verbleibt. Dabei ist <strong>Vorsicht geboten</strong>, um die Folie nicht zu beschädigen.
+						</p>
+					</div>
+				</div>
+
+				<div class="flex gap-4 items-start">
+					<div class="badge badge-primary badge-lg">4</div>
+					<div class="flex-1">
+						<h4 class="font-semibold mb-1">Transfer auf das Textil</h4>
+						<p class="text-sm text-neutral/80">
+							Das Motiv wird auf das Textil positioniert – gängige Plätze sind <strong>Brust, Rücken, Arm, Kragen oder Bund</strong>. Mit einer Transferpresse wird die Folie bei <strong>150-180°C und ca. 4 bar für 15-20 Sekunden</strong> auf das Textil übertragen. Die Klebeschicht verbindet sich dabei dauerhaft mit der Faser, die Trägerfolie wird entfernt.
+						</p>
+					</div>
+				</div>
+
+				<div class="flex gap-4 items-start">
+					<div class="badge badge-success badge-lg">✓</div>
+					<div class="flex-1">
+						<h4 class="font-semibold mb-1">Fertigstellung</h4>
+						<p class="text-sm text-neutral/80">
+							Nach dem Abkühlen ist das Textil personalisiert und <strong>sofort einsatzbereit</strong>. Keine Wartezeiten, keine Aushärtung nötig.
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Vorteile & Nachteile Grid -->
+	<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 my-8">
+		<!-- Vorteile -->
+		<div class="card bg-gradient-to-br from-success/10 to-success/5 border border-success/20">
+			<div class="card-body">
+				<h3 class="card-title text-success flex items-center gap-2">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+					</svg>
+					Vorteile von Flex- und Flockdruck
+				</h3>
+				<ul class="space-y-3 mt-4">
+					<li class="flex items-start gap-2">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-success mt-0.5 flex-shrink-0">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+						</svg>
+						<span><strong>Leuchtende, deckende Farben</strong> – Brillante Farbintensität auf allen Textilien</span>
+					</li>
+					<li class="flex items-start gap-2">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-success mt-0.5 flex-shrink-0">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+						</svg>
+						<span><strong>Bedruckung auf allen Textilfarben möglich</strong> – Auch auf dunklen Stoffen perfekt sichtbar</span>
+					</li>
+					<li class="flex items-start gap-2">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-success mt-0.5 flex-shrink-0">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+						</svg>
+						<span><strong>Ideal für kleine Auflagen und Einzelstücke</strong> – Keine Mindestmenge erforderlich</span>
+					</li>
+					<li class="flex items-start gap-2">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-success mt-0.5 flex-shrink-0">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+						</svg>
+						<span><strong>Perfekt für Schriften, Zahlen und einfache Motive</strong> – Klare, scharfe Konturen</span>
+					</li>
+					<li class="flex items-start gap-2">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-success mt-0.5 flex-shrink-0">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+						</svg>
+						<span><strong>Schnelle Produktion</strong> – Sofort einsatzbereit nach dem Transfer</span>
+					</li>
+					<li class="flex items-start gap-2">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-success mt-0.5 flex-shrink-0">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+						</svg>
+						<span><strong>Große Folienauswahl</strong> – Neon, Metallic, Glitter, Glow-in-the-dark und mehr</span>
+					</li>
+					<li class="flex items-start gap-2">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-success mt-0.5 flex-shrink-0">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+						</svg>
+						<span><strong>Kombinierbar mit anderen Druckverfahren</strong> – Z.B. mit Siebdruck für kreative Designs</span>
+					</li>
+				</ul>
+			</div>
+		</div>
+
+		<!-- Einschränkungen -->
+		<div class="card bg-gradient-to-br from-warning/10 to-warning/5 border border-warning/20">
+			<div class="card-body">
+				<h3 class="card-title text-warning flex items-center gap-2">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+					</svg>
+					Einschränkungen
+				</h3>
+				<ul class="space-y-3 mt-4">
+					<li class="flex items-start gap-2">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-warning mt-0.5 flex-shrink-0">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+						</svg>
+						<span><strong>Keine Farbverläufe möglich</strong> – Nur einfarbige oder mehrfarbige Motive (mehrere Folien)</span>
+					</li>
+					<li class="flex items-start gap-2">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-warning mt-0.5 flex-shrink-0">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+						</svg>
+						<span><strong>Nur einfache, klare Schriftarten umsetzbar</strong> – Filigrane oder verspielte Schriften schwierig</span>
+					</li>
+					<li class="flex items-start gap-2">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-warning mt-0.5 flex-shrink-0">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+						</svg>
+						<span><strong>Große Zahlen oder Schriftzüge können Tragekomfort einschränken</strong> – Folie ist fühlbar</span>
+					</li>
+					<li class="flex items-start gap-2">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-warning mt-0.5 flex-shrink-0">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+						</svg>
+						<span><strong>Mindesthöhe für Buchstaben: ca. 1 cm</strong> – Für optimale Lesbarkeit und Haltbarkeit</span>
+					</li>
+				</ul>
+
+				<div class="alert alert-warning shadow-sm">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+					</svg>
+					<div>
+						<p class="text-sm"><strong>Tipp:</strong> Für filigrane Namen oder hochwertige Textilien empfehlen wir <a href="/einzelnamenstick/" class="link link-primary">Einzelnamenstickerei</a>. Für komplexe Designs mit Farbverläufen eignet sich <a href="/dtf-transfers/" class="link link-primary">DTF-Druck</a>.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<h3>Tipps für optimale Ergebnisse</h3>
+	<div class="card bg-base-200 shadow-xl my-8">
+		<div class="card-body">
+			<ul class="space-y-3">
+				<li class="flex items-start gap-3">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 text-primary mt-0.5 flex-shrink-0">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+					</svg>
+					<div>
+						<p class="font-semibold">Schriftarten mit klaren Kanten wählen</p>
+						<p class="text-sm text-neutral/70">Schriften sollten klare Kanten besitzen und gut entgittern lassen. Vermeiden Sie zu filigrane oder verspielte Schriftarten.</p>
+					</div>
+				</li>
+				<li class="flex items-start gap-3">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 text-primary mt-0.5 flex-shrink-0">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+					</svg>
+					<div>
+						<p class="font-semibold">Mindesthöhe beachten</p>
+						<p class="text-sm text-neutral/70">Mindesthöhe für Buchstaben: ca. 1 cm für optimale Lesbarkeit und Haltbarkeit. Kleinere Buchstaben können beim Waschen abblättern.</p>
+					</div>
+				</li>
+				<li class="flex items-start gap-3">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 text-primary mt-0.5 flex-shrink-0">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+					</svg>
+					<div>
+						<p class="font-semibold">Pflege: Textilien auf links drehen</p>
+						<p class="text-sm text-neutral/70">Textilien auf links drehen beim Waschen, um Motive zu schonen. Nicht im Trockner trocknen. Bei 30-40°C waschen.</p>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="divider my-12"></div>
+
+	<UseCasesSection
+		title="Einsatzbereiche"
+		introText="Flex- und Flockdruck eignet sich perfekt für die Personalisierung verschiedenster Textilien:"
+		columns="4"
+		items={[
+			{
+				iconPath: "M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5",
+				title: "Schul- & Abishirts",
+				description: "Namen der Schüler auf Schulshirts oder Abimottos individuell gestalten"
+			},
+			{
+				iconPath: "M15.59 14.37a6 6 0 01-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 006.16-12.12A14.98 14.98 0 009.631 8.41m5.96 5.96a14.926 14.926 0 01-5.841 2.58m-.119-8.54a6 6 0 00-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 00-2.58 5.84m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 01-2.448-2.448 14.9 14.9 0 01.06-.312m-2.24 2.39a4.493 4.493 0 00-1.757 4.306 4.493 4.493 0 004.306-1.758M16.5 9a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z",
+				title: "Sportmannschaften & Vereine",
+				description: "Einzelnamen auf Trikots, Trainingsshirts oder Jacken anbringen"
+			},
+			{
+				iconPath: "M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 00.75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 00-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0112 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 01-.673-.38m0 0A2.18 2.18 0 013 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 013.413-.387m7.5 0V5.25A2.25 2.25 0 0013.5 3h-3a2.25 2.25 0 00-2.25 2.25v.894m7.5 0a48.667 48.667 0 00-7.5 0M12 12.75h.008v.008H12v-.008z",
+				title: "Firmenbekleidung",
+				description: "Mitarbeiterbekleidung mit Namen personalisieren, Corporate Wear individualisieren"
+			},
+			{
+				iconPath: "M9 9l10.5-3m0 6.553v3.75a2.25 2.25 0 01-1.632 2.163l-1.32.377a1.803 1.803 0 11-.99-3.467l2.31-.66a2.25 2.25 0 001.632-2.163zm0 0V2.25L9 5.25v10.303m0 0v3.75a2.25 2.25 0 01-1.632 2.163l-1.32.377a1.803 1.803 0 01-.99-3.467l2.31-.66A2.25 2.25 0 009 15.553z",
+				title: "Freizeit & Events",
+				description: "Junggesellenabschiede, Vereinsfeiern, Kindergeburtstage, Eventshirts"
+			}
+		]}
+	/>
+
+	<div class="alert alert-info my-8">
+		<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
+			<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+		</svg>
+		<div>
+			<p class="font-semibold">✨ Besondere Effekte mit Spezialfolien</p>
+			<p class="text-sm mt-2">
+				Mit der großen Auswahl an Flex- und Flockfolien lassen sich besondere Effekte erzielen: <strong>Neon, Metallic, Glitter, Spiegel- oder Glow-in-the-dark-Folien</strong> machen jeden Schriftzug zum Hingucker. Eine Kombination mit anderen Druckverfahren, z.B. Siebdruck, ermöglicht zusätzlich kreative Designs.
+			</p>
+		</div>
+	</div>
+
+	<!-- CTA Section -->
+	<ContactCTASection
+		title="Bereit für Ihre personalisierten Textilien?"
+		description="Fordern Sie jetzt ein kostenloses, unverbindliches Angebot für Flex & Flock Einzelnamendruck an. Teilen Sie uns mit, welche Namen und Positionen Sie wünschen – wir beraten Sie gerne zu Folienfarben, Effekten und erstellen ein individuelles Angebot."
+	/>
+
+	<!-- FAQ Section -->
+	<h2 class="mt-16 mb-8">Häufige Fragen zum Flex & Flock Einzelnamendruck</h2>
+
+	<div class="space-y-3 mb-12">
+		<!-- FAQ Item 1 -->
+		<div class="faq-item group border border-base-300/30 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-accent/30 overflow-hidden bg-gray-800">
+			<input type="checkbox" id="faq-1" class="faq-toggle" checked="checked" />
+			<label for="faq-1" class="faq-label flex items-center justify-between cursor-pointer p-6 bg-gray-800 transition-all duration-300">
+				<span class="text-xl font-semibold text-gray-200 pr-4">Was ist der Unterschied zwischen Flex- und Flockfolie?</span>
+				<div class="faq-icon flex-shrink-0 w-6 h-6 relative text-accent">
+					<svg class="faq-icon-plus absolute inset-0 w-full h-full transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+					</svg>
+					<svg class="faq-icon-minus absolute inset-0 w-full h-full transition-all duration-300 opacity-0 scale-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4" />
+					</svg>
+				</div>
+			</label>
+			<div class="faq-content overflow-hidden transition-all duration-300">
+				<div class="px-6 pb-6 pt-2">
+					<p class="text-gray-200 leading-relaxed">
+						<strong>Flexfolie</strong> hat eine glatte, glänzende Oberfläche und ist dünner – ideal für filigrane Schriften und Zahlen. <strong>Flockfolie</strong> hat eine samtige, flauschige Oberfläche und wirkt edler – perfekt für größere Motive und Logos. Beide Folien sind waschbeständig und langlebig. Die Wahl hängt von Ihrem gewünschten Look ab.
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<!-- FAQ Item 2 -->
+		<div class="faq-item group border border-base-300/30 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-accent/30 overflow-hidden bg-gray-800">
+			<input type="checkbox" id="faq-2" class="faq-toggle" />
+			<label for="faq-2" class="faq-label flex items-center justify-between cursor-pointer p-6 bg-gray-800 transition-all duration-300">
+				<span class="text-xl font-semibold text-gray-200 pr-4">Gibt es eine Mindestbestellmenge?</span>
+				<div class="faq-icon flex-shrink-0 w-6 h-6 relative text-accent">
+					<svg class="faq-icon-plus absolute inset-0 w-full h-full transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+					</svg>
+					<svg class="faq-icon-minus absolute inset-0 w-full h-full transition-all duration-300 opacity-0 scale-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4" />
+					</svg>
+				</div>
+			</label>
+			<div class="faq-content overflow-hidden transition-all duration-300">
+				<div class="px-6 pb-6 pt-2">
+					<p class="text-gray-200 leading-relaxed">
+						Nein, bei Flex- und Flockdruck gibt es <strong>keine Mindestbestellmenge</strong>. Sie können auch einzelne Textilien mit Namen personalisieren lassen. Das macht dieses Verfahren ideal für Einzelstücke, Kleinserien oder wenn jedes Textil einen individuellen Namen tragen soll.
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<!-- FAQ Item 3 -->
+		<div class="faq-item group border border-base-300/30 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-accent/30 overflow-hidden bg-gray-800">
+			<input type="checkbox" id="faq-3" class="faq-toggle" />
+			<label for="faq-3" class="faq-label flex items-center justify-between cursor-pointer p-6 bg-gray-800 transition-all duration-300">
+				<span class="text-xl font-semibold text-gray-200 pr-4">Wie klein können die Buchstaben sein?</span>
+				<div class="faq-icon flex-shrink-0 w-6 h-6 relative text-accent">
+					<svg class="faq-icon-plus absolute inset-0 w-full h-full transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+					</svg>
+					<svg class="faq-icon-minus absolute inset-0 w-full h-full transition-all duration-300 opacity-0 scale-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4" />
+					</svg>
+				</div>
+			</label>
+			<div class="faq-content overflow-hidden transition-all duration-300">
+				<div class="px-6 pb-6 pt-2">
+					<p class="text-gray-200 leading-relaxed">
+						Die <strong>Mindesthöhe für Buchstaben beträgt ca. 1 cm</strong> für optimale Lesbarkeit und Haltbarkeit. Kleinere Buchstaben können beim Waschen abblättern oder sind schwer zu entgittern. Für sehr kleine oder filigrane Schriften empfehlen wir <a href="/einzelnamenstick/" class="link link-primary">Einzelnamenstickerei</a>.
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<!-- FAQ Item 4 -->
+		<div class="faq-item group border border-base-300/30 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-accent/30 overflow-hidden bg-gray-800">
+			<input type="checkbox" id="faq-4" class="faq-toggle" />
+			<label for="faq-4" class="faq-label flex items-center justify-between cursor-pointer p-6 bg-gray-800 transition-all duration-300">
+				<span class="text-xl font-semibold text-gray-200 pr-4">Wie haltbar ist Flex- und Flockdruck?</span>
+				<div class="faq-icon flex-shrink-0 w-6 h-6 relative text-accent">
+					<svg class="faq-icon-plus absolute inset-0 w-full h-full transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+					</svg>
+					<svg class="faq-icon-minus absolute inset-0 w-full h-full transition-all duration-300 opacity-0 scale-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4" />
+					</svg>
+				</div>
+			</label>
+			<div class="faq-content overflow-hidden transition-all duration-300">
+				<div class="px-6 pb-6 pt-2">
+					<p class="text-gray-200 leading-relaxed">
+						Flex- und Flockdruck ist <strong>sehr haltbar und waschbeständig</strong>. Bei korrekter Pflege (Textilien auf links waschen, nicht im Trockner, 30-40°C) halten die Drucke viele Jahre. Die Folie verbindet sich dauerhaft mit der Textilfaser. Wichtig: Textilien auf links drehen beim Waschen, um die Motive zu schonen.
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<!-- FAQ Item 5 -->
+		<div class="faq-item group border border-base-300/30 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-accent/30 overflow-hidden bg-gray-800">
+			<input type="checkbox" id="faq-5" class="faq-toggle" />
+			<label for="faq-5" class="faq-label flex items-center justify-between cursor-pointer p-6 bg-gray-800 transition-all duration-300">
+				<span class="text-xl font-semibold text-gray-200 pr-4">Welche Spezialfolien gibt es?</span>
+				<div class="faq-icon flex-shrink-0 w-6 h-6 relative text-accent">
+					<svg class="faq-icon-plus absolute inset-0 w-full h-full transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+					</svg>
+					<svg class="faq-icon-minus absolute inset-0 w-full h-full transition-all duration-300 opacity-0 scale-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4" />
+					</svg>
+				</div>
+			</label>
+			<div class="faq-content overflow-hidden transition-all duration-300">
+				<div class="px-6 pb-6 pt-2">
+					<p class="text-gray-200 leading-relaxed">
+						Wir bieten eine große Auswahl an Spezialfolien: <strong>Neonfarben</strong> für leuchtende Effekte, <strong>Metallic</strong> (Gold, Silber, Kupfer), <strong>Glitter</strong> für glitzernde Designs, <strong>Spiegelfolien</strong> für chromatische Effekte und <strong>Glow-in-the-dark</strong> Folien, die im Dunkeln leuchten. Jede Folie hat ihre eigene Wirkung und eignet sich für unterschiedliche Designs.
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<!-- FAQ Item 6 -->
+		<div class="faq-item group border border-base-300/30 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-accent/30 overflow-hidden bg-gray-800">
+			<input type="checkbox" id="faq-6" class="faq-toggle" />
+			<label for="faq-6" class="faq-label flex items-center justify-between cursor-pointer p-6 bg-gray-800 transition-all duration-300">
+				<span class="text-xl font-semibold text-gray-200 pr-4">Kann ich Flex-/Flockdruck mit anderen Druckverfahren kombinieren?</span>
+				<div class="faq-icon flex-shrink-0 w-6 h-6 relative text-accent">
+					<svg class="faq-icon-plus absolute inset-0 w-full h-full transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+					</svg>
+					<svg class="faq-icon-minus absolute inset-0 w-full h-full transition-all duration-300 opacity-0 scale-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4" />
+					</svg>
+				</div>
+			</label>
+			<div class="faq-content overflow-hidden transition-all duration-300">
+				<div class="px-6 pb-6 pt-2">
+					<p class="text-gray-200 leading-relaxed">
+						Ja, Flex-/Flockdruck lässt sich hervorragend mit anderen Druckverfahren kombinieren. Besonders beliebt ist die Kombination mit <a href="/siebdruck/" class="link link-primary">Siebdruck</a> oder <a href="/dtf-transfers/" class="link link-primary">DTF-Transfers</a>: Das Logo wird im Siebdruck aufgebracht, die individuellen Namen in Flex/Flock. So entstehen kreative, professionelle Designs.
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Accordion Behavior Script -->
+	<script is:inline>
+		// Make FAQ work as accordion (only one open at a time)
+		document.addEventListener('DOMContentLoaded', function() {
+			const faqToggles = document.querySelectorAll('.faq-toggle');
+
+			faqToggles.forEach(function(toggle) {
+				toggle.addEventListener('change', function() {
+					const currentToggle = this;
+					if (currentToggle.checked) {
+						// Uncheck all other FAQ items
+						faqToggles.forEach(function(otherToggle) {
+							if (otherToggle !== currentToggle) {
+								otherToggle.checked = false;
+							}
+						});
+					}
+				});
+			});
+		});
+	</script>
+
+	<div class="alert alert-success my-8">
+		<svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+			<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+		</svg>
+		<div>
+			<h4 class="font-bold">Kostenlose Beratung – Wir helfen Ihnen weiter!</h4>
+			<p class="mt-2">
+				Sie sind unsicher, welche Folie oder Schriftart für Ihr Projekt geeignet ist? Unser Team berät Sie kostenlos und unverbindlich zu Folienfarben, Effekten und Positionen für Ihren Einzelnamendruck.
+			</p>
+		</div>
+	</div>
+
+	<div class="divider my-12"></div>
+
+	<!-- Inquiry Form Section -->
+	<div id="inquiry-form" class="scroll-mt-20">
+		<InquiryForm
+			formType="flex-flock-einzelnamen"
+			sourcePageTitle="Flex & Flock Einzelnamen"
+			sourcePageUrl="/flex-flock-einzelnamen-bedrucken/"
+		/>
+	</div>
+</CompanyLayout>
+
+<style>
+	.bg-grid-pattern {
+		background-image:
+			linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+			linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+		background-size: 20px 20px;
+	}
+
+	/* FAQ Accordion Styles */
+	.faq-toggle {
+		display: none;
+	}
+
+	.faq-content {
+		max-height: 0;
+	}
+
+	.faq-toggle:checked ~ .faq-content {
+		max-height: 500px;
+	}
+
+	.faq-toggle:checked ~ .faq-label .faq-icon-plus {
+		opacity: 0;
+		transform: scale(0) rotate(90deg);
+	}
+
+	.faq-toggle:checked ~ .faq-label .faq-icon-minus {
+		opacity: 1;
+		transform: scale(1) rotate(0deg);
+	}
+</style>

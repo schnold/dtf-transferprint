@@ -1,0 +1,670 @@
+---
+import CompanyLayout from '../layouts/CompanyLayout.astro';
+import InquiryForm from '../components/InquiryForm.astro';
+import UseCasesSection from '../components/UseCasesSection.astro';
+import ContactCTASection from '../components/ContactCTASection.astro';
+
+const title = 'Reflex Transferdruck für Arbeitskleidung | Lichtreflektierende Textilien';
+const description = 'Reflex Transfer für Arbeits- & Sicherheitsbekleidung. Lichtreflektierende Drucke für bessere Sichtbarkeit. Ideal für Firmen & Vereine.';
+---
+
+<CompanyLayout title={title} description={description}>
+	<!-- Hero Section -->
+	<div class="mb-12">
+		<h1 class="!mb-4">Reflex Transfer – Lichtreflektierender Textildruck für maximale Sichtbarkeit</h1>
+		<p class="text-lg text-neutral/80 !mb-6">
+			Der Reflex Transferdruck ist eine spezielle Form der Textilveredelung, bei der lichtreflektierende Motive per Transferpresse auf Textilien übertragen werden. 
+			Diese Drucktechnik wird vor allem für Arbeitskleidung, Sicherheitsbekleidung, Sportbekleidung und Warnwesten eingesetzt, 
+			um die Sichtbarkeit bei Dunkelheit und schlechten Lichtverhältnissen deutlich zu erhöhen.
+		</p>
+
+		<div class="alert alert-warning mb-8">
+			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+			</svg>
+			<div>
+				<h3 class="font-bold">Maximale Sicherheit durch Lichtreflexion</h3>
+				<p class="mt-2">
+					Reflex Transfers reflektieren auftreffendes Licht, zum Beispiel von Autoscheinwerfern, und sorgen so für mehr Sicherheit im Straßenverkehr und am Arbeitsplatz.
+				</p>
+			</div>
+		</div>
+	</div>
+
+	<!-- Quick Stats -->
+	<div class="stats stats-vertical lg:stats-horizontal shadow my-8 w-full">
+		<div class="stat">
+			<div class="stat-figure text-base-content">
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" />
+				</svg>
+			</div>
+			<div class="stat-title">Sichtbarkeit</div>
+			<div class="stat-value text-base-content">Sehr hoch</div>
+			<div class="stat-desc">Bei Dunkelheit & Licht</div>
+		</div>
+
+		<div class="stat">
+			<div class="stat-figure text-base-content">
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+				</svg>
+			</div>
+			<div class="stat-title">Einsatzbereich</div>
+			<div class="stat-value text-base-content">Sicherheit</div>
+			<div class="stat-desc">Arbeits- & Sportbekleidung</div>
+		</div>
+
+		<div class="stat">
+			<div class="stat-figure text-base-content">
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.5 12.75l7.5-7.5 7.5 7.5m-15 6l7.5-7.5 7.5 7.5" />
+				</svg>
+			</div>
+			<div class="stat-title">Haltbarkeit</div>
+			<div class="stat-value text-base-content">Langlebig</div>
+			<div class="stat-desc">Waschbeständig & robust</div>
+		</div>
+	</div>
+
+	<!-- Visual Example Section with Image Placeholder -->
+	<div class="card bg-base-200 border-4 border-dashed border-warning/30 shadow-xl my-8">
+		<div class="card-body items-center text-center">
+			<div class="w-full aspect-video bg-gradient-to-br from-base-300 to-base-200 rounded-lg flex items-center justify-center relative overflow-hidden">
+				<div class="absolute inset-0 bg-grid-pattern opacity-5"></div>
+				<div class="text-center z-10">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-16 h-16 mx-auto mb-4 text-base-content/50">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+					</svg>
+					<p class="text-sm text-neutral/60 font-semibold uppercase tracking-wider">Bild-Platzhalter</p>
+					<p class="text-xs text-neutral/50 mt-1">Beispiele für Reflex Transfers</p>
+					<p class="text-xs text-neutral/40 mt-2">(Warnwesten, Arbeitsjacken, Sportbekleidung)</p>
+				</div>
+			</div>
+			<p class="text-sm text-neutral/70 mt-4 italic">Hier werden später Beispielbilder von Reflex Transfers im Einsatz angezeigt (Tag & Nacht)</p>
+		</div>
+	</div>
+
+	<h2>Vorteile von Reflex Transfers</h2>
+	<div class="card bg-gradient-to-br from-success/10 to-success/5 border border-success/20 my-8">
+		<div class="card-body">
+			<ul class="space-y-3">
+				<li>
+					<div class="mb-1">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-base-content">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+						</svg>
+					</div>
+					<span><strong>Hohe Lichtreflexion für bessere Sichtbarkeit</strong> – Maximale Sicherheit bei Dunkelheit</span>
+				</li>
+				<li>
+					<div class="mb-1">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-base-content">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+						</svg>
+					</div>
+					<span><strong>Ideal für Arbeits- und Sicherheitsbekleidung</strong> – Schutz im Straßenverkehr</span>
+				</li>
+				<li>
+					<div class="mb-1">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-base-content">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+						</svg>
+					</div>
+					<span><strong>Sehr gute Haftung auf Textilien</strong> – Dauerhaft verbunden</span>
+				</li>
+				<li>
+					<div class="mb-1">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-base-content">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+						</svg>
+					</div>
+					<span><strong>Waschbeständig und langlebig</strong> – Hält vielen Waschzyklen stand</span>
+				</li>
+				<li>
+					<div class="mb-1">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-base-content">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+						</svg>
+					</div>
+					<span><strong>Geeignet für Logos, Schriftzüge und Nummern</strong> – Vielseitig einsetzbar</span>
+				</li>
+				<li>
+					<div class="mb-1">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-base-content">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+						</svg>
+					</div>
+					<span><strong>Kombinierbar mit anderen Druckverfahren</strong> – Flexible Gestaltungsmöglichkeiten</span>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<h2>Wie funktioniert der Reflex Transferdruck?</h2>
+	<div class="card bg-base-200 shadow-xl my-8">
+		<div class="card-body">
+			<h3 class="card-title">
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-base-content">
+					<path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 010 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 010-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z" />
+					<path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+				</svg>
+				Der Produktionsprozess im Detail
+			</h3>
+
+			<div class="space-y-4 mt-4">
+				<div class="flex gap-4 items-start">
+					<div class="badge badge-primary badge-lg">1</div>
+					<div class="flex-1">
+						<h4 class="font-semibold mb-1">Motiv vorbereiten</h4>
+						<p class="text-sm text-neutral/80">
+							Beim Reflex Transfer wird das Motiv aus einer <strong>speziellen reflektierenden Transferfolie geschnitten oder gedruckt</strong>. 
+							Die Folie enthält mikroskopisch kleine Glasperlen oder prismatische Strukturen, die Licht gezielt zurückwerfen.
+						</p>
+					</div>
+				</div>
+
+				<div class="flex gap-4 items-start">
+					<div class="badge badge-primary badge-lg">2</div>
+					<div class="flex-1">
+						<h4 class="font-semibold mb-1">Transferpresse vorbereiten</h4>
+						<p class="text-sm text-neutral/80">
+							Die Transferpresse wird auf die richtige Temperatur eingestellt (<strong>ca. 150–170 °C</strong>). 
+							Je nach Material wird die richtige Folie und Press-Einstellung gewählt.
+						</p>
+					</div>
+				</div>
+
+				<div class="flex gap-4 items-start">
+					<div class="badge badge-primary badge-lg">3</div>
+					<div class="flex-1">
+						<h4 class="font-semibold mb-1">Transfer auf das Textil pressen</h4>
+						<p class="text-sm text-neutral/80">
+							Das Motiv wird mit <strong>Hitze und Druck</strong> mithilfe einer Transferpresse dauerhaft auf das Textil aufgebracht. 
+							Dadurch entsteht der typische helle Leuchteffekt bei direkter Anstrahlung.
+						</p>
+					</div>
+				</div>
+
+				<div class="flex gap-4 items-start">
+					<div class="badge badge-success badge-lg">✓</div>
+					<div class="flex-1">
+						<h4 class="font-semibold mb-1">Trägerfolie entfernen</h4>
+						<p class="text-sm text-neutral/80">
+							Nach dem Pressvorgang wird die <strong>Trägerfolie entfernt</strong> und das reflektierende Motiv bleibt fest mit dem Textil verbunden.
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<h2>Geeignete Textilien für Reflex Transfer</h2>
+	<p class="mb-6">
+		Reflex Transfers eignen sich besonders für verschiedene Textilarten:
+	</p>
+
+	<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 my-8">
+		<div class="card bg-base-200 shadow-lg">
+			<div class="card-body">
+				<div class="mb-3">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-base-content mb-2">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+					</svg>
+					<h3 class="text-base font-semibold">Arbeitsjacken</h3>
+				</div>
+				<p class="text-sm text-neutral/70">Arbeitsjacken und Warnwesten für maximale Sicherheit</p>
+			</div>
+		</div>
+
+		<div class="card bg-base-200 shadow-lg">
+			<div class="card-body">
+				<div class="mb-3">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-base-content mb-2">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15a4.5 4.5 0 004.5 4.5H18a3.75 3.75 0 001.332-7.257 3 3 0 00-3.758-3.848 5.25 5.25 0 00-10.233 2.33A4.502 4.502 0 002.25 15z" />
+					</svg>
+					<h3 class="text-base font-semibold">Funktionsjacken</h3>
+				</div>
+				<p class="text-sm text-neutral/70">Softshell- und Regenjacken für Outdoor-Aktivitäten</p>
+			</div>
+		</div>
+
+		<div class="card bg-base-200 shadow-lg">
+			<div class="card-body">
+				<div class="mb-3">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-base-content mb-2">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M15.59 14.37a6 6 0 01-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 006.16-12.12A14.98 14.98 0 009.631 8.41m5.96 5.96a14.926 14.926 0 01-5.841 2.58m-.119-8.54a6 6 0 00-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 00-2.58 5.84m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 01-2.448-2.448 14.9 14.9 0 01.06-.312m-2.24 2.39a4.493 4.493 0 00-1.757 4.306 4.493 4.493 0 004.306-1.758M16.5 9a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" />
+					</svg>
+					<h3 class="text-base font-semibold">Sportbekleidung</h3>
+				</div>
+				<p class="text-sm text-neutral/70">T-Shirts, Sweatshirts und Laufbekleidung</p>
+			</div>
+		</div>
+
+		<div class="card bg-base-200 shadow-lg">
+			<div class="card-body">
+				<div class="mb-3">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-base-content mb-2">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+					</svg>
+					<h3 class="text-base font-semibold">Taschen & Rucksäcke</h3>
+				</div>
+				<p class="text-sm text-neutral/70">Taschen und Rucksäcke für bessere Sichtbarkeit</p>
+			</div>
+		</div>
+
+		<div class="card bg-base-200 shadow-lg">
+			<div class="card-body">
+				<div class="mb-3">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-base-content mb-2">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
+					</svg>
+					<h3 class="text-base font-semibold">Sport-Trikots</h3>
+				</div>
+				<p class="text-sm text-neutral/70">Sport- und Laufbekleidung mit Rückennummern</p>
+			</div>
+		</div>
+
+		<div class="card bg-base-200 shadow-lg">
+			<div class="card-body">
+				<div class="mb-3">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-base-content mb-2">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 00.75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 00-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0112 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 01-.673-.38m0 0A2.18 2.18 0 013 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 013.413-.387m7.5 0V5.25A2.25 2.25 0 0013.5 3h-3a2.25 2.25 0 00-2.25 2.25v.894m7.5 0a48.667 48.667 0 00-7.5 0M12 12.75h.008v.008H12v-.008z" />
+					</svg>
+					<h3 class="text-base font-semibold">Uniformen</h3>
+				</div>
+				<p class="text-sm text-neutral/70">Dienst- und Sicherheitskleidung</p>
+			</div>
+		</div>
+	</div>
+
+	<UseCasesSection
+		title="Einsatzgebiete für lichtreflektierende Transfers"
+		introText="Der Reflex Transferdruck wird häufig eingesetzt bei verschiedenen Branchen und Anwendungen:"
+		columns="3"
+		items={[
+			{
+				iconPath: "M8.25 21v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21m0 0h4.5V3.545M12.75 21h7.5V10.75M2.25 21h1.5m18 0h-18M2.25 9l4.5-1.636M18.75 3l-1.5.545m0 6.205l3 1m1.5.5l-1.5-.5M6.75 7.364V3h-3v18m3-13.636l10.5-3.819",
+				title: "Bau & Handwerk",
+				description: "Bau- und Handwerksbetriebe für bessere Sichtbarkeit auf Baustellen"
+			},
+			{
+				iconPath: "M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12",
+				title: "Logistik",
+				description: "Logistik- und Lagerpersonal für Sicherheit im Betrieb"
+			},
+			{
+				iconPath: "M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z",
+				title: "Sicherheitsdienste",
+				description: "Sicherheitsdienste für erhöhte Präsenz"
+			},
+			{
+				iconPath: "M15.362 5.214A8.252 8.252 0 0112 21 8.25 8.25 0 016.038 7.048 8.287 8.287 0 009 9.6a8.983 8.983 0 013.361-6.867 8.21 8.21 0 003 2.48z M12 18a3.75 3.75 0 00.495-7.467 5.99 5.99 0 00-1.925 3.546 5.974 5.974 0 01-2.133-1A3.75 3.75 0 0012 18z",
+				title: "Rettungsdienste",
+				description: "Feuerwehr und Rettungsdienste im Einsatz"
+			},
+			{
+				iconPath: "M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9",
+				title: "Sport & Events",
+				description: "Rad- und Laufsport sowie Nachtveranstaltungen"
+			},
+			{
+				iconPath: "M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008z",
+				title: "Unternehmen",
+				description: "Firmenlogos und Kennzeichnungen auf Arbeitskleidung"
+			}
+		]}
+	/>
+
+	<div class="alert alert-info my-8">
+		<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
+			<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+		</svg>
+		<div>
+			<p class="font-semibold">Vielseitig kombinierbar</p>
+			<p class="text-sm mt-2">
+				<strong>Logos, Schriftzüge, Rückennummern oder Warnhinweise</strong> lassen sich gut sichtbar aufbringen, ohne die Funktion der Kleidung zu beeinträchtigen.
+			</p>
+		</div>
+	</div>
+
+	<div class="divider my-12"></div>
+
+	<!-- Vorteile & Nachteile Grid -->
+	<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 my-8">
+		<!-- Nachteile -->
+		<div class="card bg-gradient-to-br from-warning/10 to-warning/5 border border-warning/20">
+			<div class="card-body">
+				<h2 class="card-title">
+					<div class="mb-2">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-base-content">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+						</svg>
+					</div>
+					Nachteile von Reflex Transfer
+				</h2>
+				<ul class="space-y-3 mt-4">
+					<li>
+						<div class="mb-1">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-base-content">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+							</svg>
+						</div>
+						<span><strong>Geringere Farbauswahl</strong> als bei normalem Druck</span>
+					</li>
+					<li>
+						<div class="mb-1">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-base-content">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+							</svg>
+						</div>
+						<span><strong>Keine Farbverläufe möglich</strong> – Einfarbige Designs</span>
+					</li>
+					<li>
+						<div class="mb-1">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-base-content">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+							</svg>
+						</div>
+						<span><strong>Größere Motive können die Atmungsaktivität leicht reduzieren</strong></span>
+					</li>
+					<li>
+						<div class="mb-1">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-base-content">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+							</svg>
+						</div>
+						<span><strong>Etwas festerer Griff auf dem Textil</strong></span>
+					</li>
+				</ul>
+
+				<div class="alert alert-warning shadow-sm">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+					</svg>
+					<div>
+						<p class="text-sm"><strong>Hinweis:</strong> Für bunte, mehrfarbige Designs empfehlen wir <a href="/dtf-transfers/" class="link link-primary">DTF-Transfers</a> oder <a href="/siebdruck/" class="link link-primary">Siebdruck</a>.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Pflegehinweise -->
+		<div class="card bg-gradient-to-br from-info/10 to-info/5 border border-info/20">
+			<div class="card-body">
+				<h2 class="card-title">
+					<div class="mb-2">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-base-content">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
+						</svg>
+					</div>
+					Pflegehinweise für Reflexdruck
+				</h2>
+				<p class="mt-4">
+					Damit die <strong>reflektierende Wirkung lange erhalten</strong> bleibt:
+				</p>
+				<ul class="space-y-3 mt-4">
+					<li>
+						<div class="mb-1">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-base-content">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+							</svg>
+						</div>
+						<span>Waschen auf links bei <strong>max. 40 °C</strong></span>
+					</li>
+					<li>
+						<div class="mb-1">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-base-content">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+							</svg>
+						</div>
+						<span><strong>Kein Trockner</strong> verwenden</span>
+					</li>
+					<li>
+						<div class="mb-1">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-base-content">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+							</svg>
+						</div>
+						<span><strong>Nicht direkt über das Motiv bügeln</strong></span>
+					</li>
+					<li>
+						<div class="mb-1">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-base-content">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+							</svg>
+						</div>
+						<span><strong>Keine Weichspüler verwenden</strong></span>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<!-- CTA Section -->
+	<ContactCTASection
+		title="Bereit für Reflex Transfers?"
+		description="Fordern Sie jetzt ein kostenloses, unverbindliches Angebot für lichtreflektierende Transfers an. Wir beraten Sie zu Materialien, Größen und erstellen ein individuelles Angebot."
+	/>
+
+
+	<!-- FAQ Section -->
+	<h2 class="mt-16 mb-8">Häufige Fragen zu Reflex Transfer</h2>
+
+	<div class="space-y-3 mb-12">
+		<!-- FAQ Item 1 -->
+		<div class="faq-item group border border-base-300/30 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-accent/30 overflow-hidden bg-gray-800">
+			<input type="checkbox" id="faq-1" class="faq-toggle" checked="checked" />
+			<label for="faq-1" class="faq-label flex items-center justify-between cursor-pointer p-6 bg-gray-800 transition-all duration-300">
+				<span class="text-xl font-semibold text-gray-200 pr-4">Was ist Reflex Transferdruck?</span>
+				<div class="faq-icon flex-shrink-0 w-6 h-6 relative text-accent">
+					<svg class="faq-icon-plus absolute inset-0 w-full h-full transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+					</svg>
+					<svg class="faq-icon-minus absolute inset-0 w-full h-full transition-all duration-300 opacity-0 scale-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4" />
+					</svg>
+				</div>
+			</label>
+			<div class="faq-content overflow-hidden transition-all duration-300">
+				<div class="px-6 pb-6 pt-2">
+					<p class="text-gray-200 leading-relaxed">
+						<strong class="text-white font-bold">Reflex Transfer</strong> ist eine spezielle Form der Textilveredelung, bei der lichtreflektierende Motive per Transferpresse auf Textilien übertragen werden. Die Folie enthält mikroskopisch kleine Glasperlen oder prismatische Strukturen, die Licht gezielt zurückwerfen und so für maximale Sichtbarkeit bei Dunkelheit sorgen.
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<!-- FAQ Item 2 -->
+		<div class="faq-item group border border-base-300/30 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-accent/30 overflow-hidden bg-gray-800">
+			<input type="checkbox" id="faq-2" class="faq-toggle" />
+			<label for="faq-2" class="faq-label flex items-center justify-between cursor-pointer p-6 bg-gray-800 transition-all duration-300">
+				<span class="text-xl font-semibold text-gray-200 pr-4">Für welche Branchen eignet sich Reflex Transfer?</span>
+				<div class="faq-icon flex-shrink-0 w-6 h-6 relative text-accent">
+					<svg class="faq-icon-plus absolute inset-0 w-full h-full transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+					</svg>
+					<svg class="faq-icon-minus absolute inset-0 w-full h-full transition-all duration-300 opacity-0 scale-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4" />
+					</svg>
+				</div>
+			</label>
+			<div class="faq-content overflow-hidden transition-all duration-300">
+				<div class="px-6 pb-6 pt-2">
+					<p class="text-gray-200 leading-relaxed">
+						Reflex Transfer ist ideal für <strong class="text-white font-bold">Bau- und Handwerksbetriebe, Logistik- und Lagerpersonal, Sicherheitsdienste, Feuerwehr und Rettungsdienste, Rad- und Laufsport</strong> sowie Events und Nachtveranstaltungen. Überall dort, wo erhöhte Sichtbarkeit und Sicherheit wichtig sind.
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<!-- FAQ Item 3 -->
+		<div class="faq-item group border border-base-300/30 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-accent/30 overflow-hidden bg-gray-800">
+			<input type="checkbox" id="faq-3" class="faq-toggle" />
+			<label for="faq-3" class="faq-label flex items-center justify-between cursor-pointer p-6 bg-gray-800 transition-all duration-300">
+				<span class="text-xl font-semibold text-gray-200 pr-4">Wie haltbar ist Reflex Transfer?</span>
+				<div class="faq-icon flex-shrink-0 w-6 h-6 relative text-accent">
+					<svg class="faq-icon-plus absolute inset-0 w-full h-full transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+					</svg>
+					<svg class="faq-icon-minus absolute inset-0 w-full h-full transition-all duration-300 opacity-0 scale-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4" />
+					</svg>
+				</div>
+			</label>
+			<div class="faq-content overflow-hidden transition-all duration-300">
+				<div class="px-6 pb-6 pt-2">
+					<p class="text-gray-200 leading-relaxed">
+						Reflex Transfers sind <strong class="text-white font-bold">sehr waschbeständig und langlebig</strong>. Bei richtiger Pflege (Waschen bei max. 40 °C auf links, kein Trockner, nicht direkt bügeln, keine Weichspüler) bleibt die reflektierende Wirkung lange erhalten. Die Transfers haben eine sehr gute Haftung auf Textilien.
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<!-- FAQ Item 4 -->
+		<div class="faq-item group border border-base-300/30 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-accent/30 overflow-hidden bg-gray-800">
+			<input type="checkbox" id="faq-4" class="faq-toggle" />
+			<label for="faq-4" class="faq-label flex items-center justify-between cursor-pointer p-6 bg-gray-800 transition-all duration-300">
+				<span class="text-xl font-semibold text-gray-200 pr-4">Sind mehrfarbige Designs möglich?</span>
+				<div class="faq-icon flex-shrink-0 w-6 h-6 relative text-accent">
+					<svg class="faq-icon-plus absolute inset-0 w-full h-full transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+					</svg>
+					<svg class="faq-icon-minus absolute inset-0 w-full h-full transition-all duration-300 opacity-0 scale-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4" />
+					</svg>
+				</div>
+			</label>
+			<div class="faq-content overflow-hidden transition-all duration-300">
+				<div class="px-6 pb-6 pt-2">
+					<p class="text-gray-200 leading-relaxed">
+						Reflex Transfer hat eine <strong class="text-white font-bold">geringere Farbauswahl</strong> als normaler Druck und <strong class="text-white font-bold">Farbverläufe sind nicht möglich</strong>. Der Fokus liegt auf der Lichtreflexion und Sichtbarkeit, nicht auf bunten, mehrfarbigen Designs. Für bunte Designs empfehlen wir <a href="/dtf-transfers/" class="link link-primary">DTF-Transfers</a> oder <a href="/siebdruck/" class="link link-primary">Siebdruck</a>.
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<!-- FAQ Item 5 -->
+		<div class="faq-item group border border-base-300/30 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-accent/30 overflow-hidden bg-gray-800">
+			<input type="checkbox" id="faq-5" class="faq-toggle" />
+			<label for="faq-5" class="faq-label flex items-center justify-between cursor-pointer p-6 bg-gray-800 transition-all duration-300">
+				<span class="text-xl font-semibold text-gray-200 pr-4">Kann Reflex Transfer auf alle Textilien aufgebracht werden?</span>
+				<div class="faq-icon flex-shrink-0 w-6 h-6 relative text-accent">
+					<svg class="faq-icon-plus absolute inset-0 w-full h-full transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+					</svg>
+					<svg class="faq-icon-minus absolute inset-0 w-full h-full transition-all duration-300 opacity-0 scale-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4" />
+					</svg>
+				</div>
+			</label>
+			<div class="faq-content overflow-hidden transition-all duration-300">
+				<div class="px-6 pb-6 pt-2">
+					<p class="text-gray-200 leading-relaxed">
+						Reflex Transfer eignet sich für <strong class="text-white font-bold">Arbeitsjacken, Warnwesten, Softshell- und Regenjacken, T-Shirts, Sweatshirts, Sportbekleidung, Taschen und Rucksäcke</strong>. Je nach Material wird die richtige Folie und Press-Einstellung gewählt, um eine optimale Haltbarkeit zu gewährleisten.
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<!-- FAQ Item 6 -->
+		<div class="faq-item group border border-base-300/30 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-accent/30 overflow-hidden bg-gray-800">
+			<input type="checkbox" id="faq-6" class="faq-toggle" />
+			<label for="faq-6" class="faq-label flex items-center justify-between cursor-pointer p-6 bg-gray-800 transition-all duration-300">
+				<span class="text-xl font-semibold text-gray-200 pr-4">Wie funktioniert die Lichtreflexion?</span>
+				<div class="faq-icon flex-shrink-0 w-6 h-6 relative text-accent">
+					<svg class="faq-icon-plus absolute inset-0 w-full h-full transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+					</svg>
+					<svg class="faq-icon-minus absolute inset-0 w-full h-full transition-all duration-300 opacity-0 scale-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4" />
+					</svg>
+				</div>
+			</label>
+			<div class="faq-content overflow-hidden transition-all duration-300">
+				<div class="px-6 pb-6 pt-2">
+					<p class="text-gray-200 leading-relaxed">
+						Die Reflexfolie enthält <strong class="text-white font-bold">mikroskopisch kleine Glasperlen oder prismatische Strukturen</strong>, die Licht gezielt zurückwerfen. Wenn zum Beispiel Autoscheinwerfer auf die Kleidung treffen, wird das Licht direkt zur Lichtquelle zurückreflektiert – dadurch entsteht der typische helle Leuchteffekt und die Person wird deutlich besser sichtbar.
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Accordion Behavior Script -->
+	<script is:inline>
+		// Make FAQ work as accordion (only one open at a time)
+		document.addEventListener('DOMContentLoaded', function() {
+			const faqToggles = document.querySelectorAll('.faq-toggle');
+
+			faqToggles.forEach(function(toggle) {
+				toggle.addEventListener('change', function() {
+					const currentToggle = this;
+					if (currentToggle.checked) {
+						// Uncheck all other FAQ items
+						faqToggles.forEach(function(otherToggle) {
+							if (otherToggle !== currentToggle) {
+								otherToggle.checked = false;
+							}
+						});
+					}
+				});
+			});
+		});
+	</script>
+
+	<div class="alert alert-success my-8">
+		<svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+			<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+		</svg>
+		<div>
+			<h4 class="font-bold">Kostenlose Beratung – Wir helfen Ihnen weiter!</h4>
+			<p class="mt-2">
+				Sie möchten Ihre Arbeits- oder Sportbekleidung mit Reflex Transfers ausstatten? Unser Team berät Sie kostenlos und unverbindlich zu Materialien, Größen, Haltbarkeit und erstellt ein individuelles Angebot.
+			</p>
+		</div>
+	</div>
+
+	<div class="divider my-12"></div>
+
+	<!-- Inquiry Form Section -->
+	<div id="inquiry-form" class="scroll-mt-20">
+		<InquiryForm
+			formType="reflex-transfer"
+			sourcePageTitle="Reflex Transfer"
+			sourcePageUrl="/reflex-transfer/"
+		/>
+	</div>
+</CompanyLayout>
+
+<style>
+	.bg-grid-pattern {
+		background-image:
+			linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+			linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+		background-size: 20px 20px;
+	}
+
+	/* FAQ Accordion Styles */
+	.faq-toggle {
+		display: none;
+	}
+
+	.faq-content {
+		max-height: 0;
+	}
+
+	.faq-toggle:checked ~ .faq-content {
+		max-height: 500px;
+	}
+
+	.faq-toggle:checked ~ .faq-label .faq-icon-plus {
+		opacity: 0;
+		transform: scale(0) rotate(90deg);
+	}
+
+	.faq-toggle:checked ~ .faq-label .faq-icon-minus {
+		opacity: 1;
+		transform: scale(1) rotate(0deg);
+	}
+</style>

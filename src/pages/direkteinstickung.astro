@@ -1,0 +1,639 @@
+---
+import CompanyLayout from "../layouts/CompanyLayout.astro";
+import InquiryForm from "../components/InquiryForm.astro";
+import UseCasesSection from "../components/UseCasesSection.astro";
+import ContactCTASection from "../components/ContactCTASection.astro";
+---
+
+<CompanyLayout
+	title="Direkteinstickung – Präzision für Ihre Textilien | Selini-Shirt"
+	description="Hochwertige Direkteinstickung auf Textilien. Professionelle Stickerei mit Präzision und langer Haltbarkeit. Ideal für Firmenlogos, Vereine und individuelle Designs."
+>
+	<!-- Hero Section -->
+	<div class="mb-12">
+		<h1 class="!mb-4">Direkteinstickung – Präzision für Ihre Textilien</h1>
+		<p class="text-lg text-neutral/80 !mb-6">
+			Die edelste Art, Textilien zu veredeln. Hochwertige Stickereien mit professioneller Präzision und langer Haltbarkeit für Firmen, Vereine und individuelle Projekte.
+		</p>
+	</div>
+
+	<!-- Quick Stats -->
+	<div class="stats stats-vertical lg:stats-horizontal shadow my-8 w-full">
+		<div class="stat">
+			<div class="stat-figure text-primary">
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
+					<path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
+				</svg>
+			</div>
+			<div class="stat-title">Schrifthöhe</div>
+			<div class="stat-value text-primary">Ab 5 mm</div>
+			<div class="stat-desc">Mindestgröße möglich</div>
+		</div>
+
+		<div class="stat">
+			<div class="stat-figure text-secondary">
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
+					<path stroke-linecap="round" stroke-linejoin="round" d="M4.098 19.902a3.75 3.75 0 005.304 0l6.401-6.402M6.75 21A3.75 3.75 0 013 17.25V4.125C3 3.504 3.504 3 4.125 3h5.25c.621 0 1.125.504 1.125 1.125v4.072M6.75 21a3.75 3.75 0 003.75-3.75V8.197M6.75 21h13.125c.621 0 1.125-.504 1.125-1.125v-5.25c0-.621-.504-1.125-1.125-1.125h-4.072M10.5 8.197l2.88-2.88c.438-.439 1.15-.439 1.59 0l3.712 3.713c.44.44.44 1.152 0 1.59l-2.879 2.88M6.75 17.25h.008v.008H6.75v-.008z" />
+				</svg>
+			</div>
+			<div class="stat-title">Farbgenauigkeit</div>
+			<div class="stat-value text-secondary">Pantone</div>
+			<div class="stat-desc">Exakte Farbabstimmung</div>
+		</div>
+
+		<div class="stat">
+			<div class="stat-figure text-[#16a34a]">
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
+					<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+				</svg>
+			</div>
+			<div class="stat-title">Haltbarkeit</div>
+			<div class="stat-value text-[#16a34a]">Langlebig</div>
+			<div class="stat-desc">Auch nach vielen Wäschen</div>
+		</div>
+	</div>
+
+	<h2>Was ist Direkteinstickung?</h2>
+	<p>
+		Die <strong>Direkteinstickung</strong> ist die edelste Art, Textilien zu veredeln. Jedes Motiv wird zunächst mit einem Stickprogramm vorbereitet.
+	</p>
+	<p>
+		Dabei wird die digitale Vorlage in eine <strong>stickbare Datei umgewandelt</strong>, die von unseren Stickexperten sorgfältig überprüft und optimiert wird.
+	</p>
+	<p>
+		Nur so entstehen hochwertige Stickereien, die <strong>präzise, langlebig und professionell</strong> wirken.
+	</p>
+
+	<h2>So entsteht Ihr Stickmotiv</h2>
+	<p class="text-neutral/70 mb-8">
+		Von der digitalen Vorlage zur perfekten Stickerei
+	</p>
+
+	<div class="grid gap-6">
+		<!-- Step 1 -->
+		<div class="bg-base-100 rounded-2xl p-6 md:p-8 shadow-sm hover:shadow-md transition-shadow">
+						<div class="flex gap-4 items-start">
+							<div class="badge badge-primary badge-lg">1</div>
+							<div class="flex-1">
+								<h4 class="font-semibold mb-2 text-lg">Vorlage & Dateivorbereitung</h4>
+								<p class="text-neutral/80 mb-3">
+									Für ein perfektes Ergebnis ist die Qualität der Vorlage entscheidend. Dateien sollten <strong>mindestens 300 dpi</strong> haben.
+								</p>
+								<p class="text-neutral/80">
+									Sehr kleine Details oder Farbverläufe müssen gegebenenfalls vereinfacht werden, um eine optimale Stickqualität zu gewährleisten.
+								</p>
+							</div>
+						</div>
+					</div>
+
+					<!-- Step 2 -->
+					<div class="bg-base-100 rounded-2xl p-6 md:p-8 shadow-sm hover:shadow-md transition-shadow">
+						<div class="flex gap-4 items-start">
+							<div class="badge badge-primary badge-lg">2</div>
+							<div class="flex-1">
+								<h4 class="font-semibold mb-2 text-lg">Punchen & Programmierung</h4>
+								<p class="text-neutral/80 mb-3">
+									Die digitale Vorlage wird in eine stickbare Datei umgewandelt. Während des <strong>Punchens</strong> werden Stiche einzeln überprüft, um sicherzustellen, dass das Design später auch auf dem Stoff exakt umgesetzt wird.
+								</p>
+								<div class="bg-info/10 border border-info/20 rounded-lg p-4">
+									<p class="text-sm text-neutral/80 mb-2">
+										<strong>Wichtig:</strong> Die Anzahl der Stiche beeinflusst den Preis.
+									</p>
+									<p class="text-sm text-neutral/80">
+										Ein einmal erstelltes Stickprogramm kann für <strong>Folgeaufträge ohne zusätzliche Kosten</strong> genutzt werden. Sollte das Motiv in einer neuen Größe benötigt werden, wird ein angepasstes Programm erstellt, damit Form und Proportionen erhalten bleiben.
+									</p>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- Step 3 -->
+					<div class="bg-base-100 rounded-2xl p-6 md:p-8 shadow-sm hover:shadow-md transition-shadow">
+						<div class="flex gap-4 items-start">
+							<div class="badge badge-primary badge-lg">3</div>
+							<div class="flex-1">
+								<h4 class="font-semibold mb-2 text-lg">Material & Stoffauswahl</h4>
+								<p class="text-neutral/80 mb-4">
+									Die Materialbeschaffenheit spielt eine große Rolle. Flexible Stoffe wie <strong>T-Shirts oder Poloshirts</strong> verhalten sich anders als feste Gewebe wie <strong>Schürzen oder Jacken</strong>.
+								</p>
+								<p class="text-neutral/80">
+									Um Verzerrungen zu vermeiden, passen unsere Experten Buchstaben und Formen an. So bleibt das Stickbild klar, symmetrisch und ästhetisch.
+								</p>
+							</div>
+						</div>
+					</div>
+
+					<!-- Step 4 -->
+					<div class="bg-base-100 rounded-2xl p-6 md:p-8 shadow-sm hover:shadow-md transition-shadow">
+						<div class="flex gap-4 items-start">
+							<div class="badge badge-primary badge-lg">4</div>
+							<div class="flex-1">
+								<h4 class="font-semibold mb-2 text-lg">Stickvorgang & Verarbeitung</h4>
+								<p class="text-neutral/80 mb-3">
+									Nur mit <strong>industriellen Stickmaschinen</strong> und hochwertigen Materialien lassen sich hochwertige Stickereien herstellen.
+								</p>
+								<p class="text-neutral/80">
+									Die richtige Ober- und Unterfadenspannung, passende Nadeln und fein abgestimmte Garne sorgen dafür, dass auch kleinste Details und <strong>Schriftzüge ab 5 mm Höhe</strong> präzise umgesetzt werden.
+								</p>
+							</div>
+						</div>
+					</div>
+
+					<!-- Step 5 -->
+					<div class="bg-base-100 rounded-2xl p-6 md:p-8 shadow-sm hover:shadow-md transition-shadow">
+						<div class="flex gap-4 items-start">
+							<div class="badge badge-primary badge-lg">5</div>
+							<div class="flex-1">
+								<h4 class="font-semibold mb-2 text-lg">Qualitätskontrolle & Fertigstellung</h4>
+								<p class="text-neutral/80 mb-3">
+									Während des Stickens überwachen wir den Prozess kontinuierlich. Nach Abschluss wird jede Stickerei geprüft.
+								</p>
+								<p class="text-neutral/80">
+									Überstehende Fäden werden entfernt, kleine Schlaufen beseitigt und Vliesreste sorgfältig entfernt. So garantieren wir eine <strong>perfekte Optik und lange Haltbarkeit</strong>, auch nach vielen Waschgängen.
+								</p>
+							</div>
+						</div>
+		</div>
+	</div>
+
+	<h2>Sticharten & Materialien</h2>
+	<p class="text-neutral/70 mb-8">
+		Professionelle Technik für perfekte Ergebnisse
+	</p>
+
+	<div class="grid md:grid-cols-2 gap-8 mb-8">
+					<!-- Stitch Types -->
+					<div class="bg-base-200 rounded-2xl p-6 md:p-8">
+						<div class="flex items-center gap-3 mb-6">
+							<div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
+								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-base-content">
+									<path stroke-linecap="round" stroke-linejoin="round" d="M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.043-.025a15.994 15.994 0 011.622-3.395m3.42 3.42a15.995 15.995 0 004.764-4.648l3.876-5.814a1.151 1.151 0 00-1.597-1.597L14.146 6.32a15.996 15.996 0 00-4.649 4.763m3.42 3.42a6.776 6.776 0 00-3.42-3.42" />
+								</svg>
+							</div>
+							<h3 class="text-2xl font-bold text-neutral">Sticharten</h3>
+						</div>
+						<div class="space-y-4">
+							<div>
+								<h4 class="font-semibold text-neutral mb-2">Deckstiche</h4>
+								<ul class="text-sm text-neutral/70 space-y-1 pl-4">
+									<li>• Steppstich</li>
+									<li>• Doppelsteppstich</li>
+									<li>• Plattstich</li>
+									<li>• Füllstich</li>
+								</ul>
+							</div>
+							<div>
+								<h4 class="font-semibold text-neutral mb-2">Unterlegstiche</h4>
+								<ul class="text-sm text-neutral/70 space-y-1 pl-4">
+									<li>• Steppstich</li>
+									<li>• Zickzack</li>
+									<li>• Doppelzickzack</li>
+									<li>• Reihstiche</li>
+									<li>• Kreuzstiche</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<!-- Backing Materials -->
+					<div class="bg-base-200 rounded-2xl p-6 md:p-8">
+						<div class="flex items-center gap-3 mb-6">
+							<div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
+								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-base-content">
+									<path stroke-linecap="round" stroke-linejoin="round" d="M6.429 9.75L2.25 12l4.179 2.25m0-4.5l5.571 3 5.571-3m-11.142 0L2.25 7.5 12 2.25l9.75 5.25-4.179 2.25m0 0L21.75 12l-4.179 2.25m0 0l4.179 2.25L12 21.75 2.25 16.5l4.179-2.25m11.142 0l-5.571 3-5.571-3" />
+								</svg>
+							</div>
+							<h3 class="text-2xl font-bold text-neutral">Stickvliese</h3>
+						</div>
+						<p class="text-neutral/70 text-sm mb-4">
+							Stickvliese sorgen für Stabilität während des Stickvorgangs:
+						</p>
+						<ul class="text-sm text-neutral/70 space-y-2">
+							<li class="flex gap-2">
+								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-primary flex-shrink-0 mt-0.5">
+									<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+								</svg>
+								<span>Schneidevlies</span>
+							</li>
+							<li class="flex gap-2">
+								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-primary flex-shrink-0 mt-0.5">
+									<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+								</svg>
+								<span>Reißvlies</span>
+							</li>
+							<li class="flex gap-2">
+								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-primary flex-shrink-0 mt-0.5">
+									<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+								</svg>
+								<span>Selbstklebendes Vlies</span>
+							</li>
+							<li class="flex gap-2">
+								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-primary flex-shrink-0 mt-0.5">
+									<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+								</svg>
+								<span>Wasserlösliches Vlies</span>
+							</li>
+						</ul>
+						<div class="mt-4 p-3 bg-base-100 rounded-lg">
+							<p class="text-xs text-neutral/70">
+								<strong>Hinweis:</strong> Leichte Stoffe benötigen zusätzliche Unterstützung, schwere Stoffe weniger.
+							</p>
+						</div>
+					</div>
+	</div>
+
+	<!-- Color & Placement -->
+	<div class="grid md:grid-cols-2 gap-8 mt-8">
+					<!-- Colors -->
+					<div class="bg-base-200 rounded-2xl p-6">
+						<h3 class="font-bold text-lg mb-4 text-neutral flex items-center gap-2">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-base-content">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M4.098 19.902a3.75 3.75 0 005.304 0l6.401-6.402M6.75 21A3.75 3.75 0 013 17.25V4.125C3 3.504 3.504 3 4.125 3h5.25c.621 0 1.125.504 1.125 1.125v4.072M6.75 21a3.75 3.75 0 003.75-3.75V8.197M6.75 21h13.125c.621 0 1.125-.504 1.125-1.125v-5.25c0-.621-.504-1.125-1.125-1.125h-4.072M10.5 8.197l2.88-2.88c.438-.439 1.15-.439 1.59 0l3.712 3.713c.44.44.44 1.152 0 1.59l-2.879 2.88M6.75 17.25h.008v.008H6.75v-.008z" />
+							</svg>
+							Farbgenauigkeit
+						</h3>
+						<p class="text-neutral/70 text-sm">
+							Eine breite Farbpalette ermöglicht die exakte Umsetzung von <strong>Pantone- und HKS-Farben</strong>. So wird Ihr Corporate Design perfekt auf Textilien übertragen.
+						</p>
+					</div>
+
+					<!-- Placement -->
+					<div class="bg-base-200 rounded-2xl p-6">
+						<h3 class="font-bold text-lg mb-4 text-neutral flex items-center gap-2">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-base-content">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+								<path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+							</svg>
+							Optimale Platzierung
+						</h3>
+						<p class="text-neutral/70 text-sm mb-3">
+							Die Stickposition ist flexibel: <strong>Herzseite, Rücken, Ärmel, Bund oder Kragen</strong>.
+						</p>
+						<p class="text-neutral/70 text-sm">
+							Bei kleineren Textilien oder Damen-Schnitten passen unsere Experten Motive entsprechend an, damit Proportionen und Platzierung optimal wirken.
+						</p>
+					</div>
+				</div>
+
+	<h2>Vorteile & Nachteile</h2>
+
+	<div class="grid md:grid-cols-2 gap-8 my-8">
+		<!-- Advantages -->
+					<div class="bg-success/5 border border-success/20 rounded-2xl p-8">
+						<div class="flex items-center gap-3 mb-6">
+							<div class="w-10 h-10 bg-success/20 rounded-lg flex items-center justify-center">
+								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-success">
+									<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+								</svg>
+							</div>
+							<h3 class="text-2xl font-bold text-neutral">Vorteile</h3>
+						</div>
+						<ul class="space-y-4">
+							<li class="flex gap-3">
+								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-success flex-shrink-0 mt-0.5">
+									<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+								</svg>
+								<span class="text-neutral/80">Hochwertigste Optik und edelste Veredelungsmethode</span>
+							</li>
+							<li class="flex gap-3">
+								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-success flex-shrink-0 mt-0.5">
+									<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+								</svg>
+								<span class="text-neutral/80">Extrem langlebig – auch nach vielen Waschgängen</span>
+							</li>
+							<li class="flex gap-3">
+								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-success flex-shrink-0 mt-0.5">
+									<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+								</svg>
+								<span class="text-neutral/80">Stickprogramm wiederverwendbar für Folgeaufträge</span>
+							</li>
+							<li class="flex gap-3">
+								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-success flex-shrink-0 mt-0.5">
+									<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+								</svg>
+								<span class="text-neutral/80">Pantone- und HKS-genaue Farbabstimmung möglich</span>
+							</li>
+							<li class="flex gap-3">
+								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-success flex-shrink-0 mt-0.5">
+									<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+								</svg>
+								<span class="text-neutral/80">Flexible Platzierung auf verschiedenen Textilbereichen</span>
+							</li>
+							<li class="flex gap-3">
+								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-success flex-shrink-0 mt-0.5">
+									<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+								</svg>
+								<span class="text-neutral/80">Professionell und repräsentativ für Firmen und Vereine</span>
+							</li>
+		</ul>
+	</div>
+
+	<!-- Disadvantages -->
+	<div class="bg-warning/5 border border-warning/20 rounded-2xl p-8">
+						<div class="flex items-center gap-3 mb-6">
+							<div class="w-10 h-10 bg-warning/20 rounded-lg flex items-center justify-center">
+								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-warning">
+									<path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+								</svg>
+							</div>
+							<h3 class="text-2xl font-bold text-neutral">Nachteile</h3>
+						</div>
+						<ul class="space-y-4">
+							<li class="flex gap-3">
+								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-warning flex-shrink-0 mt-0.5">
+									<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+								</svg>
+								<span class="text-neutral/80">Höhere Kosten pro Stück als bei Druckverfahren</span>
+							</li>
+							<li class="flex gap-3">
+								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-warning flex-shrink-0 mt-0.5">
+									<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+								</svg>
+								<span class="text-neutral/80">Nicht alle Motive umsetzbar (sehr kleine Details, komplexe Verläufe)</span>
+							</li>
+							<li class="flex gap-3">
+								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-warning flex-shrink-0 mt-0.5">
+									<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+								</svg>
+								<span class="text-neutral/80">Mindest-Schrifthöhe von 5 mm erforderlich</span>
+							</li>
+							<li class="flex gap-3">
+								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-warning flex-shrink-0 mt-0.5">
+									<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+								</svg>
+								<span class="text-neutral/80">Einmalige Programmierkosten beim ersten Auftrag</span>
+							</li>
+							<li class="flex gap-3">
+								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-warning flex-shrink-0 mt-0.5">
+									<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+								</svg>
+								<span class="text-neutral/80">Längere Produktionszeit als bei einfachen Druckverfahren</span>
+		</li>
+	</ul>
+</div>
+	</div>
+
+	<div class="divider my-12"></div>
+
+	<UseCasesSection
+		title="Einsatzgebiete für Direkteinstickung"
+		introText="Die edelste Veredelungsmethode für anspruchsvolle Projekte"
+		columns="3"
+		items={[
+			{
+				iconPath: "M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 00.75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 00-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0112 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 01-.673-.38m0 0A2.18 2.18 0 013 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 013.413-.387m7.5 0V5.25A2.25 2.25 0 0013.5 3h-3a2.25 2.25 0 00-2.25 2.25v.894m7.5 0a48.667 48.667 0 00-7.5 0M12 12.75h.008v.008H12v-.008z",
+				title: "Firmen & Corporate Fashion",
+				description: "Firmenlogos auf Hemden, Blusen, Poloshirts, Jacken – professionell und repräsentativ"
+			},
+			{
+				iconPath: "M16.5 18.75h-9m9 0a3 3 0 013 3h-15a3 3 0 013-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 01-.982-3.172M9.497 14.25a7.454 7.454 0 00.981-3.172M5.25 4.236c-.982.143-1.954.317-2.916.52A6.003 6.003 0 007.73 9.728M5.25 4.236V4.5c0 2.108.966 3.99 2.48 5.228M5.25 4.236V2.721C7.456 2.41 9.71 2.25 12 2.25c2.291 0 4.545.16 6.75.47v1.516M7.73 9.728a6.726 6.726 0 002.748 1.35m8.272-6.842V4.5c0 2.108-.966 3.99-2.48 5.228m2.48-5.492a46.32 46.32 0 012.916.52 6.003 6.003 0 01-5.395 4.972m0 0a6.726 6.726 0 01-2.749 1.35m0 0a6.772 6.772 0 01-3.044 0",
+				title: "Vereine & Sportclubs",
+				description: "Trikots, Vereinsjacken, Hoodies, Trainingsbekleidung mit Vereinslogo und Namen"
+			},
+			{
+				iconPath: "M11.42 15.17L17.25 21A2.652 2.652 0 0021 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 11-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 004.486-6.336l-3.276 3.277a3.004 3.004 0 01-2.25-2.25l3.276-3.276a4.5 4.5 0 00-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437l1.745-1.437m6.615 8.206L15.75 15.75M4.867 19.125h.008v.008h-.008v-.008z",
+				title: "Arbeitsbekleidung",
+				description: "Schürzen, Arbeitsjacken, Berufsbekleidung, Handwerker-Outfits mit Logo"
+			},
+			{
+				iconPath: "M10.34 15.84c-.688-.06-1.386-.09-2.09-.09H7.5a4.5 4.5 0 110-9h.75c.704 0 1.402-.03 2.09-.09m0 9.18c.253.962.584 1.892.985 2.783.247.55.06 1.21-.463 1.511l-.657.38c-.551.318-1.26.117-1.527-.461a20.845 20.845 0 01-1.44-4.282m3.102.069a18.03 18.03 0 01-.59-4.59c0-1.586.205-3.124.59-4.59m0 9.18a23.848 23.848 0 018.835 2.535M10.34 6.66a23.847 23.847 0 008.835-2.535m0 0A23.74 23.74 0 0018.795 3m.38 1.125a23.91 23.91 0 011.014 5.395m-1.014 8.855c-.118.38-.245.754-.38 1.125m.38-1.125a23.91 23.91 0 001.014-5.395m0-3.46c.495.413.811 1.035.811 1.73 0 .695-.316 1.317-.811 1.73m0-3.46a24.347 24.347 0 010 3.46",
+				title: "Events & Promotion",
+				description: "Messen, Kongresse, Firmenfeiern, Team-Events mit einheitlicher Kleidung"
+			},
+			{
+				iconPath: "M12 8.25v-1.5m0 1.5c-1.355 0-2.697.056-4.024.166C6.845 8.51 6 9.473 6 10.608v2.513m6-4.87c1.355 0 2.697.055 4.024.165C17.155 8.51 18 9.473 18 10.608v2.513m-3-4.87v-1.5m-6 1.5v-1.5m12 9.75l-1.5.75a3.354 3.354 0 01-3 0 3.354 3.354 0 00-3 0 3.354 3.354 0 01-3 0 3.354 3.354 0 00-3 0 3.354 3.354 0 01-3 0L3 16.5m15-3.38a48.474 48.474 0 00-6-.37c-2.032 0-4.034.125-6 .37m12 0c.39.049.777.102 1.163.16 1.07.16 1.837 1.094 1.837 2.175v5.17c0 .62-.504 1.124-1.125 1.124H4.125A1.125 1.125 0 013 20.625v-5.17c0-1.08.768-2.014 1.837-2.174A47.78 47.78 0 016 13.12M12.265 3.11a.375.375 0 11-.53 0L12 2.845l.265.265zm-3 0a.375.375 0 11-.53 0L9 2.845l.265.265zm6 0a.375.375 0 11-.53 0L15 2.845l.265.265z",
+				title: "Gastronomie & Hotellerie",
+				description: "Kochjacken, Servicekleidung, Hotel-Uniformen mit elegantem Logo"
+			},
+			{
+				iconPath: "M21 11.25v8.25a1.5 1.5 0 01-1.5 1.5H5.25a1.5 1.5 0 01-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 109.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1114.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z",
+				title: "Privat & Geschenke",
+				description: "Personalisierte Geschenke, Familienfeiern, Hochzeiten, Taufkleider"
+			}
+		]}
+	/>
+
+	<ContactCTASection
+		title="Bereit für Ihre Direkteinstickung?"
+		description="Lassen Sie uns gemeinsam Ihre hochwertigen Stickereien realisieren. Kontaktieren Sie uns für ein unverbindliches Angebot!"
+		phoneNumber="+4917641326130"
+	/>
+
+	<!-- FAQ Section -->
+	<h2 class="mt-16 mb-8">Häufige Fragen zur Direkteinstickung</h2>
+
+	<div class="space-y-3 mb-12">
+		<!-- FAQ Item 1 -->
+		<div class="faq-item group border border-base-300/30 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-accent/30 overflow-hidden bg-gray-800">
+			<input type="checkbox" id="faq-direkteinstickung-1" class="faq-toggle" checked="checked" />
+			<label for="faq-direkteinstickung-1" class="faq-label flex items-center justify-between cursor-pointer p-6 bg-gray-800 transition-all duration-300">
+				<span class="text-xl font-semibold text-gray-200 pr-4">Welche Schriftgröße ist mindestens erforderlich?</span>
+				<div class="faq-icon flex-shrink-0 w-6 h-6 relative text-accent">
+					<svg class="faq-icon-plus absolute inset-0 w-full h-full transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+					</svg>
+					<svg class="faq-icon-minus absolute inset-0 w-full h-full transition-all duration-300 opacity-0 scale-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4" />
+					</svg>
+				</div>
+			</label>
+			<div class="faq-content overflow-hidden transition-all duration-300">
+				<div class="px-6 pb-6 pt-2">
+					<p class="text-gray-200 leading-relaxed">
+						Schriften sollten mindestens <strong>5 mm Höhe</strong> haben, damit sie gut lesbar gestickt werden können. Kleinere Schriften sind technisch schwierig umzusetzen und können unleserlich werden.
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<!-- FAQ Item 2 -->
+		<div class="faq-item group border border-base-300/30 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-accent/30 overflow-hidden bg-gray-800">
+			<input type="checkbox" id="faq-direkteinstickung-2" class="faq-toggle" />
+			<label for="faq-direkteinstickung-2" class="faq-label flex items-center justify-between cursor-pointer p-6 bg-gray-800 transition-all duration-300">
+				<span class="text-xl font-semibold text-gray-200 pr-4">Kann ich ein Stickprogramm wiederverwenden?</span>
+				<div class="faq-icon flex-shrink-0 w-6 h-6 relative text-accent">
+					<svg class="faq-icon-plus absolute inset-0 w-full h-full transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+					</svg>
+					<svg class="faq-icon-minus absolute inset-0 w-full h-full transition-all duration-300 opacity-0 scale-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4" />
+					</svg>
+				</div>
+			</label>
+			<div class="faq-content overflow-hidden transition-all duration-300">
+				<div class="px-6 pb-6 pt-2">
+					<p class="text-gray-200 leading-relaxed">
+						Ja! Ein einmal erstelltes Stickprogramm kann für <strong>Folgeaufträge ohne zusätzliche Kosten</strong> genutzt werden. Sie zahlen die Programmierkosten nur einmal beim ersten Auftrag. Sollte das Motiv in einer neuen Größe benötigt werden, wird ein angepasstes Programm erstellt.
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<!-- FAQ Item 3 -->
+		<div class="faq-item group border border-base-300/30 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-accent/30 overflow-hidden bg-gray-800">
+			<input type="checkbox" id="faq-direkteinstickung-3" class="faq-toggle" />
+			<label for="faq-direkteinstickung-3" class="faq-label flex items-center justify-between cursor-pointer p-6 bg-gray-800 transition-all duration-300">
+				<span class="text-xl font-semibold text-gray-200 pr-4">Welche Dateiformate und -qualität werden benötigt?</span>
+				<div class="faq-icon flex-shrink-0 w-6 h-6 relative text-accent">
+					<svg class="faq-icon-plus absolute inset-0 w-full h-full transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+					</svg>
+					<svg class="faq-icon-minus absolute inset-0 w-full h-full transition-all duration-300 opacity-0 scale-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4" />
+					</svg>
+				</div>
+			</label>
+			<div class="faq-content overflow-hidden transition-all duration-300">
+				<div class="px-6 pb-6 pt-2">
+					<p class="text-gray-200 leading-relaxed">
+						Für ein perfektes Ergebnis sollten Dateien <strong>mindestens 300 dpi</strong> haben. Geeignet sind Vektordateien (AI, EPS, PDF) oder hochauflösende Pixelgrafiken (PNG, JPG). Sehr kleine Details oder komplexe Farbverläufe müssen gegebenenfalls vereinfacht werden.
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<!-- FAQ Item 4 -->
+		<div class="faq-item group border border-base-300/30 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-accent/30 overflow-hidden bg-gray-800">
+			<input type="checkbox" id="faq-direkteinstickung-4" class="faq-toggle" />
+			<label for="faq-direkteinstickung-4" class="faq-label flex items-center justify-between cursor-pointer p-6 bg-gray-800 transition-all duration-300">
+				<span class="text-xl font-semibold text-gray-200 pr-4">Ist Direkteinstickung waschbeständig?</span>
+				<div class="faq-icon flex-shrink-0 w-6 h-6 relative text-accent">
+					<svg class="faq-icon-plus absolute inset-0 w-full h-full transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+					</svg>
+					<svg class="faq-icon-minus absolute inset-0 w-full h-full transition-all duration-300 opacity-0 scale-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4" />
+					</svg>
+				</div>
+			</label>
+			<div class="faq-content overflow-hidden transition-all duration-300">
+				<div class="px-6 pb-6 pt-2">
+					<p class="text-gray-200 leading-relaxed">
+						Ja, Direkteinstickung ist extrem langlebig und waschbeständig. Die Stickerei hält auch <strong>nach vielen Waschgängen</strong> ihre Form und Farbe. Durch die professionelle Qualitätskontrolle und Fertigstellung garantieren wir eine perfekte Optik über lange Zeit.
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<!-- FAQ Item 5 -->
+		<div class="faq-item group border border-base-300/30 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-accent/30 overflow-hidden bg-gray-800">
+			<input type="checkbox" id="faq-direkteinstickung-5" class="faq-toggle" />
+			<label for="faq-direkteinstickung-5" class="faq-label flex items-center justify-between cursor-pointer p-6 bg-gray-800 transition-all duration-300">
+				<span class="text-xl font-semibold text-gray-200 pr-4">Wo kann die Stickerei auf dem Textil platziert werden?</span>
+				<div class="faq-icon flex-shrink-0 w-6 h-6 relative text-accent">
+					<svg class="faq-icon-plus absolute inset-0 w-full h-full transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+					</svg>
+					<svg class="faq-icon-minus absolute inset-0 w-full h-full transition-all duration-300 opacity-0 scale-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4" />
+					</svg>
+				</div>
+			</label>
+			<div class="faq-content overflow-hidden transition-all duration-300">
+				<div class="px-6 pb-6 pt-2">
+					<p class="text-gray-200 leading-relaxed mb-3">
+						Die Stickposition ist sehr flexibel. Gängige Positionen sind:
+					</p>
+					<ul class="list-disc list-inside space-y-1 text-gray-200 mb-3">
+						<li><strong>Herzseite/Brust:</strong> Links oder rechts auf der Brust</li>
+						<li><strong>Rücken:</strong> Zentral oder oben zwischen den Schulterblättern</li>
+						<li><strong>Ärmel:</strong> Oberarm oder Unterarm</li>
+						<li><strong>Bund:</strong> Am unteren Saum</li>
+						<li><strong>Kragen:</strong> Innen oder außen</li>
+					</ul>
+					<p class="text-gray-200 leading-relaxed">
+						Bei kleineren Textilien oder Damen-Schnitten passen unsere Experten Motive entsprechend an.
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<!-- FAQ Item 6 -->
+		<div class="faq-item group border border-base-300/30 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-accent/30 overflow-hidden bg-gray-800">
+			<input type="checkbox" id="faq-direkteinstickung-6" class="faq-toggle" />
+			<label for="faq-direkteinstickung-6" class="faq-label flex items-center justify-between cursor-pointer p-6 bg-gray-800 transition-all duration-300">
+				<span class="text-xl font-semibold text-gray-200 pr-4">Können Pantone- oder HKS-Farben exakt umgesetzt werden?</span>
+				<div class="faq-icon flex-shrink-0 w-6 h-6 relative text-accent">
+					<svg class="faq-icon-plus absolute inset-0 w-full h-full transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+					</svg>
+					<svg class="faq-icon-minus absolute inset-0 w-full h-full transition-all duration-300 opacity-0 scale-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4" />
+					</svg>
+				</div>
+			</label>
+			<div class="faq-content overflow-hidden transition-all duration-300">
+				<div class="px-6 pb-6 pt-2">
+					<p class="text-gray-200 leading-relaxed">
+						Ja, wir verwenden eine breite Farbpalette hochwertiger Stickgarne, die die <strong>exakte Umsetzung von Pantone- und HKS-Farben</strong> ermöglicht. So wird Ihr Corporate Design perfekt auf Textilien übertragen.
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<!-- FAQ Item 7 -->
+		<div class="faq-item group border border-base-300/30 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-accent/30 overflow-hidden bg-gray-800">
+			<input type="checkbox" id="faq-direkteinstickung-7" class="faq-toggle" />
+			<label for="faq-direkteinstickung-7" class="faq-label flex items-center justify-between cursor-pointer p-6 bg-gray-800 transition-all duration-300">
+				<span class="text-xl font-semibold text-gray-200 pr-4">Was sind Stickvliese und warum werden sie benötigt?</span>
+				<div class="faq-icon flex-shrink-0 w-6 h-6 relative text-accent">
+					<svg class="faq-icon-plus absolute inset-0 w-full h-full transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+					</svg>
+					<svg class="faq-icon-minus absolute inset-0 w-full h-full transition-all duration-300 opacity-0 scale-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4" />
+					</svg>
+				</div>
+			</label>
+			<div class="faq-content overflow-hidden transition-all duration-300">
+				<div class="px-6 pb-6 pt-2">
+					<p class="text-gray-200 leading-relaxed mb-3">
+						Stickvliese sorgen für <strong>Stabilität während des Stickvorgangs</strong> und verhindern, dass sich der Stoff verzieht. Je nach Stoffart verwenden wir:
+					</p>
+					<ul class="list-disc list-inside space-y-1 text-gray-200 mb-3">
+						<li>Schneidevlies</li>
+						<li>Reißvlies</li>
+						<li>Selbstklebendes Vlies</li>
+						<li>Wasserlösliches Vlies</li>
+					</ul>
+					<p class="text-gray-200 leading-relaxed">
+						Leichte Stoffe benötigen mehr Unterstützung, schwere Stoffe weniger.
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<!-- FAQ Item 8 -->
+		<div class="faq-item group border border-base-300/30 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-accent/30 overflow-hidden bg-gray-800">
+			<input type="checkbox" id="faq-direkteinstickung-8" class="faq-toggle" />
+			<label for="faq-direkteinstickung-8" class="faq-label flex items-center justify-between cursor-pointer p-6 bg-gray-800 transition-all duration-300">
+				<span class="text-xl font-semibold text-gray-200 pr-4">Warum ist Direkteinstickung teurer als Druckverfahren?</span>
+				<div class="faq-icon flex-shrink-0 w-6 h-6 relative text-accent">
+					<svg class="faq-icon-plus absolute inset-0 w-full h-full transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+					</svg>
+					<svg class="faq-icon-minus absolute inset-0 w-full h-full transition-all duration-300 opacity-0 scale-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4" />
+					</svg>
+				</div>
+			</label>
+			<div class="faq-content overflow-hidden transition-all duration-300">
+				<div class="px-6 pb-6 pt-2">
+					<p class="text-gray-200 leading-relaxed">
+						Direkteinstickung ist die <strong>edelste Veredelungsmethode</strong> und erfordert mehr Aufwand: Professionelle Programmierung (Punchen), hochwertige Materialien, industrielle Stickmaschinen und aufwendige Qualitätskontrolle. Dafür erhalten Sie ein extrem langlebiges, hochwertiges und repräsentatives Ergebnis, das Druckverfahren nicht erreichen können.
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="divider my-12"></div>
+
+	<!-- Inquiry Form Section -->
+	<div id="inquiry-form" class="scroll-mt-20">
+		<InquiryForm
+			formType="direkteinstickung"
+			sourcePageTitle="Direkteinstickung"
+		/>
+	</div>
+</CompanyLayout>

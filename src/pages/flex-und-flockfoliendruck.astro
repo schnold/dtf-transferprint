@@ -1,6 +1,8 @@
 ---
 import CompanyLayout from '../layouts/CompanyLayout.astro';
 import InquiryForm from '../components/InquiryForm.astro';
+import UseCasesSection from '../components/UseCasesSection.astro';
+import ContactCTASection from '../components/ContactCTASection.astro';
 
 const title = 'Flex- & Flockfoliendruck für Textilien | Einfarbige Designs & Spezialeffekte';
 const description = 'Flex- und Flockdruck für T-Shirts, Trikots & Textilien ✓ Intensive Farben ✓ Effektfolien (Glitzer, Neon, Reflex) ✓ Ab 10 Stück ✓ Ideal für Namen, Nummern & einfache Logos ➤ Kostenlos beraten lassen!';
@@ -264,8 +266,6 @@ const description = 'Flex- und Flockdruck für T-Shirts, Trikots & Textilien ✓
 					</li>
 				</ul>
 
-				<div class="divider"></div>
-
 				<div class="alert alert-warning shadow-sm">
 					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -401,96 +401,43 @@ const description = 'Flex- und Flockdruck für T-Shirts, Trikots & Textilien ✓
 
 	<div class="divider my-12"></div>
 
-	<h2>Perfekte Einsatzgebiete für Flex- & Flockdruck</h2>
-	<p>
-		Flex- und Flockdruck eignet sich besonders für <strong>Kleinauflagen mit einfachen, einfarbigen Designs</strong>, bei denen intensive Farben oder spezielle Effekte gefragt sind.
-	</p>
-
-	<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 my-8">
-		<div class="card bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20">
-			<div class="card-body pr-8">
-				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 text-primary mb-3">
-					<path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
-				</svg>
-				<h3 class="text-primary text-base font-semibold mb-2">
-					Sportvereine & Teams
-				</h3>
-				<p class="text-sm">
-					Trikotnummern, Spielernamen, Vereinslogos, Mannschaftskleidung mit Namen und Rückennummern
-				</p>
-			</div>
-		</div>
-
-		<div class="card bg-gradient-to-br from-secondary/10 to-secondary/5 border border-secondary/20">
-			<div class="card-body pr-8">
-				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 text-secondary mb-3">
-					<path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
-				</svg>
-				<h3 class="text-secondary text-base font-semibold mb-2">
-					Private Anlässe
-				</h3>
-				<p class="text-sm">
-					JGA-Shirts, Junggesellenabschiede, Geburtstags-Shirts, Familientreffen, Motto-Partys
-				</p>
-			</div>
-		</div>
-
-		<div class="card bg-gradient-to-br from-accent/10 to-accent/5 border border-accent/20">
-			<div class="card-body pr-8">
-				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 text-accent mb-3">
-					<path stroke-linecap="round" stroke-linejoin="round" d="M13.5 21v-7.5a.75.75 0 01.75-.75h3a.75.75 0 01.75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349m-16.5 11.65V9.35m0 0a3.001 3.001 0 003.75-.615A2.993 2.993 0 009.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 002.25 1.016c.896 0 1.7-.393 2.25-1.016a3.001 3.001 0 003.75.614m-16.5 0a3.004 3.004 0 01-.621-4.72L4.318 3.44A1.5 1.5 0 015.378 3h13.243a1.5 1.5 0 011.06.44l1.19 1.189a3 3 0 01-.621 4.72m-13.5 8.65h3.75a.75.75 0 00.75-.75V13.5a.75.75 0 00-.75-.75H6.75a.75.75 0 00-.75.75v3.75c0 .415.336.75.75.75z" />
-				</svg>
-				<h3 class="text-accent text-base font-semibold mb-2">
-					Kleine Unternehmen
-				</h3>
-				<p class="text-sm">
-					Firmenlogos, Workwear-Beschriftung, Teamkleidung, Corporate Fashion mit Logo
-				</p>
-			</div>
-		</div>
-
-		<div class="card bg-gradient-to-br from-warning/10 to-warning/5 border border-warning/20">
-			<div class="card-body pr-8">
-				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 text-warning mb-3">
-					<path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5" />
-				</svg>
-				<h3 class="text-warning text-base font-semibold mb-2">
-					Schulen & Kindergärten
-				</h3>
-				<p class="text-sm">
-					Klassen-Shirts, Schuluniformen mit Namen, Abi-Shirts, Abschlussklassen-Hoodies
-				</p>
-			</div>
-		</div>
-
-		<div class="card bg-gradient-to-br from-info/10 to-info/5 border border-info/20">
-			<div class="card-body pr-8">
-				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 text-info mb-3">
-					<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
-				</svg>
-				<h3 class="text-info text-base font-semibold mb-2">
-					Sicherheits- & Arbeitskleidung
-				</h3>
-				<p class="text-sm">
-					Reflektionsfolien für Warnwesten, Sicherheitsbekleidung, Workwear mit Reflex-Effekt
-				</p>
-			</div>
-		</div>
-
-		<div class="card bg-gradient-to-br from-success/10 to-success/5 border border-success/20">
-			<div class="card-body pr-8">
-				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 text-success mb-3">
-					<path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
-				</svg>
-				<h3 class="text-success text-base font-semibold mb-2">
-					Spezialeffekte & Events
-				</h3>
-				<p class="text-sm">
-					Glitzer-Designs, Neon-Shirts für Events, Glow-in-the-dark für Partys, Festival-Shirts
-				</p>
-			</div>
-		</div>
-	</div>
+	<UseCasesSection
+		title="Perfekte Einsatzgebiete für Flex- & Flockdruck"
+		introText="Flex- und Flockdruck eignet sich besonders für <strong>Kleinauflagen mit einfachen, einfarbigen Designs</strong>, bei denen intensive Farben oder spezielle Effekte gefragt sind."
+		columns="3"
+		items={[
+			{
+				iconPath: "M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z",
+				title: "Sportvereine & Teams",
+				description: "Trikotnummern, Spielernamen, Vereinslogos, Mannschaftskleidung mit Namen und Rückennummern"
+			},
+			{
+				iconPath: "M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z",
+				title: "Private Anlässe",
+				description: "JGA-Shirts, Junggesellenabschiede, Geburtstags-Shirts, Familientreffen, Motto-Partys"
+			},
+			{
+				iconPath: "M13.5 21v-7.5a.75.75 0 01.75-.75h3a.75.75 0 01.75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349m-16.5 11.65V9.35m0 0a3.001 3.001 0 003.75-.615A2.993 2.993 0 009.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 002.25 1.016c.896 0 1.7-.393 2.25-1.016a3.001 3.001 0 003.75.614m-16.5 0a3.004 3.004 0 01-.621-4.72L4.318 3.44A1.5 1.5 0 015.378 3h13.243a1.5 1.5 0 011.06.44l1.19 1.189a3 3 0 01-.621 4.72m-13.5 8.65h3.75a.75.75 0 00.75-.75V13.5a.75.75 0 00-.75-.75H6.75a.75.75 0 00-.75.75v3.75c0 .415.336.75.75.75z",
+				title: "Kleine Unternehmen",
+				description: "Firmenlogos, Workwear-Beschriftung, Teamkleidung, Corporate Fashion mit Logo"
+			},
+			{
+				iconPath: "M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5",
+				title: "Schulen & Kindergärten",
+				description: "Klassen-Shirts, Schuluniformen mit Namen, Abi-Shirts, Abschlussklassen-Hoodies"
+			},
+			{
+				iconPath: "M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z",
+				title: "Sicherheits- & Arbeitskleidung",
+				description: "Reflektionsfolien für Warnwesten, Sicherheitsbekleidung, Workwear mit Reflex-Effekt"
+			},
+			{
+				iconPath: "M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z",
+				title: "Spezialeffekte & Events",
+				description: "Glitzer-Designs, Neon-Shirts für Events, Glow-in-the-dark für Partys, Festival-Shirts"
+			}
+		]}
+	/>
 
 	<div class="alert alert-info my-8">
 		<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
@@ -501,42 +448,13 @@ const description = 'Flex- und Flockdruck für T-Shirts, Trikots & Textilien ✓
 		</div>
 	</div>
 
-	<div class="divider my-12"></div>
-
 	<!-- CTA Section -->
-	<div class="card bg-gradient-to-br from-neutral/5 to-neutral/10 border border-neutral/20 my-12">
-		<div class="card-body">
-			<h2 class="card-title text-2xl text-neutral">Interesse an Flex- oder Flockdruck?</h2>
-			<p class="text-neutral/80">
-				Fordern Sie ein kostenloses, unverbindliches Angebot an. Wir beraten Sie gerne zu Materialauswahl, Folienfarben und finden die optimale Lösung für Ihr Projekt – oder empfehlen Ihnen bei Bedarf unseren modernen DTF-Druck als flexible Alternative.
-			</p>
-			<div class="card-actions justify-end mt-4">
-				<a href="#inquiry-form" class="btn bg-neutral hover:bg-neutral/90 text-white border-none btn-lg">
-					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-						<path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25zM6.75 12h.008v.008H6.75V12zm0 3h.008v.008H6.75V15zm0 3h.008v.008H6.75V18z" />
-					</svg>
-					Jetzt Angebot anfordern
-				</a>
-				<a href="/dtf-transfers/" class="btn btn-ghost text-neutral hover:text-neutral btn-lg">
-					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-						<path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-					</svg>
-					DTF-Druck ansehen
-				</a>
-			</div>
-		</div>
-	</div>
-
-	<div class="divider my-12"></div>
-
-	<!-- Inquiry Form Section -->
-	<div id="inquiry-form" class="scroll-mt-20">
-		<InquiryForm
-			formType="flex-flock"
-			sourcePageTitle="Flex- & Flockfoliendruck"
-			sourcePageUrl="/flex-und-flockfoliendruck/"
-		/>
-	</div>
+	<ContactCTASection
+		title="Interesse an Flex- oder Flockdruck?"
+		description="Fordern Sie ein kostenloses, unverbindliches Angebot an. Wir beraten Sie gerne zu Materialauswahl, Folienfarben und finden die optimale Lösung für Ihr Projekt – oder empfehlen Ihnen bei Bedarf unseren modernen DTF-Druck als flexible Alternative."
+		callButtonHref="/dtf-transfers/"
+		callButtonText="DTF-Druck ansehen"
+	/>
 
 	<!-- FAQ Section -->
 	<h2 class="mt-16 mb-8">Häufige Fragen zu Flex- & Flockdruck</h2>
@@ -805,5 +723,16 @@ const description = 'Flex- und Flockdruck für T-Shirts, Trikots & Textilien ✓
 				Sie sind unsicher, ob Flex-/Flockdruck oder DTF-Druck für Ihr Projekt besser geeignet ist? Unser Team berät Sie kostenlos und unverbindlich zu Materialauswahl, Designmöglichkeiten und der optimalen Druckart für Ihre Anforderungen.
 			</p>
 		</div>
+	</div>
+
+	<div class="divider my-12"></div>
+
+	<!-- Inquiry Form Section -->
+	<div id="inquiry-form" class="scroll-mt-20">
+		<InquiryForm
+			formType="flex-flock"
+			sourcePageTitle="Flex- und Flockfoliendruck"
+			sourcePageUrl="/flex-und-flockfoliendruck/"
+		/>
 	</div>
 </CompanyLayout>

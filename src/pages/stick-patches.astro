@@ -1,0 +1,657 @@
+---
+import CompanyLayout from '../layouts/CompanyLayout.astro';
+import InquiryForm from '../components/InquiryForm.astro';
+import UseCasesSection from '../components/UseCasesSection.astro';
+import ContactCTASection from '../components/ContactCTASection.astro';
+
+const title = 'Stick-Patches bestellen – Aufnähen & Bügeln | Selini-Shirt';
+const description = 'Individuelle gestickte Patches für Vereine, Firmen und Mode. Hochwertige Stick-Patches zum Aufnähen, Bügeln oder mit Klett. Ab 100 Stück günstig bestellen.';
+---
+
+<CompanyLayout title={title} description={description}>
+	<!-- Hero Section -->
+	<div class="mb-12">
+		<h1 class="!mb-4">Stick-Patches bestellen – Aufnähen & Bügeln</h1>
+		<p class="text-lg text-neutral/80 !mb-6">
+			Mit gestickten <strong>Stick-Patches</strong> (auch Aufnäher, Abzeichen, Embleme oder Badges genannt) lassen sich Kleidung, Accessoires oder Arbeitsbekleidung einzigartig personalisieren.
+			Ob für <strong>Vereine, Sportclubs, Firmen, Feuerwehr, Polizei oder Modeprojekte</strong> – unsere Stick-Patches sind vielseitig einsetzbar und verleihen jedem Textil einen professionellen, hochwertigen Look.
+		</p>
+
+		<div class="alert alert-success mb-8">
+			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+			</svg>
+			<div>
+				<h3 class="font-bold">Flexible Befestigung</h3>
+				<p class="mt-2">
+					Die Patches können <strong>aufgenäht, aufgeklettet oder aufgebügelt</strong> werden und bieten so maximale Flexibilität in der Anwendung.
+				</p>
+			</div>
+		</div>
+	</div>
+
+	<!-- Quick Stats -->
+	<div class="stats stats-vertical lg:stats-horizontal shadow my-8 w-full">
+		<div class="stat">
+			<div class="stat-figure text-base-content">
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.043-.025a15.994 15.994 0 011.622-3.395m3.42 3.42a15.995 15.995 0 004.764-4.648l3.876-5.814a1.151 1.151 0 00-1.597-1.597L14.146 6.32a15.996 15.996 0 00-4.649 4.763m3.42 3.42a6.776 6.776 0 00-3.42-3.42" />
+				</svg>
+			</div>
+			<div class="stat-title">Befestigung</div>
+			<div class="stat-value text-base-content">3 Methoden</div>
+			<div class="stat-desc">Aufnähen, Bügeln, Klett</div>
+		</div>
+
+		<div class="stat">
+			<div class="stat-figure text-base-content">
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+				</svg>
+			</div>
+			<div class="stat-title">Mindestmenge</div>
+			<div class="stat-value text-base-content">100 Stück</div>
+			<div class="stat-desc">Günstige Produktion</div>
+		</div>
+
+		<div class="stat">
+			<div class="stat-figure text-base-content">
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+				</svg>
+			</div>
+			<div class="stat-title">Qualität</div>
+			<div class="stat-value text-base-content">Hochwertig</div>
+			<div class="stat-desc">Wasch- & lichtbeständig</div>
+		</div>
+	</div>
+
+	<!-- Visual Example Section with Image Placeholder -->
+	<div class="card bg-base-200 border-4 border-dashed border-primary/30 shadow-xl my-8">
+		<div class="card-body items-center text-center">
+			<div class="w-full aspect-video bg-gradient-to-br from-base-300 to-base-200 rounded-lg flex items-center justify-center relative overflow-hidden">
+				<div class="absolute inset-0 bg-grid-pattern opacity-5"></div>
+				<div class="text-center z-10">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-16 h-16 mx-auto mb-4 text-primary/50">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+					</svg>
+					<p class="text-sm text-neutral/60 font-semibold uppercase tracking-wider">Bild-Platzhalter</p>
+					<p class="text-xs text-neutral/50 mt-1">Beispiele für Stick-Patches</p>
+					<p class="text-xs text-neutral/40 mt-2">(Vereinspatches, Firmenlogos, Embleme)</p>
+				</div>
+			</div>
+			<p class="text-sm text-neutral/70 mt-4 italic">Hier werden später Beispielbilder von Stick-Patches auf verschiedenen Textilien angezeigt</p>
+		</div>
+	</div>
+
+	<h2>Vorteile von Stick-Patches</h2>
+	<div class="card bg-gradient-to-br from-success/10 to-success/5 border border-success/20 my-8">
+		<div class="card-body">
+			<ul class="space-y-3">
+				<li>
+					<div class="mb-1">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-base-content">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+						</svg>
+					</div>
+					<span><strong>Hochwertige Optik und langlebige Qualität</strong> – Professionelles Erscheinungsbild</span>
+				</li>
+				<li>
+					<div class="mb-1">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-base-content">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+						</svg>
+					</div>
+					<span><strong>Günstige Produktionskosten ab 100 Stück</strong> – Wirtschaftlich bei größeren Mengen</span>
+				</li>
+				<li>
+					<div class="mb-1">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-base-content">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+						</svg>
+					</div>
+					<span><strong>Wiederverwendbar und individuell einsetzbar</strong> – Flexibel in der Anwendung</span>
+				</li>
+				<li>
+					<div class="mb-1">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-base-content">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+						</svg>
+					</div>
+					<span><strong>Wasch- und lichtbeständig</strong> – Überstehen sogar Kochwaschgänge</span>
+				</li>
+				<li>
+					<div class="mb-1">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-base-content">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+						</svg>
+					</div>
+					<span><strong>Einfache Lagerung ohne Qualitätsverlust</strong> – Jahrelang haltbar</span>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<h2>Herstellung & Technik</h2>
+	<div class="card bg-base-200 shadow-xl my-8">
+		<div class="card-body">
+			<h3 class="card-title">
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-base-content">
+					<path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 010 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 010-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z" />
+					<path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+				</svg>
+				Der Produktionsprozess im Detail
+			</h3>
+
+			<div class="space-y-4 mt-4">
+				<div class="flex gap-4 items-start">
+					<div class="badge badge-primary badge-lg">1</div>
+					<div class="flex-1">
+						<h4 class="font-semibold mb-1">Motivprüfung und Punchsoftware</h4>
+						<p class="text-sm text-neutral/80">
+							Jedes gewünschte Design wird auf seine Umsetzbarkeit geprüft. Filigrane Details werden gegebenenfalls vereinfacht, und Schriften sollten <strong>mindestens 4–5 mm Höhe</strong> haben.
+							Anschließend wird das Motiv in ein stickbares Format umgewandelt – ein Prozess, der Know-how und Erfahrung erfordert.
+						</p>
+					</div>
+				</div>
+
+				<div class="flex gap-4 items-start">
+					<div class="badge badge-primary badge-lg">2</div>
+					<div class="flex-1">
+						<h4 class="font-semibold mb-1">Grundstoff & Garn</h4>
+						<p class="text-sm text-neutral/80">
+							Der Trägerstoff besteht meist aus einem <strong>Polyester-Baumwoll-Gemisch</strong> und ist auf der Rückseite mit einem stabilen Vlies versehen.
+							Die Garnfarben ermöglichen eine detailgetreue Umsetzung von Logos, Schriften und Symbolen in nahezu allen <strong>Pantone- oder HKS-Farbtönen</strong>.
+						</p>
+					</div>
+				</div>
+
+				<div class="flex gap-4 items-start">
+					<div class="badge badge-primary badge-lg">3</div>
+					<div class="flex-1">
+						<h4 class="font-semibold mb-1">Rahmen & Stickvorgang</h4>
+						<p class="text-sm text-neutral/80">
+							Der Patch wird in einen passenden Stickrahmen eingespannt. Durch Stickvliese erhält das Motiv Halt und Struktur. Anschließend erfolgt die Umrandung mit verschiedenen Methoden.
+						</p>
+					</div>
+				</div>
+
+				<div class="flex gap-4 items-start">
+					<div class="badge badge-success badge-lg">✓</div>
+					<div class="flex-1">
+						<h4 class="font-semibold mb-1">Zuschneiden & Umrandung</h4>
+						<p class="text-sm text-neutral/80">
+							Nach dem Sticken werden die Patches zugeschnitten und optional mit einer <strong>gestickten oder gekettelten Umrandung</strong> versehen.
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<h2>🎨 Umrandungs- und Befestigungsarten</h2>
+	
+	<!-- Border Types -->
+	<h3 class="text-xl font-semibold mb-4 mt-8">Umrandungsvarianten</h3>
+	<div class="grid md:grid-cols-2 gap-6 my-6">
+		<div class="card bg-base-200 shadow-lg">
+			<div class="card-body">
+				<h4 class="card-title text-base">Gestickte Umrandung</h4>
+				<p class="text-sm text-neutral/70">
+					Das Motiv erhält eine zusätzliche Stickkante, danach wird der Patch per <strong>Laser oder Heißmesser</strong> ausgeschnitten. Ergebnis: saubere Kanten und professioneller Look.
+				</p>
+			</div>
+		</div>
+
+		<div class="card bg-base-200 shadow-lg">
+			<div class="card-body">
+				<h4 class="card-title text-base">Gekettelte Umrandung</h4>
+				<p class="text-sm text-neutral/70">
+					Der Patch wird ohne Umrandung gestickt, ausgeschnitten und anschließend <strong>maschinell umnäht</strong>. Ergebnis: extrem robust, langlebig und hochwertige Optik.
+				</p>
+			</div>
+		</div>
+	</div>
+
+	<!-- Attachment Methods -->
+	<h3 class="text-xl font-semibold mb-4 mt-8">Befestigungsmethoden</h3>
+	<div class="grid md:grid-cols-3 gap-6 my-6">
+		<div class="card bg-base-200 shadow-lg">
+			<div class="card-body">
+				<div class="flex items-center gap-3 mb-3">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-primary">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.043-.025a15.994 15.994 0 011.622-3.395m3.42 3.42a15.995 15.995 0 004.764-4.648l3.876-5.814a1.151 1.151 0 00-1.597-1.597L14.146 6.32a15.996 15.996 0 00-4.649 4.763m3.42 3.42a6.776 6.776 0 00-3.42-3.42" />
+					</svg>
+					<h4 class="card-title text-base">Aufnähen</h4>
+				</div>
+				<p class="text-sm text-neutral/70">
+					Dauerhaft, wiederverwendbar, besonders für stark beanspruchte Textilien wie Arbeitsbekleidung und Sportausrüstung.
+				</p>
+			</div>
+		</div>
+
+		<div class="card bg-base-200 shadow-lg">
+			<div class="card-body">
+				<div class="flex items-center gap-3 mb-3">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-secondary">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M15.362 5.214A8.252 8.252 0 0112 21 8.25 8.25 0 016.038 7.048 8.287 8.287 0 009 9.6a8.983 8.983 0 013.361-6.867 8.21 8.21 0 003 2.48z" />
+						<path stroke-linecap="round" stroke-linejoin="round" d="M12 18a3.75 3.75 0 00.495-7.467 5.99 5.99 0 00-1.925 3.546 5.974 5.974 0 01-2.133-1A3.75 3.75 0 0012 18z" />
+					</svg>
+					<h4 class="card-title text-base">Bügeln</h4>
+				</div>
+				<p class="text-sm text-neutral/70">
+					Mit Bügelkleber auf der Rückseite einfach und schnell fixierbar. Ideal für weniger beanspruchte Textilien und schnelle Anwendung.
+				</p>
+			</div>
+		</div>
+
+		<div class="card bg-base-200 shadow-lg">
+			<div class="card-body">
+				<div class="flex items-center gap-3 mb-3">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 text-accent">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" />
+					</svg>
+					<h4 class="card-title text-base">Klettband</h4>
+				</div>
+				<p class="text-sm text-neutral/70">
+					Wiederverwendbar und austauschbar. Perfekt für Arbeitskleidung mit wechselnden Namenspads oder Sportausrüstung.
+				</p>
+			</div>
+		</div>
+	</div>
+
+	<UseCasesSection
+		title="Einsatzgebiete für Stick-Patches"
+		introText="Stick-Patches sind vielseitig einsetzbar – von Vereinskleidung bis zur professionellen Arbeitsbekleidung:"
+		columns="3"
+		items={[
+			{
+				iconPath: "M16.5 18.75h-9m9 0a3 3 0 013 3h-15a3 3 0 013-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 01-.982-3.172M9.497 14.25a7.454 7.454 0 00.981-3.172M5.25 4.236c-.982.143-1.954.317-2.916.52A6.003 6.003 0 007.73 9.728M5.25 4.236V4.5c0 2.108.966 3.99 2.48 5.228M5.25 4.236V2.721C7.456 2.41 9.71 2.25 12 2.25c2.291 0 4.545.16 6.75.47v1.516M7.73 9.728a6.726 6.726 0 002.748 1.35m8.272-6.842V4.5c0 2.108-.966 3.99-2.48 5.228m2.48-5.492a46.32 46.32 0 012.916.52 6.003 6.003 0 01-5.395 4.972m0 0a6.726 6.726 0 01-2.749 1.35m0 0a6.772 6.772 0 01-3.044 0",
+				title: "Vereine & Sport",
+				description: "Trikots, Hoodies, Sweater, Vereinsjacken, Taschen"
+			},
+			{
+				iconPath: "M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 00.75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 00-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0112 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 01-.673-.38m0 0A2.18 2.18 0 013 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 013.413-.387m7.5 0V5.25A2.25 2.25 0 0013.5 3h-3a2.25 2.25 0 00-2.25 2.25v.894m7.5 0a48.667 48.667 0 00-7.5 0M12 12.75h.008v.008H12v-.008z",
+				title: "Arbeitsbekleidung",
+				description: "Firmenlogos auf Hemden, Jacken, Blusen, austauschbare Namenspads"
+			},
+			{
+				iconPath: "M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z",
+				title: "Behörden & Sicherheit",
+				description: "Feuerwehr, Polizei, Sanitätsdienste, Bundeswehr, Flughafenpersonal"
+			},
+			{
+				iconPath: "M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.043-.025a15.994 15.994 0 011.622-3.395m3.42 3.42a15.995 15.995 0 004.764-4.648l3.876-5.814a1.151 1.151 0 00-1.597-1.597L14.146 6.32a15.996 15.996 0 00-4.649 4.763m3.42 3.42a6.776 6.776 0 00-3.42-3.42",
+				title: "Mode & Lifestyle",
+				description: "Trendige Markenbekleidung, Caps, Accessoires, individuelle Fashion-Patches"
+			},
+			{
+				iconPath: "M21 11.25v8.25a1.5 1.5 0 01-1.5 1.5H5.25a1.5 1.5 0 01-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 109.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1114.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z",
+				title: "Privat & Geschenke",
+				description: "Personalisierte Geschenke, Taufkleider, Geburtstags-Patches"
+			},
+			{
+				iconPath: "M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z",
+				title: "Besonderheit",
+				description: "Patches überstehen häufiges Waschen, Witterungseinflüsse und sogar Kochwaschgänge"
+			}
+		]}
+	/>
+
+	<div class="divider my-12"></div>
+
+	<!-- Vorteile & Nachteile Grid -->
+	<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 my-8">
+		<!-- Nachteile -->
+		<div class="card bg-gradient-to-br from-warning/10 to-warning/5 border border-warning/20">
+			<div class="card-body">
+				<h2 class="card-title">
+					<div class="mb-2">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-base-content">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+						</svg>
+					</div>
+					Einschränkungen
+				</h2>
+				<ul class="space-y-3 mt-4">
+					<li>
+						<div class="mb-1">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-base-content">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+							</svg>
+						</div>
+						<span><strong>Nicht alle Motive sind umsetzbar</strong> – Filigrane Details müssen vereinfacht werden</span>
+					</li>
+					<li>
+						<div class="mb-1">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-base-content">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+							</svg>
+						</div>
+						<span><strong>Schriftgröße mindestens 5 mm erforderlich</strong></span>
+					</li>
+					<li>
+						<div class="mb-1">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-base-content">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+							</svg>
+						</div>
+						<span><strong>Farbverläufe nur vereinfacht darstellbar</strong></span>
+					</li>
+					<li>
+						<div class="mb-1">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-base-content">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+							</svg>
+						</div>
+						<span><strong>Hohe Kosten bei kleinen Stückzahlen</strong> – Unter 100 Stück weniger wirtschaftlich</span>
+					</li>
+					<li>
+						<div class="mb-1">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-base-content">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+							</svg>
+						</div>
+						<span><strong>Längere Produktions- und Lieferzeiten</strong> bei komplexen Motiven</span>
+					</li>
+				</ul>
+
+				<div class="alert alert-warning shadow-sm">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+					</svg>
+					<div>
+						<p class="text-sm"><strong>Tipp:</strong> Für fotorealistische Motive empfehlen wir <a href="/dtf-transfers/" class="link link-primary">DTF-Transfers</a>.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Care Instructions -->
+		<div class="card bg-gradient-to-br from-info/10 to-info/5 border border-info/20">
+			<div class="card-body">
+				<h2 class="card-title">
+					<div class="mb-2">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-base-content">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
+						</svg>
+					</div>
+					Pflegehinweise
+				</h2>
+				<p class="mt-4">
+					Stick-Patches sind <strong>extrem pflegeleicht</strong> und haltbar:
+				</p>
+				<ul class="space-y-3 mt-4">
+					<li>
+						<div class="mb-1">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-base-content">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+							</svg>
+						</div>
+						<span><strong>Waschbeständig bis Kochwäsche</strong></span>
+					</li>
+					<li>
+						<div class="mb-1">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-base-content">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+							</svg>
+						</div>
+						<span><strong>Lichtbeständig</strong> – Farben bleiben erhalten</span>
+					</li>
+					<li>
+						<div class="mb-1">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-base-content">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+							</svg>
+						</div>
+						<span><strong>Witterungsbeständig</strong></span>
+					</li>
+					<li>
+						<div class="mb-1">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-base-content">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+							</svg>
+						</div>
+						<span><strong>Lagerung ohne Qualitätsverlust</strong></span>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<!-- CTA Section -->
+	<ContactCTASection
+		title="Bereit für Ihre Stick-Patches?"
+		description="Lassen Sie uns gemeinsam Ihre individuellen gestickten Patches realisieren. Kontaktieren Sie uns für ein unverbindliches Angebot!"
+		phoneNumber="+4917641326130"
+	/>
+
+	<!-- FAQ Section -->
+	<h2 class="mt-16 mb-8">Häufig gestellte Fragen zu Stick-Patches</h2>
+
+	<div class="space-y-3 mb-12">
+		<!-- FAQ Item 1 -->
+		<div class="faq-item group border border-base-300/30 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-accent/30 overflow-hidden bg-gray-800">
+			<input type="checkbox" id="faq-1" class="faq-toggle" checked="checked" />
+			<label for="faq-1" class="faq-label flex items-center justify-between cursor-pointer p-6 bg-gray-800 transition-all duration-300">
+				<span class="text-xl font-semibold text-gray-200 pr-4">Was ist die Mindestbestellmenge für Stick-Patches?</span>
+				<div class="faq-icon flex-shrink-0 w-6 h-6 relative text-accent">
+					<svg class="faq-icon-plus absolute inset-0 w-full h-full transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+					</svg>
+					<svg class="faq-icon-minus absolute inset-0 w-full h-full transition-all duration-300 opacity-0 scale-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4" />
+					</svg>
+				</div>
+			</label>
+			<div class="faq-content overflow-hidden transition-all duration-300">
+				<div class="px-6 pb-6 pt-2">
+					<p class="text-gray-200 leading-relaxed">
+						Die Mindestbestellmenge beträgt <strong class="text-white font-bold">100 Stück</strong>. Ab dieser Menge sind die Produktionskosten besonders günstig. Bei kleineren Mengen sind die Kosten pro Stück deutlich höher.
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<!-- FAQ Item 2 -->
+		<div class="faq-item group border border-base-300/30 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-accent/30 overflow-hidden bg-gray-800">
+			<input type="checkbox" id="faq-2" class="faq-toggle" />
+			<label for="faq-2" class="faq-label flex items-center justify-between cursor-pointer p-6 bg-gray-800 transition-all duration-300">
+				<span class="text-xl font-semibold text-gray-200 pr-4">Welche Schriftgröße ist mindestens erforderlich?</span>
+				<div class="faq-icon flex-shrink-0 w-6 h-6 relative text-accent">
+					<svg class="faq-icon-plus absolute inset-0 w-full h-full transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+					</svg>
+					<svg class="faq-icon-minus absolute inset-0 w-full h-full transition-all duration-300 opacity-0 scale-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4" />
+					</svg>
+				</div>
+			</label>
+			<div class="faq-content overflow-hidden transition-all duration-300">
+				<div class="px-6 pb-6 pt-2">
+					<p class="text-gray-200 leading-relaxed">
+						Schriften sollten mindestens <strong class="text-white font-bold">4–5 mm Höhe</strong> haben, damit sie gut lesbar gestickt werden können. Kleinere Schriften sind technisch schwierig umzusetzen und können unleserlich werden.
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<!-- FAQ Item 3 -->
+		<div class="faq-item group border border-base-300/30 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-accent/30 overflow-hidden bg-gray-800">
+			<input type="checkbox" id="faq-3" class="faq-toggle" />
+			<label for="faq-3" class="faq-label flex items-center justify-between cursor-pointer p-6 bg-gray-800 transition-all duration-300">
+				<span class="text-xl font-semibold text-gray-200 pr-4">Welche Befestigungsmethode ist am besten?</span>
+				<div class="faq-icon flex-shrink-0 w-6 h-6 relative text-accent">
+					<svg class="faq-icon-plus absolute inset-0 w-full h-full transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+					</svg>
+					<svg class="faq-icon-minus absolute inset-0 w-full h-full transition-all duration-300 opacity-0 scale-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4" />
+					</svg>
+				</div>
+			</label>
+			<div class="faq-content overflow-hidden transition-all duration-300">
+				<div class="px-6 pb-6 pt-2">
+					<p class="text-gray-200 leading-relaxed mb-3">
+						Das hängt von Ihrem Einsatzzweck ab:
+					</p>
+					<ul class="list-disc list-inside space-y-2 text-gray-200">
+						<li><strong class="text-white font-bold">Aufnähen:</strong> Ideal für stark beanspruchte Textilien – dauerhaft und wiederverwendbar</li>
+						<li><strong class="text-white font-bold">Bügeln:</strong> Schnell und einfach, gut für weniger beanspruchte Textilien</li>
+						<li><strong class="text-white font-bold">Klettband:</strong> Perfekt für austauschbare Patches auf Arbeitskleidung</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+
+		<!-- FAQ Item 4 -->
+		<div class="faq-item group border border-base-300/30 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-accent/30 overflow-hidden bg-gray-800">
+			<input type="checkbox" id="faq-4" class="faq-toggle" />
+			<label for="faq-4" class="faq-label flex items-center justify-between cursor-pointer p-6 bg-gray-800 transition-all duration-300">
+				<span class="text-xl font-semibold text-gray-200 pr-4">Sind Stick-Patches waschbeständig?</span>
+				<div class="faq-icon flex-shrink-0 w-6 h-6 relative text-accent">
+					<svg class="faq-icon-plus absolute inset-0 w-full h-full transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+					</svg>
+					<svg class="faq-icon-minus absolute inset-0 w-full h-full transition-all duration-300 opacity-0 scale-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4" />
+					</svg>
+				</div>
+			</label>
+			<div class="faq-content overflow-hidden transition-all duration-300">
+				<div class="px-6 pb-6 pt-2">
+					<p class="text-gray-200 leading-relaxed">
+						Ja, Stick-Patches sind extrem wasch- und lichtbeständig. Sie überstehen häufiges Waschen, Witterungseinflüsse und sogar <strong class="text-white font-bold">Kochwaschgänge</strong>, ohne an Qualität zu verlieren. Das macht sie ideal für Arbeitsbekleidung und stark beanspruchte Textilien.
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<!-- FAQ Item 5 -->
+		<div class="faq-item group border border-base-300/30 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-accent/30 overflow-hidden bg-gray-800">
+			<input type="checkbox" id="faq-5" class="faq-toggle" />
+			<label for="faq-5" class="faq-label flex items-center justify-between cursor-pointer p-6 bg-gray-800 transition-all duration-300">
+				<span class="text-xl font-semibold text-gray-200 pr-4">Was ist der Unterschied zwischen gestickter und gekettelter Umrandung?</span>
+				<div class="faq-icon flex-shrink-0 w-6 h-6 relative text-accent">
+					<svg class="faq-icon-plus absolute inset-0 w-full h-full transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+					</svg>
+					<svg class="faq-icon-minus absolute inset-0 w-full h-full transition-all duration-300 opacity-0 scale-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4" />
+					</svg>
+				</div>
+			</label>
+			<div class="faq-content overflow-hidden transition-all duration-300">
+				<div class="px-6 pb-6 pt-2">
+					<p class="text-gray-200 leading-relaxed mb-3">
+						Beide Varianten haben ihre Vorteile:
+					</p>
+					<ul class="list-disc list-inside space-y-2 text-gray-200">
+						<li><strong class="text-white font-bold">Gestickte Umrandung:</strong> Saubere Kanten und professioneller Look</li>
+						<li><strong class="text-white font-bold">Gekettelte Umrandung:</strong> Extrem robust, langlebig und hochwertige Optik</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+
+		<!-- FAQ Item 6 -->
+		<div class="faq-item group border border-base-300/30 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-accent/30 overflow-hidden bg-gray-800">
+			<input type="checkbox" id="faq-6" class="faq-toggle" />
+			<label for="faq-6" class="faq-label flex items-center justify-between cursor-pointer p-6 bg-gray-800 transition-all duration-300">
+				<span class="text-xl font-semibold text-gray-200 pr-4">Können alle Motive als Stick-Patch umgesetzt werden?</span>
+				<div class="faq-icon flex-shrink-0 w-6 h-6 relative text-accent">
+					<svg class="faq-icon-plus absolute inset-0 w-full h-full transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+					</svg>
+					<svg class="faq-icon-minus absolute inset-0 w-full h-full transition-all duration-300 opacity-0 scale-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4" />
+					</svg>
+				</div>
+			</label>
+			<div class="faq-content overflow-hidden transition-all duration-300">
+				<div class="px-6 pb-6 pt-2">
+					<p class="text-gray-200 leading-relaxed">
+						Nicht alle Motive sind umsetzbar. Sehr filigrane Details müssen vereinfacht werden, und <strong class="text-white font-bold">Farbverläufe können nur vereinfacht dargestellt</strong> werden. Wir prüfen jedes Design auf seine Umsetzbarkeit und beraten Sie gerne zu den Möglichkeiten.
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Accordion Behavior Script -->
+	<script is:inline>
+		// Make FAQ work as accordion (only one open at a time)
+		document.addEventListener('DOMContentLoaded', function() {
+			const faqToggles = document.querySelectorAll('.faq-toggle');
+
+			faqToggles.forEach(function(toggle) {
+				toggle.addEventListener('change', function() {
+					const currentToggle = this;
+					if (currentToggle.checked) {
+						// Uncheck all other FAQ items
+						faqToggles.forEach(function(otherToggle) {
+							if (otherToggle !== currentToggle) {
+								otherToggle.checked = false;
+							}
+						});
+					}
+				});
+			});
+		});
+	</script>
+
+	<div class="alert alert-success my-8">
+		<svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+			<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+		</svg>
+		<div>
+			<h4 class="font-bold">Kostenlose Beratung – Wir helfen Ihnen weiter!</h4>
+			<p class="mt-2">
+				Sie sind unsicher, ob Stick-Patches die richtige Wahl für Ihr Projekt sind? Unser Team berät Sie kostenlos und unverbindlich zu Größe, Umrandung, Befestigung und erstellt ein individuelles Angebot für Ihre Patches.
+			</p>
+		</div>
+	</div>
+
+	<div class="divider my-12"></div>
+
+	<!-- Inquiry Form Section -->
+	<div id="inquiry-form" class="scroll-mt-20">
+		<InquiryForm
+			formType="stick-patches"
+			sourcePageTitle="Stick-Patches"
+			sourcePageUrl="/stick-patches/"
+		/>
+	</div>
+</CompanyLayout>
+
+<style>
+	.bg-grid-pattern {
+		background-image:
+			linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+			linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+		background-size: 20px 20px;
+	}
+
+	/* FAQ Accordion Styles */
+	.faq-toggle {
+		display: none;
+	}
+
+	.faq-content {
+		max-height: 0;
+	}
+
+	.faq-toggle:checked ~ .faq-content {
+		max-height: 500px;
+	}
+
+	.faq-toggle:checked ~ .faq-label .faq-icon-plus {
+		opacity: 0;
+		transform: scale(0) rotate(90deg);
+	}
+
+	.faq-toggle:checked ~ .faq-label .faq-icon-minus {
+		opacity: 1;
+		transform: scale(1) rotate(0deg);
+	}
+</style>

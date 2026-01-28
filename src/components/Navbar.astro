@@ -102,8 +102,8 @@ try {
 				/>
 			</a>
 		</div>
-		<div class="navbar-center hidden md:flex flex-1 min-w-0 justify-center">
-			<ul class="flex flex-row flex-wrap gap-0.5 sm:gap-1 px-1 max-w-4xl justify-center md:justify-start mega-menu">
+		<div class="navbar-center hidden lg:flex flex-1 min-w-0 justify-center">
+			<ul class="flex flex-row flex-wrap gap-0.5 sm:gap-1 px-1 max-w-4xl justify-center lg:justify-start mega-menu">
 				<!-- Produkte Mega Menu (Dynamic Categories - Hierarchical) -->
 				{categoryHierarchy.length > 0 && (
 					<li class="dropdown mega-dropdown mega-dropdown-produkte flex-shrink-0 relative">
@@ -167,6 +167,20 @@ try {
 								))}
 							</div>
 
+							<!-- Textilkatalog Banner -->
+							<div class="mt-6 pt-6 border-t border-base-300/20">
+								<div class="flex items-center gap-3 bg-primary/5 rounded-lg p-4">
+									<a href="https://www.roly.es/" target="_blank" rel="noopener noreferrer" class="hover:opacity-80 transition-opacity">
+										<img
+											src="https://static.gorfactory.es/images/header/logo_Roly_2025.svg"
+											alt="Roly Logo"
+											class="h-8 w-auto object-contain"
+										/>
+									</a>
+									<p class="text-sm font-medium text-neutral">Schau in unseren Textilkatalog</p>
+								</div>
+							</div>
+
 							<!-- View All Products Button -->
 							<div class="mt-6 pt-4 border-t border-base-300/20">
 								<a href="/products/" class="btn btn-primary btn-sm w-full">Alle Produkte ansehen</a>
@@ -207,7 +221,7 @@ try {
 										Flex und Flockfoliendruck
 									</a></li>
 									<li><a href="/direkteinstickung/" class="text-neutral/70 menu-link-hover text-sm py-1.5 transition-colors block break-words">
-										Direkteinstickung
+										Stickerei
 									</a></li>
 									<li><a href="/einzelnamendruck/" class="text-neutral/70 menu-link-hover text-sm py-1.5 transition-colors block break-words">
 										Einzelnamendruck
@@ -215,14 +229,23 @@ try {
 									<li><a href="/einzelnamenstick/" class="text-neutral/70 menu-link-hover text-sm py-1.5 transition-colors block break-words">
 										Einzelnamenstick
 									</a></li>
-									<li><a href="/gestickte-aufnaeher/" class="text-neutral/70 menu-link-hover text-sm py-1.5 transition-colors block break-words">
-										Gestickte Aufnäher
+									<li><a href="/flex-flock-einzelnamen-bedrucken/" class="text-neutral/70 menu-link-hover text-sm py-1.5 transition-colors block break-words">
+										Flex & Flock Einzelnamen bedrucken
+									</a></li>
+									<li><a href="/plastisol-transfer/" class="text-neutral/70 menu-link-hover text-sm py-1.5 transition-colors block break-words">
+										Plastisol Transfer
+									</a></li>
+									<li><a href="/reflex-transfer/" class="text-neutral/70 menu-link-hover text-sm py-1.5 transition-colors block break-words">
+										Reflex Transfer
 									</a></li>
 									<li><a href="/gewebte-aufnaeher/" class="text-neutral/70 menu-link-hover text-sm py-1.5 transition-colors block break-words">
 										Gewebte Aufnäher
 									</a></li>
 									<li><a href="/gewebte-label/" class="text-neutral/70 menu-link-hover text-sm py-1.5 transition-colors block break-words">
 										Gewebte Label
+									</a></li>
+									<li><a href="/stick-patches/" class="text-neutral/70 menu-link-hover text-sm py-1.5 transition-colors block break-words">
+										Stick-Patches
 									</a></li>
 								</ul>
 							</div>
@@ -450,7 +473,7 @@ try {
 			)}
 
 			<!-- Mobile Menu Dropdown -->
-			<div class="dropdown dropdown-end md:hidden">
+			<div class="dropdown dropdown-end lg:hidden">
 				<label tabindex="0" class="btn btn-ghost text-neutral hover:bg-white/10 px-2 sm:px-3" aria-label="Menu">
 					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
 						<path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
@@ -567,7 +590,7 @@ try {
 										</li>
 										<li>
 											<a href="/direkteinstickung/" class="text-neutral/70 menu-link-hover text-sm py-1 transition-colors block">
-												Direkteinstickung
+												Stickerei
 											</a>
 										</li>
 										<li>
@@ -581,8 +604,18 @@ try {
 											</a>
 										</li>
 										<li>
-											<a href="/gestickte-aufnaeher/" class="text-neutral/70 menu-link-hover text-sm py-1 transition-colors block">
-												Gestickte Aufnäher
+											<a href="/flex-flock-einzelnamen-bedrucken/" class="text-neutral/70 menu-link-hover text-sm py-1 transition-colors block">
+												Flex & Flock Einzelnamen bedrucken
+											</a>
+										</li>
+										<li>
+											<a href="/plastisol-transfer/" class="text-neutral/70 menu-link-hover text-sm py-1 transition-colors block">
+												Plastisol Transfer
+											</a>
+										</li>
+										<li>
+											<a href="/reflex-transfer/" class="text-neutral/70 menu-link-hover text-sm py-1 transition-colors block">
+												Reflex Transfer
 											</a>
 										</li>
 										<li>
@@ -593,6 +626,11 @@ try {
 										<li>
 											<a href="/gewebte-label/" class="text-neutral/70 menu-link-hover text-sm py-1 transition-colors block">
 												Gewebte Label
+											</a>
+										</li>
+										<li>
+											<a href="/stick-patches/" class="text-neutral/70 menu-link-hover text-sm py-1 transition-colors block">
+												Stick-Patches
 											</a>
 										</li>
 									</ul>

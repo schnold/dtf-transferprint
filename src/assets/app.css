@@ -247,6 +247,48 @@
     /* Background color set via Tailwind classes */
   }
 
+  /* FAQ strong tags - white and bold */
+  .faq-content strong,
+  .collapse-content strong {
+    color: white !important;
+    font-weight: bold !important;
+  }
+
+  /* Use Cases Section Styles */
+  .use-cases-grid {
+    /* Grid layout handled by Tailwind classes */
+  }
+
+  .use-case-icon {
+    display: block;
+    margin-bottom: 0.75rem;
+  }
+
+  .use-case-title {
+    margin-bottom: 0.5rem;
+  }
+
+  /* Contact CTA Section Styles */
+  .cta-inquiry-btn {
+    color: white !important;
+  }
+
+  .cta-inquiry-btn svg {
+    color: white !important;
+  }
+
+  .cta-call-btn {
+    color: hsl(var(--bc)) !important;
+  }
+
+  .cta-call-btn:hover {
+    color: hsl(var(--bc)) !important;
+  }
+
+  .cta-call-btn svg {
+    color: hsl(var(--bc)) !important;
+  }
+
   /* Icon states - default (plus visible) */
   .faq-icon .faq-icon-plus {
     opacity: 1;
@@ -774,6 +816,19 @@
   .btn-muted-green:focus {
     background-color: var(--color-metrics-text) !important;
     box-shadow: 0 0 0 2px rgba(74, 93, 58, 0.2);
+  }
+
+  /* Lighter divider styling */
+  .divider {
+    opacity: 0.25 !important;
+    border-top-color: hsl(var(--bc) / 0.2) !important;
+    border-bottom-color: hsl(var(--bc) / 0.2) !important;
+  }
+
+  .divider.my-12 {
+    opacity: 0.25 !important;
+    border-top-color: hsl(var(--bc) / 0.2) !important;
+    border-bottom-color: hsl(var(--bc) / 0.2) !important;
   }
 }
 
