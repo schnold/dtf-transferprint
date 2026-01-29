@@ -9,7 +9,11 @@
       "Bash(npm run astro:*)",
       "Bash(npm run build:*)",
       "Bash(awk:*)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Bash(wc:*)",
+      "Bash(tsx scripts/test-sitemap.ts:*)",
+      "Bash(npm run test:sitemap:*)",
+      "Bash(npm i:*)"
     ]
   }
 }

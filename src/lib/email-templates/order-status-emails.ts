@@ -34,18 +34,14 @@ const EMAIL_STYLES = `
     }
 
     .header {
-      background: linear-gradient(135deg, #D95829 0%, #C04A1F 100%);
+      background: linear-gradient(to bottom, #f8f9fa 0%, #e9ecef 100%);
       padding: 40px 30px;
       text-align: center;
     }
 
-    .header h1 {
-      color: #ffffff;
-      margin: 0;
-      font-size: 28px;
-      font-weight: 700;
-      font-family: 'DM Sans', sans-serif;
-      letter-spacing: -0.5px;
+    .header img.logo {
+      height: 60px;
+      width: auto;
     }
 
     .content {
@@ -89,7 +85,7 @@ const EMAIL_STYLES = `
     }
 
     .button-primary {
-      background: linear-gradient(135deg, #D95829 0%, #C04A1F 100%);
+      background: linear-gradient(to bottom, #595959 0%, #262626 100%);
     }
 
     .button-container {
@@ -114,7 +110,7 @@ const EMAIL_STYLES = `
 
     .tracking-box {
       background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-      border: 2px solid #D95829;
+      border: 2px solid #EBF222;
       padding: 25px;
       border-radius: 12px;
       margin: 25px 0;
@@ -151,7 +147,7 @@ const EMAIL_STYLES = `
     }
 
     .footer a {
-      color: #D95829;
+      color: #EBF222;
       text-decoration: none;
     }
 
@@ -171,7 +167,7 @@ const EMAIL_STYLES = `
     }
 
     .link {
-      color: #D95829;
+      color: #EBF222;
       text-decoration: none;
     }
 
@@ -194,7 +190,7 @@ const EMAIL_STYLES = `
   </style>
 `;
 
-function getBaseTemplate(content: string, unsubscribeUrl: string): string {
+function getBaseTemplate(content: string, unsubscribeUrl: string, title: string = 'Selini-Shirt'): string {
   return `
     <!DOCTYPE html>
     <html lang="de">
@@ -202,26 +198,26 @@ function getBaseTemplate(content: string, unsubscribeUrl: string): string {
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <title>DTF Transfer Print</title>
+      <title>${title}</title>
       ${EMAIL_STYLES}
     </head>
     <body>
       <div class="email-container">
         <div class="header">
-          <h1>DTF Transfer Print</h1>
+          <img src="https://selini-shirt.de/images/logo/logo-1.png" alt="Selini-Shirt Logo" class="logo" />
         </div>
 
         ${content}
 
         <div class="footer">
-          <p><strong>DTF Transfer Print</strong></p>
+          <p><strong>Selini-Shirt</strong></p>
           <p>Hochwertige Direct-to-Film Transferdruck-Dienstleistungen</p>
           <div class="divider"></div>
           <p>
             <a href="${unsubscribeUrl}">Von E-Mails abmelden</a>
           </p>
           <p style="margin-top: 15px;">
-            Diese E-Mail wurde Ihnen gesendet, weil Sie eine Bestellung bei DTF Transfer Print aufgegeben haben.
+            Diese E-Mail wurde Ihnen gesendet, weil Sie eine Bestellung bei Selini-Shirt aufgegeben haben.
           </p>
         </div>
       </div>
@@ -262,10 +258,10 @@ export function generateOrderProcessingEmail(data: BaseOrderEmailData): {
     </div>
   `;
 
-  const html = getBaseTemplate(content, unsubscribeUrl);
+  const html = getBaseTemplate(content, unsubscribeUrl, 'Bestellung wird bearbeitet - Selini-Shirt');
 
   const text = `
-DTF Transfer Print
+Selini-Shirt
 Ihre Bestellung wird bearbeitet
 
 Hallo ${data.userName},
@@ -284,7 +280,7 @@ Bestellung ansehen: ${data.orderUrl}
 Bei Fragen zu Ihrer Bestellung können Sie uns jederzeit kontaktieren.
 
 ---
-DTF Transfer Print
+Selini-Shirt
 Hochwertige Direct-to-Film Transferdruck-Dienstleistungen
 
 Abmelden: ${unsubscribeUrl}
@@ -321,14 +317,14 @@ export function generateOrderReadyEmail(data: BaseOrderEmailData): {
         <a href="${data.orderUrl}" class="button">Bestellung ansehen</a>
       </div>
 
-      <p>Vielen Dank für Ihr Vertrauen in DTF Transfer Print!</p>
+      <p>Vielen Dank für Ihr Vertrauen in Selini-Shirt!</p>
     </div>
   `;
 
-  const html = getBaseTemplate(content, unsubscribeUrl);
+  const html = getBaseTemplate(content, unsubscribeUrl, 'Bestellung versandbereit - Selini-Shirt');
 
   const text = `
-DTF Transfer Print
+Selini-Shirt
 Ihre Bestellung ist versandbereit
 
 Hallo ${data.userName},
@@ -344,10 +340,10 @@ Ihre Artikel sind verpackt und werden in Kürze an unseren Versanddienstleister 
 
 Bestellung ansehen: ${data.orderUrl}
 
-Vielen Dank für Ihr Vertrauen in DTF Transfer Print!
+Vielen Dank für Ihr Vertrauen in Selini-Shirt!
 
 ---
-DTF Transfer Print
+Selini-Shirt
 Hochwertige Direct-to-Film Transferdruck-Dienstleistungen
 
 Abmelden: ${unsubscribeUrl}
@@ -397,10 +393,10 @@ export function generateOrderShippedEmail(data: ShippedOrderEmailData): {
     </div>
   `;
 
-  const html = getBaseTemplate(content, unsubscribeUrl);
+  const html = getBaseTemplate(content, unsubscribeUrl, 'Bestellung versendet - Selini-Shirt');
 
   const text = `
-DTF Transfer Print
+Selini-Shirt
 Ihre Bestellung wurde versandt!
 
 Hallo ${data.userName},
@@ -423,7 +419,7 @@ Bestellung ansehen: ${data.orderUrl}
 Wir hoffen, dass Sie mit Ihrer Bestellung zufrieden sein werden!
 
 ---
-DTF Transfer Print
+Selini-Shirt
 Hochwertige Direct-to-Film Transferdruck-Dienstleistungen
 
 Abmelden: ${unsubscribeUrl}
@@ -454,7 +450,7 @@ export function generateOrderDeliveredEmail(data: BaseOrderEmailData): {
         <p><strong>Gesamtbetrag:</strong> ${data.orderTotal}</p>
       </div>
 
-      <p>Vielen Dank, dass Sie sich für DTF Transfer Print entschieden haben. Ihre Zufriedenheit ist uns wichtig!</p>
+      <p>Vielen Dank, dass Sie sich für Selini-Shirt entschieden haben. Ihre Zufriedenheit ist uns wichtig!</p>
 
       <div class="button-container">
         <a href="${data.orderUrl}" class="button">Bestellung ansehen</a>
@@ -464,15 +460,15 @@ export function generateOrderDeliveredEmail(data: BaseOrderEmailData): {
       Sollten Sie Fragen zu Ihrer Bestellung haben oder Unterstützung benötigen, kontaktieren Sie uns gerne. Wir helfen Ihnen schnell und unkompliziert weiter.</p>
 
       <p style="margin-top: 30px; padding-top: 30px; border-top: 1px solid #e5e5e5;">
-        Wir würden uns freuen, Sie bald wieder bei DTF Transfer Print begrüßen zu dürfen!
+        Wir würden uns freuen, Sie bald wieder bei Selini-Shirt begrüßen zu dürfen!
       </p>
     </div>
   `;
 
-  const html = getBaseTemplate(content, unsubscribeUrl);
+  const html = getBaseTemplate(content, unsubscribeUrl, 'Bestellung zugestellt - Selini-Shirt');
 
   const text = `
-DTF Transfer Print
+Selini-Shirt
 Ihre Bestellung wurde zugestellt
 
 Hallo ${data.userName},
@@ -484,17 +480,17 @@ Bestellnummer: ${data.orderNumber}
 Bestelldatum: ${data.orderDate}
 Gesamtbetrag: ${data.orderTotal}
 
-Vielen Dank, dass Sie sich für DTF Transfer Print entschieden haben. Ihre Zufriedenheit ist uns wichtig!
+Vielen Dank, dass Sie sich für Selini-Shirt entschieden haben. Ihre Zufriedenheit ist uns wichtig!
 
 Bestellung ansehen: ${data.orderUrl}
 
 Fragen oder Probleme?
 Sollten Sie Fragen zu Ihrer Bestellung haben oder Unterstützung benötigen, kontaktieren Sie uns gerne. Wir helfen Ihnen schnell und unkompliziert weiter.
 
-Wir würden uns freuen, Sie bald wieder bei DTF Transfer Print begrüßen zu dürfen!
+Wir würden uns freuen, Sie bald wieder bei Selini-Shirt begrüßen zu dürfen!
 
 ---
-DTF Transfer Print
+Selini-Shirt
 Hochwertige Direct-to-Film Transferdruck-Dienstleistungen
 
 Abmelden: ${unsubscribeUrl}

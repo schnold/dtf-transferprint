@@ -1,0 +1,15 @@
+# robots.txt for selini-shirt.de
+User-agent: *
+Allow: /
+
+# Disallow admin and authentication pages
+Disallow: /admin/
+Disallow: /auth/
+Disallow: /api/
+
+# Disallow cart and checkout (no SEO value)
+Disallow: /cart
+Disallow: /checkout
+
+# Sitemap location
+Sitemap: https://selini-shirt.de/sitemap.xml

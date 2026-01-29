@@ -1,0 +1,9 @@
+<svg width="800" height="600" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="600" fill="#f3f4f6"/>
+  <g transform="translate(400, 300)">
+    <!-- T-Shirt Icon -->
+    <path d="M-80,-60 L-60,-80 L-40,-60 L-40,0 L-100,0 L-100,-60 Z M40,-60 L60,-80 L80,-60 L100,0 L100,-60 L40,-60 Z M-40,-60 L40,-60 L40,80 L-40,80 Z" fill="#6366f1" stroke="#4f46e5" stroke-width="2"/>
+  </g>
+  <text x="400" y="500" font-family="Arial, sans-serif" font-size="28" fill="#4b5563" text-anchor="middle" font-weight="bold">T-Shirts</text>
+  <text x="400" y="540" font-family="Arial, sans-serif" font-size="18" fill="#9ca3af" text-anchor="middle">Placeholder Image</text>
+</svg>

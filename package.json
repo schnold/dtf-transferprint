@@ -7,7 +7,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "migrate": "tsx scripts/run-migrations.ts"
+    "migrate": "tsx scripts/run-migrations.ts",
+    "test:sitemap": "tsx scripts/test-sitemap.ts"
   },
   "dependencies": {
     "@astrojs/netlify": "^6.6.3",
@@ -35,6 +36,7 @@
   },
   "devDependencies": {
     "@astrojs/tailwind": "^6.0.2",
+    "@types/pg": "^8.16.0",
     "daisyui": "^5.5.14",
     "tailwindcss": "^3.4.19",
     "tsx": "^4.21.0"

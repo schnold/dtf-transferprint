@@ -1,7 +1,8 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import Navbar from '../../components/Navbar.astro';
 import { verifyUnsubscribeToken } from '../../lib/email';
-import { Pool } from 'pg';
+import { pool } from '../../lib/db';
 
 const url = new URL(Astro.request.url);
 const token = url.searchParams.get('token');
@@ -18,29 +19,27 @@ if (Astro.request.method === 'POST') {
 
     if (tokenData) {
       try {
-        const pool = new Pool({
-          connectionString: process.env.NEON_DATABASE,
-          ssl: { rejectUnauthorized: false },
-        });
+        const client = await pool.connect();
+        try {
+          // Update user's email preferences
+          await client.query(
+            'UPDATE "user" SET "emailNotifications" = false WHERE id = $1',
+            [tokenData.userId]
+          );
 
-        // Update user's email preferences
-        await pool.query(
-          'UPDATE "user" SET "emailNotifications" = false WHERE id = $1',
-          [tokenData.userId]
-        );
-
-        await pool.end();
-
-        status = 'success';
-        message = 'You have been successfully unsubscribed from all email notifications.';
+          status = 'success';
+          message = 'Sie wurden erfolgreich von allen E-Mail-Benachrichtigungen abgemeldet.';
+        } finally {
+          client.release();
+        }
       } catch (error) {
         console.error('Unsubscribe error:', error);
         status = 'error';
-        message = 'An error occurred. Please try again later.';
+        message = 'Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.';
       }
     } else {
       status = 'invalid';
-      message = 'Invalid or expired unsubscribe link.';
+      message = 'Ungültiger oder abgelaufener Abmelde-Link.';
     }
   }
 }
@@ -48,34 +47,35 @@ if (Astro.request.method === 'POST') {
 const tokenData = token ? verifyUnsubscribeToken(token) : null;
 ---
 
-<Layout title="Unsubscribe - DTF Transfer Print">
+<Layout title="Abmelden - DTF Transfer Print">
+  <Navbar />
   <div class="min-h-screen flex items-center justify-center bg-base-200 py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-md w-full space-y-8">
       <div class="bg-base-100 shadow-xl rounded-lg p-8">
         <div class="text-center mb-6">
-          <h1 class="text-3xl font-bold">Email Preferences</h1>
+          <h1 class="text-3xl font-bold">E-Mail-Einstellungen</h1>
         </div>
 
         {status === 'idle' && tokenData && (
           <div>
             <p class="text-center mb-6">
-              Are you sure you want to unsubscribe from all email notifications?
+              Sind Sie sicher, dass Sie sich von allen E-Mail-Benachrichtigungen abmelden möchten?
             </p>
 
             <div class="alert alert-warning mb-6">
               <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
               </svg>
-              <span>You'll no longer receive marketing emails, but will still receive important account-related messages.</span>
+              <span>Sie erhalten keine Marketing-E-Mails mehr, aber weiterhin wichtige kontobezogene Nachrichten.</span>
             </div>
 
             <form method="POST">
               <input type="hidden" name="token" value={token} />
               <button type="submit" class="btn btn-error w-full mb-3">
-                Unsubscribe
+                Abmelden
               </button>
               <a href="/" class="btn btn-ghost w-full">
-                Keep Subscribed
+                Angemeldet bleiben
               </a>
             </form>
           </div>
@@ -91,11 +91,11 @@ const tokenData = token ? verifyUnsubscribeToken(token) : null;
             </div>
 
             <p class="text-center text-sm text-base-content/70 mb-6">
-              You can always update your email preferences by logging into your account.
+              Sie können Ihre E-Mail-Einstellungen jederzeit durch Anmeldung in Ihrem Konto aktualisieren.
             </p>
 
             <a href="/" class="btn btn-primary w-full">
-              Return to Home
+              Zur Startseite
             </a>
           </div>
         )}
@@ -110,7 +110,7 @@ const tokenData = token ? verifyUnsubscribeToken(token) : null;
             </div>
 
             <a href="/" class="btn btn-primary w-full">
-              Return to Home
+              Zur Startseite
             </a>
           </div>
         )}
@@ -121,18 +121,18 @@ const tokenData = token ? verifyUnsubscribeToken(token) : null;
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
               </svg>
-              <span>Invalid unsubscribe link. Please use the link from your email.</span>
+              <span>Ungültiger Abmelde-Link. Bitte verwenden Sie den Link aus Ihrer E-Mail.</span>
             </div>
 
             <a href="/" class="btn btn-primary w-full">
-              Return to Home
+              Zur Startseite
             </a>
           </div>
         )}
       </div>
 
       <div class="text-center text-sm text-base-content/70">
-        <p>Need help? <a href="/rechtliches/datenschutz" class="link link-primary">Privacy Policy</a></p>
+        <p>Brauchen Sie Hilfe? <a href="/rechtliches/datenschutz" class="link link-primary">Datenschutzrichtlinie</a></p>
       </div>
     </div>
   </div>

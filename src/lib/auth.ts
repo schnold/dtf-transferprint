@@ -44,7 +44,7 @@ export const auth = betterAuth({
       // Use void to avoid blocking and prevent timing attacks
       void sendEmail({
         to: user.email,
-        subject: "Verify your email address - DTF Transfer Print",
+        subject: "E-Mail-Adresse bestätigen - Selini-Shirt",
         html,
         text,
       });
@@ -59,7 +59,7 @@ export const auth = betterAuth({
 
       void sendEmail({
         to: user.email,
-        subject: "Welcome to DTF Transfer Print! 🎉",
+        subject: "Willkommen bei Selini-Shirt! 🎉",
         html,
         text,
       });
@@ -93,7 +93,7 @@ export const auth = betterAuth({
       // Use void to avoid blocking and prevent timing attacks
       void sendEmail({
         to: user.email,
-        subject: "Reset your password - DTF Transfer Print",
+        subject: "Passwort zurücksetzen - Selini-Shirt",
         html,
         text,
       });

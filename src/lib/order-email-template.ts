@@ -43,7 +43,7 @@ interface OrderConfirmationEmailData {
 
 export function generateOrderConfirmationEmail(
   data: OrderConfirmationEmailData,
-  getBaseTemplate: (content: string, unsubscribeUrl: string) => string
+  getBaseTemplate: (content: string, unsubscribeUrl: string, title?: string) => string
 ): {
   html: string;
   text: string;
@@ -129,9 +129,9 @@ export function generateOrderConfirmationEmail(
           <span style="color: #595959;">MwSt. (19%):</span>
           <span style="font-weight: 600; color: #262626;">${escapeHtml(data.taxAmount)}</span>
         </div>
-        <div style="display: flex; justify-content: space-between; padding: 12px 0; border-top: 2px solid #D95829; margin-top: 10px;">
+        <div style="display: flex; justify-content: space-between; padding: 12px 0; border-top: 2px solid #EBF222; margin-top: 10px;">
           <span style="font-weight: 700; color: #262626; font-size: 18px;">Gesamt:</span>
-          <span style="font-weight: 700; color: #D95829; font-size: 18px;">${escapeHtml(data.orderTotal)}</span>
+          <span style="font-weight: 700; color: #595959; font-size: 18px;">${escapeHtml(data.orderTotal)}</span>
         </div>
       </div>
 
@@ -152,7 +152,7 @@ export function generateOrderConfirmationEmail(
     </div>
   `;
 
-  const html = getBaseTemplate(content, unsubscribeUrl);
+  const html = getBaseTemplate(content, unsubscribeUrl, 'Bestellbestätigung - Selini-Shirt');
 
   const text = `
 Hallo ${escapeHtml(data.userName)},
@@ -183,7 +183,7 @@ Wir beginnen sofort mit der Bearbeitung Ihrer Bestellung. Sie erhalten eine weit
 Fragen zu Ihrer Bestellung? Kontaktieren Sie uns: ${data.baseUrl}/contact
 
 ---
-DTF Transfer Print
+Selini-Shirt
 Hochwertige Direct-to-Film Transferdruck-Dienstleistungen
 
 Abmelden: ${unsubscribeUrl}

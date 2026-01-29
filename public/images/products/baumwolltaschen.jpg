@@ -1,0 +1,12 @@
+<svg width="800" height="600" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="600" fill="#f3f4f6"/>
+  <g transform="translate(400, 280)">
+    <!-- Bag Icon -->
+    <path d="M-100,-40 L-100,100 L100,100 L100,-40 Z" fill="#10b981" stroke="#059669" stroke-width="2"/>
+    <path d="M-60,-40 Q-60,-100 0,-100 Q60,-100 60,-40" fill="none" stroke="#059669" stroke-width="2"/>
+    <line x1="-80" y1="-40" x2="-80" y2="-20" stroke="#059669" stroke-width="8" stroke-linecap="round"/>
+    <line x1="80" y1="-40" x2="80" y2="-20" stroke="#059669" stroke-width="8" stroke-linecap="round"/>
+  </g>
+  <text x="400" y="500" font-family="Arial, sans-serif" font-size="28" fill="#4b5563" text-anchor="middle" font-weight="bold">Baumwolltaschen</text>
+  <text x="400" y="540" font-family="Arial, sans-serif" font-size="18" fill="#9ca3af" text-anchor="middle">Placeholder Image</text>
+</svg>

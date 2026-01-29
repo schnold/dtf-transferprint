@@ -52,18 +52,14 @@ const EMAIL_STYLES = `
     }
 
     .header {
-      background: linear-gradient(135deg, #D95829 0%, #C04A1F 100%);
+      background: linear-gradient(to bottom, #f8f9fa 0%, #e9ecef 100%);
       padding: 40px 30px;
       text-align: center;
     }
 
-    .header h1 {
-      color: #ffffff;
-      margin: 0;
-      font-size: 28px;
-      font-weight: 700;
-      font-family: 'DM Sans', sans-serif;
-      letter-spacing: -0.5px;
+    .header img.logo {
+      height: 60px;
+      width: auto;
     }
 
     .content {
@@ -113,7 +109,7 @@ const EMAIL_STYLES = `
 
     .security-notice {
       background-color: #f8f9fa;
-      border-left: 4px solid #D95829;
+      border-left: 4px solid #EBF222;
       padding: 15px 20px;
       margin: 25px 0;
       border-radius: 4px;
@@ -150,7 +146,7 @@ const EMAIL_STYLES = `
     }
 
     .footer a {
-      color: #D95829;
+      color: #EBF222;
       text-decoration: none;
     }
 
@@ -170,7 +166,7 @@ const EMAIL_STYLES = `
     }
 
     .link {
-      color: #D95829;
+      color: #EBF222;
       text-decoration: none;
       word-break: break-all;
     }
@@ -204,7 +200,7 @@ const EMAIL_STYLES = `
   </style>
 `;
 
-function getBaseTemplate(content: string, unsubscribeUrl: string): string {
+function getBaseTemplate(content: string, unsubscribeUrl: string, title: string = 'Selini-Shirt'): string {
   return `
     <!DOCTYPE html>
     <html lang="de">
@@ -212,26 +208,26 @@ function getBaseTemplate(content: string, unsubscribeUrl: string): string {
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <title>DTF Transfer Print</title>
+      <title>${title}</title>
       ${EMAIL_STYLES}
     </head>
     <body>
       <div class="email-container">
         <div class="header">
-          <h1>DTF Transfer Print</h1>
+          <img src="https://selini-shirt.de/images/logo/logo-1.png" alt="Selini-Shirt Logo" class="logo" />
         </div>
 
         ${content}
 
         <div class="footer">
-          <p><strong>DTF Transfer Print</strong></p>
+          <p><strong>Selini-Shirt</strong></p>
           <p>Hochwertige Direct-to-Film Transferdruck-Dienstleistungen</p>
           <div class="divider"></div>
           <p>
             <a href="${unsubscribeUrl}">Von E-Mails abmelden</a>
           </p>
           <p style="margin-top: 15px;">
-            Diese E-Mail wurde Ihnen gesendet, weil Sie ein Konto bei DTF Transfer Print erstellt haben.
+            Diese E-Mail wurde Ihnen gesendet, weil Sie ein Konto bei Selini-Shirt erstellt haben.
           </p>
         </div>
       </div>
@@ -253,7 +249,7 @@ export function generateVerificationEmail(data: VerificationEmailData): {
 
       <p>Hallo ${data.userName},</p>
 
-      <p>Vielen Dank für Ihre Registrierung bei DTF Transfer Print! Um Ihre Registrierung abzuschließen und Ihr Konto zu nutzen, verifizieren Sie bitte Ihre E-Mail-Adresse.</p>
+      <p>Vielen Dank für Ihre Registrierung bei Selini-Shirt! Um Ihre Registrierung abzuschließen und Ihr Konto zu nutzen, verifizieren Sie bitte Ihre E-Mail-Adresse.</p>
 
       <div class="button-container">
         <a href="${data.verificationUrl}" class="button">E-Mail-Adresse verifizieren</a>
@@ -262,7 +258,7 @@ export function generateVerificationEmail(data: VerificationEmailData): {
       <p>Dieser Verifizierungslink ist aus Sicherheitsgründen 24 Stunden gültig.</p>
 
       <div class="security-notice">
-        <p><strong>🔒 Sicherheitshinweis:</strong> Wenn Sie kein Konto bei DTF Transfer Print erstellt haben, können Sie diese E-Mail ignorieren.</p>
+        <p><strong>🔒 Sicherheitshinweis:</strong> Wenn Sie kein Konto bei Selini-Shirt erstellt haben, können Sie diese E-Mail ignorieren.</p>
       </div>
 
       <div class="divider"></div>
@@ -274,22 +270,22 @@ export function generateVerificationEmail(data: VerificationEmailData): {
     </div>
   `;
 
-  const html = getBaseTemplate(content, unsubscribeUrl);
+  const html = getBaseTemplate(content, unsubscribeUrl, 'E-Mail-Bestätigung - Selini-Shirt');
 
   const text = `
 Hallo ${data.userName},
 
-Vielen Dank für Ihre Registrierung bei DTF Transfer Print! Um Ihre Registrierung abzuschließen und Ihr Konto zu nutzen, verifizieren Sie bitte Ihre E-Mail-Adresse.
+Vielen Dank für Ihre Registrierung bei Selini-Shirt! Um Ihre Registrierung abzuschließen und Ihr Konto zu nutzen, verifizieren Sie bitte Ihre E-Mail-Adresse.
 
 Verifizieren Sie Ihre E-Mail, indem Sie auf diesen Link klicken:
 ${data.verificationUrl}
 
 Dieser Verifizierungslink ist aus Sicherheitsgründen 24 Stunden gültig.
 
-Sicherheitshinweis: Wenn Sie kein Konto bei DTF Transfer Print erstellt haben, können Sie diese E-Mail ignorieren.
+Sicherheitshinweis: Wenn Sie kein Konto bei Selini-Shirt erstellt haben, können Sie diese E-Mail ignorieren.
 
 ---
-DTF Transfer Print
+Selini-Shirt
 Hochwertige Direct-to-Film Transferdruck-Dienstleistungen
 
 Abmelden: ${unsubscribeUrl}
@@ -311,7 +307,7 @@ export function generatePasswordResetEmail(data: PasswordResetEmailData): {
 
       <p>Hallo ${data.userName},</p>
 
-      <p>Wir haben eine Anfrage zum Zurücksetzen Ihres Passworts für Ihr DTF Transfer Print Konto erhalten. Klicken Sie auf den Button unten, um ein neues Passwort zu erstellen:</p>
+      <p>Wir haben eine Anfrage zum Zurücksetzen Ihres Passworts für Ihr Selini-Shirt Konto erhalten. Klicken Sie auf den Button unten, um ein neues Passwort zu erstellen:</p>
 
       <div class="button-container">
         <a href="${data.resetUrl}" class="button">Passwort zurücksetzen</a>
@@ -341,12 +337,12 @@ export function generatePasswordResetEmail(data: PasswordResetEmailData): {
     </div>
   `;
 
-  const html = getBaseTemplate(content, unsubscribeUrl);
+  const html = getBaseTemplate(content, unsubscribeUrl, 'Passwort zurücksetzen - Selini-Shirt');
 
   const text = `
 Hallo ${data.userName},
 
-Wir haben eine Anfrage zum Zurücksetzen Ihres Passworts für Ihr DTF Transfer Print Konto erhalten. Klicken Sie auf den Link unten, um ein neues Passwort zu erstellen:
+Wir haben eine Anfrage zum Zurücksetzen Ihres Passworts für Ihr Selini-Shirt Konto erhalten. Klicken Sie auf den Link unten, um ein neues Passwort zu erstellen:
 
 ${data.resetUrl}
 
@@ -360,7 +356,7 @@ Aus Sicherheitsgründen empfehlen wir:
 - Zwei-Faktor-Authentifizierung zu aktivieren (demnächst verfügbar)
 
 ---
-DTF Transfer Print
+Selini-Shirt
 Hochwertige Direct-to-Film Transferdruck-Dienstleistungen
 
 Abmelden: ${unsubscribeUrl}
@@ -378,7 +374,7 @@ export function generateWelcomeEmail(data: EmailTemplateData): {
 
   const content = `
     <div class="content">
-      <h2>Willkommen bei DTF Transfer Print!</h2>
+      <h2>Willkommen bei Selini-Shirt!</h2>
 
       <p>Hallo ${data.userName},</p>
 
@@ -404,7 +400,7 @@ export function generateWelcomeEmail(data: EmailTemplateData): {
     </div>
   `;
 
-  const html = getBaseTemplate(content, unsubscribeUrl);
+  const html = getBaseTemplate(content, unsubscribeUrl, 'Willkommen bei Selini-Shirt');
 
   const text = `
 Hallo ${data.userName},
@@ -427,7 +423,7 @@ Erste Schritte: ${data.baseUrl}/products
 Benötigen Sie Hilfe? Besuchen Sie unsere Funktionsseite: ${data.baseUrl}/eigenschaften
 
 ---
-DTF Transfer Print
+Selini-Shirt
 Hochwertige Direct-to-Film Transferdruck-Dienstleistungen
 
 Abmelden: ${unsubscribeUrl}

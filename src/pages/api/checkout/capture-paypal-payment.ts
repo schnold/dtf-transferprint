@@ -268,9 +268,16 @@ export const POST: APIRoute = async ({ request, locals }) => {
         }));
 
         // Get base template function from email-templates
-        const getBaseTemplate = (content: string, unsubscribeUrl: string): string => {
+        const getBaseTemplate = (content: string, unsubscribeUrl: string, title: string = 'DTF Transfer Print'): string => {
           // Simplified version - in production, import from email-templates
-          return content;
+          return `<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>${title}</title>
+</head>
+<body>${content}</body>
+</html>`;
         };
 
         const { html, text } = generateOrderConfirmationEmail(

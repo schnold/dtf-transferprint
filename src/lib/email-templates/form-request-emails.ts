@@ -28,18 +28,14 @@ const EMAIL_STYLES = `
     }
 
     .header {
-      background: linear-gradient(135deg, #D95829 0%, #C04A1F 100%);
+      background: linear-gradient(to bottom, #f8f9fa 0%, #e9ecef 100%);
       padding: 40px 30px;
       text-align: center;
     }
 
-    .header h1 {
-      color: #ffffff;
-      margin: 0;
-      font-size: 28px;
-      font-weight: 700;
-      font-family: 'DM Sans', sans-serif;
-      letter-spacing: -0.5px;
+    .header img.logo {
+      height: 60px;
+      width: auto;
     }
 
     .content {
@@ -64,7 +60,7 @@ const EMAIL_STYLES = `
 
     .info-box {
       background-color: #f8f8f8;
-      border-left: 4px solid #D95829;
+      border-left: 4px solid #EBF222;
       padding: 20px;
       margin: 20px 0;
       border-radius: 8px;
@@ -83,15 +79,15 @@ const EMAIL_STYLES = `
     }
 
     .highlight-box {
-      background: linear-gradient(to bottom, #fff9f5 0%, #fff3eb 100%);
-      border: 2px solid #D95829;
+      background: linear-gradient(to bottom, #f8f9fa 0%, #e9ecef 100%);
+      border: 2px solid #EBF222;
       padding: 24px;
       margin: 20px 0;
       border-radius: 12px;
     }
 
     .highlight-box strong {
-      color: #D95829;
+      color: #595959;
       font-size: 18px;
       display: block;
       margin-bottom: 12px;
@@ -118,7 +114,7 @@ const EMAIL_STYLES = `
     }
 
     .footer a {
-      color: #D95829;
+      color: #EBF222;
       text-decoration: none;
     }
   </style>
@@ -148,13 +144,13 @@ export function generateFormRequestResponseEmail(data: FormRequestEmailData): {
     <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Antwort auf Ihre Anfrage - DTF Transfer Print</title>
+      <title>Antwort auf Ihre Anfrage - Selini-Shirt</title>
       ${EMAIL_STYLES}
     </head>
     <body>
       <div class="email-container">
         <div class="header">
-          <h1>DTF Transfer Print</h1>
+          <img src="https://selini-shirt.de/images/logo/logo-1.png" alt="Selini-Shirt Logo" class="logo" style="height: 60px; width: auto;" />
         </div>
         <div class="content">
           <h2>Hallo ${escapeHtml(data.userName)},</h2>
@@ -176,11 +172,11 @@ export function generateFormRequestResponseEmail(data: FormRequestEmailData): {
           <p style="margin-top: 30px; color: #262626;">
             Mit freundlichen Grüßen,<br>
             <strong>${escapeHtml(data.adminName)}</strong><br>
-            Das Team von DTF Transfer Print
+            Das Team von Selini-Shirt
           </p>
         </div>
         <div class="footer">
-          <p><strong>DTF Transfer Print</strong></p>
+          <p><strong>Selini-Shirt</strong></p>
           <p>
             <a href="mailto:info@selini-shirt.de">info@selini-shirt.de</a>
             &nbsp;|&nbsp;
@@ -196,7 +192,7 @@ export function generateFormRequestResponseEmail(data: FormRequestEmailData): {
   `;
 
   const text = `
-DTF Transfer Print - Antwort auf Ihre Anfrage
+Selini-Shirt - Antwort auf Ihre Anfrage
 
 Hallo ${data.userName},
 
@@ -222,10 +218,10 @@ Falls Sie weitere Fragen haben, können Sie direkt auf diese E-Mail antworten od
 
 Mit freundlichen Grüßen,
 ${data.adminName}
-Das Team von DTF Transfer Print
+Das Team von Selini-Shirt
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-DTF Transfer Print
+Selini-Shirt
 E-Mail: info@selini-shirt.de
 Tel: +49 123 456789
 Web: https://dtf-transferprint.de

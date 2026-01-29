@@ -1,0 +1,247 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+
+const user = Astro.locals.user;
+
+// Available email templates
+const emailTemplates = [
+  {
+    id: 'verification',
+    name: 'E-Mail-Bestätigung',
+    description: 'Wird nach der Registrierung gesendet',
+    category: 'Auth'
+  },
+  {
+    id: 'password-reset',
+    name: 'Passwort zurücksetzen',
+    description: 'Wird bei Passwort-Zurücksetzung gesendet',
+    category: 'Auth'
+  },
+  {
+    id: 'welcome',
+    name: 'Willkommens-E-Mail',
+    description: 'Wird nach erfolgreicher E-Mail-Verifizierung gesendet',
+    category: 'Auth'
+  },
+  {
+    id: 'order-confirmation',
+    name: 'Bestellbestätigung',
+    description: 'Wird nach erfolgreicher Bestellung gesendet',
+    category: 'Bestellungen'
+  },
+  {
+    id: 'order-processing',
+    name: 'Bestellung wird bearbeitet',
+    description: 'Status-Update: In Bearbeitung',
+    category: 'Bestellungen'
+  },
+  {
+    id: 'order-ready',
+    name: 'Bestellung versandbereit',
+    description: 'Status-Update: Versandbereit',
+    category: 'Bestellungen'
+  },
+  {
+    id: 'order-shipped',
+    name: 'Bestellung versendet',
+    description: 'Status-Update: Versendet mit Tracking',
+    category: 'Bestellungen'
+  },
+  {
+    id: 'order-delivered',
+    name: 'Bestellung zugestellt',
+    description: 'Status-Update: Zugestellt',
+    category: 'Bestellungen'
+  },
+  {
+    id: 'form-response',
+    name: 'Antwort auf Anfrage',
+    description: 'Antwort auf Kundenanfrage',
+    category: 'Support'
+  }
+];
+
+// Group by category
+const groupedTemplates = emailTemplates.reduce((acc, template) => {
+  if (!acc[template.category]) {
+    acc[template.category] = [];
+  }
+  acc[template.category].push(template);
+  return acc;
+}, {} as Record<string, typeof emailTemplates>);
+---
+
+<AdminLayout title="E-Mail-Vorlagen - Selini-Shirt" currentPage="email-templates">
+  <!-- Page Header -->
+  <div class="mb-6">
+    <h2 class="text-3xl font-bold text-base-content mb-2">E-Mail-Vorlagen</h2>
+    <p class="text-base-content/60">Verwalten und testen Sie E-Mail-Vorlagen von Selini-Shirt</p>
+  </div>
+
+  <!-- Test Email Section -->
+  <div class="card bg-base-100 shadow-xl mb-8 border border-base-300/30">
+    <div class="card-body">
+      <h3 class="card-title text-xl mb-4 flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6" style="color: var(--color-yellow-accent-dark);">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
+        </svg>
+        Test-E-Mail senden
+      </h3>
+
+      <form id="test-email-form" class="space-y-4">
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text font-medium">E-Mail-Adresse</span>
+          </label>
+          <input
+            type="email"
+            name="email"
+            value={user?.email}
+            placeholder="test@example.com"
+            class="input input-bordered w-full"
+            required
+          />
+          <label class="label">
+            <span class="label-text-alt">Die Test-E-Mail wird an diese Adresse gesendet</span>
+          </label>
+        </div>
+
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text font-medium">Vorlage auswählen</span>
+          </label>
+          <select name="template" class="select select-bordered w-full" required>
+            <option value="" disabled selected>Wählen Sie eine Vorlage</option>
+            {Object.entries(groupedTemplates).map(([category, templates]) => (
+              <optgroup label={category}>
+                {templates.map((template) => (
+                  <option value={template.id}>{template.name}</option>
+                ))}
+              </optgroup>
+            ))}
+          </select>
+        </div>
+
+        <div class="flex gap-3">
+          <button type="submit" class="btn btn-admin-primary gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
+            </svg>
+            Test-E-Mail senden
+          </button>
+        </div>
+
+        <div id="result-message" class="hidden"></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Templates Overview -->
+  <div class="card bg-base-100 shadow-xl border border-base-300/30">
+    <div class="card-body">
+      <h3 class="card-title text-xl mb-4">Verfügbare Vorlagen</h3>
+
+      <div class="space-y-6">
+        {Object.entries(groupedTemplates).map(([category, templates]) => (
+          <div>
+            <h4 class="text-lg font-semibold mb-3 text-base-content/80">{category}</h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {templates.map((template) => (
+                <div class="card bg-base-200 shadow-sm border border-base-300/20">
+                  <div class="card-body p-4">
+                    <h5 class="font-semibold text-base">{template.name}</h5>
+                    <p class="text-sm text-base-content/60">{template.description}</p>
+                    <div class="card-actions justify-end mt-2">
+                      <button
+                        class="btn btn-sm btn-ghost gap-1 send-test-btn"
+                        data-template={template.id}
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
+                        </svg>
+                        Test senden
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('test-email-form') as HTMLFormElement;
+    const resultMessage = document.getElementById('result-message') as HTMLDivElement;
+    const emailInput = form?.querySelector('input[name="email"]') as HTMLInputElement;
+    const templateSelect = form?.querySelector('select[name="template"]') as HTMLSelectElement;
+
+    // Handle quick send buttons
+    document.querySelectorAll('.send-test-btn').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        const templateId = (e.currentTarget as HTMLElement).dataset.template;
+        if (templateId && emailInput.value) {
+          templateSelect.value = templateId;
+          await sendTestEmail(emailInput.value, templateId);
+        }
+      });
+    });
+
+    // Handle form submission
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(form);
+      const email = formData.get('email') as string;
+      const template = formData.get('template') as string;
+
+      await sendTestEmail(email, template);
+    });
+
+    async function sendTestEmail(email: string, template: string) {
+      const submitBtn = form.querySelector('button[type="submit"]') as HTMLButtonElement;
+      const originalText = submitBtn.innerHTML;
+
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = `
+        <span class="loading loading-spinner loading-sm"></span>
+        Wird gesendet...
+      `;
+
+      try {
+        const response = await fetch('/api/admin/test-email', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email, template }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          showMessage('success', `✅ Test-E-Mail erfolgreich an ${email} gesendet!`);
+        } else {
+          showMessage('error', `❌ Fehler: ${data.error || 'Unbekannter Fehler'}`);
+        }
+      } catch (error) {
+        showMessage('error', '❌ Netzwerkfehler beim Senden der E-Mail');
+        console.error('Test email error:', error);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalText;
+      }
+    }
+
+    function showMessage(type: 'success' | 'error', message: string) {
+      resultMessage.className = `alert ${type === 'success' ? 'alert-success' : 'alert-error'} mt-4`;
+      resultMessage.textContent = message;
+      resultMessage.classList.remove('hidden');
+
+      setTimeout(() => {
+        resultMessage.classList.add('hidden');
+      }, 5000);
+    }
+  </script>
+</AdminLayout>

@@ -49,8 +49,9 @@ export async function sendEmail(options: EmailOptions): Promise<void> {
   const resendClient = getResendClient();
 
   try {
+    const fromEmail = process.env.RESEND_FROM_EMAIL || 'info@selini-shirt.de';
     const { data, error } = await resendClient.emails.send({
-      from: 'DTF Transfer Print <noreply@info.selini-shirt.de>',
+      from: `Selini-Shirt <${fromEmail}>`,
       to: options.to,
       subject: options.subject,
       html: options.html,
