@@ -12,6 +12,10 @@
   --color-secondary: #595959;   /* Dark gray - for secondary elements */
   --color-secondary-dark: #262626; /* Very dark gray for hover states */
 
+  /* Dark Blue (same gradient ray as primary button: top → bottom) */
+  --color-dark-blue: #2d3d4f;       /* Muted dark blue – gradient start */
+  --color-dark-blue-dark: #0f1f33;  /* Darker blue – gradient end (same ray as secondary-dark) */
+
   /* Accent Colors */
   --color-accent: #EBF222;      /* Bright yellow-green accent for highlights */
   --color-accent-dark: #C9D41E; /* Darker yellow-green for hover states */
@@ -34,6 +38,15 @@
 
   /* Metrics Colors */
   --color-metrics-text: #4A5D3A; /* Dark green-brown for metrics numbers */
+
+  /* Metrics Banner (dark design – global) */
+  --color-metrics-banner-bg: #1f2937;
+  --color-metrics-banner-bg-subtle: rgba(31, 41, 55, 0.98);
+  --color-metrics-banner-text: #e5e7eb;
+  --color-metrics-banner-text-muted: #9ca3af;
+  --color-metrics-banner-value: #f3f4f6;
+  --color-metrics-banner-accent: #EBF222;
+  --color-metrics-banner-border: rgba(255, 255, 255, 0.08);
 
   /* Yellow Accent Color */
   --color-yellow-accent: #F2E307; /* Yellow for badges and stars */
@@ -88,27 +101,55 @@
 }
 
 @layer components {
+  /* Metrics banner – dark design (global) */
+  .metrics-banner-section {
+    background: var(--color-metrics-banner-bg);
+  }
+  .metrics-banner {
+    background: var(--color-metrics-banner-bg);
+    color: var(--color-metrics-banner-text);
+    border: 1px solid var(--color-metrics-banner-border);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -2px rgba(0, 0, 0, 0.15);
+  }
+  .metrics-banner .stat-title {
+    color: var(--color-metrics-banner-text-muted);
+  }
+  .metrics-banner .stat-value {
+    color: var(--color-metrics-banner-value);
+  }
+  .metrics-banner .stat-desc {
+    color: var(--color-metrics-banner-text-muted);
+  }
+  .metrics-banner .stat-figure,
+  .metrics-banner .stat-figure svg {
+    color: var(--color-metrics-banner-accent);
+  }
+
   /* Muted modern design enhancements */
   .btn {
     transition: all 0.2s ease;
+    box-shadow: none; /* no green/primary glow under button */
+  }
+  .btn:hover {
+    transform: translateY(-2px);
   }
 
   .btn-primary {
-    background: linear-gradient(to bottom, var(--color-secondary) 0%, var(--color-secondary-dark) 100%);
+    background: linear-gradient(to bottom, var(--color-dark-blue) 0%, var(--color-dark-blue-dark) 100%);
     color: white;
     border: none;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    box-shadow: none;
   }
 
   .btn-primary:hover {
-    background: linear-gradient(to bottom, var(--color-secondary) 0%, var(--color-secondary-dark) 100%);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(89, 89, 89, 0.3);
+    background: linear-gradient(to bottom, var(--color-dark-blue) 0%, var(--color-dark-blue-dark) 100%);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   }
 
   .btn-primary:focus {
-    background: linear-gradient(to bottom, var(--color-secondary) 0%, var(--color-secondary-dark) 100%);
-    box-shadow: 0 0 0 2px rgba(89, 89, 89, 0.2);
+    background: linear-gradient(to bottom, var(--color-dark-blue) 0%, var(--color-dark-blue-dark) 100%);
+    box-shadow: 0 0 0 2px rgba(30, 58, 95, 0.25);
   }
 
   .btn-secondary {
@@ -120,7 +161,6 @@
 
   .btn-secondary:hover {
     background: linear-gradient(to bottom, #4a4a4a 0%, #1a1a1a 100%);
-    transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(74, 74, 74, 0.3);
     color: white;
   }
@@ -142,7 +182,6 @@
     background: var(--color-secondary);
     color: white;
     border-color: var(--color-secondary);
-    transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(89, 89, 89, 0.25);
   }
 
