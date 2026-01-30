@@ -321,7 +321,7 @@ interface CookieConsent {
 ### Contact Information
 
 **Data Protection Officer:**
-- Email: datenschutz@dtf-transferprint.de
+- Email: datenschutz@selini-shirt.de
 - Contact form: /kontakt
 
 **Developer Support:**

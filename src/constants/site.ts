@@ -5,7 +5,7 @@
 
 export const SITE_CONFIG = {
 	// Site URL
-	url: "https://dtf-transferprint.de",
+	url: "https://selini-shirt.de",
 
 	// Branding
 	brand: {

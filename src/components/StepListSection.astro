@@ -1,0 +1,19 @@
+---
+/**
+ * Section for step-by-step process (e.g. "So entsteht Ihr Stickmotiv").
+ * Renders section title, subtitle, and a slot for the step cards.
+ * Use with StepCard for uniform number + title alignment (number not shifted upwards).
+ */
+interface Props {
+	title: string;
+	subtitle: string;
+}
+const { title, subtitle } = Astro.props;
+---
+<h2>{title}</h2>
+<p class="text-neutral/70 mb-8">
+	{subtitle}
+</p>
+<div class="grid gap-6">
+	<slot />
+</div>

@@ -3,6 +3,7 @@ import CompanyLayout from '../layouts/CompanyLayout.astro';
 import InquiryForm from '../components/InquiryForm.astro';
 import UseCasesSection from '../components/UseCasesSection.astro';
 import ContactCTASection from '../components/ContactCTASection.astro';
+import ProsConsSection from '../components/ProsConsSection.astro';
 
 const title = 'Professioneller Siebdruck auf Textilien - Langlebig & Hochwertig';
 const description = 'Siebdruck für T-Shirts, Hoodies & mehr ✓ Extrem haltbar ✓ Brillante Farben ✓ Ab 10 Stück ✓ Perfekt für große Auflagen ✓ Kostenlose Beratung ➤ Jetzt Angebot anfordern!';
@@ -60,6 +61,52 @@ const description = 'Siebdruck für T-Shirts, Hoodies & mehr ✓ Extrem haltbar 
 		</div>
 	</div>
 
+	<!-- Beispiele aus unserer Produktion -->
+	<h2>Beispiele aus unserer Produktion</h2>
+	<p class="text-neutral/70 mb-6">
+		Einblicke in unsere Siebdruck-Arbeiten: von Custom-Logos über Maschinen bis zur Werkstatt.
+	</p>
+	<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+		<figure class="rounded-2xl overflow-hidden shadow-lg border border-base-300/30">
+			<img src="/images/dienstleistungen/siebdruck/custom-logo-siebdruck-beispiel.png" alt="Custom-Logo im Siebdruck – Beispiel" class="w-full aspect-[4/3] object-cover" width="400" height="300" loading="lazy" />
+			<figcaption class="p-4 bg-base-200 text-sm text-neutral/80">Custom-Logo im Siebdruck – Beispiel</figcaption>
+		</figure>
+		<figure class="rounded-2xl overflow-hidden shadow-lg border border-base-300/30">
+			<img src="/images/dienstleistungen/siebdruck/selinishirt-logo-siebdruck-beispiel.png" alt="Selini-Shirt Logo Siebdruck – Beispiel" class="w-full aspect-[4/3] object-cover" width="400" height="300" loading="lazy" />
+			<figcaption class="p-4 bg-base-200 text-sm text-neutral/80">Selini-Shirt Logo Siebdruck – Beispiel</figcaption>
+		</figure>
+		<figure class="rounded-2xl overflow-hidden shadow-lg border border-base-300/30">
+			<img src="/images/dienstleistungen/siebdruck/siebdruckmaschine-beispiel.png" alt="Siebdruckmaschine im Einsatz" class="w-full aspect-[4/3] object-cover" width="400" height="300" loading="lazy" />
+			<figcaption class="p-4 bg-base-200 text-sm text-neutral/80">Siebdruckmaschine im Einsatz</figcaption>
+		</figure>
+		<figure class="rounded-2xl overflow-hidden shadow-lg border border-base-300/30">
+			<img src="/images/dienstleistungen/siebdruck/siebdruckmaschine-workshop.png" alt="Siebdruckmaschine in der Werkstatt" class="w-full aspect-[4/3] object-cover" width="400" height="300" loading="lazy" />
+			<figcaption class="p-4 bg-base-200 text-sm text-neutral/80">Siebdruckmaschine in der Werkstatt</figcaption>
+		</figure>
+	</div>
+
+	<!-- Videos aus unserer Produktion -->
+	<h2>Videos: Siebdruck in Aktion</h2>
+	<p class="text-neutral/70 mb-6">
+		Einblicke in den Siebdruck-Prozess – von der Stoffbedruckung bis zur Produktion.
+	</p>
+	<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-12">
+		<figure class="rounded-2xl overflow-hidden shadow-lg border border-base-300/30">
+			<video class="w-full aspect-video object-cover bg-base-300" controls muted loop playsinline preload="metadata" title="Siebdruck auf Stoff">
+				<source src="/videos/siebdruck/0_Fabric_Screenprinting_1920x1080.mp4" type="video/mp4" />
+				Ihr Browser unterstützt keine Video-Wiedergabe.
+			</video>
+			<figcaption class="p-4 bg-base-200 text-sm text-neutral/80">Siebdruck auf Stoff</figcaption>
+		</figure>
+		<figure class="rounded-2xl overflow-hidden shadow-lg border border-base-300/30">
+			<video class="w-full aspect-video object-cover bg-base-300" controls muted loop playsinline preload="metadata" title="Siebdruck-Produktion">
+				<source src="/videos/siebdruck/6894810_Production_Factory_1280x720.mp4" type="video/mp4" />
+				Ihr Browser unterstützt keine Video-Wiedergabe.
+			</video>
+			<figcaption class="p-4 bg-base-200 text-sm text-neutral/80">Siebdruck-Produktion</figcaption>
+		</figure>
+	</div>
+
 	<h2>Was ist Siebdruck?</h2>
 	<p>
 		Der <strong>Siebdruck</strong> ist das weltweit am häufigsten eingesetzte Verfahren zur Textilveredelung. Dabei wird die Druckfarbe über ein feinmaschiges Sieb direkt auf das Textil übertragen – ohne Transfermaterial. Das Ergebnis: Ein extrem dünner, kaum spürbarer Farbaufdrag mit leicht gummierter Oberfläche und hervorragender Haltbarkeit.
@@ -68,111 +115,36 @@ const description = 'Siebdruck für T-Shirts, Hoodies & mehr ✓ Extrem haltbar 
 		Der Siebdruck eignet sich perfekt für <strong>mehrfarbige Motive, Farbverläufe, Effektfarben</strong> (Neon, Gold, Silber) und sogar <strong>fotorealistische Drucke</strong>. Dank der direkten Druckweise auf das Textil bleibt der Tragekomfort optimal erhalten – der Druck ist so dünn, dass man ihn kaum bemerkt.
 	</p>
 
-	<!-- Vorteile & Nachteile Grid -->
-	<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 my-8">
-		<!-- Vorteile -->
-		<div class="card bg-gradient-to-br from-success/10 to-success/5 border border-success/20">
-			<div class="card-body">
-				<h3 class="card-title text-success flex items-center gap-2">
-					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-						<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-					</svg>
-					Vorteile des Siebdrucks
-				</h3>
-				<ul class="space-y-3 mt-4">
-					<li class="flex items-start gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-success mt-0.5 flex-shrink-0">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-						</svg>
-						<span><strong>Extrem haltbar und langlebig</strong> – Waschbeständig bis 60°C (mit Spezialhärter bis 95°C)</span>
-					</li>
-					<li class="flex items-start gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-success mt-0.5 flex-shrink-0">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-						</svg>
-						<span><strong>Brillante, satte Farben</strong> mit hervorragender Deckkraft auch auf dunklen Textilien</span>
-					</li>
-					<li class="flex items-start gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-success mt-0.5 flex-shrink-0">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-						</svg>
-						<span><strong>Farbverläufe und Fotorealismus</strong> durch spezielle Rastertechnik möglich</span>
-					</li>
-					<li class="flex items-start gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-success mt-0.5 flex-shrink-0">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-						</svg>
-						<span><strong>Niedriger Preis bei großen Auflagen</strong> – Je mehr Stück, desto günstiger</span>
-					</li>
-					<li class="flex items-start gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-success mt-0.5 flex-shrink-0">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-						</svg>
-						<span><strong>Fast jeder Farbton druckbar</strong> inklusive Sonderfarben (Neon, Metallic, Perlmutt)</span>
-					</li>
-					<li class="flex items-start gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-success mt-0.5 flex-shrink-0">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-						</svg>
-						<span><strong>Tolles Erscheinungsbild</strong> mit professioneller, industrieller Qualität</span>
-					</li>
-					<li class="flex items-start gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-success mt-0.5 flex-shrink-0">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-						</svg>
-						<span><strong>Variable Druckgrößen</strong> von kleinen Details bis zu großflächigen Motiven</span>
-					</li>
-					<li class="flex items-start gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-success mt-0.5 flex-shrink-0">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-						</svg>
-						<span><strong>Fast alle Textilien bedruckbar</strong> – Baumwolle, Polyester, Mischgewebe</span>
-					</li>
-				</ul>
-			</div>
-		</div>
-
-		<!-- Nachteile -->
-		<div class="card bg-gradient-to-br from-warning/10 to-warning/5 border border-warning/20">
-			<div class="card-body">
-				<h3 class="card-title text-warning flex items-center gap-2">
-					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-						<path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
-					</svg>
-					Einschränkungen
-				</h3>
-				<ul class="space-y-3 mt-4">
-					<li class="flex items-start gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-warning mt-0.5 flex-shrink-0">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-						</svg>
-						<span><strong>Mindestbestellmenge ab 10 Textilien</strong> – Für Einzelstücke ist DTF-Druck besser geeignet</span>
-					</li>
-					<li class="flex items-start gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-warning mt-0.5 flex-shrink-0">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-						</svg>
-						<span><strong>Höherer Preis bei Kleinauflagen</strong> – Pro Druckfarbe muss ein Sieb erstellt werden</span>
-					</li>
-					<li class="flex items-start gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-warning mt-0.5 flex-shrink-0">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-						</svg>
-						<span><strong>Viele Farben = höherer Preis</strong> – Bei sehr bunten Motiven kann Digitaldruck günstiger sein</span>
-					</li>
-				</ul>
-
-				<div class="alert alert-warning shadow-sm">
-					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-					</svg>
-					<div>
-						<p class="text-sm"><strong>Tipp für Kleinauflagen:</strong> Bei weniger als 50 Textilien oder sehr bunten Motiven empfehlen wir unseren <a href="/dtf-transfers/" class="link link-primary">DTF-Digitaldruck</a> – flexibel, günstig und ohne Mindestmenge.</p>
-					</div>
+	<ProsConsSection
+		advantagesTitle="Vorteile des Siebdrucks"
+		disadvantagesTitle="Einschränkungen"
+		advantages={[
+			'<strong>Extrem haltbar und langlebig</strong> – Waschbeständig bis 60°C (mit Spezialhärter bis 95°C)',
+			'<strong>Brillante, satte Farben</strong> mit hervorragender Deckkraft auch auf dunklen Textilien',
+			'<strong>Farbverläufe und Fotorealismus</strong> durch spezielle Rastertechnik möglich',
+			'<strong>Niedriger Preis bei großen Auflagen</strong> – Je mehr Stück, desto günstiger',
+			'<strong>Fast jeder Farbton druckbar</strong> inklusive Sonderfarben (Neon, Metallic, Perlmutt)',
+			'<strong>Tolles Erscheinungsbild</strong> mit professioneller, industrieller Qualität',
+			'<strong>Variable Druckgrößen</strong> von kleinen Details bis zu großflächigen Motiven',
+			'<strong>Fast alle Textilien bedruckbar</strong> – Baumwolle, Polyester, Mischgewebe',
+		]}
+		disadvantages={[
+			'<strong>Mindestbestellmenge ab 10 Textilien</strong> – Für Einzelstücke ist DTF-Druck besser geeignet',
+			'<strong>Höherer Preis bei Kleinauflagen</strong> – Pro Druckfarbe muss ein Sieb erstellt werden',
+			'<strong>Viele Farben = höherer Preis</strong> – Bei sehr bunten Motiven kann Digitaldruck günstiger sein',
+		]}
+	>
+		<div slot="disadvantages-extra" class="mt-4">
+			<div class="alert alert-warning shadow-sm">
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+				</svg>
+				<div>
+					<p class="text-sm"><strong>Tipp für Kleinauflagen:</strong> Bei weniger als 50 Textilien oder sehr bunten Motiven empfehlen wir unseren <a href="/dtf-transfers/" class="link link-primary">DTF-Digitaldruck</a> – flexibel, günstig und ohne Mindestmenge.</p>
 				</div>
 			</div>
 		</div>
-	</div>
+	</ProsConsSection>
 
 	<h2>Siebdruck-Technik: So funktioniert's</h2>
 	<p>

@@ -183,7 +183,7 @@ export function generateFormRequestResponseEmail(data: FormRequestEmailData): {
             Tel: +49 123 456789
           </p>
           <p style="margin-top: 15px;">
-            <a href="https://dtf-transferprint.de">dtf-transferprint.de</a>
+            <a href="https://selini-shirt.de">selini-shirt.de</a>
           </p>
         </div>
       </div>
@@ -224,7 +224,7 @@ Das Team von Selini-Shirt
 Selini-Shirt
 E-Mail: info@selini-shirt.de
 Tel: +49 123 456789
-Web: https://dtf-transferprint.de
+Web: https://selini-shirt.de
   `.trim();
 
   return { html, text };

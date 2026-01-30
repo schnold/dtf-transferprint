@@ -4,8 +4,10 @@ interface Props {
 	description: string;
 	image?: string;
 	imageAlt?: string;
+	video?: string;
 	images?: Array<{
-		src: string;
+		src?: string;
+		video?: string;
 		alt: string;
 	}>;
 	features?: Array<{
@@ -21,6 +23,7 @@ const {
 	description, 
 	image, 
 	imageAlt, 
+	video,
 	images = [],
 	features = [], 
 	badges = [],
@@ -29,7 +32,8 @@ const {
 
 const isLeft = align === 'left';
 const hasGallery = images.length > 0;
-const displayImage = image || (images.length > 0 ? images[0].src : '');
+const displayVideo = video;
+const displayImage = image || (images.length > 0 ? images[0].src ?? '' : '');
 const displayAlt = imageAlt || (images.length > 0 ? images[0].alt : '');
 ---
 
@@ -39,25 +43,62 @@ const displayAlt = imageAlt || (images.length > 0 ? images[0].alt : '');
 		{hasGallery ? (
 			<!-- Gallery -->
 			<div class="grid grid-cols-2 gap-3">
-				<figure class="relative overflow-hidden rounded-2xl shadow-lg col-span-2">
-					<img 
-						src={images[0].src} 
-						alt={images[0].alt}
-						class="w-full h-full object-cover aspect-[4/3]"
-						loading="eager"
-					/>
-				</figure>
-				{images.slice(1).map((img, index) => (
-					<figure class="relative overflow-hidden rounded-2xl shadow-lg">
-						<img 
-							src={img.src} 
-							alt={img.alt}
-							class="w-full h-full object-cover aspect-square"
-							loading="lazy"
+				<figure class="relative overflow-hidden rounded-2xl shadow-lg col-span-2 aspect-[4/3]">
+					{images[0].video ? (
+						<video
+							src={images[0].video}
+							class="w-full h-full object-cover"
+							autoplay
+							muted
+							loop
+							playsinline
+							aria-label={images[0].alt}
 						/>
+					) : (
+						<img 
+							src={images[0].src} 
+							alt={images[0].alt}
+							class="w-full h-full object-cover"
+							loading="eager"
+						/>
+					)}
+				</figure>
+				{images.slice(1).map((item) => (
+					<figure class="relative overflow-hidden rounded-2xl shadow-lg aspect-square">
+						{item.video ? (
+							<video
+								src={item.video}
+								class="w-full h-full object-cover"
+								autoplay
+								muted
+								loop
+								playsinline
+								aria-label={item.alt}
+							/>
+						) : (
+							<img 
+								src={item.src} 
+								alt={item.alt}
+								class="w-full h-full object-cover"
+								loading="lazy"
+							/>
+						)}
 					</figure>
 				))}
 			</div>
+		) : displayVideo ? (
+			<!-- Single Video -->
+			<figure class="relative overflow-hidden rounded-2xl shadow-lg aspect-video">
+				<video
+					src={displayVideo}
+					class="w-full h-full object-cover"
+					autoplay
+					muted
+					loop
+					playsinline
+					aria-label={displayAlt || title}
+				/>
+			</figure>
 		) : (
 			<!-- Single Image -->
 			<figure class="relative overflow-hidden rounded-2xl shadow-lg">

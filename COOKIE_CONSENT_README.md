@@ -342,7 +342,7 @@ psql -d your_database -f better-auth_migrations/2026-01-20T17-00-00.000Z_add_coo
 For questions or issues:
 - Check the cookie policy: `/rechtliches/cookies`
 - Check the privacy policy: `/rechtliches/datenschutz`
-- Contact: datenschutz@dtf-transferprint.de
+- Contact: datenschutz@selini-shirt.de
 
 ## References
 

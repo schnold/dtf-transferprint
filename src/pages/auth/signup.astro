@@ -14,7 +14,7 @@ if (session) {
     <div class="max-w-md w-full space-y-8">
       <div>
         <h2 class="mt-6 text-center text-3xl font-extrabold">
-          Create your account
+          Konto erstellen
         </h2>
       </div>
 
@@ -174,9 +174,9 @@ if (session) {
       return 'E-Mail-Verifizierung erforderlich. Bitte bestätige deine E-Mail-Adresse.';
     }
 
-    // Common auth errors
-    if (errorLower.includes('invalid credentials') || errorLower.includes('wrong password') || errorLower.includes('incorrect')) {
-      return 'Ungültige Anmeldedaten. Bitte überprüfe deine E-Mail-Adresse und dein Passwort.';
+    // Common auth errors (including Better Auth default message)
+    if (errorLower.includes('invalid email or password') || errorLower.includes('invalid credentials') || errorLower.includes('wrong password') || errorLower.includes('incorrect')) {
+      return 'Ungültige E-Mail-Adresse oder Passwort.';
     }
     if (errorLower.includes('user not found') || errorLower.includes('no account')) {
       return 'Kein Konto mit dieser E-Mail-Adresse gefunden.';
@@ -236,7 +236,7 @@ if (session) {
     errorMessage.classList.add('hidden');
     successMessage.classList.add('hidden');
     submitButton.disabled = true;
-    submitButton.textContent = 'Creating account...';
+    submitButton.textContent = 'Konto wird erstellt...';
 
     const formData = new FormData(form);
     const name = formData.get('name') as string;
@@ -317,7 +317,7 @@ if (session) {
       errorMessage.querySelector('span')!.textContent = translateError(errorMsg);
       errorMessage.classList.remove('hidden');
       submitButton.disabled = false;
-      submitButton.textContent = 'Sign up';
+      submitButton.textContent = 'Registrieren';
     }
   });
 </script>

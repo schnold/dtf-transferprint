@@ -3,6 +3,7 @@ import CompanyLayout from '../layouts/CompanyLayout.astro';
 import InquiryForm from '../components/InquiryForm.astro';
 import UseCasesSection from '../components/UseCasesSection.astro';
 import ContactCTASection from '../components/ContactCTASection.astro';
+import ProsConsSection from '../components/ProsConsSection.astro';
 
 const title = 'Reflex Transferdruck für Arbeitskleidung | Lichtreflektierende Textilien';
 const description = 'Reflex Transfer für Arbeits- & Sicherheitsbekleidung. Lichtreflektierende Drucke für bessere Sichtbarkeit. Ideal für Firmen & Vereine.';
@@ -67,78 +68,16 @@ const description = 'Reflex Transfer für Arbeits- & Sicherheitsbekleidung. Lich
 		</div>
 	</div>
 
-	<!-- Visual Example Section with Image Placeholder -->
-	<div class="card bg-base-200 border-4 border-dashed border-warning/30 shadow-xl my-8">
-		<div class="card-body items-center text-center">
-			<div class="w-full aspect-video bg-gradient-to-br from-base-300 to-base-200 rounded-lg flex items-center justify-center relative overflow-hidden">
-				<div class="absolute inset-0 bg-grid-pattern opacity-5"></div>
-				<div class="text-center z-10">
-					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-16 h-16 mx-auto mb-4 text-base-content/50">
-						<path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
-					</svg>
-					<p class="text-sm text-neutral/60 font-semibold uppercase tracking-wider">Bild-Platzhalter</p>
-					<p class="text-xs text-neutral/50 mt-1">Beispiele für Reflex Transfers</p>
-					<p class="text-xs text-neutral/40 mt-2">(Warnwesten, Arbeitsjacken, Sportbekleidung)</p>
-				</div>
-			</div>
-			<p class="text-sm text-neutral/70 mt-4 italic">Hier werden später Beispielbilder von Reflex Transfers im Einsatz angezeigt (Tag & Nacht)</p>
-		</div>
-	</div>
-
-	<h2>Vorteile von Reflex Transfers</h2>
-	<div class="card bg-gradient-to-br from-success/10 to-success/5 border border-success/20 my-8">
-		<div class="card-body">
-			<ul class="space-y-3">
-				<li>
-					<div class="mb-1">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-base-content">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-						</svg>
-					</div>
-					<span><strong>Hohe Lichtreflexion für bessere Sichtbarkeit</strong> – Maximale Sicherheit bei Dunkelheit</span>
-				</li>
-				<li>
-					<div class="mb-1">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-base-content">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-						</svg>
-					</div>
-					<span><strong>Ideal für Arbeits- und Sicherheitsbekleidung</strong> – Schutz im Straßenverkehr</span>
-				</li>
-				<li>
-					<div class="mb-1">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-base-content">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-						</svg>
-					</div>
-					<span><strong>Sehr gute Haftung auf Textilien</strong> – Dauerhaft verbunden</span>
-				</li>
-				<li>
-					<div class="mb-1">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-base-content">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-						</svg>
-					</div>
-					<span><strong>Waschbeständig und langlebig</strong> – Hält vielen Waschzyklen stand</span>
-				</li>
-				<li>
-					<div class="mb-1">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-base-content">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-						</svg>
-					</div>
-					<span><strong>Geeignet für Logos, Schriftzüge und Nummern</strong> – Vielseitig einsetzbar</span>
-				</li>
-				<li>
-					<div class="mb-1">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-base-content">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-						</svg>
-					</div>
-					<span><strong>Kombinierbar mit anderen Druckverfahren</strong> – Flexible Gestaltungsmöglichkeiten</span>
-				</li>
-			</ul>
-		</div>
+	<!-- Beispiele aus unserer Produktion -->
+	<h2>Beispiele aus unserer Produktion</h2>
+	<p class="text-neutral/70 mb-6">
+		Reflex Transfer – lichtreflektierender Druck für maximale Sichtbarkeit.
+	</p>
+	<div class="mb-12">
+		<figure class="rounded-2xl overflow-hidden shadow-lg border border-base-300/30 w-full">
+			<img src="/images/dienstleistungen/reflekt-druck/reflektor-druck.png" alt="Reflektordruck – lichtreflektierender Transfer für Arbeits- und Sicherheitsbekleidung" class="w-full aspect-video object-cover" width="1200" height="675" loading="lazy" />
+			<figcaption class="p-4 bg-base-200 text-sm text-neutral/80">Reflektordruck – lichtreflektierender Transfer für Arbeits- und Sicherheitsbekleidung</figcaption>
+		</figure>
 	</div>
 
 	<h2>Wie funktioniert der Reflex Transferdruck?</h2>
@@ -187,7 +126,11 @@ const description = 'Reflex Transfer für Arbeits- & Sicherheitsbekleidung. Lich
 				</div>
 
 				<div class="flex gap-4 items-start">
-					<div class="badge badge-success badge-lg">✓</div>
+					<div class="badge badge-success badge-lg shrink-0">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+						</svg>
+					</div>
 					<div class="flex-1">
 						<h4 class="font-semibold mb-1">Trägerfolie entfernen</h4>
 						<p class="text-sm text-neutral/80">
@@ -330,111 +273,74 @@ const description = 'Reflex Transfer für Arbeits- & Sicherheitsbekleidung. Lich
 
 	<div class="divider my-12"></div>
 
-	<!-- Vorteile & Nachteile Grid -->
-	<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 my-8">
-		<!-- Nachteile -->
-		<div class="card bg-gradient-to-br from-warning/10 to-warning/5 border border-warning/20">
-			<div class="card-body">
-				<h2 class="card-title">
-					<div class="mb-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-base-content">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
-						</svg>
-					</div>
-					Nachteile von Reflex Transfer
-				</h2>
-				<ul class="space-y-3 mt-4">
-					<li>
-						<div class="mb-1">
-							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-base-content">
-								<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-							</svg>
-						</div>
-						<span><strong>Geringere Farbauswahl</strong> als bei normalem Druck</span>
-					</li>
-					<li>
-						<div class="mb-1">
-							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-base-content">
-								<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-							</svg>
-						</div>
-						<span><strong>Keine Farbverläufe möglich</strong> – Einfarbige Designs</span>
-					</li>
-					<li>
-						<div class="mb-1">
-							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-base-content">
-								<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-							</svg>
-						</div>
-						<span><strong>Größere Motive können die Atmungsaktivität leicht reduzieren</strong></span>
-					</li>
-					<li>
-						<div class="mb-1">
-							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-base-content">
-								<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-							</svg>
-						</div>
-						<span><strong>Etwas festerer Griff auf dem Textil</strong></span>
-					</li>
-				</ul>
-
-				<div class="alert alert-warning shadow-sm">
-					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-					</svg>
-					<div>
-						<p class="text-sm"><strong>Hinweis:</strong> Für bunte, mehrfarbige Designs empfehlen wir <a href="/dtf-transfers/" class="link link-primary">DTF-Transfers</a> oder <a href="/siebdruck/" class="link link-primary">Siebdruck</a>.</p>
-					</div>
+	<ProsConsSection
+		advantagesTitle="Vorteile von Reflex Transfers"
+		disadvantagesTitle="Nachteile von Reflex Transfer"
+		advantages={[
+			'<strong>Hohe Lichtreflexion für bessere Sichtbarkeit</strong> – Maximale Sicherheit bei Dunkelheit',
+			'<strong>Ideal für Arbeits- und Sicherheitsbekleidung</strong> – Schutz im Straßenverkehr',
+			'<strong>Sehr gute Haftung auf Textilien</strong> – Dauerhaft verbunden',
+			'<strong>Waschbeständig und langlebig</strong> – Hält vielen Waschzyklen stand',
+			'<strong>Geeignet für Logos, Schriftzüge und Nummern</strong> – Vielseitig einsetzbar',
+			'<strong>Kombinierbar mit anderen Druckverfahren</strong> – Flexible Gestaltungsmöglichkeiten',
+		]}
+		disadvantages={[
+			'<strong>Geringere Farbauswahl</strong> als bei normalem Druck',
+			'<strong>Keine Farbverläufe möglich</strong> – Einfarbige Designs',
+			'<strong>Größere Motive können die Atmungsaktivität leicht reduzieren</strong>',
+			'<strong>Etwas festerer Griff auf dem Textil</strong>',
+		]}
+	>
+		<div slot="disadvantages-extra" class="mt-4">
+			<div class="alert alert-warning shadow-sm">
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+				</svg>
+				<div>
+					<p class="text-sm"><strong>Hinweis:</strong> Für bunte, mehrfarbige Designs empfehlen wir <a href="/dtf-transfers/" class="link link-primary">DTF-Transfers</a> oder <a href="/siebdruck/" class="link link-primary">Siebdruck</a>.</p>
 				</div>
 			</div>
 		</div>
+	</ProsConsSection>
 
-		<!-- Pflegehinweise -->
+	<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 my-8">
 		<div class="card bg-gradient-to-br from-info/10 to-info/5 border border-info/20">
 			<div class="card-body">
-				<h2 class="card-title">
-					<div class="mb-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-base-content">
+				<div class="flex items-center gap-3 mb-6">
+					<div class="w-10 h-10 bg-info/20 rounded-lg flex items-center justify-center flex-shrink-0">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-info">
 							<path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
 						</svg>
 					</div>
-					Pflegehinweise für Reflexdruck
-				</h2>
-				<p class="mt-4">
+					<h3 class="text-2xl font-bold text-neutral leading-tight">Pflegehinweise für Reflexdruck</h3>
+				</div>
+				<p class="mt-2">
 					Damit die <strong>reflektierende Wirkung lange erhalten</strong> bleibt:
 				</p>
 				<ul class="space-y-3 mt-4">
-					<li>
-						<div class="mb-1">
-							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-base-content">
-								<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-							</svg>
-						</div>
-						<span>Waschen auf links bei <strong>max. 40 °C</strong></span>
+					<li class="flex gap-3">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-info flex-shrink-0 mt-0.5">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+						</svg>
+						<span class="text-neutral/80">Waschen auf links bei <strong>max. 40 °C</strong></span>
 					</li>
-					<li>
-						<div class="mb-1">
-							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-base-content">
-								<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-							</svg>
-						</div>
-						<span><strong>Kein Trockner</strong> verwenden</span>
+					<li class="flex gap-3">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-info flex-shrink-0 mt-0.5">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+						</svg>
+						<span class="text-neutral/80"><strong>Kein Trockner</strong> verwenden</span>
 					</li>
-					<li>
-						<div class="mb-1">
-							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-base-content">
-								<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-							</svg>
-						</div>
-						<span><strong>Nicht direkt über das Motiv bügeln</strong></span>
+					<li class="flex gap-3">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-info flex-shrink-0 mt-0.5">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+						</svg>
+						<span class="text-neutral/80"><strong>Nicht direkt über das Motiv bügeln</strong></span>
 					</li>
-					<li>
-						<div class="mb-1">
-							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-base-content">
-								<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-							</svg>
-						</div>
-						<span><strong>Keine Weichspüler verwenden</strong></span>
+					<li class="flex gap-3">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-info flex-shrink-0 mt-0.5">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+						</svg>
+						<span class="text-neutral/80"><strong>Keine Weichspüler verwenden</strong></span>
 					</li>
 				</ul>
 			</div>

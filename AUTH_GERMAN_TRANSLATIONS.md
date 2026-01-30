@@ -86,6 +86,7 @@ German: "Muss Groß- und Kleinbuchstaben, Zahlen und Sonderzeichen enthalten"
 - **Already have an account?** → **Bereits ein Konto?**
 
 ### Error Messages
+- **Invalid email or password** (Better Auth) → **Ungültige E-Mail-Adresse oder Passwort.**
 - **Passwords do not match** → **Passwörter stimmen nicht überein**
 - **Failed to sign in** → **Fehler beim Anmelden**
 - **Failed to create account** → **Fehler beim Erstellen des Kontos**

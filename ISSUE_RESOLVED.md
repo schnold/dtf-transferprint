@@ -3,7 +3,7 @@
 ## Original Error
 ```
 error: relation "form_requests" does not exist
-    at C:\Users\lukas\Desktop\Projects\dtf-transferprint\node_modules\pg\lib\client.js:545:17
+    at C:\Users\lukas\Desktop\Projects\selini-shirt\node_modules\pg\lib\client.js:545:17
 ```
 
 ## What Was Fixed

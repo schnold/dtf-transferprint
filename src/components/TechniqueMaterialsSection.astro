@@ -1,0 +1,17 @@
+---
+/**
+ * Section "Sticharten & Materialien" (or similar) for druckdienstleistungen pages.
+ * Renders a section title, subtitle, and a slot for the card grids.
+ * Use with TechniqueCard for uniform icon + header alignment.
+ */
+interface Props {
+	title: string;
+	subtitle: string;
+}
+const { title, subtitle } = Astro.props;
+---
+<h2>{title}</h2>
+<p class="text-neutral/70 mb-8">
+	{subtitle}
+</p>
+<slot />

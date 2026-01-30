@@ -1,109 +1,144 @@
 ---
+import { readdirSync } from 'fs';
+import { join } from 'path';
+import { Picture } from 'astro:assets';
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.astro';
 import LogoCarousel from '../components/LogoCarousel.astro';
 import Testimonials from '../components/Testimonials.astro';
 import WhyChooseUsSections from '../components/WhyChooseUsSections.astro';
+
+const HERO_IMAGE_DIR = join(process.cwd(), 'public', 'images', 'landing-page', 'hero');
+const IMAGE_EXT = /\.(jpg|jpeg|png|webp|gif|avif)$/i;
+const heroImages: string[] = (() => {
+	try {
+		return readdirSync(HERO_IMAGE_DIR)
+			.filter((f) => IMAGE_EXT.test(f))
+			.sort()
+			.map((f) => `/images/landing-page/hero/${f}`);
+	} catch {
+		return [];
+	}
+})();
 ---
 
 <Layout title="DTF Transfer Print - Professionelle Drucklösungen">
 	<Navbar />
 
-	<!-- Hero Section -->
-	<section class="hero overflow-hidden relative -mt-[7.5rem] hero-bg-cover" style="height: 100vh; background: url('/images/landing-page/still-life-cmyk-toners-composition.jpg') center/cover no-repeat; background-color: #1a1a1a;">
+	<!-- Hero Section with rotating background images -->
+	<section class="hero overflow-hidden relative -mt-[7.5rem] hero-bg-cover" style="height: 100vh; background-color: #1a1a1a; margin-bottom: 0;">
+		<!-- Background image layers (cycle every 10s; images from public/images/landing-page/hero/) -->
+		<div class="absolute inset-0" aria-hidden="true" style="height: 100%; width: 100%;">
+			{heroImages.map((src, i) => (
+				<div
+					class={`hero-bg-layer absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-[2s] ease-in-out ${i === 0 ? 'opacity-100' : 'opacity-0'}`}
+					data-bg-src={src}
+					data-preload={i === 0 ? 'true' : 'false'}
+					style="height: 100%; width: 100%;"
+				/>
+			))}
+		</div>
+		<!-- Dark overlay over background images -->
+		<div class="absolute inset-0 bg-black/20 pointer-events-none z-[1]" aria-hidden="true"></div>
 		<div class="w-full h-full flex items-center justify-end lg:justify-center px-4 sm:px-6 lg:px-8 relative z-10" style="padding-top: 7.5rem;">
 			<!-- Right Column: Hero Content Container -->
 			<div class="max-w-2xl mr-0 lg:mr-0 lg:translate-x-[10rem] xl:translate-x-[12.5rem]">
 				<div class="bg-base-100/20 backdrop-blur-xl backdrop-saturate-150 border border-white/20 shadow-lg rounded-2xl px-6 sm:px-8 lg:px-10 py-8 sm:py-10 lg:py-12">
-					<h1 class="mb-6 text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-800 leading-tight">Die #1 für Printlösungen in Deutschland</h1>
-					<p class="mb-8 text-base sm:text-lg lg:text-xl text-gray-700 leading-relaxed">
-						Hochwertige DTF-Transfers, individueller Druck und schnelle Bearbeitungszeiten.
-						Über 20 Jahre Erfahrung in der Druckbranche. Ihre Vision, unsere Expertise.
+					<h1 class="mb-6 text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight">Die #1 für Siebdruck, Stickerei und Druck Textilveredelung</h1>
+					<p class="mb-8 text-base sm:text-lg lg:text-xl text-white/90 leading-relaxed">
+						Individueller Druck und schnelle Bearbeitungszeiten.
+						Über 30 Jahre Erfahrung in der Druckbranche. Ihre Vision, unsere Expertise.
 					</p>
 					<div class="flex flex-col sm:flex-row gap-4">
-						<a href="/kontakt/" class="btn btn-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 font-semibold bg-white/30 backdrop-blur-md text-gray-800 hover:bg-white/40 hover:text-gray-600 border border-white/30">Bestellung starten</a>
-						<a href="#services" class="btn btn-ghost btn-lg text-gray-800 border-white/30 hover:bg-white/10 hover:text-gray-600">Unsere Leistungen</a>
+						<a href="/kontakt/" class="btn btn-primary btn-lg">Bestellung starten</a>
+						<a href="#services" class="btn btn-ghost btn-lg text-white border-white/30 hover:bg-white/10 hover:text-white">Unsere Leistungen</a>
 					</div>
 				</div>
 			</div>
 		</div>
-	</section>
-
-	<!-- Print Types Section -->
-	<section class="py-16 bg-base-200">
-		<div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
-			<div class="text-center mb-12">
-				<h2 class="text-3xl md:text-4xl font-bold mb-3 text-neutral">Beliebte Druckprodukte</h2>
-				<p class="text-base text-neutral/60">Entdecken Sie unsere meistgefragten Drucklösungen</p>
+		<!-- Hero slide indicators -->
+		{heroImages.length > 0 && (
+			<div class="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex gap-2" role="tablist" aria-label="Hero slides">
+				{heroImages.map((_, i) => (
+					<button
+						type="button"
+						class="hero-dot w-2 h-2 rounded-full bg-white/40 hover:bg-white/60 transition-all duration-200 aria-[selected=true]:bg-white aria-[selected=true]:w-6"
+						aria-label={`Slide ${i + 1}`}
+						aria-selected={i === 0 ? "true" : "false"}
+						data-index={i}
+					/>
+				))}
 			</div>
-
-			<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-				<!-- T-Shirts Card -->
-				<a href="/kontakt/" class="card bg-base-100 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 overflow-hidden group">
-					<figure class="relative h-48 overflow-hidden">
-						<img
-							src="/images/products/t-shirts.jpg"
-							alt="T-Shirts bedrucken - Individuelle DTF-Transfers für T-Shirts"
-							class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-							onerror="this.src='https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=300&fit=crop'"
-						/>
-						<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-					</figure>
-					<div class="card-body p-4">
-						<h3 class="card-title text-lg text-neutral justify-center">T-Shirts bedrucken</h3>
-					</div>
-				</a>
-
-				<!-- Baumwolltaschen Card -->
-				<a href="/kontakt/" class="card bg-base-100 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 overflow-hidden group">
-					<figure class="relative h-48 overflow-hidden">
-						<img
-							src="/images/products/baumwolltaschen.jpg"
-							alt="Baumwolltaschen bedrucken - Nachhaltige Stofftaschen mit DTF-Druck"
-							class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-							onerror="this.src='https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=400&h=300&fit=crop'"
-						/>
-						<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-					</figure>
-					<div class="card-body p-4">
-						<h3 class="card-title text-lg text-neutral justify-center">Baumwolltaschen bedrucken</h3>
-					</div>
-				</a>
-
-				<!-- Bandshirts Card -->
-				<a href="/kontakt/" class="card bg-base-100 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 overflow-hidden group">
-					<figure class="relative h-48 overflow-hidden">
-						<img
-							src="/images/products/bandshirts.jpg"
-							alt="Bandshirts bedrucken - Professioneller Merchandise-Druck für Bands"
-							class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-							onerror="this.src='https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=400&h=300&fit=crop'"
-						/>
-						<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-					</figure>
-					<div class="card-body p-4">
-						<h3 class="card-title text-lg text-neutral justify-center">Bandshirts bedrucken</h3>
-					</div>
-				</a>
-
-				<!-- Laufshirts Card -->
-				<a href="/kontakt/" class="card bg-base-100 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 overflow-hidden group">
-					<figure class="relative h-48 overflow-hidden">
-						<img
-							src="/images/products/laufshirts.jpg"
-							alt="Laufshirts bedrucken - Sportbekleidung mit hochwertigem DTF-Transfer"
-							class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-							onerror="this.src='https://images.unsplash.com/photo-1556906781-9cba4a871268?w=400&h=300&fit=crop'"
-						/>
-						<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-					</figure>
-					<div class="card-body p-4">
-						<h3 class="card-title text-lg text-neutral justify-center">Laufshirts bedrucken</h3>
-					</div>
-				</a>
-			</div>
-		</div>
+		)}
 	</section>
+	<script>
+		(function () {
+			const HERO_INTERVAL_MS = 10_000;
+			const layers = document.querySelectorAll('.hero-bg-layer');
+			const dots = document.querySelectorAll('.hero-dot');
+			if (layers.length === 0) return;
+			let current = 0;
+			let loadedImages = new Set<number>();
+
+			// Preload first image immediately
+			layers.forEach((layer, i) => {
+				const bgSrc = layer.getAttribute('data-bg-src');
+				const shouldPreload = layer.getAttribute('data-preload') === 'true';
+
+				if (bgSrc && shouldPreload) {
+					// Load first image immediately
+					(layer as HTMLElement).style.backgroundImage = `url('${bgSrc}')`;
+					loadedImages.add(i);
+				}
+			});
+
+			// Lazy load images as they're needed
+			function loadImage(index: number) {
+				if (loadedImages.has(index)) return;
+				const layer = layers[index] as HTMLElement;
+				const bgSrc = layer.getAttribute('data-bg-src');
+				if (bgSrc) {
+					const img = new Image();
+					img.onload = () => {
+						layer.style.backgroundImage = `url('${bgSrc}')`;
+						loadedImages.add(index);
+					};
+					img.src = bgSrc;
+				}
+			}
+
+			function goTo(index: number) {
+				current = index;
+				// Load current and next image
+				loadImage(current);
+				loadImage((current + 1) % layers.length);
+
+				layers.forEach((el, i) => {
+					(el as HTMLElement).style.opacity = i === current ? '1' : '0';
+				});
+				dots.forEach((el, i) => {
+					el.setAttribute('aria-selected', i === current ? 'true' : 'false');
+				});
+			}
+
+			function showNext() {
+				if (layers.length <= 1) return;
+				goTo((current + 1) % layers.length);
+			}
+
+			dots.forEach((dot, i) => {
+				dot.addEventListener('click', () => goTo(i));
+			});
+
+			const t = setInterval(showNext, HERO_INTERVAL_MS);
+			document.addEventListener('visibilitychange', () => {
+				if (document.hidden) clearInterval(t);
+			});
+
+			// Preload next image after a short delay
+			setTimeout(() => loadImage(1), 1000);
+		})();
+	</script>
 
 	<!-- Logo Carousel -->
 
@@ -120,16 +155,12 @@ import WhyChooseUsSections from '../components/WhyChooseUsSections.astro';
 			<div id="services-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
 				<!-- Service Card 1: Siebdruck -->
 				<div class="hover-3d service-card">
-					<a href="/siebdruck/" class="card bg-gray-800 border border-base-300/30 shadow-lg hover:shadow-xl transition-all block h-full">
-						<figure class="px-10 pt-10">
-							<div class="w-20 h-20 rounded-full bg-primary/20 flex items-center justify-center">
-								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 text-gray-200">
-									<path stroke-linecap="round" stroke-linejoin="round" d="M6.429 9.75L2.25 12l4.179 2.25m0-4.5l5.571 3 5.571-3m-11.142 0L2.25 7.5 12 2.25l9.75 5.25-4.179 2.25m0 0L21.75 12l-4.179 2.25m0 0l4.179 2.25L12 21.75 2.25 16.5l4.179-2.25m11.142 0l-5.571 3-5.571-3" />
-								</svg>
-							</div>
+					<a href="/siebdruck/" class="card bg-gray-800 border border-base-300/30 shadow-lg hover:shadow-xl transition-all block h-full overflow-hidden p-0">
+						<figure class="relative w-full aspect-[4/3] overflow-hidden">
+							<img src="/images/dienstleistungen/siebdruck/custom-logo-siebdruck-beispiel.png" alt="Custom-Logo im Siebdruck – Beispiel" class="w-full h-full object-cover" width="400" height="300" loading="lazy" />
 						</figure>
 						<div class="card-body items-center text-center">
-							<h2 class="card-title text-gray-200">Siebdruck</h2>
+							<h2 class="card-title text-gray-200 text-lg font-bold">Siebdruck</h2>
 							<p class="text-gray-200">Professioneller Siebdruck für Großauflagen mit brillanten Farben und hervorragender Haltbarkeit.</p>
 						</div>
 					</a>
@@ -137,16 +168,12 @@ import WhyChooseUsSections from '../components/WhyChooseUsSections.astro';
 
 				<!-- Service Card 2: DTF Transfers -->
 				<div class="hover-3d service-card">
-					<a href="/dtf-transfers/" class="card bg-gray-800 border border-base-300/30 shadow-lg hover:shadow-xl transition-all block h-full">
-						<figure class="px-10 pt-10">
-							<div class="w-20 h-20 rounded-full bg-primary/20 flex items-center justify-center">
-								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 text-gray-200">
-									<path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
-								</svg>
-							</div>
+					<a href="/dtf-transfers/" class="card bg-gray-800 border border-base-300/30 shadow-lg hover:shadow-xl transition-all block h-full overflow-hidden p-0">
+						<figure class="relative w-full aspect-[4/3] overflow-hidden">
+							<img src="/images/dienstleistungen/dtf/dtf-transfer-beispielbild.png" alt="DTF-Transfer Beispiel – Direkt auf Textil" class="w-full h-full object-cover" width="400" height="300" loading="lazy" />
 						</figure>
 						<div class="card-body items-center text-center">
-							<h2 class="card-title text-gray-200">DTF Transfers</h2>
+							<h2 class="card-title text-gray-200 text-lg font-bold">DTF Transfers</h2>
 							<p class="text-gray-200">Hochwertige Direct-to-Film-Transfers für lebendige, langlebige Drucke auf jedem Stoff.</p>
 						</div>
 					</a>
@@ -154,16 +181,12 @@ import WhyChooseUsSections from '../components/WhyChooseUsSections.astro';
 
 				<!-- Service Card 3: Sublimation -->
 				<div class="hover-3d service-card">
-					<a href="/sublimation/" class="card bg-gray-800 border border-base-300/30 shadow-lg hover:shadow-xl transition-all block h-full">
-						<figure class="px-10 pt-10">
-							<div class="w-20 h-20 rounded-full bg-secondary/20 flex items-center justify-center">
-								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 text-gray-200">
-									<path stroke-linecap="round" stroke-linejoin="round" d="M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.043-.025a15.994 15.994 0 011.622-3.395m3.42 3.42a15.995 15.995 0 004.764-4.648l3.876-5.814a1.151 1.151 0 00-1.597-1.597L14.146 6.32a15.996 15.996 0 00-4.649 4.763m3.42 3.42a6.776 6.776 0 00-3.42-3.42" />
-								</svg>
-							</div>
+					<a href="/sublimation/" class="card bg-gray-800 border border-base-300/30 shadow-lg hover:shadow-xl transition-all block h-full overflow-hidden p-0">
+						<figure class="relative w-full aspect-[4/3] overflow-hidden">
+							<img src="/images/dienstleistungen/sublimation/sublimation-beispiel-komplettes-shirt.png" alt="Sublimationsdruck – komplettes Shirt mit fotorealistischem Druck" class="w-full h-full object-cover" width="400" height="300" loading="lazy" />
 						</figure>
 						<div class="card-body items-center text-center">
-							<h2 class="card-title text-gray-200">Sublimation</h2>
+							<h2 class="card-title text-gray-200 text-lg font-bold">Sublimation</h2>
 							<p class="text-gray-200">Lebendiger Sublimationsdruck für Polyester-Textilien mit fotorealistischer Qualität.</p>
 						</div>
 					</a>
@@ -171,16 +194,12 @@ import WhyChooseUsSections from '../components/WhyChooseUsSections.astro';
 
 				<!-- Service Card 4: Flex und Flockfoliendruck -->
 				<div class="hover-3d service-card">
-					<a href="/flex-und-flockfoliendruck/" class="card bg-gray-800 border border-base-300/30 shadow-lg hover:shadow-xl transition-all block h-full">
-						<figure class="px-10 pt-10">
-							<div class="w-20 h-20 rounded-full bg-accent/20 flex items-center justify-center">
-								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 text-gray-200">
-									<path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25zM6.75 12h.008v.008H6.75V12zm0 3h.008v.008H6.75V15zm0 3h.008v.008H6.75V18z" />
-								</svg>
-							</div>
+					<a href="/flex-und-flockfoliendruck/" class="card bg-gray-800 border border-base-300/30 shadow-lg hover:shadow-xl transition-all block h-full overflow-hidden p-0">
+						<figure class="relative w-full aspect-[4/3] overflow-hidden">
+							<img src="/images/dienstleistungen/flex-flock/flockdruck-selini-shirt-logo-blau.jpg" alt="Flex und Flockfoliendruck – Selini-Shirt Logo in Blau" class="w-full h-full object-cover" width="400" height="300" loading="lazy" />
 						</figure>
 						<div class="card-body items-center text-center">
-							<h2 class="card-title text-gray-200">Flex und Flockfoliendruck</h2>
+							<h2 class="card-title text-gray-200 text-lg font-bold">Flex und Flockfoliendruck</h2>
 							<p class="text-gray-200">Strapazierfähiger Foliendruck für Beschriftungen und Logos in verschiedenen Farben.</p>
 						</div>
 					</a>
@@ -188,16 +207,12 @@ import WhyChooseUsSections from '../components/WhyChooseUsSections.astro';
 
 				<!-- Service Card 5: Stickerei -->
 				<div class="hover-3d service-card">
-					<a href="/direkteinstickung/" class="card bg-gray-800 border border-base-300/30 shadow-lg hover:shadow-xl transition-all block h-full">
-						<figure class="px-10 pt-10">
-							<div class="w-20 h-20 rounded-full bg-info/20 flex items-center justify-center">
-								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 text-gray-200">
-									<path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
-								</svg>
-							</div>
+					<a href="/direkteinstickung/" class="card bg-gray-800 border border-base-300/30 shadow-lg hover:shadow-xl transition-all block h-full overflow-hidden p-0">
+						<figure class="relative w-full aspect-[4/3] overflow-hidden">
+							<img src="/images/dienstleistungen/stickerei/selini-shirt-farbig-beispielstickung.png" alt="Selini-Shirt – farbige Beispielstickung" class="w-full h-full object-cover" width="400" height="300" loading="lazy" />
 						</figure>
 						<div class="card-body items-center text-center">
-							<h2 class="card-title text-gray-200">Stickerei</h2>
+							<h2 class="card-title text-gray-200 text-lg font-bold">Stickerei</h2>
 							<p class="text-gray-200">Hochwertige Direktstickerei für elegante und langlebige Textilveredlung.</p>
 						</div>
 					</a>
@@ -205,16 +220,12 @@ import WhyChooseUsSections from '../components/WhyChooseUsSections.astro';
 
 				<!-- Service Card 6: Einzelnamendruck -->
 				<div class="hover-3d service-card">
-					<a href="/einzelnamendruck/" class="card bg-gray-800 border border-base-300/30 shadow-lg hover:shadow-xl transition-all block h-full">
-						<figure class="px-10 pt-10">
-							<div class="w-20 h-20 rounded-full bg-success/20 flex items-center justify-center">
-								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 text-gray-200">
-									<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
-								</svg>
-							</div>
+					<a href="/einzelnamendruck/" class="card bg-gray-800 border border-base-300/30 shadow-lg hover:shadow-xl transition-all block h-full overflow-hidden p-0">
+						<figure class="relative w-full aspect-[4/3] overflow-hidden">
+							<img src="/images/dienstleistungen/einzelnamen-bedrucken/einzelnamendruck-beispiel.png" alt="Einzelnamendruck – DTF-Personalisierung" class="w-full h-full object-cover" width="400" height="300" loading="lazy" />
 						</figure>
 						<div class="card-body items-center text-center">
-							<h2 class="card-title text-gray-200">Einzelnamendruck</h2>
+							<h2 class="card-title text-gray-200 text-lg font-bold">Einzelnamendruck</h2>
 							<p class="text-gray-200">Personalisierung mit Einzelnamen für Teams, Vereine und individuelle Projekte.</p>
 						</div>
 					</a>
@@ -222,114 +233,84 @@ import WhyChooseUsSections from '../components/WhyChooseUsSections.astro';
 
 				<!-- Hidden Service Cards (7-16) -->
 				<div class="hover-3d service-card service-card-hidden hidden">
-					<a href="/einzelnamenstick/" class="card bg-gray-800 border border-base-300/30 shadow-lg hover:shadow-xl transition-all block h-full">
-						<figure class="px-10 pt-10">
-							<div class="w-20 h-20 rounded-full bg-warning/20 flex items-center justify-center">
-								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 text-gray-200">
-									<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
-								</svg>
-							</div>
+					<a href="/einzelnamenstick/" class="card bg-gray-800 border border-base-300/30 shadow-lg hover:shadow-xl transition-all block h-full overflow-hidden p-0">
+						<figure class="relative w-full aspect-[4/3] overflow-hidden">
+							<img src="/images/dienstleistungen/einzelnamen-direkstickung/logo-david-stickung-detailaufnahme.png" alt="Logo David – Stickung Detailaufnahme" class="w-full h-full object-cover" width="400" height="300" loading="lazy" />
 						</figure>
 						<div class="card-body items-center text-center">
-							<h2 class="card-title text-gray-200">Einzelnamenstick</h2>
+							<h2 class="card-title text-gray-200 text-lg font-bold">Einzelnamenstick</h2>
 							<p class="text-gray-200">Individuelle Namen gestickt für professionelle Textilveredelung.</p>
 						</div>
 					</a>
 				</div>
 
 				<div class="hover-3d service-card service-card-hidden hidden">
-					<a href="/flex-flock-einzelnamen-bedrucken/" class="card bg-gray-800 border border-base-300/30 shadow-lg hover:shadow-xl transition-all block h-full">
-						<figure class="px-10 pt-10">
-							<div class="w-20 h-20 rounded-full bg-error/20 flex items-center justify-center">
-								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 text-gray-200">
-									<path stroke-linecap="round" stroke-linejoin="round" d="M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z" />
-									<path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6z" />
-								</svg>
-							</div>
+					<a href="/flex-flock-einzelnamen-bedrucken/" class="card bg-gray-800 border border-base-300/30 shadow-lg hover:shadow-xl transition-all block h-full overflow-hidden p-0">
+						<figure class="relative w-full aspect-[4/3] overflow-hidden">
+							<img src="/images/dienstleistungen/flex-flock/beispiel-flockdruck-fussbaltrikot.png" alt="Flockdruck auf Fußballtrikot – Beispiel" class="w-full h-full object-cover" width="400" height="300" loading="lazy" />
 						</figure>
 						<div class="card-body items-center text-center">
-							<h2 class="card-title text-gray-200">Flex & Flock Einzelnamen</h2>
+							<h2 class="card-title text-gray-200 text-lg font-bold">Flex & Flock Einzelnamen</h2>
 							<p class="text-gray-200">Einzelnamen mit Flex- und Flockfolie für dauerhaften und farbenfrohen Druck.</p>
 						</div>
 					</a>
 				</div>
 
 				<div class="hover-3d service-card service-card-hidden hidden">
-					<a href="/plastisol-transfer/" class="card bg-gray-800 border border-base-300/30 shadow-lg hover:shadow-xl transition-all block h-full">
-						<figure class="px-10 pt-10">
-							<div class="w-20 h-20 rounded-full bg-primary/20 flex items-center justify-center">
-								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 text-gray-200">
-									<path stroke-linecap="round" stroke-linejoin="round" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" />
-								</svg>
-							</div>
+					<a href="/plastisol-transfer/" class="card bg-gray-800 border border-base-300/30 shadow-lg hover:shadow-xl transition-all block h-full overflow-hidden p-0">
+						<figure class="relative w-full aspect-[4/3] overflow-hidden">
+							<img src="/images/dienstleistungen/plastisol-transfer/plastisoltransfer-beispiel.png" alt="Plastisol Transfer – Beispiel auf Textil" class="w-full h-full object-cover" width="400" height="300" loading="lazy" />
 						</figure>
 						<div class="card-body items-center text-center">
-							<h2 class="card-title text-gray-200">Plastisol Transfer</h2>
+							<h2 class="card-title text-gray-200 text-lg font-bold">Plastisol Transfer</h2>
 							<p class="text-gray-200">Robuste Plastisol-Transfers für intensive Farben und lange Haltbarkeit.</p>
 						</div>
 					</a>
 				</div>
 
 				<div class="hover-3d service-card service-card-hidden hidden">
-					<a href="/reflex-transfer/" class="card bg-gray-800 border border-base-300/30 shadow-lg hover:shadow-xl transition-all block h-full">
-						<figure class="px-10 pt-10">
-							<div class="w-20 h-20 rounded-full bg-secondary/20 flex items-center justify-center">
-								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 text-gray-200">
-									<path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
-								</svg>
-							</div>
+					<a href="/reflex-transfer/" class="card bg-gray-800 border border-base-300/30 shadow-lg hover:shadow-xl transition-all block h-full overflow-hidden p-0">
+						<figure class="relative w-full aspect-[4/3] overflow-hidden">
+							<img src="/images/dienstleistungen/reflekt-druck/reflektor-druck.png" alt="Reflektordruck – lichtreflektierender Transfer für Arbeits- und Sicherheitsbekleidung" class="w-full h-full object-cover" width="400" height="300" loading="lazy" />
 						</figure>
 						<div class="card-body items-center text-center">
-							<h2 class="card-title text-gray-200">Reflex Transfer</h2>
+							<h2 class="card-title text-gray-200 text-lg font-bold">Reflex Transfer</h2>
 							<p class="text-gray-200">Reflektierende Transfers für Sichtbarkeit und Sicherheit im Dunkeln.</p>
 						</div>
 					</a>
 				</div>
 
 				<div class="hover-3d service-card service-card-hidden hidden">
-					<a href="/gewebte-aufnaeher/" class="card bg-gray-800 border border-base-300/30 shadow-lg hover:shadow-xl transition-all block h-full">
-						<figure class="px-10 pt-10">
-							<div class="w-20 h-20 rounded-full bg-accent/20 flex items-center justify-center">
-								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 text-gray-200">
-									<path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
-								</svg>
-							</div>
+					<a href="/gewebte-aufnaeher/" class="card bg-gray-800 border border-base-300/30 shadow-lg hover:shadow-xl transition-all block h-full overflow-hidden p-0">
+						<figure class="relative w-full aspect-[4/3] overflow-hidden">
+							<img src="/images/dienstleistungen/gewebte-aufnäher/gestickte-patches.png" alt="Gewebte Aufnäher – gestickte Patches im Vergleich" class="w-full h-full object-cover" width="400" height="300" loading="lazy" />
 						</figure>
 						<div class="card-body items-center text-center">
-							<h2 class="card-title text-gray-200">Gewebte Aufnäher</h2>
+							<h2 class="card-title text-gray-200 text-lg font-bold">Gewebte Aufnäher</h2>
 							<p class="text-gray-200">Hochwertige gewebte Aufnäher mit feinen Details und professioneller Verarbeitung.</p>
 						</div>
 					</a>
 				</div>
 
 				<div class="hover-3d service-card service-card-hidden hidden">
-					<a href="/gewebte-label/" class="card bg-gray-800 border border-base-300/30 shadow-lg hover:shadow-xl transition-all block h-full">
-						<figure class="px-10 pt-10">
-							<div class="w-20 h-20 rounded-full bg-info/20 flex items-center justify-center">
-								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 text-gray-200">
-									<path stroke-linecap="round" stroke-linejoin="round" d="M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z" />
-									<path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6z" />
-								</svg>
-							</div>
+					<a href="/gewebte-label/" class="card bg-gray-800 border border-base-300/30 shadow-lg hover:shadow-xl transition-all block h-full overflow-hidden p-0">
+						<figure class="relative w-full aspect-[4/3] overflow-hidden">
+							<img src="/images/dienstleistungen/gewebte-lables/gewebtes-label-selini-shirt-logo.png" alt="Gewebtes Label Selini-Shirt Logo – Beispiel für Textiletiketten" class="w-full h-full object-cover" width="400" height="300" loading="lazy" />
 						</figure>
 						<div class="card-body items-center text-center">
-							<h2 class="card-title text-gray-200">Gewebte Label</h2>
+							<h2 class="card-title text-gray-200 text-lg font-bold">Gewebte Label</h2>
 							<p class="text-gray-200">Individuelle gewebte Labels für Markenidentität und professionelle Präsentation.</p>
 						</div>
 					</a>
 				</div>
 
 				<div class="hover-3d service-card service-card-hidden hidden">
-					<a href="/stick-patches/" class="card bg-gray-800 border border-base-300/30 shadow-lg hover:shadow-xl transition-all block h-full">
-						<figure class="px-10 pt-10">
-							<div class="w-20 h-20 rounded-full bg-success/20 flex items-center justify-center">
-								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 text-gray-200">
-									<path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
-								</svg>
-							</div>
+					<a href="/stick-patches/" class="card bg-gray-800 border border-base-300/30 shadow-lg hover:shadow-xl transition-all block h-full overflow-hidden p-0">
+						<figure class="relative w-full aspect-[4/3] overflow-hidden">
+							<img src="/images/dienstleistungen/stick-patches/stick-patches.png" alt="Stick-Patches – gestickte Aufnäher zum Aufnähen, Bügeln oder mit Klett" class="w-full h-full object-cover" width="400" height="300" loading="lazy" />
 						</figure>
 						<div class="card-body items-center text-center">
-							<h2 class="card-title text-gray-200">Stick-Patches</h2>
+							<h2 class="card-title text-gray-200 text-lg font-bold">Stick-Patches</h2>
 							<p class="text-gray-200">Gestickte Patches für Aufnäher und individuelle Textilgestaltung.</p>
 						</div>
 					</a>
@@ -377,7 +358,7 @@ import WhyChooseUsSections from '../components/WhyChooseUsSections.astro';
 						} else {
 							toggleText.textContent = 'Weitere Leistungen anzeigen';
 							toggleIcon.style.transform = 'rotate(0deg)';
-							
+
 							// Scroll back to services section when collapsing
 							document.getElementById('services').scrollIntoView({ behavior: 'smooth', block: 'center' });
 						}
@@ -385,57 +366,108 @@ import WhyChooseUsSections from '../components/WhyChooseUsSections.astro';
 				}
 			});
 		</script>
+
+		<!-- Lazy Loading Script for Service Card Images -->
+		<script is:inline>
+			document.addEventListener('DOMContentLoaded', function() {
+				// Check if IntersectionObserver is supported
+				if ('IntersectionObserver' in window) {
+					// Configure the observer with a 50px margin for smooth loading
+					const imageObserver = new IntersectionObserver(function(entries, observer) {
+						entries.forEach(function(entry) {
+							if (entry.isIntersecting) {
+								const img = entry.target;
+								const src = img.getAttribute('data-src');
+
+								if (src) {
+									// Preload the image
+									const tempImg = new Image();
+									tempImg.onload = function() {
+										img.src = src;
+										img.removeAttribute('data-src');
+										img.classList.add('loaded');
+									};
+									tempImg.src = src;
+								}
+
+								// Stop observing this image
+								observer.unobserve(img);
+							}
+						});
+					}, {
+						rootMargin: '50px 0px',
+						threshold: 0.01
+					});
+
+					// Observe all service card images below the fold
+					const serviceImages = document.querySelectorAll('.service-card img[data-src]');
+					serviceImages.forEach(function(img) {
+						imageObserver.observe(img);
+					});
+				} else {
+					// Fallback for browsers without IntersectionObserver
+					const serviceImages = document.querySelectorAll('.service-card img[data-src]');
+					serviceImages.forEach(function(img) {
+						const src = img.getAttribute('data-src');
+						if (src) {
+							img.src = src;
+							img.removeAttribute('data-src');
+						}
+					});
+				}
+			});
+		</script>
 	</section>
 
-	<!-- Features Section -->
-	<section id="features" class="py-20 relative overflow-hidden" style="background: #1a1a1a;">
-		<!-- Overlay Image -->
-		<div class="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
-			<img
+	<!-- Features Section: Warum uns wählen -->
+	<section id="features" class="py-20 relative overflow-hidden min-h-[32rem]">
+		<!-- Full-width background image behind text -->
+		<div class="absolute inset-0 w-full h-full z-0">
+			<Picture
 				src="/images/landing-page/still-life-cmyk-toners-composition (1).jpg"
 				alt="CMYK Druckkartuschen - Professionelle Druckqualität mit präzisen Farben"
+				formats={['avif', 'webp']}
+				width={1920}
+				height={800}
+				loading="lazy"
+				decoding="async"
 				class="w-full h-full object-cover"
-				onerror="this.style.display='none'"
 			/>
 		</div>
-		<!-- Dark Overlay -->
-		<div class="absolute inset-0 bg-black/60 z-0"></div>
+		<div class="absolute inset-0 bg-black/60 z-0" aria-hidden="true"></div>
+		<!-- Content on top -->
 		<div class="w-full px-4 sm:px-6 lg:px-8 relative z-10">
 			<div class="max-w-7xl mx-auto">
-				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-					<!-- Left Column: Heading -->
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
 					<div class="lg:pl-8 lg:pr-8">
 						<h2 class="text-4xl md:text-5xl font-bold mb-4 text-white">Warum uns wählen</h2>
-						<p class="text-lg md:text-xl text-white/80">Was uns von der Konkurrenz abhebt</p>
+						<p class="text-lg text-white/90 leading-relaxed">
+							Über 30 Jahre Erfahrung in Siebdruck, Stickerei und Textildruck. Wir liefern hochwertige, langlebige Drucke mit schnellen Lieferzeiten und fairen Preisen – direkt aus unserer Berliner Werkstatt für Firmen, Agenturen und Gewerbekunden.
+						</p>
 					</div>
-
-				<!-- Right Column: Cards -->
-				<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-					<div class="text-center p-8 bg-base-200 rounded-lg border border-base-300/30 shadow-sm hover:shadow-md transition-shadow">
-						<div class="badge badge-primary badge-sm mb-4">Premium Qualität</div>
-						<h3 class="text-xl font-semibold mb-3 text-neutral">Modernste Ausrüstung</h3>
-						<p class="text-neutral/70">Neueste Drucktechnologie für überlegene Ergebnisse</p>
-					</div>
-
-					<div class="text-center p-8 bg-base-200 rounded-lg border border-base-300/30 shadow-sm hover:shadow-md transition-shadow">
-						<div class="badge badge-success badge-sm mb-4">Schnelle Lieferung</div>
-						<h3 class="text-xl font-semibold mb-3 text-neutral">Schnelle Bearbeitung</h3>
-						<p class="text-neutral/70">Die meisten Bestellungen innerhalb von 3-5 Werktagen fertiggestellt</p>
-					</div>
-
-					<div class="text-center p-8 bg-base-200 rounded-lg border border-base-300/30 shadow-sm hover:shadow-md transition-shadow">
-						<div class="badge badge-info badge-sm mb-4">Fachkundiges Team</div>
-						<h3 class="text-xl font-semibold mb-3 text-neutral">Professioneller Service</h3>
-						<p class="text-neutral/70">Erfahrene Mitarbeiter, die sich Ihrem Erfolg widmen</p>
-					</div>
-
-					<div class="text-center p-8 bg-base-200 rounded-lg border border-base-300/30 shadow-sm hover:shadow-md transition-shadow">
-						<div class="badge badge-accent badge-sm mb-4">Konkurrenzfähige Preise</div>
-						<h3 class="text-xl font-semibold mb-3 text-neutral">Bestes Preis-Leistungs-Verhältnis</h3>
-						<p class="text-neutral/70">Qualitätsdrucke zu erschwinglichen Preisen</p>
+					<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+						<div class="text-center p-8 bg-base-200 rounded-lg border border-base-300/30 shadow-sm hover:shadow-md transition-shadow">
+							<div class="badge badge-primary badge-sm mb-4">30+ Jahre Erfahrung</div>
+							<h3 class="text-xl font-semibold mb-3 text-neutral">Komplettdienstleister</h3>
+							<p class="text-neutral/70">Von Siebdruck über Stickerei bis Digitaldruck – alles aus einer Hand</p>
+						</div>
+						<div class="text-center p-8 bg-base-200 rounded-lg border border-base-300/30 shadow-sm hover:shadow-md transition-shadow">
+							<div class="badge badge-success badge-sm mb-4">Berlin-Werkstatt</div>
+							<h3 class="text-xl font-semibold mb-3 text-neutral">Direkt vor Ort</h3>
+							<p class="text-neutral/70">Hochwertige Veredelung direkt aus unserer Berliner Produktionsstätte</p>
+						</div>
+						<div class="text-center p-8 bg-base-200 rounded-lg border border-base-300/30 shadow-sm hover:shadow-md transition-shadow">
+							<div class="badge badge-info badge-sm mb-4">Nachhaltigkeit</div>
+							<h3 class="text-xl font-semibold mb-3 text-neutral">Ökologische Farben</h3>
+							<p class="text-neutral/70">Wasserbasierte Farben und nachhaltige Bekleidung für umweltbewusste Projekte</p>
+						</div>
+						<div class="text-center p-8 bg-base-200 rounded-lg border border-base-300/30 shadow-sm hover:shadow-md transition-shadow">
+							<div class="badge badge-accent badge-sm mb-4">Flexibilität</div>
+							<h3 class="text-xl font-semibold mb-3 text-neutral">Individuelle Lösungen</h3>
+							<p class="text-neutral/70">Von Design-Updates bis Neugestaltung – Ihr Produkt nach Ihren Wünschen</p>
+						</div>
 					</div>
 				</div>
-			</div>
 			</div>
 		</div>
 	</section>
@@ -474,7 +506,7 @@ import WhyChooseUsSections from '../components/WhyChooseUsSections.astro';
 						</svg>
 					</div>
 					<div class="stat-title">Jahre Erfahrung</div>
-					<div class="stat-value" style="color: var(--color-metrics-text);">15+</div>
+					<div class="stat-value" style="color: var(--color-metrics-text);">30+</div>
 					<div class="stat-desc">In der Druckbranche</div>
 				</div>
 
@@ -844,11 +876,15 @@ import WhyChooseUsSections from '../components/WhyChooseUsSections.astro';
 </Layout>
 
 <style>
-	/* Ensure hero section covers body gradient */
+	/* Ensure hero section covers body gradient and always fills viewport */
 	.hero-bg-cover {
 		background-color: #1a1a1a !important;
 		position: relative;
 		z-index: 1;
+		height: 100vh !important;
+		max-height: 100vh;
+		display: flex;
+		align-items: center;
 	}
 
 	/* Extend hero background upward to cover negative margin area */
@@ -862,6 +898,14 @@ import WhyChooseUsSections from '../components/WhyChooseUsSections.astro';
 		background: url('/images/landing-page/still-life-cmyk-toners-composition.jpg') center top/cover no-repeat;
 		background-color: #1a1a1a;
 		z-index: -1;
+	}
+
+	/* Ensure hero background layers cover full height */
+	.hero-bg-layer {
+		height: 100% !important;
+		width: 100% !important;
+		object-fit: cover;
+		background-size: cover !important;
 	}
 
 	/* 3D Hover Effect for Service Cards */
@@ -910,14 +954,4 @@ import WhyChooseUsSections from '../components/WhyChooseUsSections.astro';
 		pointer-events: none;
 	}
 
-	/* 3D Hover Effect for Hero Button */
-	.hero a.btn:first-child {
-		transition: transform 0.3s ease, box-shadow 0.3s ease;
-		transform-style: preserve-3d;
-	}
-
-	.hero a.btn:first-child:hover {
-		transform: rotateX(10deg) scale(1.05);
-		box-shadow: 0 15px 30px rgba(251, 146, 60, 0.3);
-	}
 </style>

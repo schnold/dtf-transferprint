@@ -111,6 +111,70 @@
     box-shadow: 0 0 0 2px rgba(89, 89, 89, 0.2);
   }
 
+  .btn-secondary {
+    background: linear-gradient(to bottom, var(--color-secondary) 0%, var(--color-secondary-dark) 100%);
+    color: white;
+    border: none;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+
+  .btn-secondary:hover {
+    background: linear-gradient(to bottom, #4a4a4a 0%, #1a1a1a 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(74, 74, 74, 0.3);
+    color: white;
+  }
+
+  .btn-secondary:focus {
+    background: linear-gradient(to bottom, var(--color-secondary) 0%, var(--color-secondary-dark) 100%);
+    box-shadow: 0 0 0 2px rgba(89, 89, 89, 0.2);
+    color: white;
+  }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--color-secondary);
+    border: 2px solid var(--color-secondary);
+    text-shadow: none;
+  }
+
+  .btn-outline:hover {
+    background: var(--color-secondary);
+    color: white;
+    border-color: var(--color-secondary);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(89, 89, 89, 0.25);
+  }
+
+  .btn-outline:focus {
+    background: transparent;
+    color: var(--color-secondary);
+    border-color: var(--color-secondary);
+    box-shadow: 0 0 0 2px rgba(89, 89, 89, 0.2);
+  }
+
+  /* Ensure SVG icons in buttons inherit the button text color */
+  .btn-primary svg,
+  .btn-secondary svg {
+    color: white;
+  }
+
+  .btn-outline svg {
+    color: currentColor;
+  }
+
+  .btn-outline:hover svg {
+    color: white;
+  }
+
+  /* Buttons inside alerts: force white text (alert context can override button color) */
+  .alert .btn {
+    color: white !important;
+  }
+  .alert .btn svg {
+    color: white !important;
+  }
+
   /* Ensure proper button sizing and padding */
   .btn {
     padding: 0.75rem 1.5rem;
@@ -829,6 +893,66 @@
     opacity: 0.25 !important;
     border-top-color: hsl(var(--bc) / 0.2) !important;
     border-bottom-color: hsl(var(--bc) / 0.2) !important;
+  }
+
+  /* Hero section full viewport height fix */
+  .hero-bg-cover {
+    height: 100vh !important;
+    max-height: 100vh !important;
+    min-height: 100vh !important;
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+    overflow: hidden !important;
+    display: block !important;
+  }
+
+  /* Ensure hero background layers cover full height */
+  .hero-bg-layer {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    height: 100% !important;
+    width: 100% !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+  }
+
+  /* Remove any gap between hero and next section */
+  section.hero + section,
+  section.hero-bg-cover + section {
+    margin-top: 0 !important;
+    padding-top: 4rem;
+  }
+
+  /* Scroll Reveal Animation Classes */
+  .reveal-text {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    will-change: opacity, transform;
+  }
+
+  .reveal-text.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Stagger delays for list items to create a nice effect */
+  li.reveal-text:nth-child(1) { transition-delay: 0.05s; }
+  li.reveal-text:nth-child(2) { transition-delay: 0.1s; }
+  li.reveal-text:nth-child(3) { transition-delay: 0.15s; }
+  li.reveal-text:nth-child(4) { transition-delay: 0.2s; }
+  li.reveal-text:nth-child(5) { transition-delay: 0.25s; }
+  
+  @media (prefers-reduced-motion: reduce) {
+    .reveal-text {
+      transition: none;
+      opacity: 1;
+      transform: none;
+    }
   }
 }
 

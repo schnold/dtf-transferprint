@@ -3,6 +3,7 @@ import CompanyLayout from '../layouts/CompanyLayout.astro';
 import InquiryForm from '../components/InquiryForm.astro';
 import UseCasesSection from '../components/UseCasesSection.astro';
 import ContactCTASection from '../components/ContactCTASection.astro';
+import ProsConsSection from '../components/ProsConsSection.astro';
 
 const title = 'Flex- & Flockfoliendruck für Textilien | Einfarbige Designs & Spezialeffekte';
 const description = 'Flex- und Flockdruck für T-Shirts, Trikots & Textilien ✓ Intensive Farben ✓ Effektfolien (Glitzer, Neon, Reflex) ✓ Ab 10 Stück ✓ Ideal für Namen, Nummern & einfache Logos ➤ Kostenlos beraten lassen!';
@@ -21,7 +22,12 @@ const description = 'Flex- und Flockdruck für T-Shirts, Trikots & Textilien ✓
 				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
 			</svg>
 			<div>
-				<h3 class="font-bold">💡 Moderne Alternative verfügbar</h3>
+				<h3 class="font-bold flex items-center gap-2">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 shrink-0">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0M3.75 18.75a1.5 1.5 0 013 0M3.75 6.75a1.5 1.5 0 013 0" />
+					</svg>
+					Moderne Alternative verfügbar
+				</h3>
 				<p class="mt-2">
 					Durch die Einführung von <a href="/dtf-transfers/" class="link link-primary font-semibold">DTF-Transfers</a> bieten wir Flex- und Flockdruck nur noch in speziellen Fällen an. DTF-Druck ist flexibler, günstiger und ermöglicht auch mehrfarbige Designs. Wir empfehlen für die meisten Anwendungen unseren modernen DTF-Druck.
 				</p>
@@ -71,6 +77,22 @@ const description = 'Flex- und Flockdruck für T-Shirts, Trikots & Textilien ✓
 			<div class="stat-value text-[#16a34a]">10 Stk</div>
 			<div class="stat-desc">Kostengünstig ab 10 Textilien</div>
 		</div>
+	</div>
+
+	<!-- Beispiele aus unserer Produktion -->
+	<h2>Beispiele aus unserer Produktion</h2>
+	<p class="text-neutral/70 mb-6">
+		Flex- und Flockfoliendruck – intensive Farben auf Trikots und Textilien.
+	</p>
+	<div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-12">
+		<figure class="rounded-2xl overflow-hidden shadow-lg border border-base-300/30">
+			<img src="/images/dienstleistungen/flex-flock/beispiel-flockdruck-fussbaltrikot.png" alt="Flockdruck auf Fußballtrikot – Beispiel" class="w-full aspect-[4/3] object-cover" width="400" height="300" loading="lazy" />
+			<figcaption class="p-4 bg-base-200 text-sm text-neutral/80">Flockdruck auf Fußballtrikot – Beispiel</figcaption>
+		</figure>
+		<figure class="rounded-2xl overflow-hidden shadow-lg border border-base-300/30">
+			<img src="/images/dienstleistungen/flex-flock/flockdruck-selini-shirt-logo-blau.jpg" alt="Flockdruck Selini-Shirt Logo in Blau" class="w-full aspect-[4/3] object-cover" width="400" height="300" loading="lazy" />
+			<figcaption class="p-4 bg-base-200 text-sm text-neutral/80">Flockdruck Selini-Shirt Logo in Blau</figcaption>
+		</figure>
 	</div>
 
 	<h2>Was ist Flex- und Flockfoliendruck?</h2>
@@ -160,123 +182,38 @@ const description = 'Flex- und Flockdruck für T-Shirts, Trikots & Textilien ✓
 		</div>
 	</div>
 
-	<!-- Vorteile & Nachteile Grid -->
-	<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 my-8">
-		<!-- Vorteile -->
-		<div class="card bg-gradient-to-br from-success/10 to-success/5 border border-success/20">
-			<div class="card-body">
-				<h3 class="card-title text-success flex items-center gap-2">
-					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-						<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-					</svg>
-					Vorteile von Flex- & Flockdruck
-				</h3>
-				<ul class="space-y-3 mt-4">
-					<li class="flex items-start gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-success mt-0.5 flex-shrink-0">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-						</svg>
-						<span><strong>Intensive, deckende Farben</strong> – Brillante Farbkraft auf allen Textilien</span>
-					</li>
-					<li class="flex items-start gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-success mt-0.5 flex-shrink-0">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-						</svg>
-						<span><strong>Druck auf jeder Textilfarbe möglich</strong> – Auch auf schwarzen oder dunklen Stoffen perfekt sichtbar</span>
-					</li>
-					<li class="flex items-start gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-success mt-0.5 flex-shrink-0">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-						</svg>
-						<span><strong>Große Auswahl an Spezialfolien</strong> – Glitzer, Neon, Reflex, Metallic, Glow-in-the-dark</span>
-					</li>
-					<li class="flex items-start gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-success mt-0.5 flex-shrink-0">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-						</svg>
-						<span><strong>Kostengünstig bei kleinen Auflagen</strong> – Ideal ab 10 Stück</span>
-					</li>
-					<li class="flex items-start gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-success mt-0.5 flex-shrink-0">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-						</svg>
-						<span><strong>Perfekt für Schriften und Zahlen</strong> – Klare Kanten und saubere Linien</span>
-					</li>
-					<li class="flex items-start gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-success mt-0.5 flex-shrink-0">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-						</svg>
-						<span><strong>Langlebig und waschfest</strong> – Bei korrekter Pflege sehr haltbar</span>
-					</li>
-					<li class="flex items-start gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-success mt-0.5 flex-shrink-0">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-						</svg>
-						<span><strong>Schnelle Produktion</strong> – Kurze Fertigungszeiten möglich</span>
-					</li>
-				</ul>
-			</div>
-		</div>
-
-		<!-- Nachteile -->
-		<div class="card bg-gradient-to-br from-warning/10 to-warning/5 border border-warning/20">
-			<div class="card-body">
-				<h3 class="card-title text-warning flex items-center gap-2">
-					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-						<path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
-					</svg>
-					Einschränkungen
-				</h3>
-				<ul class="space-y-3 mt-4">
-					<li class="flex items-start gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-warning mt-0.5 flex-shrink-0">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-						</svg>
-						<span><strong>Nur einfarbige Designs</strong> – Keine Farbverläufe oder mehrfarbigen Motive möglich</span>
-					</li>
-					<li class="flex items-start gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-warning mt-0.5 flex-shrink-0">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-						</svg>
-						<span><strong>Keine komplexen Bilder oder Fotos</strong> – Nur einfache geometrische Formen umsetzbar</span>
-					</li>
-					<li class="flex items-start gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-warning mt-0.5 flex-shrink-0">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-						</svg>
-						<span><strong>Zeitaufwändiges Entgittern</strong> – Manuelle Entfernung des überflüssigen Materials</span>
-					</li>
-					<li class="flex items-start gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-warning mt-0.5 flex-shrink-0">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-						</svg>
-						<span><strong>Eingeschränkter Tragekomfort bei großen Motiven</strong> – Fühlbare Folienschicht</span>
-					</li>
-					<li class="flex items-start gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-warning mt-0.5 flex-shrink-0">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-						</svg>
-						<span><strong>Probleme bei sehr kleinen Details</strong> – Schriften unter 5 mm schwer umsetzbar</span>
-					</li>
-					<li class="flex items-start gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-warning mt-0.5 flex-shrink-0">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-						</svg>
-						<span><strong>Nicht für filigrane Motive geeignet</strong> – Feine Spitzen und Linien schwer entgitterbar</span>
-					</li>
-				</ul>
-
-				<div class="alert alert-warning shadow-sm">
-					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-					</svg>
-					<div>
-						<p class="text-sm"><strong>Alternative für komplexe Designs:</strong> Für mehrfarbige Motive, Fotos oder Farbverläufe empfehlen wir unseren flexiblen <a href="/dtf-transfers/" class="link link-primary">DTF-Digitaldruck</a> – günstiger, vielseitiger und ohne Einschränkungen.</p>
-					</div>
+	<ProsConsSection
+		advantagesTitle="Vorteile von Flex- & Flockdruck"
+		disadvantagesTitle="Einschränkungen"
+		advantages={[
+			'<strong>Intensive, deckende Farben</strong> – Brillante Farbkraft auf allen Textilien',
+			'<strong>Druck auf jeder Textilfarbe möglich</strong> – Auch auf schwarzen oder dunklen Stoffen perfekt sichtbar',
+			'<strong>Große Auswahl an Spezialfolien</strong> – Glitzer, Neon, Reflex, Metallic, Glow-in-the-dark',
+			'<strong>Kostengünstig bei kleinen Auflagen</strong> – Ideal ab 10 Stück',
+			'<strong>Perfekt für Schriften und Zahlen</strong> – Klare Kanten und saubere Linien',
+			'<strong>Langlebig und waschfest</strong> – Bei korrekter Pflege sehr haltbar',
+			'<strong>Schnelle Produktion</strong> – Kurze Fertigungszeiten möglich',
+		]}
+		disadvantages={[
+			'<strong>Nur einfarbige Designs</strong> – Keine Farbverläufe oder mehrfarbigen Motive möglich',
+			'<strong>Keine komplexen Bilder oder Fotos</strong> – Nur einfache geometrische Formen umsetzbar',
+			'<strong>Zeitaufwändiges Entgittern</strong> – Manuelle Entfernung des überflüssigen Materials',
+			'<strong>Eingeschränkter Tragekomfort bei großen Motiven</strong> – Fühlbare Folienschicht',
+			'<strong>Probleme bei sehr kleinen Details</strong> – Schriften unter 5 mm schwer umsetzbar',
+			'<strong>Nicht für filigrane Motive geeignet</strong> – Feine Spitzen und Linien schwer entgitterbar',
+		]}
+	>
+		<div slot="disadvantages-extra" class="mt-4">
+			<div class="alert alert-warning shadow-sm">
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+				</svg>
+				<div>
+					<p class="text-sm"><strong>Alternative für komplexe Designs:</strong> Für mehrfarbige Motive, Fotos oder Farbverläufe empfehlen wir unseren flexiblen <a href="/dtf-transfers/" class="link link-primary">DTF-Digitaldruck</a> – günstiger, vielseitiger und ohne Einschränkungen.</p>
 				</div>
 			</div>
 		</div>
-	</div>
+	</ProsConsSection>
 
 	<h2>Wie funktioniert Flex- und Flockfoliendruck?</h2>
 	<p>
@@ -343,7 +280,11 @@ const description = 'Flex- und Flockdruck für T-Shirts, Trikots & Textilien ✓
 				</div>
 
 				<div class="flex gap-4 items-start">
-					<div class="badge badge-success badge-lg">✓</div>
+					<div class="badge badge-success badge-lg shrink-0">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+						</svg>
+					</div>
 					<div class="flex-1">
 						<h4 class="font-semibold mb-1">Abkühlen und Trägerfolie abziehen</h4>
 						<p class="text-sm text-neutral/80">
@@ -363,37 +304,67 @@ const description = 'Flex- und Flockdruck für T-Shirts, Trikots & Textilien ✓
 	<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 my-8">
 		<div class="card bg-base-200 border border-base-300">
 			<div class="card-body p-4">
-				<h4 class="font-semibold text-sm">✨ Glitterfolie</h4>
+				<h4 class="font-semibold text-sm flex items-center gap-2">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 shrink-0">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
+					</svg>
+					Glitterfolie
+				</h4>
 				<p class="text-xs text-neutral/70">Funkelnde Glitzereffekte für auffällige Designs</p>
 			</div>
 		</div>
 		<div class="card bg-base-200 border border-base-300">
 			<div class="card-body p-4">
-				<h4 class="font-semibold text-sm">🔆 Neonfolie</h4>
+				<h4 class="font-semibold text-sm flex items-center gap-2">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 shrink-0">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" />
+					</svg>
+					Neonfolie
+				</h4>
 				<p class="text-xs text-neutral/70">Leuchtende, grelle Farben für maximale Sichtbarkeit</p>
 			</div>
 		</div>
 		<div class="card bg-base-200 border border-base-300">
 			<div class="card-body p-4">
-				<h4 class="font-semibold text-sm">🚨 Reflektionsfolie</h4>
+				<h4 class="font-semibold text-sm flex items-center gap-2">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 shrink-0">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
+					</svg>
+					Reflektionsfolie
+				</h4>
 				<p class="text-xs text-neutral/70">Reflektiert Licht – ideal für Sicherheitskleidung</p>
 			</div>
 		</div>
 		<div class="card bg-base-200 border border-base-300">
 			<div class="card-body p-4">
-				<h4 class="font-semibold text-sm">⚡ Metallicfolie</h4>
+				<h4 class="font-semibold text-sm flex items-center gap-2">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 shrink-0">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5m8.25 3v6.75m0 0l-3-3m3 3l3-3M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
+					</svg>
+					Metallicfolie
+				</h4>
 				<p class="text-xs text-neutral/70">Metallischer Glanz in Gold, Silber, Kupfer</p>
 			</div>
 		</div>
 		<div class="card bg-base-200 border border-base-300">
 			<div class="card-body p-4">
-				<h4 class="font-semibold text-sm">🪞 Spiegelfolie</h4>
+				<h4 class="font-semibold text-sm flex items-center gap-2">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 shrink-0">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128z" />
+					</svg>
+					Spiegelfolie
+				</h4>
 				<p class="text-xs text-neutral/70">Hochglänzende, spiegelnde Oberfläche</p>
 			</div>
 		</div>
 		<div class="card bg-base-200 border border-base-300">
 			<div class="card-body p-4">
-				<h4 class="font-semibold text-sm">🌙 Glow-in-the-dark</h4>
+				<h4 class="font-semibold text-sm flex items-center gap-2">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 shrink-0">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" />
+					</svg>
+					Glow-in-the-dark
+				</h4>
 				<p class="text-xs text-neutral/70">Leuchtet im Dunkeln nach Lichteinfall</p>
 			</div>
 		</div>
@@ -452,8 +423,6 @@ const description = 'Flex- und Flockdruck für T-Shirts, Trikots & Textilien ✓
 	<ContactCTASection
 		title="Interesse an Flex- oder Flockdruck?"
 		description="Fordern Sie ein kostenloses, unverbindliches Angebot an. Wir beraten Sie gerne zu Materialauswahl, Folienfarben und finden die optimale Lösung für Ihr Projekt – oder empfehlen Ihnen bei Bedarf unseren modernen DTF-Druck als flexible Alternative."
-		callButtonHref="/dtf-transfers/"
-		callButtonText="DTF-Druck ansehen"
 	/>
 
 	<!-- FAQ Section -->

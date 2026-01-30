@@ -108,7 +108,7 @@ insert into "productTagRelations" ("productId", "tagId") values
 
 -- Create a system user for historical reviews (if not exists)
 insert into "user" (id, name, email, "emailVerified", "accountLocked", "failedLoginAttempts", "emailNotifications", "isAdmin")
-values ('system-user', 'System', 'system@dtf-transferprint.local', true, false, 0, false, false)
+values ('system-user', 'System', 'system@selini-shirt.local', true, false, 0, false, false)
 on conflict (email) do nothing;
 
 -- Insert product reviews (linked to system user for historical data)

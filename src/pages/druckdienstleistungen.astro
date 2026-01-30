@@ -1,0 +1,319 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import ContactCTASection from '../components/ContactCTASection.astro';
+
+const title = 'Druckdienstleistungen - Professionelle Textilveredelung';
+const description = 'Entdecken Sie unsere umfangreichen Druckdienstleistungen: Siebdruck, DTF-Transfers, Sublimation, Stickerei und mehr. Höchste Qualität für Ihre Textilveredelung.';
+
+// Service data for cards
+const services = [
+	{
+		title: 'Siebdruck',
+		slug: '/siebdruck/',
+		description: 'Der bewährte Industriestandard für brillante Farben und extreme Haltbarkeit. Ideal für große Auflagen ab 10 Stück.',
+		image: '/images/dienstleistungen/siebdruck/custom-logo-siebdruck-beispiel.png',
+		features: ['Ab 10 Stück', 'Bis 60°C waschbar', 'Langlebig & haltbar']
+	},
+	{
+		title: 'DTF Transfers',
+		slug: '/dtf-transfers/',
+		description: 'Moderne Direct-to-Film Technologie für brillante Farben und feinste Details. Perfekt für kleine und große Auflagen.',
+		image: '/images/dienstleistungen/dtf/dtf-transfer-beispielbild.png',
+		features: ['Ab 1 Stück', 'Freie Größe', 'Hot-Peel-Folie']
+	},
+	{
+		title: 'Sublimation',
+		slug: '/sublimation/',
+		description: 'Fotorealistische Drucke mit leuchtenden Farben. Ideal für Polyester-Textilien und personalisierte Produkte.',
+		image: '/images/dienstleistungen/sublimation/sublimation-beispiel-komplettes-shirt.png',
+		features: ['Fotorealistische Qualität', 'Vollflächendruck', 'Für Polyester']
+	},
+	{
+		title: 'Flex und Flockfoliendruck',
+		slug: '/flex-und-flockfoliendruck/',
+		description: 'Hochwertige Foliendrucke mit matter oder glänzender Oberfläche. Perfekt für Logos und Texte.',
+		image: '/images/dienstleistungen/flex-flock/flockdruck-selini-shirt-logo-blau.jpg',
+		features: ['Konturgeschnitten', 'Hochwertige Folien', 'Lange Haltbarkeit']
+	},
+	{
+		title: 'Stickerei',
+		slug: '/direkteinstickung/',
+		description: 'Hochwertige Direktstickerei für einen edlen und professionellen Look. Perfekt für Logos und Schriftzüge.',
+		image: '/images/dienstleistungen/stickerei/selini-shirt-farbig-beispielstickung.png',
+		features: ['Edle Optik', 'Sehr haltbar', 'Premium-Qualität']
+	},
+	{
+		title: 'Einzelnamendruck',
+		slug: '/einzelnamendruck/',
+		description: 'Personalisierte Namen und Nummern im DTF-Verfahren. Ideal für Sportteams und Vereine.',
+		image: '/images/dienstleistungen/einzelnamen-bedrucken/ChatGPT%20Image%2028.%20Jan.%202026%2C%2013_32_19.png',
+		features: ['Individuelle Namen', 'Schnelle Produktion', 'Jede Schriftart']
+	},
+	{
+		title: 'Einzelnamenstick',
+		slug: '/einzelnamenstick/',
+		description: 'Hochwertige Namensstickerei für einen besonders edlen Look. Premium-Qualität für Ihre Textilien.',
+		image: '/images/dienstleistungen/einzelnamen-direkstickung/logo-david-stickung-detailaufnahme.png',
+		features: ['Gestickte Namen', 'Premium Look', 'Langlebig']
+	},
+	{
+		title: 'Flex & Flock Einzelnamen',
+		slug: '/flex-flock-einzelnamen-bedrucken/',
+		description: 'Personalisierte Namen mit Flex- oder Flockfolie. Hochwertig und haltbar für jeden Einsatzzweck.',
+		image: '/images/dienstleistungen/flex-flock/beispiel-flockdruck-fussbaltrikot.png',
+		features: ['Flex oder Flock', 'Individuelle Namen', 'Viele Farben']
+	},
+	{
+		title: 'Plastisol Transfer',
+		slug: '/plastisol-transfer/',
+		description: 'Hochwertige Plastisol-Transferdrucke mit ausgezeichneter Deckkraft. Ideal für dunkle Stoffe.',
+		image: '/images/dienstleistungen/siebdruck/custom-logo-siebdruck-beispiel.png',
+		features: ['Starke Deckkraft', 'Für dunkle Stoffe', 'Professionell']
+	},
+	{
+		title: 'Reflex Transfer',
+		slug: '/reflex-transfer/',
+		description: 'Reflektierende Transfers für maximale Sichtbarkeit. Perfekt für Sicherheitskleidung und Sportbekleidung.',
+		image: '/images/dienstleistungen/dtf/dtf-transfer-beispielbild.png',
+		features: ['Reflektierend', 'Sicherheit', 'Hohe Sichtbarkeit']
+	},
+	{
+		title: 'Gewebte Aufnäher',
+		slug: '/gewebte-aufnaeher/',
+		description: 'Hochwertige gewebte Patches mit feinen Details. Ideal für Logos und Embleme.',
+		image: '/images/dienstleistungen/stickerei/selini-shirt print raum mit maschinen.png',
+		features: ['Feine Details', 'Hochwertig', 'Langlebig']
+	},
+	{
+		title: 'Gewebte Label',
+		slug: '/gewebte-label/',
+		description: 'Professionelle gewebte Labels für Ihre Marke. Hochwertig und detailliert.',
+		image: '/images/dienstleistungen/stickerei/selini-shirt-farbig-beispielstickung.png',
+		features: ['Marken-Label', 'Detailliert', 'Professionell']
+	},
+	{
+		title: 'Stick-Patches',
+		slug: '/stick-patches/',
+		description: 'Hochwertige gestickte Patches in beliebigen Formen. Premium-Qualität für individuelle Designs.',
+		image: '/images/dienstleistungen/einzelnamen-direkstickung/logo-david-stickung-detailaufnahme.png',
+		features: ['Individuelle Formen', 'Gestickt', 'Premium-Qualität']
+	}
+];
+---
+
+<Layout title={title} description={description}>
+	<Navbar />
+
+	<!-- Hero Section -->
+	<section class="relative bg-gradient-to-br from-base-200 via-base-100 to-base-200 pt-32 pb-20">
+		<div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+			<!-- Breadcrumbs -->
+			<nav class="mb-8 flex items-center gap-2 text-sm text-neutral/60">
+				<a href="/" class="hover:text-primary transition-colors">Startseite</a>
+				<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+				</svg>
+				<span class="text-neutral font-medium">Druckdienstleistungen</span>
+			</nav>
+
+			<!-- Hero Content -->
+			<div class="text-center max-w-4xl mx-auto">
+				<h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-neutral mb-6 leading-tight">
+					Unsere Druckdienstleistungen
+				</h1>
+				<p class="text-lg sm:text-xl text-neutral/70 mb-8 leading-relaxed">
+					Entdecken Sie unsere umfangreichen Veredelungstechniken für Ihre Textilien. Von Siebdruck über DTF bis zur Stickerei – wir bieten professionelle Lösungen für jeden Bedarf und jede Auflage.
+				</p>
+
+				<!-- Quick Stats -->
+				<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-12">
+					<div class="bg-base-100/50 backdrop-blur-sm rounded-xl p-6 border border-base-300/30">
+						<div class="text-3xl font-bold text-primary mb-2">13+</div>
+						<div class="text-sm text-neutral/70">Druckverfahren</div>
+					</div>
+					<div class="bg-base-100/50 backdrop-blur-sm rounded-xl p-6 border border-base-300/30">
+						<div class="text-3xl font-bold text-primary mb-2">30+</div>
+						<div class="text-sm text-neutral/70">Jahre Erfahrung</div>
+					</div>
+					<div class="bg-base-100/50 backdrop-blur-sm rounded-xl p-6 border border-base-300/30">
+						<div class="text-3xl font-bold text-primary mb-2">1000+</div>
+						<div class="text-sm text-neutral/70">Projekte</div>
+					</div>
+					<div class="bg-base-100/50 backdrop-blur-sm rounded-xl p-6 border border-base-300/30">
+						<div class="text-3xl font-bold text-primary mb-2">100%</div>
+						<div class="text-sm text-neutral/70">Qualität</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Services Grid -->
+	<section class="py-20 bg-base-100">
+		<div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+				{services.map((service) => (
+					<div class="hover-3d service-card">
+						<a 
+							href={service.slug}
+							class="card bg-gray-800 border border-base-300/30 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 block h-full overflow-hidden p-0"
+						>
+							<!-- Image -->
+							<figure class="relative w-full aspect-[4/3] overflow-hidden">
+								<img 
+									src={service.image} 
+									alt={service.title}
+									class="w-full h-full object-cover"
+									width="400"
+									height="300"
+									loading="lazy"
+								/>
+							</figure>
+
+							<!-- Card Body -->
+							<div class="card-body items-center text-center p-6">
+								<h3 class="card-title text-gray-200 text-xl font-bold mb-3">
+									{service.title}
+								</h3>
+
+								<!-- Description -->
+								<p class="text-gray-300 mb-4 leading-relaxed text-sm">
+									{service.description}
+								</p>
+
+								<!-- Features -->
+								<div class="flex flex-wrap gap-2 justify-center">
+									{service.features.map((feature) => (
+										<span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-700/50 text-gray-200 border border-gray-600/30">
+											<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3 h-3 mr-1" style="color: var(--color-accent);">
+												<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+											</svg>
+											{feature}
+										</span>
+									))}
+								</div>
+							</div>
+						</a>
+					</div>
+				))}
+			</div>
+		</div>
+	</section>
+
+	<!-- Why Choose Us Section -->
+	<section class="py-20 bg-gradient-to-br from-base-200 via-base-100 to-base-200">
+		<div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+			<div class="text-center mb-12">
+				<h2 class="text-3xl sm:text-4xl font-bold text-neutral mb-4">
+					Warum selini-shirt?
+				</h2>
+				<p class="text-lg text-neutral/70 max-w-2xl mx-auto">
+					Als Ihr Partner für professionelle Textilveredelung bieten wir Ihnen umfassende Lösungen aus einer Hand.
+				</p>
+			</div>
+
+			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+				<div class="text-center">
+					<div class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4" style="color: var(--color-metrics-text);">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+						</svg>
+					</div>
+					<h3 class="text-xl font-bold text-neutral mb-2">Höchste Qualität</h3>
+					<p class="text-neutral/70">
+						Modernste Technologie und erfahrene Experten garantieren perfekte Ergebnisse bei jedem Auftrag.
+					</p>
+				</div>
+
+				<div class="text-center">
+					<div class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4" style="color: var(--color-metrics-text);">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+						</svg>
+					</div>
+					<h3 class="text-xl font-bold text-neutral mb-2">Schnelle Lieferung</h3>
+					<p class="text-neutral/70">
+						Express-Produktion und zuverlässige Lieferzeiten – auch bei großen Auflagen und engen Deadlines.
+					</p>
+				</div>
+
+				<div class="text-center">
+					<div class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4" style="color: var(--color-metrics-text);">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+						</svg>
+					</div>
+					<h3 class="text-xl font-bold text-neutral mb-2">Faire Preise</h3>
+					<p class="text-neutral/70">
+						Transparente Preisgestaltung ohne versteckte Kosten. B2B-Rabatte für Wiederverkäufer verfügbar.
+					</p>
+				</div>
+
+				<div class="text-center">
+					<div class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4" style="color: var(--color-metrics-text);">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5" />
+						</svg>
+					</div>
+					<h3 class="text-xl font-bold text-neutral mb-2">Expertise & Beratung</h3>
+					<p class="text-neutral/70">
+						Über 30 Jahre Erfahrung in der Textilveredelung. Wir beraten Sie kompetent bei der Wahl des richtigen Verfahrens.
+					</p>
+				</div>
+
+				<div class="text-center">
+					<div class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4" style="color: var(--color-metrics-text);">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M6.429 9.75L2.25 12l4.179 2.25m0-4.5l5.571 3 5.571-3m-11.142 0L2.25 7.5 12 2.25l9.75 5.25-4.179 2.25m0 0L21.75 12l-4.179 2.25m0 0l4.179 2.25L12 21.75 2.25 16.5l4.179-2.25m11.142 0l-5.571 3-5.571-3" />
+						</svg>
+					</div>
+					<h3 class="text-xl font-bold text-neutral mb-2">Alle Auflagengrößen</h3>
+					<p class="text-neutral/70">
+						Von Einzelstücken bis zu Großauflagen – wir produzieren flexibel nach Ihrem Bedarf.
+					</p>
+				</div>
+
+				<div class="text-center">
+					<div class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4" style="color: var(--color-metrics-text);">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+						</svg>
+					</div>
+					<h3 class="text-xl font-bold text-neutral mb-2">Zertifizierte Qualität</h3>
+					<p class="text-neutral/70">
+						GOTS-zertifizierte Materialien und umweltfreundliche Produktionsprozesse für nachhaltige Veredelung.
+					</p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- CTA Section -->
+	<ContactCTASection 
+		title="Bereit für Ihr nächstes Projekt?"
+		description="Kontaktieren Sie uns für eine persönliche Beratung und ein individuelles Angebot. Unser Team hilft Ihnen gerne bei der Auswahl der passenden Veredelungstechnik."
+	/>
+</Layout>
+
+<style>
+	/* 3D Hover Effect for Service Cards */
+	.hover-3d {
+		perspective: 1000px;
+	}
+
+	.hover-3d .card {
+		transition: transform 0.3s ease, box-shadow 0.3s ease;
+		transform-style: preserve-3d;
+	}
+
+	.hover-3d:hover .card {
+		transform: translateY(-10px) rotateX(5deg) rotateY(5deg);
+		box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+	}
+
+	/* Smooth transition for card elements */
+	.hover-3d .card * {
+		transition: transform 0.3s ease;
+	}
+</style>

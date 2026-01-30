@@ -3,6 +3,7 @@ import CompanyLayout from '../layouts/CompanyLayout.astro';
 import InquiryForm from '../components/InquiryForm.astro';
 import UseCasesSection from '../components/UseCasesSection.astro';
 import ContactCTASection from '../components/ContactCTASection.astro';
+import ProsConsSection from '../components/ProsConsSection.astro';
 
 const title = 'Gewebte Labels & Textiletiketten – Hochwertige Textilveredelung | BySelini';
 const description = 'Gewebte Labels & Textiletiketten für professionelles Branding ✓ Feine Haptik ✓ Ab 100 Stück ✓ Filigrane Details ab 2mm ✓ Wasch- & lichtbeständig ✓ Individuelle Falzungen ➤ Jetzt Angebot anfordern!';
@@ -21,7 +22,12 @@ const description = 'Gewebte Labels & Textiletiketten für professionelles Brand
 				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
 			</svg>
 			<div>
-				<h3 class="font-bold">✨ Professionelles Branding</h3>
+				<h3 class="font-bold flex items-center gap-2">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 shrink-0">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
+					</svg>
+					Professionelles Branding
+				</h3>
 				<p class="mt-2">
 					Gewebte Labels verleihen Ihren Textilien eine edle Wertigkeit und präsentieren Ihre Marke dauerhaft und hochwertig. Perfekt für Mode, Sportbekleidung, Arbeitskleidung und Merchandising.
 				</p>
@@ -65,22 +71,16 @@ const description = 'Gewebte Labels & Textiletiketten für professionelles Brand
 		</div>
 	</div>
 
-	<!-- Visual Example Section with Image Placeholder -->
-	<div class="card bg-base-200 border-4 border-dashed border-primary/30 shadow-xl my-8">
-		<div class="card-body items-center text-center">
-			<div class="w-full aspect-video bg-gradient-to-br from-base-300 to-base-200 rounded-lg flex items-center justify-center relative overflow-hidden">
-				<div class="absolute inset-0 bg-grid-pattern opacity-5"></div>
-				<div class="text-center z-10">
-					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-16 h-16 mx-auto mb-4 text-primary/50">
-						<path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
-					</svg>
-					<p class="text-sm text-neutral/60 font-semibold uppercase tracking-wider">Bild-Platzhalter</p>
-					<p class="text-xs text-neutral/50 mt-1">Beispiele für gewebte Labels</p>
-					<p class="text-xs text-neutral/40 mt-2">(Textiletiketten, Marken-Labels, Logo-Tags)</p>
-				</div>
-			</div>
-			<p class="text-sm text-neutral/70 mt-4 italic">📷 Hier werden später Beispielbilder von gewebten Labels auf verschiedenen Textilien angezeigt</p>
-		</div>
+	<!-- Beispiele aus unserer Produktion -->
+	<h2>Beispiele aus unserer Produktion</h2>
+	<p class="text-neutral/70 mb-6">
+		Gewebte Labels – hochwertige Textiletiketten für professionelles Branding.
+	</p>
+	<div class="mb-12">
+		<figure class="rounded-2xl overflow-hidden shadow-lg border border-base-300/30 w-full">
+			<img src="/images/dienstleistungen/gewebte-lables/gewebtes-label-selini-shirt-logo.png" alt="Gewebtes Label Selini-Shirt Logo – Beispiel für Textiletiketten" class="w-full aspect-video object-cover" width="1200" height="675" loading="lazy" />
+			<figcaption class="p-4 bg-base-200 text-sm text-neutral/80">Gewebtes Label Selini-Shirt Logo – Beispiel für Textiletiketten</figcaption>
+		</figure>
 	</div>
 
 	<h2>Was sind gewebte Labels?</h2>
@@ -225,105 +225,35 @@ const description = 'Gewebte Labels & Textiletiketten für professionelles Brand
 		</div>
 	</div>
 
-	<!-- Vorteile & Nachteile Grid -->
-	<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 my-8">
-		<!-- Vorteile -->
-		<div class="card bg-gradient-to-br from-success/10 to-success/5 border border-success/20">
-			<div class="card-body">
-				<h3 class="card-title text-success flex items-center gap-2">
-					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-						<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-					</svg>
-					Vorteile gewebter Textiletiketten
-				</h3>
-				<ul class="space-y-3 mt-4">
-					<li class="flex items-start gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-success mt-0.5 flex-shrink-0">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-						</svg>
-						<span><strong>Hochwertige, filigrane Optik</strong> – Professionelle Markenpräsentation</span>
-					</li>
-					<li class="flex items-start gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-success mt-0.5 flex-shrink-0">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-						</svg>
-						<span><strong>Weiche, angenehme Haptik</strong> – Glatte Oberfläche ohne Kratzen</span>
-					</li>
-					<li class="flex items-start gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-success mt-0.5 flex-shrink-0">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-						</svg>
-						<span><strong>Wasch- und lichtbeständig</strong> – Langlebige Qualität auch nach vielen Waschzyklen</span>
-					</li>
-					<li class="flex items-start gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-success mt-0.5 flex-shrink-0">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-						</svg>
-						<span><strong>Vielseitig einsetzbar</strong> – Auf Kleidung, Taschen, Accessoires</span>
-					</li>
-					<li class="flex items-start gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-success mt-0.5 flex-shrink-0">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-						</svg>
-						<span><strong>Kein Qualitätsverlust bei längerer Lagerung</strong> – Labels bleiben dauerhaft einsatzbereit</span>
-					</li>
-					<li class="flex items-start gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-success mt-0.5 flex-shrink-0">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-						</svg>
-						<span><strong>Kostengünstig bei größeren Stückzahlen</strong> – Wirtschaftlich ab 100 Stück</span>
-					</li>
-					<li class="flex items-start gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-success mt-0.5 flex-shrink-0">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-						</svg>
-						<span><strong>Individuelle Falzungen möglich</strong> – Anpassung an Ihre Anforderungen</span>
-					</li>
-				</ul>
-			</div>
-		</div>
-
-		<!-- Nachteile -->
-		<div class="card bg-gradient-to-br from-warning/10 to-warning/5 border border-warning/20">
-			<div class="card-body">
-				<h3 class="card-title text-warning flex items-center gap-2">
-					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-						<path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
-					</svg>
-					Einschränkungen
-				</h3>
-				<ul class="space-y-3 mt-4">
-					<li class="flex items-start gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-warning mt-0.5 flex-shrink-0">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-						</svg>
-						<span><strong>Farbverläufe müssen vereinfacht werden</strong> – Glatte Übergänge schwer darstellbar</span>
-					</li>
-					<li class="flex items-start gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-warning mt-0.5 flex-shrink-0">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-						</svg>
-						<span><strong>Längere Lieferzeiten</strong> – Ca. 3 Wochen nach Auftragsfreigabe</span>
-					</li>
-					<li class="flex items-start gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-warning mt-0.5 flex-shrink-0">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-						</svg>
-						<span><strong>Mindestbestellmenge: 100 Stück</strong> – Nicht wirtschaftlich für Kleinmengen</span>
-					</li>
-				</ul>
-
-				<div class="alert alert-warning shadow-sm">
-					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-					</svg>
-					<div>
-						<p class="text-sm"><strong>Tipp:</strong> Für Kleinmengen unter 100 Stück oder fotorealistische Designs empfehlen wir <a href="/dtf-transfers/" class="link link-primary">DTF-Transfers</a>.</p>
-					</div>
+	<ProsConsSection
+		advantagesTitle="Vorteile gewebter Textiletiketten"
+		disadvantagesTitle="Einschränkungen"
+		advantages={[
+			'<strong>Hochwertige, filigrane Optik</strong> – Professionelle Markenpräsentation',
+			'<strong>Weiche, angenehme Haptik</strong> – Glatte Oberfläche ohne Kratzen',
+			'<strong>Wasch- und lichtbeständig</strong> – Langlebige Qualität auch nach vielen Waschzyklen',
+			'<strong>Vielseitig einsetzbar</strong> – Auf Kleidung, Taschen, Accessoires',
+			'<strong>Kein Qualitätsverlust bei längerer Lagerung</strong> – Labels bleiben dauerhaft einsatzbereit',
+			'<strong>Kostengünstig bei größeren Stückzahlen</strong> – Wirtschaftlich ab 100 Stück',
+			'<strong>Individuelle Falzungen möglich</strong> – Anpassung an Ihre Anforderungen',
+		]}
+		disadvantages={[
+			'<strong>Farbverläufe müssen vereinfacht werden</strong> – Glatte Übergänge schwer darstellbar',
+			'<strong>Längere Lieferzeiten</strong> – Ca. 3 Wochen nach Auftragsfreigabe',
+			'<strong>Mindestbestellmenge: 100 Stück</strong> – Nicht wirtschaftlich für Kleinmengen',
+		]}
+	>
+		<div slot="disadvantages-extra" class="mt-4">
+			<div class="alert alert-warning shadow-sm">
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+				</svg>
+				<div>
+					<p class="text-sm"><strong>Tipp:</strong> Für Kleinmengen unter 100 Stück oder fotorealistische Designs empfehlen wir <a href="/dtf-transfers/" class="link link-primary">DTF-Transfers</a>.</p>
 				</div>
 			</div>
 		</div>
-	</div>
+	</ProsConsSection>
 
 	<div class="divider my-12"></div>
 
@@ -360,7 +290,12 @@ const description = 'Gewebte Labels & Textiletiketten für professionelles Brand
 			<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
 		</svg>
 		<div>
-			<p class="font-semibold">✨ Fazit: Professionelles Branding mit gewebten Labels</p>
+			<p class="font-semibold flex items-center gap-2">
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 shrink-0">
+					<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+				</svg>
+				Fazit: Professionelles Branding mit gewebten Labels
+			</p>
 			<p class="text-sm mt-2">
 				Mit gewebten Labels und Textiletiketten lassen sich Textilien hochwertig individualisieren und professionell branden. Sie bieten eine <strong>elegante Optik, angenehme Haptik und langfristige Beständigkeit</strong> – ideal für Mode, Sportbekleidung, Arbeitskleidung oder Merchandise.
 			</p>

@@ -93,7 +93,7 @@ export const POST: APIRoute = async ({ request }) => {
               </div>
             </div>
             <div class="footer">
-              <p>Diese E-Mail wurde über das Produktanfrage-Formular auf dtf-transferprint.de gesendet.</p>
+              <p>Diese E-Mail wurde über das Produktanfrage-Formular auf selini-shirt.de gesendet.</p>
               <p>Antworten Sie direkt an: <a href="mailto:${email}">${email}</a></p>
             </div>
           </div>
@@ -119,7 +119,7 @@ Nachricht:
 ${message}
 
 ---
-Diese E-Mail wurde über das Produktanfrage-Formular auf dtf-transferprint.de gesendet.
+Diese E-Mail wurde über das Produktanfrage-Formular auf selini-shirt.de gesendet.
 Antworten Sie direkt an: ${email}
     `.trim();
 

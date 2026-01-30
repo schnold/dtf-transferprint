@@ -264,7 +264,7 @@ A complete admin interface page with:
 ### Step 1: Run Database Migration
 ```bash
 # Navigate to project root
-cd C:\Users\lukas\Desktop\Projects\dtf-transferprint
+cd C:\Users\lukas\Desktop\Projects\selini-shirt
 
 # Run migration
 psql $NEON_DATABASE < migrations/001_form_requests.sql

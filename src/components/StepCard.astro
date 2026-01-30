@@ -1,0 +1,23 @@
+---
+/**
+ * Single step card for StepListSection.
+ * Number and title use flex items-center so the number is aligned with the title (not shifted upwards).
+ */
+interface Props {
+	number: string | number;
+	title: string;
+	/** Use 'success' for checkmark/final step */
+	badgeVariant?: 'primary' | 'success';
+}
+const { number, title, badgeVariant = 'primary' } = Astro.props;
+const badgeClass = badgeVariant === 'success' ? 'badge-success' : 'badge-primary';
+---
+<div class="bg-base-100 rounded-2xl p-6 md:p-8 shadow-sm hover:shadow-md transition-shadow">
+	<div class="flex gap-4 items-center">
+		<div class={`badge ${badgeClass} badge-lg flex-shrink-0`}>{number}</div>
+		<h4 class="font-semibold text-lg text-neutral leading-tight">{title}</h4>
+	</div>
+	<div class="mt-3">
+		<slot />
+	</div>
+</div>

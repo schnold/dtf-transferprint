@@ -3,6 +3,7 @@ import CompanyLayout from '../layouts/CompanyLayout.astro';
 import InquiryForm from '../components/InquiryForm.astro';
 import UseCasesSection from '../components/UseCasesSection.astro';
 import ContactCTASection from '../components/ContactCTASection.astro';
+import ProsConsSection from '../components/ProsConsSection.astro';
 
 const title = 'Einzelnamenstick auf Textilien | Hochwertige Namens-Stickerei';
 const description = 'Einzelnamen sticken auf T-Shirts, Trikots & Textilien ✓ Premium-Qualität ✓ Persönliche Monogramme ✓ Waschbeständig ✓ Ab 1 Stück ✓ Flexible Positionen ✓ Keine Programmerstellungskosten bei Standardschriften!';
@@ -21,7 +22,12 @@ const description = 'Einzelnamen sticken auf T-Shirts, Trikots & Textilien ✓ P
 				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
 			</svg>
 			<div>
-				<h3 class="font-bold">💎 Premium-Vorteil bei Standardschriften</h3>
+				<h3 class="font-bold flex items-center gap-2">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 shrink-0">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456z" />
+					</svg>
+					Premium-Vorteil bei Standardschriften
+				</h3>
 				<p class="mt-2">
 					Bei Verwendung von <strong>Standardschriften entfallen die Kosten für die Stickprogrammerstellung</strong> – Sie zahlen nur die reine Stickleistung! Für individuelle oder aufwendige Schriften erstellen wir gerne ein maßgeschneidertes Stickprogramm.
 				</p>
@@ -65,22 +71,20 @@ const description = 'Einzelnamen sticken auf T-Shirts, Trikots & Textilien ✓ P
 		</div>
 	</div>
 
-	<!-- Visual Example Section with Image Placeholder -->
-	<div class="card bg-base-200 border-4 border-dashed border-primary/30 shadow-xl my-8">
-		<div class="card-body items-center text-center">
-			<div class="w-full aspect-video bg-gradient-to-br from-base-300 to-base-200 rounded-lg flex items-center justify-center relative overflow-hidden">
-				<div class="absolute inset-0 bg-grid-pattern opacity-5"></div>
-				<div class="text-center z-10">
-					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-16 h-16 mx-auto mb-4 text-primary/50">
-						<path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
-					</svg>
-					<p class="text-sm text-neutral/60 font-semibold uppercase tracking-wider">Bild-Platzhalter</p>
-					<p class="text-xs text-neutral/50 mt-1">Beispiele für Einzelnamenstickerei</p>
-					<p class="text-xs text-neutral/40 mt-2">(Kragenstick, Bruststick, Armstick)</p>
-				</div>
-			</div>
-			<p class="text-sm text-neutral/70 mt-4 italic">📷 Hier werden später Beispielbilder von gestickten Namen auf verschiedenen Textilien angezeigt</p>
-		</div>
+	<!-- Beispiele aus unserer Produktion -->
+	<h2>Beispiele aus unserer Produktion</h2>
+	<p class="text-neutral/70 mb-6">
+		Einzelnamenstick – von der Detailaufnahme bis zur Logo-Stickerei.
+	</p>
+	<div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-12">
+		<figure class="rounded-2xl overflow-hidden shadow-lg border border-base-300/30">
+			<img src="/images/dienstleistungen/einzelnamen-direkstickung/logo-david-stickung-detailaufnahme.png" alt="Logo David – Stickung Detailaufnahme" class="w-full aspect-[4/3] object-cover" width="400" height="300" loading="lazy" />
+			<figcaption class="p-4 bg-base-200 text-sm text-neutral/80">Logo David – Stickung Detailaufnahme</figcaption>
+		</figure>
+		<figure class="rounded-2xl overflow-hidden shadow-lg border border-base-300/30">
+			<img src="/images/dienstleistungen/einzelnamen-direkstickung/selini-shirt-logo-beispielstickung.png" alt="Selini-Shirt Logo Beispielstickung" class="w-full aspect-[4/3] object-cover" width="400" height="300" loading="lazy" />
+			<figcaption class="p-4 bg-base-200 text-sm text-neutral/80">Selini-Shirt Logo Beispielstickung</figcaption>
+		</figure>
 	</div>
 
 	<h2>Was ist Einzelnamenstickerei?</h2>
@@ -97,136 +101,51 @@ const description = 'Einzelnamen sticken auf T-Shirts, Trikots & Textilien ✓ P
 			<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
 		</svg>
 		<div>
-			<p class="font-semibold">💰 Kostenersparnis bei Standardschriften</p>
+			<p class="font-semibold flex items-center gap-2">
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 shrink-0">
+					<path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+				</svg>
+				Kostenersparnis bei Standardschriften
+			</p>
 			<p class="text-sm mt-2">
 				Bei Verwendung von <strong>Standardschriften aus unserer Punch-Software entfallen die Kosten für die Stickprogrammerstellung</strong> komplett! Sie zahlen nur die reine Stickleistung nach Stichanzahl. Für aufwendige oder individuelle Schriften muss ein Stickprogramm erstellt werden, das einmalig berechnet wird und bei Folgeaufträgen nicht erneut anfällt.
 			</p>
 		</div>
 	</div>
 
-	<!-- Vorteile & Nachteile Grid -->
-	<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 my-8">
-		<!-- Vorteile -->
-		<div class="card bg-gradient-to-br from-success/10 to-success/5 border border-success/20">
-			<div class="card-body">
-				<h3 class="card-title text-success flex items-center gap-2">
-					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-						<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-					</svg>
-					Vorteile der Einzelnamenstickerei
-				</h3>
-				<ul class="space-y-3 mt-4">
-					<li class="flex items-start gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-success mt-0.5 flex-shrink-0">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-						</svg>
-						<span><strong>Qualitativ hochwertig</strong> – Premium-Stickerei für edle Optik</span>
-					</li>
-					<li class="flex items-start gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-success mt-0.5 flex-shrink-0">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-						</svg>
-						<span><strong>Einzigartige Optik und Haptik</strong> – Fühlbare, dreidimensionale Stickerei</span>
-					</li>
-					<li class="flex items-start gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-success mt-0.5 flex-shrink-0">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-						</svg>
-						<span><strong>Extrem wasch- und lichtbeständig</strong> – Hält hunderte Waschzyklen ohne Verblassen</span>
-					</li>
-					<li class="flex items-start gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-success mt-0.5 flex-shrink-0">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-						</svg>
-						<span><strong>Keine Programmerstellungskosten bei Standardschriften</strong> – Direkt loslegen ohne Setup-Gebühr</span>
-					</li>
-					<li class="flex items-start gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-success mt-0.5 flex-shrink-0">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-						</svg>
-						<span><strong>Große Garnfarben-Auswahl</strong> – Über 1000 Farben (Pantone, HKS)</span>
-					</li>
-					<li class="flex items-start gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-success mt-0.5 flex-shrink-0">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-						</svg>
-						<span><strong>Filigrane Stickerei möglich</strong> – Schriften ab 3,5-5 mm Höhe mit Spezialgarn</span>
-					</li>
-					<li class="flex items-start gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-success mt-0.5 flex-shrink-0">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-						</svg>
-						<span><strong>Professionelles Erscheinungsbild</strong> – Edle Wertigkeit für Business und Premium-Textilien</span>
-					</li>
-					<li class="flex items-start gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-success mt-0.5 flex-shrink-0">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-						</svg>
-						<span><strong>Fast überall positionierbar</strong> – Brust, Arm, Kragen, Nacken, Manschetten</span>
-					</li>
-					<li class="flex items-start gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-success mt-0.5 flex-shrink-0">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-						</svg>
-						<span><strong>Langlebigkeit</strong> – Stickerei hält deutlich länger als Druckverfahren</span>
-					</li>
-				</ul>
-			</div>
-		</div>
-
-		<!-- Nachteile -->
-		<div class="card bg-gradient-to-br from-warning/10 to-warning/5 border border-warning/20">
-			<div class="card-body">
-				<h3 class="card-title text-warning flex items-center gap-2">
-					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-						<path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
-					</svg>
-					Einschränkungen
-				</h3>
-				<ul class="space-y-3 mt-4">
-					<li class="flex items-start gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-warning mt-0.5 flex-shrink-0">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-						</svg>
-						<span><strong>Mindestgröße erforderlich</strong> – Schriften unter 3,5 mm nicht umsetzbar</span>
-					</li>
-					<li class="flex items-start gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-warning mt-0.5 flex-shrink-0">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-						</svg>
-						<span><strong>Verspielte/filigrane Schriften schwierig</strong> – Klare, einfache Schriften besser geeignet</span>
-					</li>
-					<li class="flex items-start gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-warning mt-0.5 flex-shrink-0">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-						</svg>
-						<span><strong>Programmerstellungskosten bei Spezialschriften</strong> – Einmalige Gebühr für individuelle Designs</span>
-					</li>
-					<li class="flex items-start gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-warning mt-0.5 flex-shrink-0">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-						</svg>
-						<span><strong>Nicht skalierbar</strong> – Jede Größenänderung benötigt neues Stickprogramm</span>
-					</li>
-					<li class="flex items-start gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-warning mt-0.5 flex-shrink-0">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-						</svg>
-						<span><strong>Höhere Kosten als Druck</strong> – Premium-Qualität hat ihren Preis</span>
-					</li>
-				</ul>
-
-				<div class="alert alert-warning shadow-sm">
-					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-					</svg>
-					<div>
-						<p class="text-sm"><strong>Alternative:</strong> Für große Schriften oder mehrfarbige Designs empfehlen wir <a href="/einzelnamendruck/" class="link link-primary">Einzelnamendruck</a> per DTF oder Flex/Flock – günstiger und flexibler.</p>
-					</div>
+	<ProsConsSection
+		advantagesTitle="Vorteile der Einzelnamenstickerei"
+		disadvantagesTitle="Einschränkungen"
+		advantages={[
+			'<strong>Qualitativ hochwertig</strong> – Premium-Stickerei für edle Optik',
+			'<strong>Einzigartige Optik und Haptik</strong> – Fühlbare, dreidimensionale Stickerei',
+			'<strong>Extrem wasch- und lichtbeständig</strong> – Hält hunderte Waschzyklen ohne Verblassen',
+			'<strong>Keine Programmerstellungskosten bei Standardschriften</strong> – Direkt loslegen ohne Setup-Gebühr',
+			'<strong>Große Garnfarben-Auswahl</strong> – Über 1000 Farben (Pantone, HKS)',
+			'<strong>Filigrane Stickerei möglich</strong> – Schriften ab 3,5-5 mm Höhe mit Spezialgarn',
+			'<strong>Professionelles Erscheinungsbild</strong> – Edle Wertigkeit für Business und Premium-Textilien',
+			'<strong>Fast überall positionierbar</strong> – Brust, Arm, Kragen, Nacken, Manschetten',
+			'<strong>Langlebigkeit</strong> – Stickerei hält deutlich länger als Druckverfahren',
+		]}
+		disadvantages={[
+			'<strong>Mindestgröße erforderlich</strong> – Schriften unter 3,5 mm nicht umsetzbar',
+			'<strong>Verspielte/filigrane Schriften schwierig</strong> – Klare, einfache Schriften besser geeignet',
+			'<strong>Programmerstellungskosten bei Spezialschriften</strong> – Einmalige Gebühr für individuelle Designs',
+			'<strong>Nicht skalierbar</strong> – Jede Größenänderung benötigt neues Stickprogramm',
+			'<strong>Höhere Kosten als Druck</strong> – Premium-Qualität hat ihren Preis',
+		]}
+	>
+		<div slot="disadvantages-extra" class="mt-4">
+			<div class="alert alert-warning shadow-sm">
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+				</svg>
+				<div>
+					<p class="text-sm"><strong>Alternative:</strong> Für große Schriften oder mehrfarbige Designs empfehlen wir <a href="/einzelnamendruck/" class="link link-primary">Einzelnamendruck</a> per DTF oder Flex/Flock – günstiger und flexibler.</p>
 				</div>
 			</div>
 		</div>
-	</div>
+	</ProsConsSection>
 
 	<h2>Wie funktioniert Einzelnamenstickerei?</h2>
 	<p>
@@ -309,7 +228,11 @@ const description = 'Einzelnamen sticken auf T-Shirts, Trikots & Textilien ✓ P
 				</div>
 
 				<div class="flex gap-4 items-start">
-					<div class="badge badge-success badge-lg">✓</div>
+					<div class="badge badge-success badge-lg shrink-0">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+						</svg>
+					</div>
 					<div class="flex-1">
 						<h4 class="font-semibold mb-1">Qualitätskontrolle & Fertigstellung</h4>
 						<p class="text-sm text-neutral/80">
@@ -327,7 +250,12 @@ const description = 'Einzelnamen sticken auf T-Shirts, Trikots & Textilien ✓ P
 			<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
 		</svg>
 		<div>
-			<p class="font-semibold">🧵 Filigrane Stickerei dank Spezialgarn</p>
+			<p class="font-semibold flex items-center gap-2">
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 shrink-0">
+					<path stroke-linecap="round" stroke-linejoin="round" d="M14.25 6.087c0-.355.186-.676.401-.959.221-.29.349-.634.349-1.003 0-1.036-1.007-1.875-2.25-1.875s-2.25.84-2.25 1.875c0 .369.128.713.349 1.003.215.283.401.604.401.959v0a.64.64 0 01-.657.65 48.39 48.39 0 01-4.163-.3c.186 1.613.293 3.25.315 4.907a.656.656 0 01-.658.663v0c-.355 0-.676-.186-.959-.401a1.647 1.647 0 00-1.003-.349c-1.036 0-1.875 1.007-1.875 2.25s.84 2.25 1.875 2.25c.369 0 .713-.128 1.003-.349.283-.215.604-.401.959-.401v0c.31 0 .555.26.532.57a48.039 48.039 0 01-.642 5.056c1.518.19 3.058.309 4.616.354a.64.64 0 00.657-.648v0c0-.355-.186-.676-.401-.959a1.647 1.647 0 01-.349-1.003c0-1.035 1.008-1.875 2.25-1.875 1.243 0 2.25.84 2.25 1.875 0 .369-.128.713-.349 1.003-.215.283-.4.604-.4.959v0c0 .333.277.599.61.58a48.1 48.1 0 005.427-.63 48.05 48.05 0 00.582-4.717.532.532 0 00-.533-.57v0c-.355 0-.676.186-.959.401-.29.221-.634.349-1.003.349-1.035 0-1.875-1.007-1.875-2.25s.84-2.25 1.875-2.25c.37 0 .713.128 1.003.349.283.215.604.401.96.401v0a.656.656 0 00.658-.663 48.422 48.422 0 00-.37-5.36c-1.886.342-3.81.574-5.766.689a.578.578 0 01-.61-.58v0z" />
+				</svg>
+				Filigrane Stickerei dank Spezialgarn
+			</p>
 			<p class="text-sm mt-2">
 				Dank spezieller <strong>dünner Garne</strong> können wir Schriften ab 5 mm Höhe umsetzen. In Ausnahmefällen sind sogar Schriften ab 3,5 mm möglich – abhängig von Motiv und Textil. Unsere langjährige Erfahrung ermöglicht solch präzise Arbeiten. Senden Sie uns Ihr Motiv zur Prüfung – wir beraten Sie fachmännisch.
 			</p>
@@ -454,7 +382,12 @@ const description = 'Einzelnamen sticken auf T-Shirts, Trikots & Textilien ✓ P
 			</h3>
 			<div class="space-y-4 mt-4">
 				<div>
-					<h4 class="font-semibold mb-2">📊 Stickpreis richtet sich nach:</h4>
+					<h4 class="font-semibold mb-2 flex items-center gap-2">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 shrink-0">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
+						</svg>
+						Stickpreis richtet sich nach:
+					</h4>
 					<ul class="list-disc list-inside space-y-2 ml-4 text-sm">
 						<li><strong>Stichanzahl</strong> – Je komplexer das Motiv, desto mehr Stiche werden benötigt</li>
 						<li><strong>Menge der Textilien</strong> – Größere Auflagen = günstigerer Stückpreis</li>
@@ -464,7 +397,12 @@ const description = 'Einzelnamen sticken auf T-Shirts, Trikots & Textilien ✓ P
 				</div>
 
 				<div>
-					<h4 class="font-semibold mb-2">💾 Stickprogramm-Erstellung (einmalig):</h4>
+					<h4 class="font-semibold mb-2 flex items-center gap-2">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 shrink-0">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125" />
+						</svg>
+						Stickprogramm-Erstellung (einmalig):
+					</h4>
 					<ul class="list-disc list-inside space-y-2 ml-4 text-sm">
 						<li><strong>Bei Standardschriften: KOSTENLOS</strong> – keine Programmierkosten</li>
 						<li><strong>Bei individuellen Schriften:</strong> Einmalige Erstellungsgebühr, bei Folgeaufträgen entfällt sie</li>
@@ -474,7 +412,12 @@ const description = 'Einzelnamen sticken auf T-Shirts, Trikots & Textilien ✓ P
 
 				<div class="bg-primary/10 p-4 rounded-lg border border-primary/20">
 					<p class="text-sm">
-						<strong>💡 Unser Tipp:</strong> Senden Sie uns Ihr gewünschtes Motiv zur Ansicht. Wir prüfen, ob es sich in der gewünschten Größe umsetzen lässt und erstellen Ihnen ein individuelles Angebot basierend auf der Stichanzahl. Unser Team berät Sie gerne kostenlos und unverbindlich.
+						<strong class="inline-flex items-center gap-1">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 shrink-0 inline">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0M3.75 18.75a1.5 1.5 0 013 0M3.75 6.75a1.5 1.5 0 013 0" />
+							</svg>
+							Unser Tipp:
+						</strong> Senden Sie uns Ihr gewünschtes Motiv zur Ansicht. Wir prüfen, ob es sich in der gewünschten Größe umsetzen lässt und erstellen Ihnen ein individuelles Angebot basierend auf der Stichanzahl. Unser Team berät Sie gerne kostenlos und unverbindlich.
 					</p>
 				</div>
 			</div>

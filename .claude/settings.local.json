@@ -2,7 +2,7 @@
   "permissions": {
     "allow": [
       "Bash(npx @better-auth/cli generate:*)",
-      "Bash(dir \"C:\\\\Users\\\\lukas\\\\Desktop\\\\Projects\\\\dtf-transferprint\\\\src\\\\pages\")",
+      "Bash(dir \"C:\\\\Users\\\\lukas\\\\Desktop\\\\Projects\\\\selini-shirt\\\\src\\\\pages\")",
       "Bash(npm install:*)",
       "Bash(npm run migrate:*)",
       "Bash(npm run dev:*)",
@@ -13,7 +13,9 @@
       "Bash(wc:*)",
       "Bash(tsx scripts/test-sitemap.ts:*)",
       "Bash(npm run test:sitemap:*)",
-      "Bash(npm i:*)"
+      "Bash(npm i:*)",
+      "WebSearch",
+      "WebFetch(domain:docs.astro.build)"
     ]
   }
 }

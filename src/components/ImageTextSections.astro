@@ -6,8 +6,10 @@ interface Section {
 	description: string;
 	image?: string;
 	imageAlt?: string;
+	video?: string;
 	images?: Array<{
-		src: string;
+		src?: string;
+		video?: string;
 		alt: string;
 	}>;
 	features?: Array<{
@@ -36,6 +38,7 @@ const { sections } = Astro.props;
 					description={section.description}
 					image={section.image}
 					imageAlt={section.imageAlt}
+					video={section.video}
 					images={section.images}
 					features={section.features}
 					badges={section.badges}

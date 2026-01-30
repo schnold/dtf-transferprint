@@ -3,6 +3,7 @@ import CompanyLayout from '../layouts/CompanyLayout.astro';
 import InquiryForm from '../components/InquiryForm.astro';
 import UseCasesSection from '../components/UseCasesSection.astro';
 import ContactCTASection from '../components/ContactCTASection.astro';
+import ProsConsSection from '../components/ProsConsSection.astro';
 
 const title = 'Sublimationsdruck auf Polyester & Funktionskleidung | Fotorealistische Qualität';
 const description = 'Sublimationsdruck für T-Shirts, Trikots & Sportbekleidung ✓ Fotorealistisch ✓ Atmungsaktiv ✓ Waschfest bis 60°C ✓ Perfekt für weiße Polyester-Textilien ✓ Keine Mindestmenge ➤ Jetzt beraten lassen!';
@@ -60,6 +61,18 @@ const description = 'Sublimationsdruck für T-Shirts, Trikots & Sportbekleidung 
 		</div>
 	</div>
 
+	<!-- Beispiele aus unserer Produktion -->
+	<h2>Beispiele aus unserer Produktion</h2>
+	<p class="text-neutral/70 mb-6">
+		Sublimationsdruck auf Polyester – fotorealistisch und atmungsaktiv.
+	</p>
+	<div class="mb-12">
+		<figure class="rounded-2xl overflow-hidden shadow-lg border border-base-300/30 w-full">
+			<img src="/images/dienstleistungen/sublimation/sublimation-beispiel-komplettes-shirt.png" alt="Sublimationsdruck – komplettes Shirt mit fotorealistischem Druck" class="w-full aspect-video object-cover" width="1200" height="675" loading="lazy" />
+			<figcaption class="p-4 bg-base-200 text-sm text-neutral/80">Sublimationsdruck – komplettes Shirt mit fotorealistischem Druck</figcaption>
+		</figure>
+	</div>
+
 	<h2>Was ist Sublimationsdruck?</h2>
 	<p>
 		<strong>Sublimationsdruck</strong> ist ein innovatives Textildruckverfahren, bei dem Farbe mittels Hitze und Druck direkt in die Polyesterfasern eingedampft wird. Dabei wird die Farbe vom festen in den gasförmigen Zustand überführt (Sublimation) und verbindet sich permanent mit dem Textil – ohne jeglichen fühlbaren Aufdruck.
@@ -68,123 +81,38 @@ const description = 'Sublimationsdruck für T-Shirts, Trikots & Sportbekleidung 
 		Das Ergebnis ist ein <strong>fotorealistischer, hochauflösender Druck</strong> mit brillanten Farben, der nicht auf dem Stoff liegt, sondern Teil des Materials wird. Die bedruckten Textilien bleiben zu 100% atmungsaktiv, geschmeidig und angenehm zu tragen – perfekt für Sportbekleidung, Trikots und Funktionskleidung.
 	</p>
 
-	<!-- Vorteile & Nachteile Grid -->
-	<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 my-8">
-		<!-- Vorteile -->
-		<div class="card bg-gradient-to-br from-success/10 to-success/5 border border-success/20">
-			<div class="card-body">
-				<h3 class="card-title text-success flex items-center gap-2">
-					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-						<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-					</svg>
-					Vorteile des Sublimationsdrucks
-				</h3>
-				<ul class="space-y-3 mt-4">
-					<li class="flex items-start gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-success mt-0.5 flex-shrink-0">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-						</svg>
-						<span><strong>Fotorealistische Bildqualität</strong> – Perfekt für Fotos, Farbverläufe und komplexe Designs</span>
-					</li>
-					<li class="flex items-start gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-success mt-0.5 flex-shrink-0">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-						</svg>
-						<span><strong>Kein fühlbarer Aufdruck</strong> – Die Farbe wird Teil des Stoffes, nicht aufgetragen</span>
-					</li>
-					<li class="flex items-start gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-success mt-0.5 flex-shrink-0">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-						</svg>
-						<span><strong>100% atmungsaktiv</strong> – Ideal für Sport- und Funktionskleidung, keine Beeinträchtigung der Luftzirkulation</span>
-					</li>
-					<li class="flex items-start gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-success mt-0.5 flex-shrink-0">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-						</svg>
-						<span><strong>Brillante, waschfeste Farben</strong> – Waschbeständig bis 60°C ohne Verblassen</span>
-					</li>
-					<li class="flex items-start gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-success mt-0.5 flex-shrink-0">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-						</svg>
-						<span><strong>Unbegrenzte Farbvielfalt</strong> – Vollfarb-CMYK-Druck mit 16,7 Millionen Farben</span>
-					</li>
-					<li class="flex items-start gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-success mt-0.5 flex-shrink-0">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-						</svg>
-						<span><strong>Keine Mindestmenge</strong> – Perfekt für Einzelstücke, kleine und große Auflagen</span>
-					</li>
-					<li class="flex items-start gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-success mt-0.5 flex-shrink-0">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-						</svg>
-						<span><strong>Ganzflächiger Druck möglich</strong> – All-Over-Prints ohne Grenzen</span>
-					</li>
-					<li class="flex items-start gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-success mt-0.5 flex-shrink-0">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-						</svg>
-						<span><strong>Langlebig und robust</strong> – Der Druck kann nicht reißen, abblättern oder rissig werden</span>
-					</li>
-					<li class="flex items-start gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-success mt-0.5 flex-shrink-0">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-						</svg>
-						<span><strong>Umweltfreundlich</strong> – Kein Wasser, keine Chemikalien, geruchsneutral</span>
-					</li>
-				</ul>
-			</div>
-		</div>
-
-		<!-- Nachteile -->
-		<div class="card bg-gradient-to-br from-warning/10 to-warning/5 border border-warning/20">
-			<div class="card-body">
-				<h3 class="card-title text-warning flex items-center gap-2">
-					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-						<path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
-					</svg>
-					Einschränkungen
-				</h3>
-				<ul class="space-y-3 mt-4">
-					<li class="flex items-start gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-warning mt-0.5 flex-shrink-0">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-						</svg>
-						<span><strong>Nur für Polyester-Textilien</strong> – Funktioniert nicht auf Baumwolle oder Naturfasern</span>
-					</li>
-					<li class="flex items-start gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-warning mt-0.5 flex-shrink-0">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-						</svg>
-						<span><strong>Benötigt helle Grundfarben</strong> – Optimal auf weißen oder sehr hellen Textilien (max. Hellgrau)</span>
-					</li>
-					<li class="flex items-start gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-warning mt-0.5 flex-shrink-0">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-						</svg>
-						<span><strong>Nicht für dunkle Stoffe geeignet</strong> – Schwarze oder dunkle Textilien können nicht sublimiert werden</span>
-					</li>
-					<li class="flex items-start gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-warning mt-0.5 flex-shrink-0">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-						</svg>
-						<span><strong>Mindestens 65% Polyester erforderlich</strong> – Bei Mischgeweben sinkt die Farbintensität</span>
-					</li>
-				</ul>
-
-				<div class="alert alert-warning shadow-sm">
-					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-					</svg>
-					<div>
-						<p class="text-sm"><strong>Alternative für dunkle Textilien:</strong> Für dunkle Baumwoll- oder Mischgewebe-Textilien empfehlen wir unseren <a href="/dtf-transfers/" class="link link-primary">DTF-Digitaldruck</a> oder <a href="/siebdruck/" class="link link-primary">Siebdruck</a>.</p>
-					</div>
+	<ProsConsSection
+		advantagesTitle="Vorteile des Sublimationsdrucks"
+		disadvantagesTitle="Einschränkungen"
+		advantages={[
+			'<strong>Fotorealistische Bildqualität</strong> – Perfekt für Fotos, Farbverläufe und komplexe Designs',
+			'<strong>Kein fühlbarer Aufdruck</strong> – Die Farbe wird Teil des Stoffes, nicht aufgetragen',
+			'<strong>100% atmungsaktiv</strong> – Ideal für Sport- und Funktionskleidung, keine Beeinträchtigung der Luftzirkulation',
+			'<strong>Brillante, waschfeste Farben</strong> – Waschbeständig bis 60°C ohne Verblassen',
+			'<strong>Unbegrenzte Farbvielfalt</strong> – Vollfarb-CMYK-Druck mit 16,7 Millionen Farben',
+			'<strong>Keine Mindestmenge</strong> – Perfekt für Einzelstücke, kleine und große Auflagen',
+			'<strong>Ganzflächiger Druck möglich</strong> – All-Over-Prints ohne Grenzen',
+			'<strong>Langlebig und robust</strong> – Der Druck kann nicht reißen, abblättern oder rissig werden',
+			'<strong>Umweltfreundlich</strong> – Kein Wasser, keine Chemikalien, geruchsneutral',
+		]}
+		disadvantages={[
+			'<strong>Nur für Polyester-Textilien</strong> – Funktioniert nicht auf Baumwolle oder Naturfasern',
+			'<strong>Benötigt helle Grundfarben</strong> – Optimal auf weißen oder sehr hellen Textilien (max. Hellgrau)',
+			'<strong>Nicht für dunkle Stoffe geeignet</strong> – Schwarze oder dunkle Textilien können nicht sublimiert werden',
+			'<strong>Mindestens 65% Polyester erforderlich</strong> – Bei Mischgeweben sinkt die Farbintensität',
+		]}
+	>
+		<div slot="disadvantages-extra" class="mt-4">
+			<div class="alert alert-warning shadow-sm">
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+				</svg>
+				<div>
+					<p class="text-sm"><strong>Alternative für dunkle Textilien:</strong> Für dunkle Baumwoll- oder Mischgewebe-Textilien empfehlen wir unseren <a href="/dtf-transfers/" class="link link-primary">DTF-Digitaldruck</a> oder <a href="/siebdruck/" class="link link-primary">Siebdruck</a>.</p>
 				</div>
 			</div>
 		</div>
-	</div>
+	</ProsConsSection>
 
 	<h2>Wie funktioniert Sublimationsdruck?</h2>
 	<p>
@@ -231,7 +159,11 @@ const description = 'Sublimationsdruck für T-Shirts, Trikots & Sportbekleidung 
 				</div>
 
 				<div class="flex gap-4 items-start">
-					<div class="badge badge-success badge-lg">✓</div>
+					<div class="badge badge-success badge-lg shrink-0">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+						</svg>
+					</div>
 					<div class="flex-1">
 						<h4 class="font-semibold mb-1">Fertiges Ergebnis</h4>
 						<p class="text-sm text-neutral/80">

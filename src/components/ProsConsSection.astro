@@ -1,0 +1,73 @@
+---
+/**
+ * Vorteile & Nachteile section for druckdienstleistungen pages.
+ * Uniform styling: icon and header text on same line (flex items-center), same card style on all pages.
+ */
+interface Props {
+	sectionTitle?: string;
+	advantagesTitle?: string;
+	disadvantagesTitle?: string;
+	advantages: string[];
+	disadvantages: string[];
+	/** Optional HTML string or slot for extra content in advantages card (e.g. alert) */
+	advantagesExtra?: string;
+	/** Optional HTML string or slot for extra content in disadvantages card (e.g. alert) */
+	disadvantagesExtra?: string;
+}
+const {
+	sectionTitle = 'Vorteile & Nachteile',
+	advantagesTitle = 'Vorteile',
+	disadvantagesTitle = 'Nachteile',
+	advantages,
+	disadvantages,
+} = Astro.props;
+---
+<h2>{sectionTitle}</h2>
+
+<div class="grid md:grid-cols-2 gap-8 my-8">
+	<!-- Advantages -->
+	<div class="bg-success/5 border border-success/20 rounded-2xl p-8">
+		<div class="flex items-center gap-3 mb-6">
+			<div class="w-10 h-10 bg-success/20 rounded-lg flex items-center justify-center flex-shrink-0">
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-success">
+					<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+				</svg>
+			</div>
+			<h3 class="text-2xl font-bold text-neutral leading-tight">{advantagesTitle}</h3>
+		</div>
+		<ul class="space-y-4">
+			{advantages.map((item) => (
+				<li class="flex gap-3">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-success flex-shrink-0 mt-0.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+					</svg>
+					<span class="text-neutral/80 prose prose-sm max-w-none" set:html={item} />
+				</li>
+			))}
+		</ul>
+		<slot name="advantages-extra" />
+	</div>
+
+	<!-- Disadvantages -->
+	<div class="bg-warning/5 border border-warning/20 rounded-2xl p-8">
+		<div class="flex items-center gap-3 mb-6">
+			<div class="w-10 h-10 bg-warning/20 rounded-lg flex items-center justify-center flex-shrink-0">
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-warning">
+					<path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+				</svg>
+			</div>
+			<h3 class="text-2xl font-bold text-neutral leading-tight">{disadvantagesTitle}</h3>
+		</div>
+		<ul class="space-y-4">
+			{disadvantages.map((item) => (
+				<li class="flex gap-3">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-warning flex-shrink-0 mt-0.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+					</svg>
+					<span class="text-neutral/80 prose prose-sm max-w-none" set:html={item} />
+				</li>
+			))}
+		</ul>
+		<slot name="disadvantages-extra" />
+	</div>
+</div>
