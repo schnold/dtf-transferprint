@@ -8,7 +8,8 @@
     "preview": "astro preview",
     "astro": "astro",
     "migrate": "tsx scripts/run-migrations.ts",
-    "test:sitemap": "tsx scripts/test-sitemap.ts"
+    "test:sitemap": "tsx scripts/test-sitemap.ts",
+    "convert:webp": "tsx scripts/convert-to-webp.ts"
   },
   "dependencies": {
     "@astrojs/netlify": "^6.6.3",

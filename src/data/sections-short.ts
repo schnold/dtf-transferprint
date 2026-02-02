@@ -26,15 +26,15 @@ export const shortSections = [
 		description: "Von Plastisol-Transfers über Stickerei bis hin zu digitalen Textildrucken – wir bieten professionelle Drucklösungen und individuelle Veredelungstechniken für jeden Bedarf.",
 		images: [
 			{
-				src: "/images/landing-page/2150538681.jpg",
+				src: "/images/landing-page/2150538681.webp",
 				alt: "Textilveredelung Selini-Shirt - Professionelle Drucklösungen"
 			},
 			{
-				src: "/images/landing-page/2826813.jpg",
+				src: "/images/landing-page/2826813.webp",
 				alt: "Selini-Shirt Textilveredelung - Siebdruck, Plastisoltransfer und Stickerei aus Berlin"
 			},
 			{
-				src: "/images/eigenschaften/2769.jpg",
+				src: "/images/eigenschaften/2769.webp",
 				alt: "Stickerei und Textildruck Lösungen von Selini-Shirt"
 			}
 		],

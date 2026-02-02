@@ -1,0 +1,40 @@
+---
+/**
+ * WebP Image Component with automatic fallback
+ * Automatically serves WebP images with fallback to original format for browser compatibility
+ */
+interface Props {
+	src: string;
+	alt: string;
+	class?: string;
+	loading?: 'lazy' | 'eager';
+	width?: number;
+	height?: number;
+	[key: string]: any;
+}
+
+const { src, alt, class: className, loading = 'lazy', width, height, ...rest } = Astro.props;
+
+// Convert image path to WebP version
+const getWebPPath = (originalPath: string): string => {
+	return originalPath.replace(/\.(jpg|jpeg|png|gif)$/i, '.webp');
+};
+
+const webpSrc = getWebPPath(src);
+---
+
+<picture>
+	<!-- WebP version for modern browsers -->
+	<source srcset={webpSrc} type="image/webp" />
+
+	<!-- Fallback to original format -->
+	<img
+		src={src}
+		alt={alt}
+		class={className}
+		loading={loading}
+		width={width}
+		height={height}
+		{...rest}
+	/>
+</picture>
