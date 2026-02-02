@@ -12,7 +12,7 @@ export const SITE_CONFIG = {
 		name: "DTF Transfer Print",
 		tagline: "Professionelle Drucklösungen seit 2009. Ihre Vision, unsere Expertise.",
 		logo: {
-			primary: "/images/logo/logo-1.png",
+			primary: "/images/logo/logo-1.webp",
 			alt: "DTF Transfer Print Logo",
 		},
 	},

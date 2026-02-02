@@ -554,57 +554,8 @@ import { SITE_CONFIG } from '../constants/site';
     }
   });
 
-  // Close modal on scroll
-  let scrollTimeout: number | null = null;
-  const handleScroll = () => {
-    if (modal?.open) {
-      // Clear any existing timeout
-      if (scrollTimeout) {
-        clearTimeout(scrollTimeout);
-      }
-      
-      // Close modal after a small delay to prevent accidental closes
-      scrollTimeout = window.setTimeout(() => {
-        modal.close();
-      }, 100);
-    }
-  };
-
-  // Listen for modal opening to add scroll listener
-  const observer = new MutationObserver((mutations) => {
-    mutations.forEach((mutation) => {
-      if (mutation.type === 'attributes' && mutation.attributeName === 'open') {
-        if (modal?.open) {
-          // Add scroll listeners when modal opens
-          window.addEventListener('scroll', handleScroll, true);
-          window.addEventListener('wheel', handleScroll, true);
-          window.addEventListener('touchmove', handleScroll, true);
-        } else {
-          // Remove scroll listeners when modal closes
-          window.removeEventListener('scroll', handleScroll, true);
-          window.removeEventListener('wheel', handleScroll, true);
-          window.removeEventListener('touchmove', handleScroll, true);
-        }
-      }
-    });
-  });
-
-  if (modal) {
-    observer.observe(modal, { attributes: true, attributeFilter: ['open'] });
-  }
-
   // Reset on close
   modal?.addEventListener('close', () => {
-    // Remove scroll listeners
-    window.removeEventListener('scroll', handleScroll, true);
-    window.removeEventListener('wheel', handleScroll, true);
-    window.removeEventListener('touchmove', handleScroll, true);
-    
-    if (scrollTimeout) {
-      clearTimeout(scrollTimeout);
-      scrollTimeout = null;
-    }
-    
     // Reset form state
     loginForm?.reset();
     signupForm?.reset();

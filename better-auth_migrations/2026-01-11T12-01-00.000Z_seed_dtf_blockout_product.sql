@@ -268,7 +268,7 @@ values
   (
     'img-1',
     'prod-dtf-blockout-5m',
-    '/images/products/dtf-blockout-meterware.jpg',
+    '/images/products/dtf-blockout-meterware.webp',
     'DTF Blockout Meterware Beispiel',
     1,
     true

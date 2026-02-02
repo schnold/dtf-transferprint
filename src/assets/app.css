@@ -13,8 +13,8 @@
   --color-secondary-dark: #262626; /* Very dark gray for hover states */
 
   /* Dark stone gray (neutral dark gray, slight stone – primary buttons, links) */
-  --color-dark-blue: #3d3b38;       /* Neutral dark gray with stone – gradient start */
-  --color-dark-blue-dark: #252322;  /* Darker stone gray – gradient end */
+  --color-dark-blue: #32302e;       /* Neutral dark gray with stone – gradient start */
+  --color-dark-blue-dark: #1e1d1c;  /* Darker stone gray – gradient end */
 
   /* Accent Colors */
   --color-accent: #EBF222;      /* Bright yellow-green accent for highlights */
@@ -41,7 +41,7 @@
 
   /* Metrics Banner (dark design – uses same dark stone as primary) */
   --color-metrics-banner-bg: var(--color-dark-blue);
-  --color-metrics-banner-bg-subtle: rgba(61, 59, 56, 0.98);
+  --color-metrics-banner-bg-subtle: rgba(50, 48, 46, 0.98);
   --color-metrics-banner-text: #e5e7eb;
   --color-metrics-banner-text-muted: #9ca3af;
   --color-metrics-banner-value: #f3f4f6;
@@ -52,6 +52,22 @@
   --color-yellow-accent: #F2E307; /* Yellow for badges and stars */
   --color-yellow-accent-dark: #B8A805; /* Darker yellow for icons */
   --color-yellow-accent-10: rgba(242, 227, 7, 0.1); /* Yellow with 10% opacity for backgrounds */
+}
+
+/* Hero card fade-in animation */
+@keyframes hero-card-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(1.25rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-card-fade-in {
+  animation: hero-card-fade-in 1s cubic-bezier(0.22, 1, 0.36, 1) 0.3s both;
 }
 
 @layer base {
@@ -153,7 +169,7 @@
 
   .btn-primary:focus {
     background: linear-gradient(to bottom, var(--color-dark-blue) 0%, var(--color-dark-blue-dark) 100%);
-    box-shadow: 0 0 0 2px rgba(37, 35, 34, 0.25);
+    box-shadow: 0 0 0 2px rgba(30, 29, 28, 0.25);
     color: rgba(255, 255, 255, 0.95) !important;
   }
 
@@ -212,6 +228,22 @@
     border-color: var(--color-secondary) !important;
     box-shadow: 0 4px 12px rgba(89, 89, 89, 0.25);
   }
+
+  /* Navbar CTA: default = brand light green (accent), hover = subtle highlight */
+  #navbar-container .navbar-end .btn-outline.btn-primary {
+    background: var(--color-accent) !important;
+    color: var(--color-neutral) !important;
+    border-color: var(--color-accent) !important;
+    transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+  }
+  #navbar-container .navbar-end .btn-outline.btn-primary:hover {
+    background: #f2f755 !important; /* slightly brighter accent */
+    color: var(--color-neutral) !important;
+    border-color: #f2f755 !important;
+    box-shadow: 0 4px 14px rgba(235, 242, 34, 0.45);
+    transform: translateY(-1px);
+  }
+
   .btn-outline.btn-primary:focus {
     color: var(--color-secondary) !important;
     border-color: var(--color-secondary) !important;
@@ -703,6 +735,68 @@
     --shadow: 0.5rem 0.5rem;
   }
 
+  /* Global input field styling - clearer borders for better visibility */
+  .input,
+  .textarea,
+  .select,
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="number"],
+  input[type="tel"],
+  input[type="url"],
+  input[type="search"],
+  input[type="date"],
+  input[type="time"],
+  input[type="datetime-local"],
+  textarea,
+  select {
+    border-width: 2px !important;
+    border-color: rgba(166, 166, 166, 0.4) !important;
+    transition: all 0.2s ease !important;
+  }
+
+  /* Hover state - slightly darker border */
+  .input:hover,
+  .textarea:hover,
+  .select:hover,
+  input[type="text"]:hover,
+  input[type="email"]:hover,
+  input[type="password"]:hover,
+  input[type="number"]:hover,
+  input[type="tel"]:hover,
+  input[type="url"]:hover,
+  input[type="search"]:hover,
+  input[type="date"]:hover,
+  input[type="time"]:hover,
+  input[type="datetime-local"]:hover,
+  textarea:hover,
+  select:hover {
+    border-color: rgba(166, 166, 166, 0.6) !important;
+  }
+
+  /* Focus state - primary color border */
+  .input:focus,
+  .textarea:focus,
+  .select:focus,
+  input[type="text"]:focus,
+  input[type="email"]:focus,
+  input[type="password"]:focus,
+  input[type="number"]:focus,
+  input[type="tel"]:focus,
+  input[type="url"]:focus,
+  input[type="search"]:focus,
+  input[type="date"]:focus,
+  input[type="time"]:focus,
+  input[type="datetime-local"]:focus,
+  textarea:focus,
+  select:focus {
+    border-color: var(--color-primary) !important;
+    border-width: 2px !important;
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(102, 109, 39, 0.1) !important;
+  }
+
   /* Input field placeholder padding - shift placeholder text to the right */
   .input,
   input[type="text"],
@@ -738,61 +832,29 @@
     padding-left: 1.25rem !important;
   }
 
-  /* Switch/Toggle styling - light green accent when activated */
-  .toggle:checked:not(.toggle-success):not(.toggle-warning):not(.toggle-error):not(.toggle-secondary):not([style*="--toggle-color"]) {
-    background-color: var(--color-accent) !important;
-    border-color: var(--color-accent) !important;
-  }
-
-  .toggle:checked:not(.toggle-success):not(.toggle-warning):not(.toggle-error):not(.toggle-secondary):not([style*="--toggle-color"]):hover {
-    background-color: var(--color-accent-dark) !important;
-    border-color: var(--color-accent-dark) !important;
-  }
-
-  /* Primary toggle variant uses light green accent */
-  .toggle-primary:checked {
-    background-color: var(--color-accent) !important;
-    border-color: var(--color-accent) !important;
-  }
-
-  .toggle-primary:checked:hover {
-    background-color: var(--color-accent-dark) !important;
-    border-color: var(--color-accent-dark) !important;
-  }
-
-  .toggle-success:checked {
-    background-color: var(--color-success) !important;
-    border-color: var(--color-success) !important;
-  }
-
-  .toggle-warning:checked {
-    background-color: var(--color-warning) !important;
-    border-color: var(--color-warning) !important;
-  }
-
-  .toggle-error:checked {
-    background-color: var(--color-error) !important;
-    border-color: var(--color-error) !important;
-  }
-
-  .toggle-info:checked {
-    background-color: var(--color-accent) !important;
-    border-color: var(--color-accent) !important;
-  }
-
-  .toggle-info:checked:hover {
-    background-color: var(--color-accent-dark) !important;
-    border-color: var(--color-accent-dark) !important;
-  }
-
+  /* Switch/Toggle styling - ALL toggles use the same light green accent when activated */
+  .toggle:checked,
+  .toggle:checked:not([style*="--toggle-color"]),
+  .toggle-primary:checked,
+  .toggle-success:checked,
+  .toggle-warning:checked,
+  .toggle-error:checked,
+  .toggle-info:checked,
   .toggle-secondary:checked {
-    background-color: var(--color-secondary) !important;
-    border-color: var(--color-secondary) !important;
+    background-color: var(--color-accent) !important;
+    border-color: var(--color-accent) !important;
   }
 
+  .toggle:checked:hover,
+  .toggle:checked:not([style*="--toggle-color"]):hover,
+  .toggle-primary:checked:hover,
+  .toggle-success:checked:hover,
+  .toggle-warning:checked:hover,
+  .toggle-error:checked:hover,
+  .toggle-info:checked:hover,
   .toggle-secondary:checked:hover {
-    background-color: var(--color-secondary-dark) !important;
-    border-color: var(--color-secondary-dark) !important;
+    background-color: var(--color-accent-dark) !important;
+    border-color: var(--color-accent-dark) !important;
   }
 
   /* Menu hover with darker accent */

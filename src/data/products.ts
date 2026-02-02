@@ -39,9 +39,9 @@ export const products: Product[] = [
 		description: "Unser Standard DTF-Transfer bietet hervorragende Qualität für alle Ihre Textilprojekte. Perfekt für T-Shirts, Hoodies, Taschen und mehr. Die Transferfolie gewährleistet eine langlebige Haftung und brillante Farbwiedergabe.",
 		price: 2.50,
 		images: [
-			"/images/products/dtf-basic-1.jpg",
-			"/images/products/dtf-basic-2.jpg",
-			"/images/products/dtf-basic-3.jpg"
+			"/images/products/dtf-basic-1.webp",
+			"/images/products/dtf-basic-2.webp",
+			"/images/products/dtf-basic-3.webp"
 		],
 		category: "DTF-Transfers",
 		specifications: {
@@ -82,8 +82,8 @@ export const products: Product[] = [
 		description: "Unser Premium DTF-Transfer bietet die höchste Qualität für professionelle Anwendungen. Mit verbesserter Haftung, erweitertem Farbraum und längerer Haltbarkeit ist dieser Transfer ideal für kommerzielle Projekte und hochwertige Textilien.",
 		price: 3.75,
 		images: [
-			"/images/products/dtf-premium-1.jpg",
-			"/images/products/dtf-premium-2.jpg"
+			"/images/products/dtf-premium-1.webp",
+			"/images/products/dtf-premium-2.webp"
 		],
 		category: "DTF-Transfers",
 		specifications: {
@@ -116,8 +116,8 @@ export const products: Product[] = [
 		description: "Unser individueller Druck-Service ermöglicht es Ihnen, Ihre eigenen Designs auf verschiedene Textilien drucken zu lassen. Von kleinen Auflagen bis zu Großbestellungen - wir realisieren Ihre Vision.",
 		price: 15.00,
 		images: [
-			"/images/products/custom-print-1.jpg",
-			"/images/products/custom-print-2.jpg"
+			"/images/products/custom-print-1.webp",
+			"/images/products/custom-print-2.webp"
 		],
 		category: "Druck-Services",
 		specifications: {
@@ -140,9 +140,9 @@ export const products: Product[] = [
 		description: "Unsere DTF-Transfers in Freigröße bieten Ihnen maximale Flexibilität für Ihre kreativen Projekte. Sie bestimmen die Größe und das Design - wir liefern höchste Qualität. Ideal für individuelle Motive, Logos oder künstlerische Designs auf Textilien aller Art. Die professionelle DTF-Technologie garantiert brillante Farben, feine Details und hervorragende Waschbeständigkeit.",
 		price: 1.80,
 		images: [
-			"/images/products/dtf-freesize-1.jpg",
-			"/images/products/dtf-freesize-2.jpg",
-			"/images/products/dtf-freesize-3.jpg"
+			"/images/products/dtf-freesize-1.webp",
+			"/images/products/dtf-freesize-2.webp",
+			"/images/products/dtf-freesize-3.webp"
 		],
 		category: "DTF-Transfers",
 		specifications: {
@@ -183,9 +183,9 @@ export const products: Product[] = [
 		description: "Unser Blockout DTF-Transfer in Freigröße ist die perfekte Lösung für Drucke auf dunklen und farbigen Textilien. Die spezielle Blockout-Schicht verhindert, dass die Farbe des Untergrunds durchscheint, und sorgt für brillante, deckende Farben auch auf schwarzen Stoffen. Ideal für professionelle Anwendungen, wo höchste Farbdeckung und Qualität gefordert sind. Sie bestimmen die Größe - wir liefern Premium-Qualität mit maximaler Deckkraft.",
 		price: 2.20,
 		images: [
-			"/images/products/blockout-freesize-1.jpg",
-			"/images/products/blockout-freesize-2.jpg",
-			"/images/products/blockout-freesize-3.jpg"
+			"/images/products/blockout-freesize-1.webp",
+			"/images/products/blockout-freesize-2.webp",
+			"/images/products/blockout-freesize-3.webp"
 		],
 		category: "Blockout DTF",
 		specifications: {

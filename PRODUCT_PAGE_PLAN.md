@@ -277,8 +277,8 @@ export const products = [
     description: "Längere Beschreibung...",
     price: 2.50,
     images: [
-      "/images/products/dtf-basic-1.jpg",
-      "/images/products/dtf-basic-2.jpg"
+      "/images/products/dtf-basic-1.webp",
+      "/images/products/dtf-basic-2.webp"
     ],
     category: "DTF-Transfers",
     specifications: {

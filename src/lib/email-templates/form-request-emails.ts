@@ -150,7 +150,7 @@ export function generateFormRequestResponseEmail(data: FormRequestEmailData): {
     <body>
       <div class="email-container">
         <div class="header">
-          <img src="https://selini-shirt.de/images/logo/logo-1.png" alt="Selini-Shirt Logo" class="logo" style="height: 60px; width: auto;" />
+          <img src="https://selini-shirt.de/images/logo/logo-1.webp" alt="Selini-Shirt Logo" class="logo" style="height: 60px; width: auto;" />
         </div>
         <div class="content">
           <h2>Hallo ${escapeHtml(data.userName)},</h2>

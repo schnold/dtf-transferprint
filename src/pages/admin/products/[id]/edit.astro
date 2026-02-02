@@ -69,7 +69,6 @@ try {
   .tab-label-modern {
     @apply px-5 py-3 rounded-xl flex items-center gap-2 font-semibold text-sm
            border-2 border-transparent
-           transition-all duration-300
            select-none whitespace-nowrap;
     background-color: rgba(156, 163, 175, 0.3);
     color: rgba(107, 114, 128, 0.8);
@@ -88,7 +87,7 @@ try {
   .input-modern {
     @apply input w-full border-2
            focus:border-primary focus:bg-base-100 focus:outline-none focus:ring-4
-           transition-all duration-200 font-medium text-base;
+           font-medium text-base;
     background-color: rgba(229, 229, 229, 0.8);
     border-color: rgba(166, 166, 166, 0.5);
   }
@@ -104,7 +103,7 @@ try {
   .textarea-modern {
     @apply textarea w-full border-2
            focus:border-primary focus:bg-base-100 focus:outline-none focus:ring-4
-           transition-all duration-200 font-medium;
+           font-medium;
     background-color: rgba(229, 229, 229, 0.8);
     border-color: rgba(166, 166, 166, 0.5);
   }
@@ -120,7 +119,7 @@ try {
   .select-modern {
     @apply select w-full border-2
            focus:border-primary focus:bg-base-100 focus:outline-none focus:ring-4
-           transition-all duration-200 font-medium;
+           font-medium;
     background-color: rgba(229, 229, 229, 0.8);
     border-color: rgba(166, 166, 166, 0.5);
   }
@@ -132,7 +131,7 @@ try {
   /* Modern Card Design */
   .card-modern {
     @apply bg-base-100 rounded-2xl shadow-md border
-           hover:shadow-xl transition-all duration-300 overflow-hidden;
+           hover:shadow-xl overflow-hidden;
     border-color: rgba(166, 166, 166, 0.3);
   }
 </style>
@@ -299,38 +298,35 @@ try {
                 <div class="w-1 h-6 bg-primary rounded-full"></div>
                 Grundinformationen
               </h3>
-              <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+              <div class="grid grid-cols-1 lg:grid-cols-2 gap-x-4 gap-y-4">
                 <!-- Product Name -->
                 <div class="form-control">
-                  <label class="label pb-2">
-                    <span class="label-text font-bold text-base flex items-center gap-2">
-                      Produktname
-                      <span class="badge badge-error badge-xs">Pflicht</span>
-                    </span>
-                  </label>
-                  <input type="text" name="name" required form="productForm" class="input-modern h-12 text-base" value={product.name} placeholder="z.B. DTF Transfer Premium" />
+                  <div class="mb-2">
+                    <label class="text-sm font-medium text-base-content">
+                      Produktname <span class="text-error">*</span>
+                    </label>
+                  </div>
+                  <input type="text" name="name" required form="productForm" class="input input-bordered focus:input-primary" value={product.name} placeholder="z.B. DTF Transfer Premium" />
                 </div>
 
                 <!-- Slug -->
                 <div class="form-control">
-                  <label class="label pb-2">
-                    <span class="label-text font-bold text-base flex items-center gap-2">
-                      URL-Slug
-                      <span class="badge badge-error badge-xs">Pflicht</span>
-                    </span>
-                  </label>
-                  <input type="text" name="slug" required form="productForm" class="input-modern h-12 text-base font-mono" value={product.slug} placeholder="dtf-transfer-premium" />
+                  <div class="mb-2">
+                    <label class="text-sm font-medium text-base-content">
+                      URL-Slug <span class="text-error">*</span>
+                    </label>
+                  </div>
+                  <input type="text" name="slug" required form="productForm" class="input input-bordered focus:input-primary font-mono" value={product.slug} placeholder="dtf-transfer-premium" />
                 </div>
 
                 <!-- Category -->
                 <div class="form-control">
-                  <label class="label pb-2">
-                    <span class="label-text font-bold text-base flex items-center gap-2">
-                      Kategorie
-                      <span class="badge badge-error badge-xs">Pflicht</span>
-                    </span>
-                  </label>
-                  <select name="categoryId" required form="productForm" class="select-modern h-12 text-base">
+                  <div class="mb-2">
+                    <label class="text-sm font-medium text-base-content">
+                      Kategorie <span class="text-error">*</span>
+                    </label>
+                  </div>
+                  <select name="categoryId" required form="productForm" class="select select-bordered focus:select-primary">
                     <option value="">Kategorie auswählen...</option>
                     {categories.rows.map((cat) => (
                       <option value={cat.id} selected={cat.id === product.categoryId}>{cat.name}</option>
@@ -340,13 +336,12 @@ try {
 
                 <!-- SKU -->
                 <div class="form-control">
-                  <label class="label pb-2">
-                    <span class="label-text font-bold text-base flex items-center gap-2">
-                      Artikelnummer (SKU)
-                      <span class="badge badge-ghost badge-xs">Optional</span>
-                    </span>
-                  </label>
-                  <input type="text" name="sku" form="productForm" class="input-modern h-12 text-base" value={product.sku || ''} placeholder="SKU-12345" />
+                  <div class="mb-2">
+                    <label class="text-sm font-medium text-base-content">
+                      Artikelnummer (SKU) <span class="text-xs text-base-content/50">(Optional)</span>
+                    </label>
+                  </div>
+                  <input type="text" name="sku" form="productForm" class="input input-bordered focus:input-primary" value={product.sku || ''} placeholder="SKU-12345" />
                 </div>
               </div>
             </div>
@@ -359,29 +354,27 @@ try {
                 <div class="w-1 h-6 bg-secondary rounded-full"></div>
                 Beschreibung
               </h3>
-              <div class="space-y-5">
+              <div class="space-y-4">
                 <!-- Short Description -->
                 <div class="form-control">
-                  <label class="label pb-2">
-                    <span class="label-text font-bold text-base flex items-center gap-2">
-                      Kurzbeschreibung
-                      <span class="badge badge-error badge-xs">Pflicht</span>
-                    </span>
-                    <span class="label-text-alt badge badge-info badge-sm">Für Karten</span>
-                  </label>
-                  <textarea name="shortDescription" required form="productForm" class="textarea-modern h-24 text-base resize-none" placeholder="Kurze, prägnante Beschreibung für Produktkarten...">{product.shortDescription}</textarea>
+                  <div class="mb-2">
+                    <label class="text-sm font-medium text-base-content">
+                      Kurzbeschreibung <span class="text-error">*</span>
+                    </label>
+                    <p class="text-xs text-base-content/50 mt-0.5">Für Produktkarten</p>
+                  </div>
+                  <textarea name="shortDescription" required form="productForm" class="textarea textarea-bordered focus:textarea-primary resize-none" rows="3" placeholder="Kurze, prägnante Beschreibung für Produktkarten...">{product.shortDescription}</textarea>
                 </div>
 
                 <!-- Full Description -->
                 <div class="form-control">
-                  <label class="label pb-2">
-                    <span class="label-text font-bold text-base flex items-center gap-2">
-                      Vollständige Beschreibung
-                      <span class="badge badge-error badge-xs">Pflicht</span>
-                    </span>
-                    <span class="label-text-alt badge badge-info badge-sm">Für Detailseite</span>
-                  </label>
-                  <textarea name="description" required form="productForm" class="textarea-modern h-36 text-base resize-none" placeholder="Detaillierte Produktbeschreibung...">{product.description}</textarea>
+                  <div class="mb-2">
+                    <label class="text-sm font-medium text-base-content">
+                      Vollständige Beschreibung <span class="text-error">*</span>
+                    </label>
+                    <p class="text-xs text-base-content/50 mt-0.5">Für Detailseite</p>
+                  </div>
+                  <textarea name="description" required form="productForm" class="textarea textarea-bordered focus:textarea-primary resize-none" rows="6" placeholder="Detaillierte Produktbeschreibung...">{product.description}</textarea>
                 </div>
               </div>
             </div>
@@ -438,38 +431,38 @@ try {
                 <div class="w-1 h-6 bg-primary rounded-full"></div>
                 Grundpreise
               </h3>
-              <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+              <div class="grid grid-cols-1 lg:grid-cols-3 gap-x-4 gap-y-4">
                 <div class="form-control">
-                  <label class="label pb-2">
-                    <span class="label-text font-bold text-base flex items-center gap-2">
-                      Grundpreis
-                      <span class="badge badge-error badge-xs">Pflicht</span>
-                    </span>
-                  </label>
+                  <div class="mb-2">
+                    <label class="text-sm font-medium text-base-content">
+                      Grundpreis <span class="text-error">*</span>
+                    </label>
+                  </div>
                   <div class="join w-full">
-                    <input type="number" name="basePrice" step="0.01" required form="productForm" class="input-modern h-12 text-base font-bold join-item flex-1" value={parseFloat(product.basePrice)} />
-                    <span class="btn btn-neutral join-item h-12">€</span>
+                    <input type="number" name="basePrice" step="0.01" required form="productForm" class="input input-bordered focus:input-primary join-item flex-1 font-bold" value={parseFloat(product.basePrice)} />
+                    <span class="btn btn-neutral join-item">€</span>
                   </div>
                 </div>
 
                 <div class="form-control">
-                  <label class="label pb-2">
-                    <span class="label-text font-bold text-base flex items-center gap-2">
-                      Vergleichspreis
-                      <span class="badge badge-ghost badge-xs">Optional</span>
-                    </span>
-                  </label>
+                  <div class="mb-2">
+                    <label class="text-sm font-medium text-base-content">
+                      Vergleichspreis <span class="text-xs text-base-content/50">(Optional)</span>
+                    </label>
+                  </div>
                   <div class="join w-full">
-                    <input type="number" name="compareAtPrice" step="0.01" form="productForm" class="input-modern h-12 text-base join-item flex-1" value={product.compareAtPrice ? parseFloat(product.compareAtPrice) : ''} placeholder="UVP" />
-                    <span class="btn btn-neutral join-item h-12">€</span>
+                    <input type="number" name="compareAtPrice" step="0.01" form="productForm" class="input input-bordered focus:input-primary join-item flex-1" value={product.compareAtPrice ? parseFloat(product.compareAtPrice) : ''} placeholder="UVP" />
+                    <span class="btn btn-neutral join-item">€</span>
                   </div>
                 </div>
 
                 <div class="form-control">
-                  <label class="label pb-2">
-                    <span class="label-text font-bold text-base">Berechnungsmethode</span>
-                  </label>
-                  <select name="priceCalculationMethod" form="productForm" class="select-modern h-12 text-base">
+                  <div class="mb-2">
+                    <label class="text-sm font-medium text-base-content">
+                      Berechnungsmethode
+                    </label>
+                  </div>
+                  <select name="priceCalculationMethod" form="productForm" class="select select-bordered focus:select-primary">
                     <option value="per_piece" selected={product.priceCalculationMethod === 'per_piece'}>Pro Stück</option>
                     <option value="per_meter" selected={product.priceCalculationMethod === 'per_meter'}>Pro Meter</option>
                     <option value="per_area" selected={product.priceCalculationMethod === 'per_area'}>Pro Fläche (m²)</option>
@@ -480,7 +473,7 @@ try {
           </div>
 
           <!-- Price Tiers Card -->
-          <div class="card bg-base-100 shadow-lg border-2 border-secondary/10 hover:border-secondary/30 transition-all duration-300">
+          <div class="card bg-base-100 shadow-lg border-2 border-secondary/10 hover:border-secondary/30 ">
             <div class="card-body">
               <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-6">
                 <div>
@@ -507,32 +500,32 @@ try {
               <div id="priceTiersContainer" class="space-y-3">
                 {priceTiers.rows.length > 0 ? (
                   priceTiers.rows.map((tier, index) => (
-                    <div class="tier-row card bg-base-100 border border-base-300/50 shadow-sm rounded-xl hover:shadow-md transition-shadow">
+                    <div class="tier-row card bg-base-100 border border-base-300/50 shadow-sm rounded-xl hover:shadow-md ">
                       <div class="card-body p-4">
                         <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
                           <div class="form-control">
-                            <label class="label">
-                              <span class="label-text font-medium text-sm">Min. Menge</span>
-                            </label>
+                            <div class="mb-1">
+                              <label class="text-xs font-medium text-base-content">Min. Menge</label>
+                            </div>
                             <input type="number" name="tier_minQty[]" form="productForm" value={tier.minQuantity} required class="input input-bordered input-sm tier-minQty" />
                           </div>
                           <div class="form-control">
-                            <label class="label">
-                              <span class="label-text font-medium text-sm">Rabatt %</span>
-                            </label>
+                            <div class="mb-1">
+                              <label class="text-xs font-medium text-base-content">Rabatt %</label>
+                            </div>
                             <input type="number" name="tier_discount[]" form="productForm" value={parseFloat(tier.discountPercent)} step="0.01" required class="input input-bordered input-sm tier-discount" />
                           </div>
                           <div class="form-control">
-                            <label class="label">
-                              <span class="label-text font-medium text-sm">Preis (€)</span>
-                              <span class="label-text-alt text-xs">Auto-berechnet</span>
-                            </label>
+                            <div class="mb-1">
+                              <label class="text-xs font-medium text-base-content">Preis (€)</label>
+                              <p class="text-xs text-base-content/50">Auto-berechnet</p>
+                            </div>
                             <input type="number" name="tier_price[]" form="productForm" value={parseFloat(tier.pricePerUnit)} step="0.01" required class="input input-bordered input-sm tier-price bg-base-200" readonly />
                           </div>
                           <div class="form-control">
-                            <label class="label">
-                              <span class="label-text font-medium text-sm">Reihenfolge</span>
-                            </label>
+                            <div class="mb-1">
+                              <label class="text-xs font-medium text-base-content">Reihenfolge</label>
+                            </div>
                             <div class="join w-full">
                               <input type="number" name="tier_order[]" form="productForm" value={tier.displayOrder} required class="input input-bordered input-sm join-item flex-1 tier-order" />
                               <button type="button" class="btn btn-error btn-sm join-item remove-tier">
@@ -547,32 +540,32 @@ try {
                     </div>
                   ))
                 ) : (
-                  <div class="tier-row card bg-base-100 border border-base-300/50 shadow-sm rounded-xl hover:shadow-md transition-shadow">
+                  <div class="tier-row card bg-base-100 border border-base-300/50 shadow-sm rounded-xl hover:shadow-md ">
                     <div class="card-body p-4">
                       <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
                         <div class="form-control">
-                          <label class="label">
-                            <span class="label-text font-medium text-sm">Min. Menge</span>
-                          </label>
+                          <div class="mb-1">
+                            <label class="text-xs font-medium text-base-content">Min. Menge</label>
+                          </div>
                           <input type="number" name="tier_minQty[]" form="productForm" value="0" required class="input input-bordered input-sm tier-minQty" />
                         </div>
                         <div class="form-control">
-                          <label class="label">
-                            <span class="label-text font-medium text-sm">Rabatt %</span>
-                          </label>
+                          <div class="mb-1">
+                            <label class="text-xs font-medium text-base-content">Rabatt %</label>
+                          </div>
                           <input type="number" name="tier_discount[]" form="productForm" value="0" step="0.01" required class="input input-bordered input-sm tier-discount" />
                         </div>
                         <div class="form-control">
-                          <label class="label">
-                            <span class="label-text font-medium text-sm">Preis (€)</span>
-                            <span class="label-text-alt text-xs">Auto-berechnet</span>
-                          </label>
+                          <div class="mb-1">
+                            <label class="text-xs font-medium text-base-content">Preis (€)</label>
+                            <p class="text-xs text-base-content/50">Auto-berechnet</p>
+                          </div>
                           <input type="number" name="tier_price[]" form="productForm" value={parseFloat(product.basePrice)} step="0.01" required class="input input-bordered input-sm tier-price bg-base-200" readonly />
                         </div>
                         <div class="form-control">
-                          <label class="label">
-                            <span class="label-text font-medium text-sm">Reihenfolge</span>
-                          </label>
+                          <div class="mb-1">
+                            <label class="text-xs font-medium text-base-content">Reihenfolge</label>
+                          </div>
                           <div class="join w-full">
                             <input type="number" name="tier_order[]" form="productForm" value="1" required class="input input-bordered input-sm join-item flex-1 tier-order" />
                             <button type="button" class="btn btn-error btn-sm join-item remove-tier">
@@ -614,7 +607,7 @@ try {
               <h2 class="card-title text-lg mb-4 text-base-content">DTF-Konfiguration</h2>
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div class="form-control">
-                  <label class="label cursor-pointer justify-start gap-3 p-4 bg-base-100 rounded-xl border border-base-300/50 hover:bg-base-200/80 hover:border-base-300 transition-all duration-200 shadow-sm">
+                  <label class="label cursor-pointer justify-start gap-3 p-4 bg-base-100 rounded-xl border border-base-300/50 hover:bg-base-200/80 hover:border-base-300  shadow-sm">
                     <input type="checkbox" name="isBlockout" form="productForm" class="toggle toggle-primary" checked={product.isBlockout} />
                     <div class="flex-1">
                       <span class="label-text font-semibold">Blockout-Produkt</span>
@@ -624,10 +617,10 @@ try {
                 </div>
 
                 <div class="form-control">
-                  <label class="label">
-                    <span class="label-text font-semibold">Drucktechnologie</span>
-                  </label>
-                  <input type="text" name="printTechnology" form="productForm" value={product.printTechnology || 'DTF'} class="input input-bordered" />
+                  <div class="mb-2">
+                    <label class="text-sm font-medium text-base-content">Drucktechnologie</label>
+                  </div>
+                  <input type="text" name="printTechnology" form="productForm" value={product.printTechnology || 'DTF'} class="input input-bordered focus:input-primary" />
                 </div>
               </div>
             </div>
@@ -636,9 +629,9 @@ try {
           <!-- File Upload Settings Card -->
           <div class="card bg-gradient-to-br from-base-100 to-base-200/30 border border-base-300/30 shadow-md rounded-xl">
             <div class="card-body">
-              <h2 class="card-title text-lg mb-4 text-base-content">Datei-Upload-Einstellungen</h2>
+              <h2 class="card-title text-lg mb-4 text-base-content">Datei-Upload & Anfrage-Einstellungen</h2>
               <div class="form-control mb-4">
-                <label class="label cursor-pointer justify-start gap-3 p-4 bg-base-100 rounded-lg border border-base-300 hover:bg-base-200 transition-colors">
+                <label class="label cursor-pointer justify-start gap-3 p-4 bg-base-100 rounded-lg border border-base-300 hover:bg-base-200 ">
                   <input type="checkbox" id="acceptsFileUpload" name="acceptsFileUpload" form="productForm" class="toggle toggle-secondary" checked={product.acceptsFileUpload} />
                   <div class="flex-1">
                     <span class="label-text font-semibold">Datei-Upload erlauben</span>
@@ -647,48 +640,56 @@ try {
                 </label>
               </div>
 
+              <div class="form-control mb-4">
+                <label class="label cursor-pointer justify-start gap-3 p-4 bg-base-100 rounded-lg border border-base-300 hover:bg-base-200 ">
+                  <input type="checkbox" name="requiresInquiry" form="productForm" class="toggle toggle-accent" checked={product.requiresInquiry} />
+                  <div class="flex-1">
+                    <span class="label-text font-semibold">Nur Anfrage (kein direkter Kauf)</span>
+                    <p class="text-xs text-base-content/60 mt-1">Anstelle von Kaufen-Button wird ein Anfrageformular angezeigt</p>
+                  </div>
+                </label>
+              </div>
+
               <div id="fileUploadSettings" class={product.acceptsFileUpload ? 'space-y-4' : 'hidden space-y-4'}>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-4">
                   <div class="form-control">
-                    <label class="label">
-                      <span class="label-text font-semibold">Max. Dateigröße (MB)</span>
-                    </label>
-                    <input type="number" name="maxFileSizeMb" form="productForm" value={product.maxFileSizeMb || 255} class="input input-bordered" />
+                    <div class="mb-2">
+                      <label class="text-sm font-medium text-base-content">Max. Dateigröße (MB)</label>
+                    </div>
+                    <input type="number" name="maxFileSizeMb" form="productForm" value={product.maxFileSizeMb || 255} class="input input-bordered focus:input-primary" />
                   </div>
 
                   <div class="form-control">
-                    <label class="label">
-                      <span class="label-text font-semibold">Erlaubte Dateitypen</span>
-                    </label>
-                    <input type="text" name="allowedFileTypes" form="productForm" value={product.allowedFileTypes || 'PDF'} class="input input-bordered" placeholder="PDF, PNG, JPG" />
-                    <label class="label">
-                      <span class="label-text-alt">Kommagetrennte Liste von Dateierweiterungen</span>
-                    </label>
+                    <div class="mb-2">
+                      <label class="text-sm font-medium text-base-content">Erlaubte Dateitypen</label>
+                      <p class="text-xs text-base-content/50 mt-0.5">Kommagetrennte Liste von Dateierweiterungen</p>
+                    </div>
+                    <input type="text" name="allowedFileTypes" form="productForm" value={product.allowedFileTypes || 'PDF'} class="input input-bordered focus:input-primary" placeholder="PDF, PNG, JPG" />
                   </div>
                 </div>
 
                 <div class="divider">Abmessungen</div>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-x-4 gap-y-4">
                   <div class="form-control">
-                    <label class="label">
-                      <span class="label-text font-semibold">Max. Breite (mm)</span>
-                    </label>
-                    <input type="number" name="maxWidthMm" form="productForm" value={product.maxWidthMm || ''} class="input input-bordered" placeholder="560" />
+                    <div class="mb-2">
+                      <label class="text-sm font-medium text-base-content">Max. Breite (mm)</label>
+                    </div>
+                    <input type="number" name="maxWidthMm" form="productForm" value={product.maxWidthMm || ''} class="input input-bordered focus:input-primary" placeholder="560" />
                   </div>
 
                   <div class="form-control">
-                    <label class="label">
-                      <span class="label-text font-semibold">Min. Höhe (mm)</span>
-                    </label>
-                    <input type="number" name="minHeightMm" form="productForm" value={product.minHeightMm || ''} class="input input-bordered" placeholder="100" />
+                    <div class="mb-2">
+                      <label class="text-sm font-medium text-base-content">Min. Höhe (mm)</label>
+                    </div>
+                    <input type="number" name="minHeightMm" form="productForm" value={product.minHeightMm || ''} class="input input-bordered focus:input-primary" placeholder="100" />
                   </div>
 
                   <div class="form-control">
-                    <label class="label">
-                      <span class="label-text font-semibold">Max. Höhe (mm)</span>
-                    </label>
-                    <input type="number" name="maxHeightMm" form="productForm" value={product.maxHeightMm || ''} class="input input-bordered" placeholder="5000" />
+                    <div class="mb-2">
+                      <label class="text-sm font-medium text-base-content">Max. Höhe (mm)</label>
+                    </div>
+                    <input type="number" name="maxHeightMm" form="productForm" value={product.maxHeightMm || ''} class="input input-bordered focus:input-primary" placeholder="5000" />
                   </div>
                 </div>
 
@@ -706,78 +707,72 @@ try {
                   </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-x-4 gap-y-4">
                   <div class="form-control">
-                    <label class="label">
-                      <span class="label-text font-semibold flex items-center gap-2">
+                    <div class="mb-2">
+                      <label class="text-sm font-medium text-base-content flex items-center gap-2">
                         Erforderliche DPI
                         <div class="tooltip" data-tip="Mindest-DPI für PNG-Dateien. Empfohlen: 300 DPI für beste Druckqualität">
                           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-base-content/50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                           </svg>
                         </div>
-                      </span>
-                    </label>
+                      </label>
+                      <p class="text-xs text-base-content/50 mt-0.5">Standard: 300 DPI</p>
+                    </div>
                     <input
                       type="number"
                       name="requiredDpi" form="productForm"
                       value={product.requiredDpi || 300}
-                      class="input input-bordered"
+                      class="input input-bordered focus:input-primary"
                       min="72"
                       max="600"
                       placeholder="300"
                     />
-                    <label class="label">
-                      <span class="label-text-alt text-base-content/60">Standard: 300 DPI</span>
-                    </label>
                   </div>
 
                   <div class="form-control">
-                    <label class="label">
-                      <span class="label-text font-semibold flex items-center gap-2">
+                    <div class="mb-2">
+                      <label class="text-sm font-medium text-base-content flex items-center gap-2">
                         Min. Breite (Pixel)
                         <div class="tooltip" data-tip="Minimale Breite in Pixeln für PNG-Dateien. Leer lassen für keine Einschränkung">
                           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-base-content/50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                           </svg>
                         </div>
-                      </span>
-                    </label>
+                      </label>
+                      <p class="text-xs text-base-content/50 mt-0.5">Optional (nur PNG)</p>
+                    </div>
                     <input
                       type="number"
                       name="requiredMinWidth" form="productForm"
                       value={product.requiredMinWidth || ''}
-                      class="input input-bordered"
+                      class="input input-bordered focus:input-primary"
                       min="1"
                       placeholder="z.B. 1200"
                     />
-                    <label class="label">
-                      <span class="label-text-alt text-base-content/60">Optional (nur PNG)</span>
-                    </label>
                   </div>
 
                   <div class="form-control">
-                    <label class="label">
-                      <span class="label-text font-semibold flex items-center gap-2">
+                    <div class="mb-2">
+                      <label class="text-sm font-medium text-base-content flex items-center gap-2">
                         Min. Höhe (Pixel)
                         <div class="tooltip" data-tip="Minimale Höhe in Pixeln für PNG-Dateien. Leer lassen für keine Einschränkung">
                           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-base-content/50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                           </svg>
                         </div>
-                      </span>
-                    </label>
+                      </label>
+                      <p class="text-xs text-base-content/50 mt-0.5">Optional (nur PNG)</p>
+                    </div>
                     <input
                       type="number"
                       name="requiredMinHeight" form="productForm"
                       value={product.requiredMinHeight || ''}
-                      class="input input-bordered"
+                      class="input input-bordered focus:input-primary"
                       min="1"
                       placeholder="z.B. 800"
                     />
-                    <label class="label">
-                      <span class="label-text-alt text-base-content/60">Optional (nur PNG)</span>
-                    </label>
                   </div>
                 </div>
 
@@ -812,7 +807,7 @@ try {
     </div>
 
     <div id="seo-panel" class="tab-panel p-8 hidden">
-        <div class="card bg-base-100 shadow-lg border-2 border-success/10 hover:border-success/30 transition-all duration-300">
+        <div class="card bg-base-100 shadow-lg border-2 border-success/10 hover:border-success/30 ">
           <div class="card-body">
             <div class="flex items-center gap-3 mb-6">
               <div class="badge badge-success badge-lg">
@@ -829,59 +824,37 @@ try {
               </span>
             </div>
             <div class="divider divider-success my-2"></div>
-            <div class="space-y-6 mt-4">
+            <div class="space-y-4 mt-4">
               <div class="form-control">
-                <label class="label">
-                  <span class="label-text font-semibold flex items-center gap-2 text-lg">
-                    <svg class="w-5 h-5 text-success" fill="currentColor" viewBox="0 0 20 20">
+                <div class="mb-2 flex items-center justify-between">
+                  <label class="text-sm font-medium text-base-content flex items-center gap-2">
+                    <svg class="w-4 h-4 text-success" fill="currentColor" viewBox="0 0 20 20">
                       <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
                     </svg>
-                    Meta-Titel
-                    <span class="badge badge-ghost badge-xs">Optional</span>
+                    Meta-Titel <span class="text-xs text-base-content/50">(Optional)</span>
+                  </label>
+                  <span class={`badge ${(product.metaTitle || '').length > 50 ? 'badge-warning' : 'badge-success'} badge-sm`}>
+                    {(product.metaTitle || '').length}/60 Zeichen
                   </span>
-                  <span class="label-text-alt">
-                    <span class={`badge ${(product.metaTitle || '').length > 50 ? 'badge-warning' : 'badge-success'}`}>
-                      {(product.metaTitle || '').length}/60 Zeichen
-                    </span>
-                  </span>
-                </label>
-                <input type="text" name="metaTitle" form="productForm" class="input input-bordered input-lg focus:input-success transition-all" value={product.metaTitle || ''} placeholder="Leer lassen, um Produktnamen zu verwenden" maxlength="60" />
-                <label class="label">
-                  <span class="label-text-alt badge badge-info badge-sm gap-1">
-                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
-                      <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
-                    </svg>
-                    Anzeige in Browser-Tabs und Suchergebnissen
-                  </span>
-                </label>
+                </div>
+                <input type="text" name="metaTitle" form="productForm" class="input input-bordered focus:input-primary" value={product.metaTitle || ''} placeholder="Leer lassen, um Produktnamen zu verwenden" maxlength="60" />
+                <p class="text-xs text-base-content/50 mt-1">Anzeige in Browser-Tabs und Suchergebnissen</p>
               </div>
 
               <div class="form-control">
-                <label class="label">
-                  <span class="label-text font-semibold flex items-center gap-2 text-lg">
-                    <svg class="w-5 h-5 text-success" fill="currentColor" viewBox="0 0 20 20">
+                <div class="mb-2 flex items-center justify-between">
+                  <label class="text-sm font-medium text-base-content flex items-center gap-2">
+                    <svg class="w-4 h-4 text-success" fill="currentColor" viewBox="0 0 20 20">
                       <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clip-rule="evenodd"/>
                     </svg>
-                    Meta-Beschreibung
-                    <span class="badge badge-ghost badge-xs">Optional</span>
+                    Meta-Beschreibung <span class="text-xs text-base-content/50">(Optional)</span>
+                  </label>
+                  <span class={`badge ${(product.metaDescription || '').length > 140 ? 'badge-warning' : 'badge-success'} badge-sm`}>
+                    {(product.metaDescription || '').length}/160 Zeichen
                   </span>
-                  <span class="label-text-alt">
-                    <span class={`badge ${(product.metaDescription || '').length > 140 ? 'badge-warning' : 'badge-success'}`}>
-                      {(product.metaDescription || '').length}/160 Zeichen
-                    </span>
-                  </span>
-                </label>
-                <textarea name="metaDescription" form="productForm" class="textarea textarea-bordered textarea-lg h-28 focus:textarea-success transition-all" placeholder="Leer lassen, um Kurzbeschreibung zu verwenden" maxlength="160">{product.metaDescription || ''}</textarea>
-                <label class="label">
-                  <span class="label-text-alt badge badge-info badge-sm gap-1">
-                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
-                      <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
-                    </svg>
-                    Erscheint in Suchergebnissen als Vorschautext
-                  </span>
-                </label>
+                </div>
+                <textarea name="metaDescription" form="productForm" class="textarea textarea-bordered focus:textarea-primary resize-none" rows="4" placeholder="Leer lassen, um Kurzbeschreibung zu verwenden" maxlength="160">{product.metaDescription || ''}</textarea>
+                <p class="text-xs text-base-content/50 mt-1">Erscheint in Suchergebnissen als Vorschautext</p>
               </div>
 
               <div class="divider">SEO-Vorschau</div>
@@ -903,7 +876,7 @@ try {
     </div>
 
     <div id="specs-panel" class="tab-panel p-8 hidden">
-        <div class="card bg-base-100 shadow-lg border-2 border-accent/10 hover:border-accent/30 transition-all duration-300">
+        <div class="card bg-base-100 shadow-lg border-2 border-accent/10 hover:border-accent/30 ">
           <div class="card-body">
             <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 mb-6">
               <div>
@@ -939,7 +912,7 @@ try {
                 </div>
               ) : (
                 productSpecs.rows.map((spec) => (
-                  <div class="spec-row card bg-base-100 border border-base-300/50 shadow-sm rounded-xl hover:shadow-md transition-shadow" data-spec-id={spec.id}>
+                  <div class="spec-row card bg-base-100 border border-base-300/50 shadow-sm rounded-xl hover:shadow-md " data-spec-id={spec.id}>
                     <div class="card-body p-4">
                       <div class="grid grid-cols-1 md:grid-cols-12 gap-3 items-end">
                         <div class="col-span-12 md:col-span-3 form-control">
@@ -1016,12 +989,10 @@ try {
     <div class="border-t-2 border-primary/20 p-6 bg-gradient-to-r from-base-100 via-base-200/30 to-base-100">
       <div class="flex flex-col lg:flex-row justify-between items-center gap-4">
         <div class="flex items-center gap-3">
-          <div class="avatar placeholder">
-            <div class="bg-primary text-primary-content rounded-full w-12">
-              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
-              </svg>
-            </div>
+          <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6" style="color: var(--color-metrics-text);">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+            </svg>
           </div>
           <div>
             <div class="font-semibold text-sm text-base-content">Zuletzt aktualisiert</div>
@@ -1495,6 +1466,7 @@ try {
       priceCalculationMethod: getValue('priceCalculationMethod') || 'per_piece',
       isBlockout: getValue('isBlockout') === true,
       acceptsFileUpload: getValue('acceptsFileUpload') === true,
+      requiresInquiry: getValue('requiresInquiry') === true,
       maxFileSizeMb: parseInt(getValue('maxFileSizeMb')) || 255,
       allowedFileTypes: getValue('allowedFileTypes') || 'pdf,png',
       requiredDpi: parseInt(getValue('requiredDpi')) || 300,

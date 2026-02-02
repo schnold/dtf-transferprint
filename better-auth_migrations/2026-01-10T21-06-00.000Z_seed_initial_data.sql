@@ -30,19 +30,19 @@ insert into "products" (id, slug, name, "shortDescription", description, "catego
 
 -- Insert product images
 insert into "productImages" (id, "productId", url, "altText", "displayOrder", "isPrimary") values
-  ('img-1', 'dtf-transfer-basic', '/images/products/dtf-basic-1.jpg', 'DTF Transfer Basic - Hauptansicht', 0, true),
-  ('img-2', 'dtf-transfer-basic', '/images/products/dtf-basic-2.jpg', 'DTF Transfer Basic - Detailansicht', 1, false),
-  ('img-3', 'dtf-transfer-basic', '/images/products/dtf-basic-3.jpg', 'DTF Transfer Basic - Anwendungsbeispiel', 2, false),
-  ('img-4', 'dtf-transfer-premium', '/images/products/dtf-premium-1.jpg', 'DTF Transfer Premium - Hauptansicht', 0, true),
-  ('img-5', 'dtf-transfer-premium', '/images/products/dtf-premium-2.jpg', 'DTF Transfer Premium - Detailansicht', 1, false),
-  ('img-6', 'custom-print-service', '/images/products/custom-print-1.jpg', 'Custom Print Service - Hauptansicht', 0, true),
-  ('img-7', 'custom-print-service', '/images/products/custom-print-2.jpg', 'Custom Print Service - Beispiele', 1, false),
-  ('img-8', 'dtf-transfer-freie-groesse', '/images/products/dtf-freesize-1.jpg', 'DTF Transfer Freigröße - Hauptansicht', 0, true),
-  ('img-9', 'dtf-transfer-freie-groesse', '/images/products/dtf-freesize-2.jpg', 'DTF Transfer Freigröße - Detailansicht', 1, false),
-  ('img-10', 'dtf-transfer-freie-groesse', '/images/products/dtf-freesize-3.jpg', 'DTF Transfer Freigröße - Anwendungsbeispiel', 2, false),
-  ('img-11', 'blockout-dtf-transfer-freie-groesse', '/images/products/blockout-freesize-1.jpg', 'Blockout DTF Transfer - Hauptansicht', 0, true),
-  ('img-12', 'blockout-dtf-transfer-freie-groesse', '/images/products/blockout-freesize-2.jpg', 'Blockout DTF Transfer - Detailansicht', 1, false),
-  ('img-13', 'blockout-dtf-transfer-freie-groesse', '/images/products/blockout-freesize-3.jpg', 'Blockout DTF Transfer - Anwendungsbeispiel', 2, false);
+  ('img-1', 'dtf-transfer-basic', '/images/products/dtf-basic-1.webp', 'DTF Transfer Basic - Hauptansicht', 0, true),
+  ('img-2', 'dtf-transfer-basic', '/images/products/dtf-basic-2.webp', 'DTF Transfer Basic - Detailansicht', 1, false),
+  ('img-3', 'dtf-transfer-basic', '/images/products/dtf-basic-3.webp', 'DTF Transfer Basic - Anwendungsbeispiel', 2, false),
+  ('img-4', 'dtf-transfer-premium', '/images/products/dtf-premium-1.webp', 'DTF Transfer Premium - Hauptansicht', 0, true),
+  ('img-5', 'dtf-transfer-premium', '/images/products/dtf-premium-2.webp', 'DTF Transfer Premium - Detailansicht', 1, false),
+  ('img-6', 'custom-print-service', '/images/products/custom-print-1.webp', 'Custom Print Service - Hauptansicht', 0, true),
+  ('img-7', 'custom-print-service', '/images/products/custom-print-2.webp', 'Custom Print Service - Beispiele', 1, false),
+  ('img-8', 'dtf-transfer-freie-groesse', '/images/products/dtf-freesize-1.webp', 'DTF Transfer Freigröße - Hauptansicht', 0, true),
+  ('img-9', 'dtf-transfer-freie-groesse', '/images/products/dtf-freesize-2.webp', 'DTF Transfer Freigröße - Detailansicht', 1, false),
+  ('img-10', 'dtf-transfer-freie-groesse', '/images/products/dtf-freesize-3.webp', 'DTF Transfer Freigröße - Anwendungsbeispiel', 2, false),
+  ('img-11', 'blockout-dtf-transfer-freie-groesse', '/images/products/blockout-freesize-1.webp', 'Blockout DTF Transfer - Hauptansicht', 0, true),
+  ('img-12', 'blockout-dtf-transfer-freie-groesse', '/images/products/blockout-freesize-2.webp', 'Blockout DTF Transfer - Detailansicht', 1, false),
+  ('img-13', 'blockout-dtf-transfer-freie-groesse', '/images/products/blockout-freesize-3.webp', 'Blockout DTF Transfer - Anwendungsbeispiel', 2, false);
 
 -- Insert product specifications
 insert into "productSpecifications" (id, "productId", "specKey", "specLabel", "specValue", "displayOrder") values

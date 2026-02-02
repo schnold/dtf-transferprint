@@ -391,25 +391,64 @@ const formatPrice = (price: number) => {
 		`;
 	};
 
-	// Re-render all cart items
-	const renderCartItems = (items: any[]) => {
-		const container = document.getElementById('cart-items-container');
-		if (!container) {
-			// If container doesn't exist (empty cart initially), we might need to reload
-			// But for now, just return - the page will show empty state from server
-			return;
-		}
+	// Build the full "cart with items" dropdown HTML (header + container + footer)
+	const buildCartWithItemsMarkup = (subtotal: number) => {
+		return `
+			<div class="max-h-[500px] flex flex-col">
+				<div class="p-4 bg-base-200 border-b border-base-200">
+					<div class="flex items-center justify-between">
+						<h3 class="text-lg font-bold text-neutral flex items-center gap-2">
+							<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="color: var(--color-metrics-text);">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+							</svg>
+							Warenkorb
+						</h3>
+					</div>
+				</div>
+				<div class="overflow-y-auto flex-1 p-4 space-y-3" id="cart-items-container"></div>
+				<div class="p-4 border-t border-base-200 bg-base-100">
+					<div class="flex justify-between items-center mb-3">
+						<span class="text-sm text-neutral/70">Zwischensumme</span>
+						<span class="text-lg font-bold text-neutral" id="cart-subtotal">${formatPrice(subtotal)}</span>
+					</div>
+					<div class="space-y-2">
+						<a href="/checkout" class="btn btn-primary btn-block">Zur Kasse</a>
+						<a href="/cart" class="btn btn-outline btn-block text-sm">Warenkorb ansehen</a>
+					</div>
+				</div>
+			</div>
+		`;
+	};
+
+	// Re-render all cart items (and optionally replace dropdown content if it was empty state)
+	const renderCartItems = (items: any[], subtotal: number) => {
+		let container = document.getElementById('cart-items-container');
 
 		if (items.length === 0) {
 			// If cart becomes empty, reload to show empty state
-			// This is simpler than dynamically showing/hiding the empty state structure
 			window.location.reload();
 			return;
 		}
 
+		// If container doesn't exist, we started with empty cart - replace dropdown content with "has items" structure
+		if (!container) {
+			const dropdownContent = document.querySelector('.cart-dropdown-content');
+			if (dropdownContent) {
+				dropdownContent.innerHTML = buildCartWithItemsMarkup(subtotal);
+				container = document.getElementById('cart-items-container');
+			}
+		}
+
+		if (!container) return;
+
 		container.innerHTML = items.map(item => renderCartItem(item)).join('');
-		
-		// Re-attach event listeners
+
+		// Update subtotal in footer (in case we just created the structure)
+		const cartSubtotalEl = document.getElementById('cart-subtotal');
+		if (cartSubtotalEl) {
+			cartSubtotalEl.textContent = formatPrice(subtotal);
+		}
+
 		attachCartItemListeners();
 	};
 
@@ -529,8 +568,8 @@ const formatPrice = (price: number) => {
 						cartIconButton.style.borderColor = '#4B5563';
 					}
 
-					// Re-render cart items
-					renderCartItems(items);
+					// Re-render cart items (and replace empty-state UI with items UI if needed)
+					renderCartItems(items, subtotal);
 				} else {
 					if (cartCountBadge) {
 						cartCountBadge.style.display = 'none';
@@ -545,8 +584,8 @@ const formatPrice = (price: number) => {
 						cartIconButton.style.borderColor = '#4B5563';
 					}
 
-					// Clear cart items
-					renderCartItems([]);
+					// Clear cart items (reloads to show empty state)
+					renderCartItems([], 0);
 				}
 
 				// Update subtotal

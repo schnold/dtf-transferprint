@@ -214,7 +214,7 @@ function getBaseTemplate(content: string, unsubscribeUrl: string, title: string 
     <body>
       <div class="email-container">
         <div class="header">
-          <img src="https://selini-shirt.de/images/logo/logo-1.png" alt="Selini-Shirt Logo" class="logo" />
+          <img src="https://selini-shirt.de/images/logo/logo-1.webp" alt="Selini-Shirt Logo" class="logo" />
         </div>
 
         ${content}

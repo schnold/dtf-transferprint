@@ -68,6 +68,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
           "minHeightMm",
           "maxHeightMm",
           "acceptsFileUpload",
+          "requiresInquiry",
           "maxFileSizeMb",
           "allowedFileTypes",
           "priceCalculationMethod",
@@ -78,7 +79,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
         ) VALUES (
           gen_random_uuid()::text,
           $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14,
-          $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25
+          $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26
         ) RETURNING id
       `, [
         data.categoryId,
@@ -99,6 +100,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
         data.minHeightMm || null,
         data.maxHeightMm || null,
         data.acceptsFileUpload || false,
+        data.requiresInquiry || false,
         data.maxFileSizeMb || 255,
         data.allowedFileTypes || 'PDF',
         data.priceCalculationMethod || 'per_piece',

@@ -120,7 +120,7 @@ Comprehensive performance optimizations have been applied to the landing page (`
 **Example:**
 ```astro
 <Picture
-  src="/images/products/t-shirts.jpg"
+  src="/images/products/t-shirts.webp"
   alt="T-Shirts bedrucken"
   formats={['avif', 'webp']}
   width={400}

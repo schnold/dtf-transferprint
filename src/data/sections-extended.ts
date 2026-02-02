@@ -3,7 +3,7 @@ export const extendedSections = [
 	{
 		title: "Selini-Shirt – Ihre Textilveredelungsexperten",
 		description: "Mit über 30 Jahren Erfahrung sind wir Ihr verlässlicher Partner für Siebdruck-Plastisoltransfer, Stickerei und Druck-Textilveredelung. Selini-Shirt ist ein mittelständisches Unternehmen, das sich auf Transferdruck und Stickerei spezialisiert hat, aber auch auf digitalen Textildruck mit wasserbasierten ökologischen Farben. Von unserer Berliner Werkstatt aus liefern wir langlebige, farbintensive Drucke auf nachhaltige Bekleidung – unverwechselbar und einzigartig.",
-		image: "/images/landing-page/2826813.jpg",
+		image: "/images/landing-page/2826813.webp",
 		imageAlt: "Selini-Shirt Textilveredelung - Siebdruck, Plastisoltransfer und Stickerei aus Berlin",
 		features: [
 			{
@@ -26,15 +26,15 @@ export const extendedSections = [
 		description: "Unsere Leistungspalette umfasst Transferdruck im Plastisol- und Sublimationsverfahren, Reflex-Siebdruck, digitaler Textildruck, fotorealistische Raster-Transfers und Stickerei. Wir bieten professionelle Drucklösungen und individuelle Veredelungstechniken in verschiedenen Farben, Größen und Designvarianten mit höchster Präzision und Qualität.",
 		images: [
 			{
-				src: "/images/landing-page/2150538681.jpg",
+				src: "/images/landing-page/2150538681.webp",
 				alt: "Textilveredelung Selini-Shirt - Professionelle Drucklösungen"
 			},
 			{
-				src: "/images/landing-page/2149120698.jpg",
+				src: "/images/landing-page/2149120698.webp",
 				alt: "Siebdruck und Transferdruck von Selini-Shirt"
 			},
 			{
-				src: "/images/eigenschaften/2769.jpg",
+				src: "/images/eigenschaften/2769.webp",
 				alt: "Stickerei und Textildruck Lösungen von Selini-Shirt"
 			}
 		],
@@ -57,7 +57,7 @@ export const extendedSections = [
 	{
 		title: "Unser Motto: Textilien & Veredelung vereint",
 		description: "Wir bringen Textilien und Veredelungstechniken zueinander. Mit langjähriger Erfahrung und technischer Kompetenz sind wir Ihr zuverlässiger Partner. Wir streben danach, in allem Handeln kooperativ und kommunikativ zu sein und die Bedürfnisse unserer Kunden in den Mittelpunkt zu stellen. Unser flexibler Service und unsere einzigartigen Produkte helfen Ihnen dabei, Ihr Unternehmen zu vermarkten und Ihr Image zu verbessern.",
-		image: "/images/landing-page/1980.jpg",
+		image: "/images/landing-page/1980.webp",
 		imageAlt: "Selini-Shirt - Kooperative und kundenorientierte Textilveredelung",
 		features: [
 			{

@@ -169,15 +169,22 @@ try {
 
 							<!-- Textilkatalog Banner -->
 							<div class="mt-6 pt-6 border-t border-base-300/20">
-								<div class="flex items-center gap-3 bg-primary/5 rounded-lg p-4">
-									<a href="https://www.roly.es/" target="_blank" rel="noopener noreferrer" class="hover:opacity-80 transition-opacity">
+								<div class="flex flex-wrap items-center gap-4 bg-primary/5 rounded-lg p-4">
+									<a href="https://byselini.printwear.de/de/home" target="_blank" rel="noopener noreferrer" class="hover:opacity-80 transition-opacity">
+										<img
+											src={SITE_CONFIG.brand.logo.primary}
+											alt={SITE_CONFIG.brand.logo.alt}
+											class="h-8 w-auto object-contain"
+										/>
+									</a>
+									<a href="https://www.roly.es/" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
 										<img
 											src="https://static.gorfactory.es/images/header/logo_Roly_2025.svg"
 											alt="Roly Logo"
 											class="h-8 w-auto object-contain"
 										/>
+										<span class="text-sm font-medium text-neutral">Schau in unseren Textilkatalog</span>
 									</a>
-									<p class="text-sm font-medium text-neutral">Schau in unseren Textilkatalog</p>
 								</div>
 							</div>
 
@@ -476,13 +483,13 @@ try {
 			)}
 
 			<!-- Mobile Menu Dropdown -->
-			<div class="dropdown dropdown-end lg:hidden">
-				<label tabindex="0" class="btn btn-ghost text-neutral hover:bg-white/10 px-2 sm:px-3" aria-label="Menu">
+			<div class="dropdown dropdown-end lg:hidden" id="mobile-menu-dropdown">
+				<label tabindex="0" class="btn btn-ghost text-neutral hover:bg-white/10 px-2 sm:px-3" aria-label="Menu" id="mobile-menu-button">
 					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
 						<path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
 					</svg>
 				</label>
-				<div tabindex="0" class="dropdown-content mt-3 bg-base-100 rounded-2xl shadow-2xl border border-base-300/30 p-6 w-[calc(100vw-2rem)] max-w-sm max-h-[calc(100vh-8rem)] overflow-y-auto overflow-x-hidden z-50">
+				<div tabindex="0" class="dropdown-content mt-3 bg-base-100 rounded-2xl shadow-2xl border border-base-300/30 p-6 w-[calc(100vw-2rem)] max-w-sm max-h-[calc(100vh-8rem)] overflow-y-auto overflow-x-hidden z-50" id="mobile-menu-content">
 					<div class="space-y-4">
 						<!-- Produkte Section (Collapsible) - Hierarchical -->
 						<details class="mobile-menu-section" open>
@@ -1054,6 +1061,14 @@ try {
 			opacity: 0.8;
 		}
 
+		/* Center mobile menu dropdown on mobile screens */
+		#mobile-menu-dropdown.dropdown-end .dropdown-content {
+			position: fixed !important;
+			left: 50% !important;
+			transform: translateX(-50%) !important;
+			right: auto !important;
+		}
+
 		.user-dropdown .user-dropdown-content {
 			position: absolute !important;
 			right: 0 !important;
@@ -1090,6 +1105,51 @@ try {
 	if (authIconButton) {
 		authIconButton.addEventListener('click', () => {
 			(window as any).openAuthModal('login');
+		});
+	}
+
+	// Mobile menu toggle functionality
+	const mobileMenuButton = document.getElementById('mobile-menu-button');
+	const mobileMenuContent = document.getElementById('mobile-menu-content');
+	const mobileMenuDropdown = document.getElementById('mobile-menu-dropdown');
+
+	if (mobileMenuButton && mobileMenuContent && mobileMenuDropdown) {
+		let isMenuOpen = false;
+
+		mobileMenuButton.addEventListener('click', (e) => {
+			e.preventDefault();
+			e.stopPropagation();
+
+			if (isMenuOpen) {
+				// Close menu
+				mobileMenuButton.blur();
+				mobileMenuContent.blur();
+				document.activeElement?.blur();
+				isMenuOpen = false;
+			} else {
+				// Open menu
+				mobileMenuContent.focus();
+				isMenuOpen = true;
+			}
+		});
+
+		// Close menu when clicking outside
+		document.addEventListener('click', (e) => {
+			if (isMenuOpen && !mobileMenuDropdown.contains(e.target as Node)) {
+				mobileMenuButton.blur();
+				mobileMenuContent.blur();
+				isMenuOpen = false;
+			}
+		});
+
+		// Close menu when clicking a link inside
+		mobileMenuContent.addEventListener('click', (e) => {
+			const target = e.target as HTMLElement;
+			if (target.tagName === 'A' || target.closest('a')) {
+				mobileMenuButton.blur();
+				mobileMenuContent.blur();
+				isMenuOpen = false;
+			}
 		});
 	}
 

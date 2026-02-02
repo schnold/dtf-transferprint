@@ -172,15 +172,16 @@ export const PUT: APIRoute = async ({ params, request, locals }) => {
           "minHeightMm" = $14,
           "maxHeightMm" = $15,
           "acceptsFileUpload" = $16,
-          "maxFileSizeMb" = $17,
-          "allowedFileTypes" = $18,
-          "priceCalculationMethod" = $19,
-          "isBlockout" = $20,
-          "printTechnology" = $21,
-          "metaTitle" = $22,
-          "metaDescription" = $23,
+          "requiresInquiry" = $17,
+          "maxFileSizeMb" = $18,
+          "allowedFileTypes" = $19,
+          "priceCalculationMethod" = $20,
+          "isBlockout" = $21,
+          "printTechnology" = $22,
+          "metaTitle" = $23,
+          "metaDescription" = $24,
           "updatedAt" = CURRENT_TIMESTAMP
-        WHERE id = $24
+        WHERE id = $25
       `, [
         data.categoryId,
         data.slug,
@@ -198,6 +199,7 @@ export const PUT: APIRoute = async ({ params, request, locals }) => {
         data.minHeightMm || null,
         data.maxHeightMm || null,
         data.acceptsFileUpload || false,
+        data.requiresInquiry || false,
         data.maxFileSizeMb || 255,
         data.allowedFileTypes || 'PDF',
         data.priceCalculationMethod || 'per_piece',
