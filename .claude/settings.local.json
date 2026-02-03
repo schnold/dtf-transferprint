@@ -15,7 +15,9 @@
       "Bash(npm run test:sitemap:*)",
       "Bash(npm i:*)",
       "WebSearch",
-      "WebFetch(domain:docs.astro.build)"
+      "WebFetch(domain:docs.astro.build)",
+      "Bash(grep:*)",
+      "Bash(npx astro check:*)"
     ]
   }
 }

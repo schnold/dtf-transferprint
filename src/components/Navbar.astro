@@ -3,6 +3,7 @@ import { SITE_CONFIG } from '../constants/site';
 import AuthModal from './AuthModal.astro';
 import CartDropdown from './CartDropdown.astro';
 import CategoryIcon from './CategoryIcon.astro';
+import PromoBanner from './PromoBanner.astro';
 import { pool } from '../lib/db';
 
 const user = Astro.locals.user;
@@ -90,6 +91,9 @@ try {
 }
 ---
 
+<!-- Promotional Banner -->
+<PromoBanner />
+
 <!-- Navbar -->
 <div id="navbar-container" class="w-full px-4 sm:px-6 lg:px-8 pt-6 sticky top-0 z-50 navbar-scroll-container">
 	<div class="navbar bg-base-100/20 backdrop-blur-xl backdrop-saturate-150 border border-white/20 shadow-lg rounded-2xl px-3 sm:px-4 lg:px-6 py-4 max-w-7xl lg:max-w-7xl-extended mx-auto min-h-[4.5rem] overflow-visible">
@@ -98,7 +102,7 @@ try {
 				<img
 					src={SITE_CONFIG.brand.logo.primary}
 					alt={SITE_CONFIG.brand.logo.alt}
-					class="h-6 sm:h-8 lg:h-10 w-auto object-contain"
+					class="h-8 sm:h-10 lg:h-10 w-auto object-contain"
 				/>
 			</a>
 		</div>
@@ -380,7 +384,7 @@ try {
 				</li>
 			</ul>
 		</div>
-		<div class="navbar-end flex items-center gap-4">
+		<div class="navbar-end flex items-center gap-3 sm:gap-4 flex-shrink-0">
 			<!-- Angebot erhalten Button -->
 			<a href="/kontakt/" class="btn btn-outline btn-primary btn-sm hidden sm:flex">
 				Angebot erhalten
@@ -396,7 +400,7 @@ try {
 				<div class="dropdown relative user-dropdown">
 					<button
 						tabindex="0"
-						class="w-8 h-8 rounded-full border-2 flex items-center justify-center hover:bg-accent/10 transition-all duration-200 cursor-pointer"
+						class="w-8 h-8 min-w-[2rem] min-h-[2rem] flex-shrink-0 rounded-full border-2 flex items-center justify-center hover:bg-accent/10 transition-all duration-200 cursor-pointer"
 						style="border-color: #4B5563;"
 						aria-label="User menu"
 					>
@@ -472,7 +476,7 @@ try {
 				<!-- Not Logged In: User Icon -->
 				<button
 					id="auth-icon-button"
-					class="w-8 h-8 rounded-full border-2 flex items-center justify-center hover:bg-accent/10 transition-all duration-200 cursor-pointer"
+					class="w-8 h-8 min-w-[2rem] min-h-[2rem] flex-shrink-0 rounded-full border-2 flex items-center justify-center hover:bg-accent/10 transition-all duration-200 cursor-pointer"
 					style="border-color: #4B5563;"
 					aria-label="Sign in or Sign up"
 				>

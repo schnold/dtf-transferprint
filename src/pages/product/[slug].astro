@@ -289,7 +289,8 @@ const relatedProducts = relatedProductsResult.rows.map(p => ({
 					</div>
 				)}
 
-				<!-- File Upload Section (always visible) -->
+				<!-- File Upload Section (only for non-inquiry products) -->
+			{!product.requiresInquiry && (
 				<div class="product-container rounded-xl p-4 space-y-3">
 					<h3 class="text-base font-bold text-neutral flex items-center gap-2">
 						<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -380,7 +381,9 @@ const relatedProducts = relatedProductsResult.rows.map(p => ({
 					</p>
 				</div>
 
-				{/* Conditional: Show inquiry form or normal cart/checkout actions */}
+				)}
+
+		{/* Conditional: Show inquiry form or normal cart/checkout actions */}
 				{product.requiresInquiry ? (
 					<ProductInquiryForm
 						productId={product.id}

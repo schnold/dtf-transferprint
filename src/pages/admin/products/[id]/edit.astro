@@ -1033,7 +1033,7 @@ try {
 
     // Create toast container
     const toastContainer = document.createElement('div');
-    toastContainer.className = 'toast toast-bottom toast-end z-50';
+    toastContainer.className = 'toast toast-bottom toast-start z-50';
     
     const alertClass = type === 'success' ? 'alert-success' : type === 'error' ? 'alert-error' : 'alert-info';
     const icon = type === 'success' 
@@ -1255,7 +1255,7 @@ try {
         console.error('[Auto-save] Error:', error);
         if (showToast) {
           const toast = document.createElement('div');
-          toast.className = 'toast toast-top toast-end';
+          toast.className = 'toast toast-bottom toast-start';
           toast.innerHTML = '<div class="alert alert-error"><span>Fehler beim automatischen Speichern</span></div>';
           document.body.appendChild(toast);
           setTimeout(() => toast.remove(), 3000);
@@ -1533,7 +1533,7 @@ try {
       if (result.success) {
         // Show success toast
         const toast = document.createElement('div');
-        toast.className = 'toast toast-top toast-end';
+        toast.className = 'toast toast-bottom toast-start';
         toast.innerHTML = '<div class="alert alert-success"><span>Produkt erfolgreich aktualisiert!</span></div>';
         document.body.appendChild(toast);
         setTimeout(() => toast.remove(), 3000);
@@ -1667,7 +1667,7 @@ try {
       if (result.success) {
         // Show success toast
         const toast = document.createElement('div');
-        toast.className = 'toast toast-end';
+        toast.className = 'toast toast-bottom toast-start';
         toast.innerHTML = `
           <div class="alert alert-success">
             <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">

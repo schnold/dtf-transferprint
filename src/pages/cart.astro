@@ -757,10 +757,6 @@ const formatPrice = (price: number) => {
 	};
 
 	const removeCartItem = async (cartItemId) => {
-		if (!confirm('Möchten Sie diesen Artikel wirklich entfernen?')) {
-			return;
-		}
-
 		try {
 			const response = await fetch('/api/cart/remove', {
 				method: 'DELETE',

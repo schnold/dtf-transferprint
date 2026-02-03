@@ -38,7 +38,7 @@ const formatPrice = (price: number) => {
 	<div class="dropdown dropdown-end cart-dropdown relative">
 		<button
 			tabindex="0"
-			class="w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all duration-200 cursor-pointer relative"
+			class="w-8 h-8 min-w-[2rem] min-h-[2rem] flex-shrink-0 rounded-full border-2 flex items-center justify-center transition-all duration-200 cursor-pointer relative"
 			style="border-color: #4B5563;"
 			aria-label="Shopping cart"
 			id="cart-icon-button"
@@ -53,9 +53,9 @@ const formatPrice = (price: number) => {
 			)}
 		</button>
 		
-		<div tabindex="0" class="cart-dropdown-content absolute top-full mt-3 z-[100] shadow-2xl bg-base-100 rounded-xl w-96 border border-base-300/30 overflow-hidden opacity-0 invisible transform translate-y-2 transition-all duration-300 ease-out">
+		<div tabindex="0" class="cart-dropdown-content absolute top-full mt-3 z-[100] shadow-2xl bg-base-100 rounded-xl w-[28rem] border border-base-300/30 overflow-hidden opacity-0 invisible transform translate-y-2 transition-all duration-300 ease-out">
 			{hasCartItems ? (
-				<div class="max-h-[500px] flex flex-col">
+				<div class="max-h-[600px] flex flex-col">
 					<!-- Header -->
 					<div class="p-4 bg-base-200 border-b border-base-200">
 						<div class="flex items-center justify-between">
@@ -190,7 +190,7 @@ const formatPrice = (price: number) => {
 	<!-- Not logged in - redirect to login when clicking cart -->
 	<button
 		id="cart-login-prompt"
-		class="w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all duration-200 cursor-pointer"
+		class="w-8 h-8 min-w-[2rem] min-h-[2rem] flex-shrink-0 rounded-full border-2 flex items-center justify-center transition-all duration-200 cursor-pointer"
 		style="border-color: #4B5563;"
 		aria-label="Shopping cart - Login required"
 	>
@@ -275,7 +275,7 @@ const formatPrice = (price: number) => {
 			top: 4.5rem !important;
 			transform: translateX(-50%) translateY(2px) !important;
 			width: calc(100vw - 2rem) !important;
-			max-width: 24rem !important;
+			max-width: 28rem !important;
 			margin-top: 0 !important;
 		}
 
@@ -291,9 +291,9 @@ const formatPrice = (price: number) => {
 	}
 </style>
 
-<script>
+<script is:inline>
 	// Cart management functions
-	const formatPrice = (price: number) => {
+	const formatPrice = (price) => {
 		return new Intl.NumberFormat('de-DE', {
 			style: 'currency',
 			currency: 'EUR'
@@ -301,14 +301,14 @@ const formatPrice = (price: number) => {
 	};
 
 	// Escape HTML to prevent XSS
-	const escapeHtml = (text: string) => {
+	const escapeHtml = (text) => {
 		const div = document.createElement('div');
 		div.textContent = text;
 		return div.innerHTML;
 	};
 
 	// Render a single cart item
-	const renderCartItem = (item: any) => {
+	const renderCartItem = (item) => {
 		const savingsHtml = item.currentSavings > 0 
 			? `<span class="savings-indicator text-xs text-success flex items-center gap-1">
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -392,9 +392,9 @@ const formatPrice = (price: number) => {
 	};
 
 	// Build the full "cart with items" dropdown HTML (header + container + footer)
-	const buildCartWithItemsMarkup = (subtotal: number) => {
+	const buildCartWithItemsMarkup = (subtotal) => {
 		return `
-			<div class="max-h-[500px] flex flex-col">
+			<div class="max-h-[600px] flex flex-col">
 				<div class="p-4 bg-base-200 border-b border-base-200">
 					<div class="flex items-center justify-between">
 						<h3 class="text-lg font-bold text-neutral flex items-center gap-2">
@@ -421,26 +421,52 @@ const formatPrice = (price: number) => {
 	};
 
 	// Re-render all cart items (and optionally replace dropdown content if it was empty state)
-	const renderCartItems = (items: any[], subtotal: number) => {
+	const renderCartItems = (items, subtotal) => {
+		console.log('renderCartItems called with', items.length, 'items');
 		let container = document.getElementById('cart-items-container');
 
 		if (items.length === 0) {
-			// If cart becomes empty, reload to show empty state
-			window.location.reload();
+			// If cart becomes empty, show empty state without reloading
+			console.log('Cart is empty, showing empty state');
+			const dropdownContent = document.querySelector('.cart-dropdown-content');
+			if (dropdownContent) {
+				dropdownContent.innerHTML = `
+					<div class="p-8 text-center">
+						<div class="w-20 h-20 mx-auto mb-4 bg-base-200 rounded-full flex items-center justify-center">
+							<svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-neutral/30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+							</svg>
+						</div>
+						<h3 class="text-lg font-bold text-neutral mb-2">Warenkorb ist leer</h3>
+						<p class="text-sm text-neutral/60 mb-4">Fügen Sie Produkte hinzu, um fortzufahren</p>
+						<a href="/products" class="btn btn-primary btn-sm">
+							Produkte ansehen
+						</a>
+					</div>
+				`;
+			}
 			return;
 		}
 
 		// If container doesn't exist, we started with empty cart - replace dropdown content with "has items" structure
 		if (!container) {
+			console.log('Container not found, creating cart structure');
 			const dropdownContent = document.querySelector('.cart-dropdown-content');
 			if (dropdownContent) {
+				console.log('Found dropdown content, replacing with cart markup');
 				dropdownContent.innerHTML = buildCartWithItemsMarkup(subtotal);
 				container = document.getElementById('cart-items-container');
+			} else {
+				console.error('Dropdown content not found!');
 			}
 		}
 
-		if (!container) return;
+		if (!container) {
+			console.error('Cart container still not found after attempting to create it');
+			return;
+		}
 
+		console.log('Rendering', items.length, 'cart items');
 		container.innerHTML = items.map(item => renderCartItem(item)).join('');
 
 		// Update subtotal in footer (in case we just created the structure)
@@ -458,7 +484,7 @@ const formatPrice = (price: number) => {
 		document.querySelectorAll('.quantity-decrease').forEach((button) => {
 			button.addEventListener('click', async (e) => {
 				e.preventDefault();
-				const buttonElement = e.currentTarget as HTMLElement;
+				const buttonElement = e.currentTarget;
 				const cartItemId = buttonElement.getAttribute('data-cart-item-id');
 				if (!cartItemId) return;
 
@@ -469,12 +495,12 @@ const formatPrice = (price: number) => {
 					// Disable buttons during update
 					const cartItemElement = document.querySelector(`[data-cart-item-id="${cartItemId}"]`);
 					const buttons = cartItemElement?.querySelectorAll('button');
-					buttons?.forEach(btn => (btn as HTMLButtonElement).disabled = true);
+					buttons?.forEach(btn => btn.disabled = true);
 
 					await updateCartItemQuantity(cartItemId, currentQuantity - 1);
 
 					// Re-enable buttons after update
-					buttons?.forEach(btn => (btn as HTMLButtonElement).disabled = false);
+					buttons?.forEach(btn => btn.disabled = false);
 				}
 			});
 		});
@@ -483,7 +509,7 @@ const formatPrice = (price: number) => {
 		document.querySelectorAll('.quantity-increase').forEach((button) => {
 			button.addEventListener('click', async (e) => {
 				e.preventDefault();
-				const buttonElement = e.currentTarget as HTMLElement;
+				const buttonElement = e.currentTarget;
 				const cartItemId = buttonElement.getAttribute('data-cart-item-id');
 				if (!cartItemId) return;
 
@@ -493,12 +519,12 @@ const formatPrice = (price: number) => {
 				// Disable buttons during update
 				const cartItemElement = document.querySelector(`[data-cart-item-id="${cartItemId}"]`);
 				const buttons = cartItemElement?.querySelectorAll('button');
-				buttons?.forEach(btn => (btn as HTMLButtonElement).disabled = true);
+				buttons?.forEach(btn => btn.disabled = true);
 
 				await updateCartItemQuantity(cartItemId, currentQuantity + 1);
 
 				// Re-enable buttons after update
-				buttons?.forEach(btn => (btn as HTMLButtonElement).disabled = false);
+				buttons?.forEach(btn => btn.disabled = false);
 			});
 		});
 
@@ -507,7 +533,7 @@ const formatPrice = (price: number) => {
 			button.addEventListener('click', (e) => {
 				e.preventDefault();
 				e.stopPropagation();
-				const cartItemId = (e.currentTarget as HTMLElement).getAttribute('data-cart-item-id');
+				const cartItemId = e.currentTarget.getAttribute('data-cart-item-id');
 				if (!cartItemId) return;
 
 				removeCartItem(cartItemId);
@@ -517,11 +543,13 @@ const formatPrice = (price: number) => {
 
 	const updateCartUI = async (showAnimation = false) => {
 		try {
+			console.log('Updating cart UI...');
 			const response = await fetch('/api/cart/get');
 			const result = await response.json();
 
 			if (result.success) {
 				const { items, count, subtotal } = result.data;
+				console.log('Cart data received:', { itemsCount: items.length, count, subtotal });
 
 				// Update cart count badge
 				const cartCountBadge = document.getElementById('cart-count-badge');
@@ -602,7 +630,7 @@ const formatPrice = (price: number) => {
 		}
 	};
 
-	const updateCartItemQuantity = async (cartItemId: string, newQuantity: number) => {
+	const updateCartItemQuantity = async (cartItemId, newQuantity) => {
 		// Optimistic UI update - update immediately
 		const cartItemElement = document.querySelector(`[data-cart-item-id="${cartItemId}"]`);
 		const quantityElement = cartItemElement?.querySelector('.cart-item-quantity');
@@ -682,11 +710,7 @@ const formatPrice = (price: number) => {
 		}
 	};
 
-	const removeCartItem = async (cartItemId: string) => {
-		if (!confirm('Möchten Sie diesen Artikel wirklich entfernen?')) {
-			return;
-		}
-
+	const removeCartItem = async (cartItemId) => {
 		try {
 			const response = await fetch('/api/cart/remove', {
 				method: 'DELETE',
@@ -710,6 +734,7 @@ const formatPrice = (price: number) => {
 
 	// Event listeners
 	document.addEventListener('DOMContentLoaded', () => {
+		console.log('CartDropdown: DOM Content Loaded');
 		// Attach initial event listeners
 		attachCartItemListeners();
 
@@ -717,22 +742,15 @@ const formatPrice = (price: number) => {
 		const cartLoginPrompt = document.getElementById('cart-login-prompt');
 		if (cartLoginPrompt) {
 			cartLoginPrompt.addEventListener('click', () => {
-				(window as any).openAuthModal('login');
+				window.openAuthModal('login');
 			});
 		}
-	});
 
-	// Listen for cart updates from other parts of the app
-	window.addEventListener('cartItemAdded', async () => {
-		// Update cart UI without page reload with animation
-		await updateCartUI(true);
-	});
-
-	// Also listen for page load to ensure cart is up to date
-	window.addEventListener('load', () => {
-		const cartIconButton = document.getElementById('cart-icon-button');
-		if (cartIconButton) {
-			updateCartUI(false);
-		}
+		// Listen for cart updates from other parts of the app
+		window.addEventListener('cartItemAdded', async (event) => {
+			console.log('cartItemAdded event received:', event.detail);
+			// Update cart UI without page reload with animation
+			await updateCartUI(true);
+		});
 	});
 </script>

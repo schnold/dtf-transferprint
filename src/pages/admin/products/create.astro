@@ -262,21 +262,21 @@ try {
             <div class="card-body p-4">
               <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
                 <div class="form-control">
-                  <div class="mb-1">
-                    <label class="text-xs font-medium text-base-content">Min. Menge</label>
-                  </div>
+                  <label class="label">
+                    <span class="label-text font-medium text-sm">Min. Menge</span>
+                  </label>
                   <input type="number" name="tier_minQty[]" value="0" required class="input input-bordered input-sm focus:input-primary" />
                 </div>
                 <div class="form-control">
-                  <div class="mb-1">
-                    <label class="text-xs font-medium text-base-content">Rabatt %</label>
-                  </div>
+                  <label class="label">
+                    <span class="label-text font-medium text-sm">Rabatt %</span>
+                  </label>
                   <input type="number" name="tier_discount[]" value="0" step="0.01" required class="input input-bordered input-sm focus:input-primary" />
                 </div>
                 <div class="form-control">
-                  <div class="mb-1">
-                    <label class="text-xs font-medium text-base-content">Preis (€)</label>
-                  </div>
+                  <label class="label">
+                    <span class="label-text font-medium text-sm">Preis (€)</span>
+                  </label>
                   <input type="number" name="tier_price[]" value="14.99" step="0.01" required class="input input-bordered input-sm focus:input-primary" />
                 </div>
                 <div class="form-control">
@@ -605,7 +605,7 @@ try {
       if (result.success) {
         // Show success toast
         const toast = document.createElement('div');
-        toast.className = 'toast toast-top toast-end';
+        toast.className = 'toast toast-bottom toast-start';
         toast.innerHTML = '<div class="alert alert-success"><span>Produkt erfolgreich erstellt! Sie können jetzt Bilder hinzufügen.</span></div>';
         document.body.appendChild(toast);
         setTimeout(() => toast.remove(), 3000);

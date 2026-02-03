@@ -70,6 +70,111 @@
   animation: hero-card-fade-in 1s cubic-bezier(0.22, 1, 0.36, 1) 0.3s both;
 }
 
+/* Marker-style brush highlight under each line of hero card title (3 different brush SVGs) */
+@keyframes hero-title-brush-swipe {
+  0% {
+    clip-path: inset(0 100% 0 0);
+    -webkit-clip-path: inset(0 100% 0 0);
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+    -webkit-clip-path: inset(0 0 0 0);
+  }
+}
+
+.hero-card-title {
+  color: white;
+}
+
+.hero-card-title-line {
+  position: relative;
+  display: block;
+}
+
+.hero-card-title-line::after {
+  content: '';
+  position: absolute;
+  left: -2%;
+  right: -2%;
+  width: 104%;
+  bottom: 0.02em;
+  height: 0.65em;
+  background-color: var(--color-accent);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: left center;
+  mask-size: cover;
+  mask-repeat: no-repeat;
+  mask-position: left center;
+  mask-origin: border-box;
+  -webkit-mask-size: cover;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: left center;
+  -webkit-mask-origin: border-box;
+  z-index: -1;
+  opacity: 0.35;
+}
+
+.hero-card-title-line:nth-child(1)::after {
+  background-image: none;
+  mask-image: url('/images/hero-brushes/brush01.svg');
+  -webkit-mask-image: url('/images/hero-brushes/brush01.svg');
+  animation: hero-title-brush-swipe 1s cubic-bezier(0.33, 1, 0.28, 1) 1.35s both;
+}
+
+.hero-card-title-line:nth-child(2)::after {
+  background-image: none;
+  mask-image: url('/images/hero-brushes/brush02.svg');
+  -webkit-mask-image: url('/images/hero-brushes/brush02.svg');
+  animation: hero-title-brush-swipe 1s cubic-bezier(0.33, 1, 0.28, 1) 1.5s both;
+}
+
+.hero-card-title-line:nth-child(3)::after {
+  background-image: none;
+  mask-image: url('/images/hero-brushes/brush03.svg');
+  -webkit-mask-image: url('/images/hero-brushes/brush03.svg');
+  animation: hero-title-brush-swipe 1s cubic-bezier(0.33, 1, 0.28, 1) 1.65s both;
+}
+
+/* Brush stroke under "Warum uns wählen?" heading */
+.why-choose-title-brush {
+  position: relative;
+  display: inline-block;
+}
+
+.why-choose-title-brush::after {
+  content: '';
+  position: absolute;
+  left: -2%;
+  right: -2%;
+  width: 104%;
+  bottom: 0.02em;
+  height: 0.65em;
+  background-color: var(--color-accent);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: left center;
+  mask-image: url('/images/hero-brushes/brush02.svg');
+  -webkit-mask-image: url('/images/hero-brushes/brush02.svg');
+  mask-size: cover;
+  mask-repeat: no-repeat;
+  mask-position: left center;
+  mask-origin: border-box;
+  -webkit-mask-size: cover;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: left center;
+  -webkit-mask-origin: border-box;
+  z-index: -1;
+  opacity: 0.35;
+  clip-path: inset(0 100% 0 0);
+  -webkit-clip-path: inset(0 100% 0 0);
+  transition: none;
+}
+
+.why-choose-title-brush.is-visible::after {
+  animation: hero-title-brush-swipe 1s cubic-bezier(0.33, 1, 0.28, 1) 0.2s both;
+}
+
 @layer base {
   * {
     box-sizing: border-box;
@@ -396,10 +501,10 @@
     transition: all 0.3s ease;
   }
 
-  /* Product page container styling - matches testimonials border and shadow */
+  /* Product page container styling - lighter border for modern look */
   .product-container {
     background-color: var(--color-base-200);
-    border: 1px solid rgba(166, 166, 166, 0.3); /* border-base-300/30 */
+    border: 1px solid rgba(166, 166, 166, 0.2); /* lighter border - 0.2 instead of 0.3 */
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* shadow-sm */
     transition: all 0.3s ease;
   }

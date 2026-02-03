@@ -321,7 +321,7 @@ function getFileIcon(mimeType: string): string {
 
           // Show success message
           const toast = document.createElement('div');
-          toast.className = 'toast toast-end';
+          toast.className = 'toast toast-bottom toast-start';
           toast.innerHTML = '<div class="alert alert-success"><span class="text-xs">Datei erfolgreich gelöscht!</span></div>';
           document.body.appendChild(toast);
           setTimeout(() => toast.remove(), 3000);
