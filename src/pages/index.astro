@@ -30,11 +30,15 @@ const heroImages: string[] = (() => {
 		<!-- Background image layers (cycle every 10s; images from public/images/landing-page/hero/) -->
 		<div class="absolute inset-0" aria-hidden="true" style="height: 100%; width: 100%;">
 			{heroImages.map((src, i) => (
-				<div
-					class={`hero-bg-layer absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-[2s] ease-in-out ${i === 0 ? 'opacity-100' : 'opacity-0'}`}
-					data-bg-src={src}
+				<img
+					class={`hero-bg-layer absolute inset-0 w-full h-full object-cover transition-opacity duration-[2s] ease-in-out ${i === 0 ? 'opacity-100' : 'opacity-0'}`}
+					src={i === 0 ? src : undefined}
+					data-bg-src={i === 0 ? undefined : src}
 					data-preload={i === 0 ? 'true' : 'false'}
-					style="height: 100%; width: 100%;"
+					alt={i === 0 ? "Hero Background" : ""}
+					fetchpriority={i === 0 ? "high" : "auto"}
+					loading={i === 0 ? "eager" : "lazy"}
+					decoding={i === 0 ? "sync" : "async"}
 				/>
 			))}
 		</div>
@@ -84,30 +88,17 @@ const heroImages: string[] = (() => {
 			let current = 0;
 			let loadedImages = new Set<number>();
 
-			// Preload first image immediately
-			layers.forEach((layer, i) => {
-				const bgSrc = layer.getAttribute('data-bg-src');
-				const shouldPreload = layer.getAttribute('data-preload') === 'true';
-
-				if (bgSrc && shouldPreload) {
-					// Load first image immediately
-					(layer as HTMLElement).style.backgroundImage = `url('${bgSrc}')`;
-					loadedImages.add(i);
-				}
-			});
+			// Mark first image as loaded
+			loadedImages.add(0);
 
 			// Lazy load images as they're needed
 			function loadImage(index: number) {
 				if (loadedImages.has(index)) return;
-				const layer = layers[index] as HTMLElement;
+				const layer = layers[index] as HTMLImageElement;
 				const bgSrc = layer.getAttribute('data-bg-src');
 				if (bgSrc) {
-					const img = new Image();
-					img.onload = () => {
-						layer.style.backgroundImage = `url('${bgSrc}')`;
-						loadedImages.add(index);
-					};
-					img.src = bgSrc;
+					layer.src = bgSrc;
+					loadedImages.add(index);
 				}
 			}
 
@@ -371,55 +362,7 @@ const heroImages: string[] = (() => {
 		</script>
 
 		<!-- Lazy Loading Script for Service Card Images -->
-		<script is:inline>
-			document.addEventListener('DOMContentLoaded', function() {
-				// Check if IntersectionObserver is supported
-				if ('IntersectionObserver' in window) {
-					// Configure the observer with a 50px margin for smooth loading
-					const imageObserver = new IntersectionObserver(function(entries, observer) {
-						entries.forEach(function(entry) {
-							if (entry.isIntersecting) {
-								const img = entry.target;
-								const src = img.getAttribute('data-src');
-
-								if (src) {
-									// Preload the image
-									const tempImg = new Image();
-									tempImg.onload = function() {
-										img.src = src;
-										img.removeAttribute('data-src');
-										img.classList.add('loaded');
-									};
-									tempImg.src = src;
-								}
-
-								// Stop observing this image
-								observer.unobserve(img);
-							}
-						});
-					}, {
-						rootMargin: '50px 0px',
-						threshold: 0.01
-					});
-
-					// Observe all service card images below the fold
-					const serviceImages = document.querySelectorAll('.service-card img[data-src]');
-					serviceImages.forEach(function(img) {
-						imageObserver.observe(img);
-					});
-				} else {
-					// Fallback for browsers without IntersectionObserver
-					const serviceImages = document.querySelectorAll('.service-card img[data-src]');
-					serviceImages.forEach(function(img) {
-						const src = img.getAttribute('data-src');
-						if (src) {
-							img.src = src;
-							img.removeAttribute('data-src');
-						}
-					});
-				}
-			});
-		</script>
+		<!-- Lazy Loading Script for Service Card Images - REMOVED (native lazy loading used) -->
 	</section>
 
 	<!-- Features Section: Warum uns wählen -->

@@ -335,18 +335,33 @@
   }
 
   /* Navbar CTA: default = brand light green (accent), hover = subtle highlight */
-  #navbar-container .navbar-end .btn-outline.btn-primary {
+  #navbar-container .navbar-end .btn-outline.btn-primary,
+  .btn-angebot-accent {
     background: var(--color-accent) !important;
     color: var(--color-neutral) !important;
-    border-color: var(--color-accent) !important;
+    border: 2px solid var(--color-accent) !important;
+    text-shadow: none;
     transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s, transform 0.2s;
   }
-  #navbar-container .navbar-end .btn-outline.btn-primary:hover {
+  #navbar-container .navbar-end .btn-outline.btn-primary:hover,
+  .btn-angebot-accent:hover {
     background: #f2f755 !important; /* slightly brighter accent */
     color: var(--color-neutral) !important;
     border-color: #f2f755 !important;
     box-shadow: 0 4px 14px rgba(235, 242, 34, 0.45);
     transform: translateY(-1px);
+  }
+  .btn-angebot-accent:focus,
+  .btn-angebot-accent:focus-visible {
+    outline: none;
+    border-color: var(--color-accent) !important;
+    box-shadow: 0 0 0 2px rgba(235, 242, 34, 0.4);
+  }
+  .btn-angebot-accent svg {
+    color: inherit !important;
+  }
+  .btn-angebot-accent:hover svg {
+    color: inherit !important;
   }
 
   .btn-outline.btn-primary:focus {
@@ -612,7 +627,7 @@
     padding-left: 0;
   }
 
-  /* Use Cases Section Styles */
+  /* Use Cases Section Styles + global segment headings (e.g. Firmen & Unternehmen) */
   .use-cases-grid {
     /* Grid layout handled by Tailwind classes */
   }
@@ -622,8 +637,26 @@
     margin-bottom: 0.75rem;
   }
 
-  .use-case-title {
+  /* Segment headings: avoid cut-off words, slightly smaller font, hyphenate on line break */
+  .use-case-title,
+  .segment-heading {
     margin-bottom: 0.5rem;
+    font-size: 0.9375rem; /* 15px – slightly smaller than base */
+    overflow-wrap: normal;
+    word-break: normal;
+    hyphens: auto;
+    -webkit-hyphens: auto;
+    -ms-hyphens: auto;
+  }
+
+  /* Description under segment headings: same line-break rules (no mid-word cut-off) */
+  .use-cases-grid .card-body > p,
+  .card-body:has(.segment-heading) > p {
+    overflow-wrap: normal;
+    word-break: normal;
+    hyphens: auto;
+    -webkit-hyphens: auto;
+    -ms-hyphens: auto;
   }
 
   /* Contact CTA Section Styles */

@@ -11,6 +11,18 @@ const bannerText = bannerSettings.text;
 {bannerEnabled && (
 	<div class="promo-banner-container w-full">
 		<div class="promo-banner text-neutral-content py-2 overflow-hidden">
+			<!-- Desktop: Address section on left -->
+			<div class="address-section">
+				<div class="address-content">
+					<svg class="pin-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+						<circle cx="12" cy="10" r="3"></circle>
+					</svg>
+					<span class="address-text">Musterstraße 123, 10115 Berlin</span>
+				</div>
+			</div>
+
+			<!-- Marquee section -->
 			<div class="marquee-wrapper">
 				<div class="marquee-content">
 					{Array(10).fill(null).map(() => (
@@ -36,6 +48,12 @@ const bannerText = bannerSettings.text;
 	.promo-banner {
 		position: relative;
 		background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+		display: flex;
+	}
+
+	/* Address section - hidden on mobile/tablet, visible on desktop */
+	.address-section {
+		display: none;
 	}
 
 	.marquee-wrapper {
@@ -85,10 +103,51 @@ const bannerText = bannerSettings.text;
 		}
 	}
 
-	@media (min-width: 641px) and (max-width: 1024px) {
+	@media (min-width: 641px) and (max-width: 1023px) {
 		.marquee-text {
 			font-size: 0.8125rem;
 			padding: 0 3rem;
+		}
+	}
+
+	/* Desktop layout with address section */
+	@media (min-width: 1024px) {
+		.promo-banner {
+			background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+		}
+
+		.address-section {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			flex-shrink: 0;
+			width: 20%;
+			background: linear-gradient(to right, #000000 0%, #000000 40%, rgba(0, 0, 0, 0.5) 70%, transparent 100%);
+			position: relative;
+		}
+
+		.address-content {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 0.5rem;
+			white-space: nowrap;
+			position: relative;
+			z-index: 1;
+		}
+
+		.pin-icon {
+			flex-shrink: 0;
+		}
+
+		.address-text {
+			font-size: 0.875rem;
+			font-weight: 500;
+			letter-spacing: 0.025em;
+		}
+
+		.marquee-wrapper {
+			flex: 1;
 		}
 	}
 </style>

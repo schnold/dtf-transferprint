@@ -1,20 +1,24 @@
 ---
 import CompanyLayout from '../layouts/CompanyLayout.astro';
+import ContactCTASection from '../components/ContactCTASection.astro';
+import InquiryForm from '../components/InquiryForm.astro';
 
 const title = 'Professionelle Druckvorlagen für DTF-Transfer';
 const description = 'Erfahren Sie alles über optimale Druckvorlagen für DTF-Transfers: Dateiformate, Farbprofile, Auflösung und professionelle Vorbereitung Ihrer Designs für perfekte Druckergebnisse.';
 ---
 
 <CompanyLayout title={title} description={description}>
-	<h1>{title}</h1>
+	<!-- Hero Section -->
+	<div class="mb-12">
+		<h1 class="!mb-4">{title}</h1>
+		<p class="text-lg text-neutral/80 !mb-6">
+			Der ultimative Leitfaden für perfekte Druckdateien – Dateiformate, Farbprofile, Auflösung und professionelle Vorbereitung Ihrer Designs für perfekte Druckergebnisse.
+		</p>
 
-	<p class="text-neutral/70 text-sm mb-8">
-		Der ultimative Leitfaden für perfekte Druckdateien
-	</p>
-
-	<div class="alert alert-info mb-8">
+		<div class="alert alert-info mb-8">
 		<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
 		<span><strong>Die richtige Druckvorlage</strong> ist entscheidend für ein perfektes Druckergebnis. In diesem Leitfaden erfahren Sie, wie Sie Ihre Designs optimal für den DTF-Druck vorbereiten.</span>
+		</div>
 	</div>
 
 	<h2>Warum sind professionelle Druckvorlagen wichtig?</h2>
@@ -74,6 +78,9 @@ const description = 'Erfahren Sie alles über optimale Druckvorlagen für DTF-Tr
 	</div>
 
 	<h2>Anforderungen an Druckdateien</h2>
+	<p class="text-neutral/70 mb-6">
+		Die richtigen Dateiformate, Auflösung und Farbprofile sind die Grundlage für ein perfektes Druckergebnis.
+	</p>
 
 	<h3>Empfohlene Dateiformate</h3>
 	<p>
@@ -92,8 +99,8 @@ const description = 'Erfahren Sie alles über optimale Druckvorlagen für DTF-Tr
 			</thead>
 			<tbody>
 				<tr>
-					<td><span class="badge badge-success gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+					<td class="align-middle py-3 min-h-[3.5rem]"><span class="badge badge-success gap-2 py-2.5 px-3 text-sm whitespace-nowrap">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 shrink-0">
 							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
 						</svg>
 						.AI / .EPS
@@ -103,8 +110,8 @@ const description = 'Erfahren Sie alles über optimale Druckvorlagen für DTF-Tr
 					<td>Schriften in Pfade umwandeln</td>
 				</tr>
 				<tr>
-					<td><span class="badge badge-success gap-2">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+					<td class="align-middle py-3 min-h-[3.5rem]"><span class="badge badge-success gap-2 py-2.5 px-3 text-sm whitespace-nowrap">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 shrink-0">
 							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
 						</svg>
 						.PDF
@@ -114,7 +121,7 @@ const description = 'Erfahren Sie alles über optimale Druckvorlagen für DTF-Tr
 					<td>PDF/X-3 oder PDF/X-4 Format</td>
 				</tr>
 				<tr>
-					<td><span class="badge badge-warning gap-2">
+					<td class="align-middle py-3 min-h-[3.5rem]"><span class="badge badge-warning gap-2 py-2.5 px-3 text-sm whitespace-nowrap">
 						.PSD
 					</span></td>
 					<td>Fotorealistische Designs</td>
@@ -122,7 +129,7 @@ const description = 'Erfahren Sie alles über optimale Druckvorlagen für DTF-Tr
 					<td>Ebenen zusammenfügen vor Export</td>
 				</tr>
 				<tr>
-					<td><span class="badge badge-warning gap-2">
+					<td class="align-middle py-3 min-h-[3.5rem]"><span class="badge badge-warning gap-2 py-2.5 px-3 text-sm whitespace-nowrap">
 						.PNG
 					</span></td>
 					<td>Designs mit Transparenz</td>
@@ -130,7 +137,7 @@ const description = 'Erfahren Sie alles über optimale Druckvorlagen für DTF-Tr
 					<td>Mindestens 300 DPI</td>
 				</tr>
 				<tr>
-					<td><span class="badge badge-error gap-2">
+					<td class="align-middle py-3 min-h-[3.5rem]"><span class="badge badge-error gap-2 py-2.5 px-3 text-sm whitespace-nowrap">
 						.JPG
 					</span></td>
 					<td>Nicht empfohlen</td>
@@ -160,7 +167,7 @@ const description = 'Erfahren Sie alles über optimale Druckvorlagen für DTF-Tr
 				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
 			</div>
 			<div class="stat-title">Mindestauflösung</div>
-			<div class="stat-value text-primary">300 DPI</div>
+			<div class="stat-value text-base-content">300 DPI</div>
 			<div class="stat-desc">Für alle Pixelgrafiken</div>
 		</div>
 
@@ -169,7 +176,7 @@ const description = 'Erfahren Sie alles über optimale Druckvorlagen für DTF-Tr
 				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"></path></svg>
 			</div>
 			<div class="stat-title">Empfohlene Auflösung</div>
-			<div class="stat-value text-secondary">600 DPI</div>
+			<div class="stat-value text-base-content">600 DPI</div>
 			<div class="stat-desc">Für fotorealistische Motive</div>
 		</div>
 
@@ -178,24 +185,24 @@ const description = 'Erfahren Sie alles über optimale Druckvorlagen für DTF-Tr
 				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
 			</div>
 			<div class="stat-title">Vektorgrafiken</div>
-			<div class="stat-value text-accent">DPI-frei</div>
+			<div class="stat-value text-base-content">DPI-frei</div>
 			<div class="stat-desc">Unbegrenzt skalierbar</div>
 		</div>
 	</div>
 
 	<div class="card bg-gradient-to-br from-info/10 to-info/5 border border-info/20 my-8">
 		<div class="card-body">
-			<h4 class="card-title text-lg">
+			<h4 class="card-title text-lg text-base-content">
 				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-base-content inline">
 					<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 15.75l-2.489-2.489m0 0a3.375 3.375 0 10-4.773-4.773 3.375 3.375 0 004.774 4.774zM21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
 				</svg>
 				Berechnung der Bildgröße
 			</h4>
-			<p>
+			<p class="text-base-content/90">
 				Um die benötigte Bildgröße in Pixeln zu berechnen, multiplizieren Sie die gewünschte Druckgröße (in cm) mit der Auflösung und teilen durch 2,54:
 			</p>
-			<div class="mockup-code">
-				<pre><code>Beispiel für ein 30cm x 40cm Motiv bei 300 DPI:
+			<div class="bg-base-200/60 rounded-lg border border-base-300/50 text-base-content text-left pl-6 pr-4 py-4 my-2">
+				<pre class="m-0 font-mono text-sm whitespace-pre-wrap break-words"><code>Beispiel für ein 30cm x 40cm Motiv bei 300 DPI:
 Breite: (30 cm × 300 DPI) ÷ 2,54 = 3543 Pixel
 Höhe: (40 cm × 300 DPI) ÷ 2,54 = 4724 Pixel</code></pre>
 			</div>
@@ -264,6 +271,9 @@ Höhe: (40 cm × 300 DPI) ÷ 2,54 = 4724 Pixel</code></pre>
 	</div>
 
 	<h2>Design-Richtlinien für optimale Ergebnisse</h2>
+	<p class="text-neutral/70 mb-6">
+		Mit den richtigen Beschnittzugaben, Sicherheitsabständen und Schrifteinstellungen vermeiden Sie Fehler und sichern professionelle Ergebnisse.
+	</p>
 
 	<h3>Beschnittzugabe und Sicherheitsabstände</h3>
 	<p>
@@ -327,18 +337,6 @@ Höhe: (40 cm × 300 DPI) ÷ 2,54 = 4724 Pixel</code></pre>
 				<li><strong>Dünne Schriftschnitte:</strong> vermeiden oder mindestens 10 pt</li>
 			</ul>
 		</div>
-	</div>
-
-	<h3>Transparenzen und Überdrucken</h3>
-	<p>
-		Transparenzeffekte und Überdrucken-Einstellungen können zu unerwarteten Ergebnissen führen:
-	</p>
-
-	<div class="steps steps-vertical lg:steps-horizontal my-8">
-		<div class="step step-primary">Transparenzen reduzieren</div>
-		<div class="step step-primary">Überdrucken deaktivieren</div>
-		<div class="step step-primary">Ebenen zusammenfügen</div>
-		<div class="step">Druckfertige PDF erstellen</div>
 	</div>
 
 	<h2>Häufige Fehler und wie Sie sie vermeiden</h2>
@@ -495,115 +493,216 @@ Höhe: (40 cm × 300 DPI) ÷ 2,54 = 4724 Pixel</code></pre>
 	<div class="grid grid-cols-1 md:grid-cols-3 gap-6 my-8">
 		<div class="card bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20">
 			<div class="card-body items-center text-center">
-				<div class="avatar placeholder mb-4">
-					<div class="bg-primary text-primary-content rounded-full w-16">
-						<span class="text-2xl">1</span>
-					</div>
+				<div class="flex items-center justify-center w-14 h-14 rounded-full bg-primary text-primary-content mb-4 shrink-0">
+					<span class="text-2xl font-semibold tabular-nums leading-none">1</span>
 				</div>
 				<h3 class="card-title">Datei hochladen</h3>
-				<p>Senden Sie uns Ihre Druckdatei per E-Mail oder über unser Upload-Portal</p>
+				<p class="text-base-content/80">Senden Sie uns Ihre Druckdatei per E-Mail oder über unser Upload-Portal</p>
 			</div>
 		</div>
 
 		<div class="card bg-gradient-to-br from-secondary/10 to-secondary/5 border border-secondary/20">
 			<div class="card-body items-center text-center">
-				<div class="avatar placeholder mb-4">
-					<div class="bg-secondary text-secondary-content rounded-full w-16">
-						<span class="text-2xl">2</span>
-					</div>
+				<div class="flex items-center justify-center w-14 h-14 rounded-full bg-secondary text-secondary-content mb-4 shrink-0">
+					<span class="text-2xl font-semibold tabular-nums leading-none">2</span>
 				</div>
 				<h3 class="card-title">Wir prüfen</h3>
-				<p>Unser Team überprüft Ihre Datei auf technische Anforderungen und Druckbarkeit</p>
+				<p class="text-base-content/80">Unser Team überprüft Ihre Datei auf technische Anforderungen und Druckbarkeit</p>
 			</div>
 		</div>
 
 		<div class="card bg-gradient-to-br from-accent/10 to-accent/5 border border-accent/20">
 			<div class="card-body items-center text-center">
-				<div class="avatar placeholder mb-4">
-					<div class="bg-accent text-accent-content rounded-full w-16">
-						<span class="text-2xl">3</span>
-					</div>
+				<div class="flex items-center justify-center w-14 h-14 rounded-full bg-accent text-accent-content mb-4 shrink-0">
+					<span class="text-2xl font-semibold tabular-nums leading-none">3</span>
 				</div>
 				<h3 class="card-title">Feedback erhalten</h3>
-				<p>Sie erhalten innerhalb von 24h Feedback und ggf. Optimierungsvorschläge</p>
+				<p class="text-base-content/80">Sie erhalten innerhalb von 24h Feedback und ggf. Optimierungsvorschläge</p>
 			</div>
 		</div>
 	</div>
 
-	<h2>Häufig gestellte Fragen</h2>
+	<ContactCTASection
+		title="Bereit für perfekte Druckvorlagen?"
+		description="Fordern Sie jetzt ein kostenloses, unverbindliches Angebot an. Unser Expertenteam prüft Ihre Druckdaten kostenlos und berät Sie zu Dateiformaten, Auflösung und Farbprofilen."
+	/>
 
-	<div class="join join-vertical w-full my-8">
-		<div class="collapse collapse-arrow join-item border border-base-300">
-			<input type="radio" name="faq-accordion" />
-			<div class="collapse-title text-lg font-medium">
-				Kann ich auch Dateien aus Canva oder PowerPoint verwenden?
-			</div>
-			<div class="collapse-content">
-				<p>Grundsätzlich ja, aber diese Programme sind nicht für professionellen Druck optimiert. Exportieren Sie Ihre Designs als hochauflösende PDF oder PNG (mindestens 300 DPI) und senden Sie uns die Datei zur Prüfung. Oft ist die Qualität jedoch nicht ausreichend für größere Druckformate.</p>
+	<!-- FAQ Section -->
+	<h2 class="mt-16 mb-8">Häufig gestellte Fragen zu Druckvorlagen</h2>
+
+	<div class="space-y-3 mb-12">
+		<div class="faq-item group border border-base-300/30 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-accent/30 overflow-hidden bg-gray-800">
+			<input type="checkbox" id="faq-druck-1" class="faq-toggle" checked="checked" />
+			<label for="faq-druck-1" class="faq-label flex items-center justify-between cursor-pointer p-6 bg-gray-800 transition-all duration-300">
+				<span class="text-xl font-semibold text-gray-200 pr-4">Kann ich auch Dateien aus Canva oder PowerPoint verwenden?</span>
+				<div class="faq-icon flex-shrink-0 w-6 h-6 relative text-accent">
+					<svg class="faq-icon-plus absolute inset-0 w-full h-full transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+					</svg>
+					<svg class="faq-icon-minus absolute inset-0 w-full h-full transition-all duration-300 opacity-0 scale-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4" />
+					</svg>
+				</div>
+			</label>
+			<div class="faq-content overflow-hidden transition-all duration-300">
+				<div class="px-6 pb-6 pt-2">
+					<p class="text-gray-200 leading-relaxed">
+						Grundsätzlich ja, aber diese Programme sind nicht für professionellen Druck optimiert. Exportieren Sie Ihre Designs als hochauflösende PDF oder PNG (mindestens 300 DPI) und senden Sie uns die Datei zur Prüfung. Oft ist die Qualität jedoch nicht ausreichend für größere Druckformate.
+					</p>
+				</div>
 			</div>
 		</div>
 
-		<div class="collapse collapse-arrow join-item border border-base-300">
-			<input type="radio" name="faq-accordion" />
-			<div class="collapse-title text-lg font-medium">
-				Was mache ich, wenn ich nur eine niedrig aufgelöste Datei habe?
-			</div>
-			<div class="collapse-content">
-				<p>Kontaktieren Sie uns! Wir können versuchen, die Datei zu optimieren, oder bieten Ihnen an, das Design neu zu vektorisieren. Alternativ können wir einen Probedruck erstellen, damit Sie das Ergebnis vorab beurteilen können.</p>
-			</div>
-		</div>
-
-		<div class="collapse collapse-arrow join-item border border-base-300">
-			<input type="radio" name="faq-accordion" />
-			<div class="collapse-title text-lg font-medium">
-				Bietet ihr auch Design-Services an?
-			</div>
-			<div class="collapse-content">
-				<p>Ja! Unser Designteam erstellt professionelle Druckvorlagen nach Ihren Vorgaben. Vom Logo-Design bis zur kompletten Motivgestaltung – kontaktieren Sie uns für ein individuelles Angebot.</p>
-			</div>
-		</div>
-
-		<div class="collapse collapse-arrow join-item border border-base-300">
-			<input type="radio" name="faq-accordion" />
-			<div class="collapse-title text-lg font-medium">
-				Wie übertrage ich meine Datei am besten?
-			</div>
-			<div class="collapse-content">
-				<p>Für Dateien bis 25 MB nutzen Sie einfach unseren E-Mail-Service. Größere Dateien können Sie über WeTransfer, Dropbox oder unser sicheres Upload-Portal übertragen. Links erhalten Sie nach Auftragsbestätigung.</p>
+		<div class="faq-item group border border-base-300/30 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-accent/30 overflow-hidden bg-gray-800">
+			<input type="checkbox" id="faq-druck-2" class="faq-toggle" />
+			<label for="faq-druck-2" class="faq-label flex items-center justify-between cursor-pointer p-6 bg-gray-800 transition-all duration-300">
+				<span class="text-xl font-semibold text-gray-200 pr-4">Was mache ich, wenn ich nur eine niedrig aufgelöste Datei habe?</span>
+				<div class="faq-icon flex-shrink-0 w-6 h-6 relative text-accent">
+					<svg class="faq-icon-plus absolute inset-0 w-full h-full transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+					</svg>
+					<svg class="faq-icon-minus absolute inset-0 w-full h-full transition-all duration-300 opacity-0 scale-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4" />
+					</svg>
+				</div>
+			</label>
+			<div class="faq-content overflow-hidden transition-all duration-300">
+				<div class="px-6 pb-6 pt-2">
+					<p class="text-gray-200 leading-relaxed">
+						Kontaktieren Sie uns! Wir können versuchen, die Datei zu optimieren, oder bieten Ihnen an, das Design neu zu vektorisieren. Alternativ können wir einen Probedruck erstellen, damit Sie das Ergebnis vorab beurteilen können.
+					</p>
+				</div>
 			</div>
 		</div>
 
-		<div class="collapse collapse-arrow join-item border border-base-300">
-			<input type="radio" name="faq-accordion" />
-			<div class="collapse-title text-lg font-medium">
-				Kann ich einen Farbproof erhalten?
-			</div>
-			<div class="collapse-content">
-				<p>Ja, wir bieten digitale Farbproofs (Soft Proofs) kostenlos an. Für absolute Farbsicherheit können Sie auch einen physischen Probedruck bestellen. Dieser wird zum Selbstkostenpreis berechnet und kann bei Auftragserteilung verrechnet werden.</p>
+		<div class="faq-item group border border-base-300/30 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-accent/30 overflow-hidden bg-gray-800">
+			<input type="checkbox" id="faq-druck-3" class="faq-toggle" />
+			<label for="faq-druck-3" class="faq-label flex items-center justify-between cursor-pointer p-6 bg-gray-800 transition-all duration-300">
+				<span class="text-xl font-semibold text-gray-200 pr-4">Bietet ihr auch Design-Services an?</span>
+				<div class="faq-icon flex-shrink-0 w-6 h-6 relative text-accent">
+					<svg class="faq-icon-plus absolute inset-0 w-full h-full transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+					</svg>
+					<svg class="faq-icon-minus absolute inset-0 w-full h-full transition-all duration-300 opacity-0 scale-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4" />
+					</svg>
+				</div>
+			</label>
+			<div class="faq-content overflow-hidden transition-all duration-300">
+				<div class="px-6 pb-6 pt-2">
+					<p class="text-gray-200 leading-relaxed">
+						Ja! Unser Designteam erstellt professionelle Druckvorlagen nach Ihren Vorgaben. Vom Logo-Design bis zur kompletten Motivgestaltung – kontaktieren Sie uns für ein individuelles Angebot.
+					</p>
+				</div>
 			</div>
 		</div>
 
-		<div class="collapse collapse-arrow join-item border border-base-300">
-			<input type="radio" name="faq-accordion" />
-			<div class="collapse-title text-lg font-medium">
-				Was passiert, wenn meine Datei nicht druckfertig ist?
+		<div class="faq-item group border border-base-300/30 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-accent/30 overflow-hidden bg-gray-800">
+			<input type="checkbox" id="faq-druck-4" class="faq-toggle" />
+			<label for="faq-druck-4" class="faq-label flex items-center justify-between cursor-pointer p-6 bg-gray-800 transition-all duration-300">
+				<span class="text-xl font-semibold text-gray-200 pr-4">Wie übertrage ich meine Datei am besten?</span>
+				<div class="faq-icon flex-shrink-0 w-6 h-6 relative text-accent">
+					<svg class="faq-icon-plus absolute inset-0 w-full h-full transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+					</svg>
+					<svg class="faq-icon-minus absolute inset-0 w-full h-full transition-all duration-300 opacity-0 scale-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4" />
+					</svg>
+				</div>
+			</label>
+			<div class="faq-content overflow-hidden transition-all duration-300">
+				<div class="px-6 pb-6 pt-2">
+					<p class="text-gray-200 leading-relaxed">
+						Für Dateien bis 25 MB nutzen Sie einfach unseren E-Mail-Service. Größere Dateien können Sie über WeTransfer, Dropbox oder unser sicheres Upload-Portal übertragen. Links erhalten Sie nach Auftragsbestätigung.
+					</p>
+				</div>
 			</div>
-			<div class="collapse-content">
-				<p>Wir informieren Sie umgehend und schlagen Lösungen vor. Kleine Anpassungen nehmen wir kostenlos vor. Bei größeren Korrekturen erhalten Sie ein Angebot für die Datenaufbereitung. Sie entscheiden dann, ob wir die Datei optimieren oder Sie selbst Anpassungen vornehmen möchten.</p>
+		</div>
+
+		<div class="faq-item group border border-base-300/30 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-accent/30 overflow-hidden bg-gray-800">
+			<input type="checkbox" id="faq-druck-5" class="faq-toggle" />
+			<label for="faq-druck-5" class="faq-label flex items-center justify-between cursor-pointer p-6 bg-gray-800 transition-all duration-300">
+				<span class="text-xl font-semibold text-gray-200 pr-4">Kann ich einen Farbproof erhalten?</span>
+				<div class="faq-icon flex-shrink-0 w-6 h-6 relative text-accent">
+					<svg class="faq-icon-plus absolute inset-0 w-full h-full transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+					</svg>
+					<svg class="faq-icon-minus absolute inset-0 w-full h-full transition-all duration-300 opacity-0 scale-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4" />
+					</svg>
+				</div>
+			</label>
+			<div class="faq-content overflow-hidden transition-all duration-300">
+				<div class="px-6 pb-6 pt-2">
+					<p class="text-gray-200 leading-relaxed">
+						Ja, wir bieten digitale Farbproofs (Soft Proofs) kostenlos an. Für absolute Farbsicherheit können Sie auch einen physischen Probedruck bestellen. Dieser wird zum Selbstkostenpreis berechnet und kann bei Auftragserteilung verrechnet werden.
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<div class="faq-item group border border-base-300/30 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-accent/30 overflow-hidden bg-gray-800">
+			<input type="checkbox" id="faq-druck-6" class="faq-toggle" />
+			<label for="faq-druck-6" class="faq-label flex items-center justify-between cursor-pointer p-6 bg-gray-800 transition-all duration-300">
+				<span class="text-xl font-semibold text-gray-200 pr-4">Was passiert, wenn meine Datei nicht druckfertig ist?</span>
+				<div class="faq-icon flex-shrink-0 w-6 h-6 relative text-accent">
+					<svg class="faq-icon-plus absolute inset-0 w-full h-full transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+					</svg>
+					<svg class="faq-icon-minus absolute inset-0 w-full h-full transition-all duration-300 opacity-0 scale-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4" />
+					</svg>
+				</div>
+			</label>
+			<div class="faq-content overflow-hidden transition-all duration-300">
+				<div class="px-6 pb-6 pt-2">
+					<p class="text-gray-200 leading-relaxed">
+						Wir informieren Sie umgehend und schlagen Lösungen vor. Kleine Anpassungen nehmen wir kostenlos vor. Bei größeren Korrekturen erhalten Sie ein Angebot für die Datenaufbereitung. Sie entscheiden dann, ob wir die Datei optimieren oder Sie selbst Anpassungen vornehmen möchten.
+					</p>
+				</div>
 			</div>
 		</div>
 	</div>
 
-	<div class="card bg-gradient-to-br from-neutral/5 to-neutral/10 border border-neutral/20 my-12">
-		<div class="card-body">
-			<h2 class="card-title text-2xl text-neutral">Brauchen Sie Unterstützung bei Ihren Druckdaten?</h2>
-			<p class="text-neutral/80">
-				Unser Expertenteam steht Ihnen bei allen Fragen rund um Druckvorlagen zur Verfügung. Nutzen Sie unseren kostenlosen Datencheck oder lassen Sie uns Ihre Designs professionell aufbereiten.
+	<!-- Accordion Behavior Script -->
+	<script is:inline>
+		document.addEventListener('DOMContentLoaded', function() {
+			const faqToggles = document.querySelectorAll('.faq-toggle');
+			faqToggles.forEach(function(toggle) {
+				toggle.addEventListener('change', function() {
+					const currentToggle = this;
+					if (currentToggle.checked) {
+						faqToggles.forEach(function(otherToggle) {
+							if (otherToggle !== currentToggle) {
+								otherToggle.checked = false;
+							}
+						});
+					}
+				});
+			});
+		});
+	</script>
+
+	<div class="alert alert-success my-8">
+		<svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+			<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+		</svg>
+		<div>
+			<h4 class="font-bold">Kostenlose Beratung – Wir helfen Ihnen gerne!</h4>
+			<p class="mt-2">
+				Sie sind unsicher, ob Ihre Druckdatei alle Anforderungen erfüllt? Unser Team berät Sie kostenlos und unverbindlich zu Dateiformaten, Auflösung und Farbprofilen. Nutzen Sie unseren kostenlosen Datencheck!
 			</p>
-			<div class="card-actions justify-end mt-4">
-				<a href="/kontakt/" class="btn bg-neutral hover:bg-neutral/90 !text-white border-none btn-lg">Kostenloser Datencheck</a>
-				<a href="/beratung/" class="btn btn-ghost !text-base-content hover:!text-base-content btn-lg">Persönliche Beratung</a>
-			</div>
 		</div>
+	</div>
+
+	<div class="divider my-12"></div>
+
+	<!-- Inquiry Form Section -->
+	<div id="inquiry-form" class="scroll-mt-20">
+		<InquiryForm
+			formType="druckvorlagen"
+			sourcePageTitle="Druckvorlagen"
+			sourcePageUrl="/druckvorlagen/"
+		/>
 	</div>
 </CompanyLayout>
