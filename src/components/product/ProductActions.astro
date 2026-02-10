@@ -92,31 +92,13 @@ const formatPrice = (price: number) => {
 
 <script>
 	document.addEventListener('DOMContentLoaded', () => {
-		const quantityInput = document.getElementById('quantity-input') as HTMLInputElement;
-		const quantityDecrease = document.getElementById('quantity-decrease');
-		const quantityIncrease = document.getElementById('quantity-increase');
-		const totalPrice = document.getElementById('total-price');
-		const unitPrice = document.getElementById('unit-price');
-		const discountBadge = document.getElementById('discount-badge');
-		const discountPercent = document.getElementById('discount-percent');
-		const originalPriceContainer = document.getElementById('original-price-container');
-		const originalUnitPrice = document.getElementById('original-unit-price');
-		const orderBtn = document.getElementById('order-btn');
-		const quoteBtn = document.getElementById('quote-btn');
 		const productContainer = document.querySelector('[data-product-price]');
 
-		if (!quantityInput || !totalPrice || !unitPrice || !productContainer) return;
+		if (!productContainer) return;
 
 		const basePrice = parseFloat(productContainer.getAttribute('data-product-price') || '0');
 		const productName = productContainer.getAttribute('data-product-name') || 'Produkt';
 		const productSlug = productContainer.getAttribute('data-product-slug') || '';
-
-		let currentPriceData = {
-			unitPrice: basePrice,
-			basePrice: basePrice,
-			discountPercent: 0,
-			total: basePrice,
-		};
 
 		let availableZusatzleistungen: any[] = [];
 		let selectedZusatzleistungIds: string[] = [];
@@ -126,100 +108,6 @@ const formatPrice = (price: number) => {
 				style: 'currency',
 				currency: 'EUR'
 			}).format(price);
-		};
-
-		const updatePriceDisplay = (priceData: typeof currentPriceData) => {
-			currentPriceData = priceData;
-			
-			// Update unit price
-			unitPrice.textContent = formatPrice(priceData.unitPrice);
-			
-			// Update total price
-			totalPrice.textContent = formatPrice(priceData.total);
-
-			// Show/hide discount badge
-			if (priceData.discountPercent > 0) {
-				if (discountBadge && discountPercent) {
-					discountBadge.classList.remove('hidden');
-					discountPercent.textContent = `-${priceData.discountPercent.toFixed(0)}%`;
-				}
-				// Show original price with strikethrough
-				if (originalPriceContainer && originalUnitPrice) {
-					originalPriceContainer.classList.remove('hidden');
-					originalUnitPrice.textContent = formatPrice(priceData.basePrice);
-				}
-			} else {
-				if (discountBadge) {
-					discountBadge.classList.add('hidden');
-				}
-				if (originalPriceContainer) {
-					originalPriceContainer.classList.add('hidden');
-				}
-			}
-		};
-
-		const fetchPrice = async (quantity: number) => {
-			if (!productSlug) {
-				// Fallback to client-side calculation if no slug
-				const total = basePrice * quantity;
-				updatePriceDisplay({
-					unitPrice: basePrice,
-					basePrice: basePrice,
-					discountPercent: 0,
-					total: total,
-				});
-				return;
-			}
-
-			try {
-				const response = await fetch(`/api/products/${productSlug}/price?quantity=${quantity}`);
-				const result = await response.json();
-
-				if (result.success && result.data) {
-					updatePriceDisplay({
-						unitPrice: result.data.unitPrice,
-						basePrice: result.data.basePrice,
-						discountPercent: result.data.discountPercent,
-						total: result.data.total,
-					});
-				} else {
-					// Fallback on error
-					const total = basePrice * quantity;
-					updatePriceDisplay({
-						unitPrice: basePrice,
-						basePrice: basePrice,
-						discountPercent: 0,
-						total: total,
-					});
-				}
-			} catch (error) {
-				console.error('Error fetching price:', error);
-				// Fallback on error
-				const total = basePrice * quantity;
-				updatePriceDisplay({
-					unitPrice: basePrice,
-					basePrice: basePrice,
-					discountPercent: 0,
-					total: total,
-				});
-			}
-		};
-
-		const updatePriceTierHighlight = (quantity: number) => {
-			const tierRows = document.querySelectorAll('.price-tier-row');
-			tierRows.forEach((row) => {
-				const minQty = parseInt(row.getAttribute('data-min-quantity') || '0');
-				const maxQtyAttr = row.getAttribute('data-max-quantity');
-				const maxQty = maxQtyAttr === '999999' || !maxQtyAttr ? Infinity : parseInt(maxQtyAttr);
-
-				// Remove existing highlight classes
-				row.classList.remove('bg-success/20', 'border-l-4', 'border-success', 'shadow-sm');
-
-				// Check if current quantity falls within this tier
-				if (quantity >= minQty && quantity <= maxQty) {
-					row.classList.add('bg-success/20', 'border-l-4', 'border-success', 'shadow-sm');
-				}
-			});
 		};
 
 		// Load zusatzleistungen for this product
@@ -288,40 +176,8 @@ const formatPrice = (price: number) => {
 			}
 		};
 
-		const updateTotal = () => {
-			const quantity = parseInt(quantityInput.value) || 1;
-			fetchPrice(quantity);
-			updatePriceTierHighlight(quantity);
-		};
-
-		// Initial price fetch
-		updateTotal();
-
 		// Load zusatzleistungen
 		loadZusatzleistungen();
-
-		quantityDecrease?.addEventListener('click', () => {
-			const current = parseInt(quantityInput.value) || 1;
-			if (current > 1) {
-				quantityInput.value = (current - 1).toString();
-				updateTotal();
-			}
-		});
-
-		quantityIncrease?.addEventListener('click', () => {
-			const current = parseInt(quantityInput.value) || 1;
-			if (current < 100) {
-				quantityInput.value = (current + 1).toString();
-				updateTotal();
-			}
-		});
-
-		quantityInput.addEventListener('input', () => {
-			const value = parseInt(quantityInput.value);
-			if (value < 1) quantityInput.value = '1';
-			if (value > 100) quantityInput.value = '100';
-			updateTotal();
-		});
 
 		// Show success toast notification
 		const showSuccessToast = (message: string) => {
@@ -356,9 +212,11 @@ const formatPrice = (price: number) => {
 		};
 
 		const addToCartBtn = document.getElementById('add-to-cart-btn') as HTMLButtonElement;
-		
+
 		addToCartBtn?.addEventListener('click', async () => {
-			const quantity = parseInt(quantityInput.value) || 1;
+			// Get quantity from global function (defined in ProductInfo)
+			const getQuantity = (window as any).getProductQuantity;
+			const quantity = getQuantity ? getQuantity() : 1;
 			const productId = addToCartBtn.getAttribute('data-product-id');
 
 			if (!productId) {
@@ -458,8 +316,12 @@ const formatPrice = (price: number) => {
 			}
 		});
 
+		const quoteBtn = document.getElementById('quote-btn');
+
 		quoteBtn?.addEventListener('click', () => {
-			const quantity = parseInt(quantityInput.value) || 1;
+			// Get quantity from global function (defined in ProductInfo)
+			const getQuantity = (window as any).getProductQuantity;
+			const quantity = getQuantity ? getQuantity() : 1;
 			// In a real app, this would open a contact form or redirect
 			alert(`Angebot anfordern für: ${quantity}x ${productName}`);
 		});

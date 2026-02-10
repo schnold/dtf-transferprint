@@ -1,0 +1,194 @@
+---
+import ThemeLayout from '../../../layouts/ThemeLayout.astro';
+import InquiryForm from '../../../components/InquiryForm.astro';
+import ContactCTASection from '../../../components/ContactCTASection.astro';
+import ProsConsSection from '../../../components/ProsConsSection.astro';
+import UseCasesSection from '../../../components/UseCasesSection.astro';
+import { sportbekleidungSlugs } from '../../../data/themen';
+import type { ThemeMetric, ThemeFAQ } from '../../../data/themen';
+import { 
+	Wind, Zap, Feather, Palette, Droplets, Users, Timer, Shield, 
+	Sun, Pocket, Award, Layers, Briefcase, Monitor, MousePointer, Minimize2, 
+	Activity, Thermometer, Maximize, Sliders, Clock, TrendingUp, ShoppingBag, Tag 
+} from 'lucide-astro';
+
+export const prerender = true;
+
+export function getStaticPaths() {
+	return Object.entries(sportbekleidungSlugs).map(([slug, data]) => ({
+		params: { slug },
+		props: { 
+			title: data.title, 
+			description: data.description,
+			metrics: data.metrics,
+			faqs: data.faqs
+		},
+	}));
+}
+
+interface Props {
+	title: string;
+	description: string;
+	metrics?: ThemeMetric[];
+	faqs?: ThemeFAQ[];
+}
+
+const { slug } = Astro.params;
+const { title, description, metrics, faqs } = Astro.props;
+const placeholderImage = '/images/themen/placeholder.webp';
+const imageSlug = slug || '';
+
+// Map string icon names to components
+const iconMap: Record<string, any> = {
+	Wind, Zap, Feather, Palette, Droplets, Users, Timer, Shield,
+	Sun, Pocket, Award, Layers, Briefcase, Monitor, MousePointer, Minimize2,
+	Activity, Thermometer, Maximize, Sliders, Clock, TrendingUp, ShoppingBag, Tag
+};
+
+const defaultMetrics: ThemeMetric[] = [
+	{ icon: 'Wind', label: 'Atmungsaktiv', value: '100%', description: 'Hoher Tragekomfort' },
+	{ icon: 'Shield', label: 'Haltbar', value: 'Lang', description: 'Robuster Druck' },
+	{ icon: 'Zap', label: 'Schnell', value: 'Express', description: 'Kurze Lieferzeit' }
+];
+
+const currentMetrics = metrics || defaultMetrics;
+
+const defaultFaqs: ThemeFAQ[] = [
+	{ question: 'Wie lange dauert die Lieferung?', answer: 'In der Regel 5-7 Werktage nach Freigabe. Expressversand ist auf Anfrage möglich.' },
+	{ question: 'Gibt es eine Mindestbestellmenge?', answer: 'Wir produzieren viele Artikel schon ab 1 Stück. Für bessere Preise empfehlen wir Sammelbestellungen.' },
+];
+
+const currentFaqs = faqs || defaultFaqs;
+---
+
+<ThemeLayout title={title} description={description}>
+	<!-- Hero Section -->
+	<div class="mb-12">
+		<h1 class="!mb-4">{title}</h1>
+		<p class="text-lg text-neutral/80 !mb-6">
+			{description}
+		</p>
+		<div class="alert alert-info mb-8">
+			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+			</svg>
+			<span><strong>Sportbekleidung professionell veredeln:</strong> DTF, Siebdruck, Sublimation und Stickerei – wir beraten Sie gerne und erstellen ein unverbindliches Angebot, auch für kleine Teams und Events.</span>
+		</div>
+	</div>
+
+	<!-- Quick Stats -->
+	<div class="stats stats-vertical lg:stats-horizontal shadow my-8 w-full">
+		{currentMetrics.map((metric) => {
+			const IconComponent = iconMap[metric.icon] || Wind;
+			return (
+				<div class="stat">
+					<div class="stat-figure text-[#16a34a]">
+						<IconComponent class="inline-block w-8 h-8 stroke-current" />
+					</div>
+					<div class="stat-title">{metric.label}</div>
+					<div class="stat-value text-[#16a34a] text-2xl">{metric.value}</div>
+					<div class="stat-desc">{metric.description}</div>
+				</div>
+			);
+		})}
+	</div>
+
+	<!-- Beispiele aus unserer Produktion -->
+	<h2>Beispiele aus unserer Produktion</h2>
+	<p class="text-neutral/70 mb-6">
+		Inspiration für Ihre {title}:
+	</p>
+	<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+		<figure class="rounded-2xl overflow-hidden shadow-lg border border-base-300/30">
+			<img src={`/images/themen/sportbekleidung-bedrucken/${imageSlug}/1.webp`} alt={`${title} – Beispiel 1`} class="w-full aspect-[4/3] object-cover" width="400" height="300" loading="lazy" onerror="this.src='/images/themen/placeholder.webp'" />
+		</figure>
+		<figure class="rounded-2xl overflow-hidden shadow-lg border border-base-300/30">
+			<img src={`/images/themen/sportbekleidung-bedrucken/${imageSlug}/2.webp`} alt={`${title} – Beispiel 2`} class="w-full aspect-[4/3] object-cover" width="400" height="300" loading="lazy" onerror="this.src='/images/themen/placeholder.webp'" />
+		</figure>
+		<figure class="rounded-2xl overflow-hidden shadow-lg border border-base-300/30">
+			<img src={`/images/themen/sportbekleidung-bedrucken/${imageSlug}/3.webp`} alt={`${title} – Beispiel 3`} class="w-full aspect-[4/3] object-cover" width="400" height="300" loading="lazy" onerror="this.src='/images/themen/placeholder.webp'" />
+		</figure>
+		<figure class="rounded-2xl overflow-hidden shadow-lg border border-base-300/30">
+			<img src={`/images/themen/sportbekleidung-bedrucken/${imageSlug}/4.webp`} alt={`${title} – Beispiel 4`} class="w-full aspect-[4/3] object-cover" width="400" height="300" loading="lazy" onerror="this.src='/images/themen/placeholder.webp'" />
+		</figure>
+	</div>
+
+	<h2>Sportbekleidung bedrucken und besticken</h2>
+	<p>
+		Für <strong>{title}</strong> setzen wir alle gängigen Veredelungsverfahren ein: <a href="/dtf-transfers/" class="link link-primary">DTF-Druck</a>, <a href="/siebdruck/" class="link link-primary">Siebdruck</a>, <a href="/sublimation/" class="link link-primary">Sublimation</a> (ideal für Polyester-Funktionsstoffe) und <a href="/direkteinstickung/" class="link link-primary">Stickerei</a>. So bleibt Ihre Sportbekleidung atmungsaktiv, waschfest und professionell gestaltet.
+	</p>
+	<p>
+		Ob Trikot, Laufshirt, Hoodie oder Trainingsjacke – wir beraten Sie zu Material, Druckart und Lieferzeit und erstellen ein unverbindliches Angebot.
+	</p>
+
+	<ProsConsSection
+		advantagesTitle="Ihre Vorteile"
+		disadvantagesTitle="Hinweise"
+		advantages={[
+			'<strong>Atmungsaktiv</strong> – Druck und Stick beeinträchtigen die Funktionalität nicht',
+			'<strong>Waschbeständig</strong> – bis 60°C, bei Bedarf spezielle Härtung',
+			'<strong>Keine Mindestmenge</strong> – vom Einzeltrikot bis zur Mannschaftsausstattung',
+			'<strong>Nummern & Namen</strong> – für Teams, Vereine und Events',
+			'<strong>Schnelle Abwicklung</strong> – auch kurzfristige Lieferung möglich',
+		]}
+		disadvantages={[
+			'<strong>Preis abhängig von Auflage und Verfahren</strong> – wir kalkulieren individuell',
+			'<strong>Polyester für Sublimation</strong> – für beste Atmungsaktivität bei All-Over-Prints',
+		]}
+	/>
+
+	<UseCasesSection
+		title="Typische Einsatzgebiete"
+		introText={`Unser Angebot für <strong>${title}</strong> eignet sich unter anderem für:`}
+		columns="3"
+		items={[
+			{ iconPath: "M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0z", title: "Vereine & Mannschaften", description: "Trikots, Trainingsbekleidung, Nummern, Namen" },
+			{ iconPath: "M9 9l10.5-3m0 6.553v3.75a2.25 2.25 0 01-1.632 2.163l-1.32.377a1.803 1.803 0 11-.99-3.467l2.31-.66a2.25 2.25 0 001.632-2.163zm0 0V2.25L9 5.25v10.303m0 0v3.75a2.25 2.25 0 01-1.632 2.163l-1.32.377a1.803 1.803 0 01-.99-3.467l2.31-.66A2.25 2.25 0 009 15.553z", title: "Events & Läufe", description: "Marathon, Firmenlauf, Laufevents, Promotion" },
+			{ iconPath: "M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 00.75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 00-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0112 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 01-.673-.38m0 0A2.18 2.18 0 013 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 013.413-.387m7.5 0V5.25A2.25 2.25 0 0013.5 3h-3a2.25 2.25 0 00-2.25 2.25v.894m7.5 0a48.667 48.667 0 00-7.5 0M12 12.75h.008v.008H12v-.008z", title: "Firmen & Teams", description: "Corporate Sportswear, Business Runs, Teambuilding" },
+		]}
+	/>
+
+	<div class="alert alert-info my-8">
+		<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
+			<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+		</svg>
+		<div>
+			<p><strong>Beratung gewünscht?</strong> Wir helfen Ihnen bei der Auswahl des passenden Materials und Druckverfahrens für Ihre Sportbekleidung – kostenlos und unverbindlich.</p>
+		</div>
+	</div>
+
+	<ContactCTASection
+		title={`Angebot für ${title}`}
+		description="Fordern Sie jetzt ein kostenloses Angebot an. Nennen Sie uns Stückzahl, Wunschtextil und Motiv – wir kalkulieren für Sie."
+	/>
+
+	<h2 class="mt-16 mb-8">Häufige Fragen</h2>
+	<div class="space-y-3 mb-12">
+		{currentFaqs.map((faq, index) => (
+			<div class="faq-item group border border-base-300/30 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-accent/30 overflow-hidden bg-gray-800">
+				<input type="checkbox" id={`faq-${index}`} class="faq-toggle" />
+				<label for={`faq-${index}`} class="faq-label flex items-center justify-between cursor-pointer p-6 bg-gray-800 transition-all duration-300">
+					<span class="text-xl font-semibold text-gray-200 pr-4">{faq.question}</span>
+					<div class="faq-icon flex-shrink-0 w-6 h-6 relative text-accent">
+						<svg class="faq-icon-plus absolute inset-0 w-full h-full transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" /></svg>
+						<svg class="faq-icon-minus absolute inset-0 w-full h-full transition-all duration-300 opacity-0 scale-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4" /></svg>
+					</div>
+				</label>
+				<div class="faq-content overflow-hidden transition-all duration-300">
+					<div class="px-6 pb-6 pt-2">
+						<p class="text-gray-200 leading-relaxed" set:html={faq.answer}></p>
+					</div>
+				</div>
+			</div>
+		))}
+	</div>
+
+	<div class="divider my-12"></div>
+	<div id="inquiry-form" class="scroll-mt-20">
+		<InquiryForm
+			formType="themen"
+			sourcePageTitle={title}
+			sourcePageUrl={`/themen/sportbekleidung-bedrucken/${imageSlug}/`}
+		/>
+	</div>
+</ThemeLayout>

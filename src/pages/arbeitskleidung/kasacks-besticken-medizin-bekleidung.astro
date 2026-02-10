@@ -1,0 +1,178 @@
+---
+import ThemeLayout from '../../layouts/ThemeLayout.astro';
+import InquiryForm from '../../components/InquiryForm.astro';
+import ContactCTASection from '../../components/ContactCTASection.astro';
+import ProsConsSection from '../../components/ProsConsSection.astro';
+import UseCasesSection from '../../components/UseCasesSection.astro';
+import { arbeitskleidungKasacks } from '../../data/themen';
+
+const title = arbeitskleidungKasacks.title;
+const description = arbeitskleidungKasacks.description;
+const placeholderImage = '/images/themen/placeholder.webp';
+---
+
+<ThemeLayout title={title} description={description}>
+	<!-- Hero Section -->
+	<div class="mb-12">
+		<h1 class="!mb-4">{title}</h1>
+		<p class="text-lg text-neutral/80 !mb-6">
+			{description}
+		</p>
+		<div class="alert alert-info mb-8">
+			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+			</svg>
+			<span><strong>Hygienisch und haltbar:</strong> Kasacks und medizinische Berufsbekleidung besticken oder bedrucken wir mit Logo, Name oder Klinik-Design. Die Veredelung ist pflegeleicht, kochfest und erfüllt hohe Anforderungen an Hygiene und Haltbarkeit.</span>
+		</div>
+	</div>
+
+	<!-- Quick Stats -->
+	<div class="stats stats-vertical lg:stats-horizontal shadow my-8 w-full">
+		<div class="stat">
+			<div class="stat-figure text-[#16a34a]">
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" />
+				</svg>
+			</div>
+			<div class="stat-title">Kochfest</div>
+			<div class="stat-value text-[#16a34a]">100%</div>
+			<div class="stat-desc">Für Klinik & Praxis</div>
+		</div>
+		<div class="stat">
+			<div class="stat-figure text-secondary">
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+				</svg>
+			</div>
+			<div class="stat-title">Berufsbekleidung</div>
+			<div class="stat-value text-secondary">1 Stk</div>
+			<div class="stat-desc">Logo & Namensstick</div>
+		</div>
+		<div class="stat">
+			<div class="stat-figure text-[#16a34a]">
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.25 7.5l-.875 10.632M3.25 7.5h17.5L18 21.75 6 21.75 3.25 7.5zM17.25 7.5L12 10.5 6.75 7.5m10.5 0l-4.5 3m4.5-3l-4.5-3m4.5 3l-4.5 3" />
+				</svg>
+			</div>
+			<div class="stat-title">Mindestmenge</div>
+			<div class="stat-value text-[#16a34a]">1 Stk</div>
+			<div class="stat-desc">Auch kleine Abnahmen</div>
+		</div>
+	</div>
+
+	<!-- Beispiele aus unserer Produktion -->
+	<h2>Beispiele aus unserer Produktion</h2>
+	<p class="text-neutral/70 mb-6">
+		Platzhalter für Ihre Fotos: Ersetzen Sie die Bilder in <code class="text-sm bg-base-200 px-1 rounded">/public/images/themen/</code> durch eigene Aufnahmen (z.B. <code class="text-sm bg-base-200 px-1 rounded">kasacks-besticken-medizin-bekleidung.webp</code>).
+	</p>
+	<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+		<figure class="rounded-2xl overflow-hidden shadow-lg border border-base-300/30">
+			<img src={placeholderImage} alt={`${title} – Platzhalter Bild 1`} class="w-full aspect-[4/3] object-cover" width="400" height="300" loading="lazy" />
+			<figcaption class="p-4 bg-base-200 text-sm text-neutral/80">Platzhalter – Bild 1</figcaption>
+		</figure>
+		<figure class="rounded-2xl overflow-hidden shadow-lg border border-base-300/30">
+			<img src={placeholderImage} alt={`${title} – Platzhalter Bild 2`} class="w-full aspect-[4/3] object-cover" width="400" height="300" loading="lazy" />
+			<figcaption class="p-4 bg-base-200 text-sm text-neutral/80">Platzhalter – Bild 2</figcaption>
+		</figure>
+		<figure class="rounded-2xl overflow-hidden shadow-lg border border-base-300/30">
+			<img src={placeholderImage} alt={`${title} – Platzhalter Bild 3`} class="w-full aspect-[4/3] object-cover" width="400" height="300" loading="lazy" />
+			<figcaption class="p-4 bg-base-200 text-sm text-neutral/80">Platzhalter – Bild 3</figcaption>
+		</figure>
+		<figure class="rounded-2xl overflow-hidden shadow-lg border border-base-300/30">
+			<img src={placeholderImage} alt={`${title} – Platzhalter Bild 4`} class="w-full aspect-[4/3] object-cover" width="400" height="300" loading="lazy" />
+			<figcaption class="p-4 bg-base-200 text-sm text-neutral/80">Platzhalter – Bild 4</figcaption>
+		</figure>
+	</div>
+
+	<h2>Kasacks und Medizinische Berufsbekleidung veredeln</h2>
+	<p>
+		<strong>Kasacks</strong> und weitere <strong>medizinische Berufsbekleidung</strong> besticken oder bedrucken wir mit Ihrem Logo, Klinik- oder Praxisnamen sowie individuellen Motiven. Die Veredelung ist so ausgeführt, dass sie den Anforderungen an Hygiene, Waschbarkeit und Haltbarkeit in Klinik und Praxis entspricht – inklusive kochfester Ausrüstung bei Bedarf.
+	</p>
+	<p>
+		Wir arbeiten mit bewährten Stick- und Druckverfahren und beraten Sie gerne zu Textilauswahl, Position des Logos und Mindestmengen. Auch kleine Abnahmen sind möglich.
+	</p>
+
+	<ProsConsSection
+		advantagesTitle="Ihre Vorteile"
+		disadvantagesTitle="Hinweise"
+		advantages={[
+			'<strong>Kochfest und pflegeleicht</strong> – geeignet für Klinik- und Praxishygiene',
+			'<strong>Logo, Name, Klinik-Design</strong> – professionelle Stickerei oder Druck',
+			'<strong>Keine Mindestmenge</strong> – auch kleine Stückzahlen',
+			'<strong>Individuelle Beratung</strong> – kostenlos und unverbindlich',
+			'<strong>Langlebig und farbecht</strong> – viele Waschzyklen ohne Qualitätsverlust',
+		]}
+		disadvantages={[
+			'<strong>Preis abhängig von Stückzahl und Motiv</strong> – wir kalkulieren individuell',
+			'<strong>Lieferzeit abhängig von Auslastung</strong> – in der Regel wenige Werktage',
+		]}
+	/>
+
+	<UseCasesSection
+		title="Typische Einsatzgebiete"
+		introText="Unser Angebot für <strong>Kasacks und medizinische Berufsbekleidung</strong> eignet sich unter anderem für:"
+		columns="3"
+		items={[
+			{ iconPath: "M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008z", title: "Kliniken & Krankenhäuser", description: "Kasacks, Schwesternkleidung, Abteilungs-Logos" },
+			{ iconPath: "M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25z", title: "Praxen & MVZ", description: "Praxis-Logo, Namensstick, einheitliche Berufskleidung" },
+			{ iconPath: "M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 00.75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 00-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0112 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 01-.673-.38m0 0A2.18 2.18 0 013 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 013.413-.387m7.5 0V5.25A2.25 2.25 0 0013.5 3h-3a2.25 2.25 0 00-2.25 2.25v.894m7.5 0a48.667 48.667 0 00-7.5 0M12 12.75h.008v.008H12v-.008z", title: "Pflege & Betreuung", description: "Einheitliche Kleidung mit Logo, Namensschilder" },
+		]}
+	/>
+
+	<div class="alert alert-info my-8">
+		<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
+			<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+		</svg>
+		<div>
+			<p><strong>Beratung gewünscht?</strong> Wir beraten Sie gerne zu Textilien, Stickposition und kochfester Ausrüstung – kostenlos und unverbindlich.</p>
+		</div>
+	</div>
+
+	<ContactCTASection
+		title="Angebot für Kasacks & Medizinische Berufsbekleidung"
+		description="Fordern Sie jetzt ein kostenloses Angebot an. Nennen Sie uns Stückzahl, Wunschtextil und Logo/Motiv – wir kalkulieren für Sie."
+	/>
+
+	<h2 class="mt-16 mb-8">Häufige Fragen</h2>
+	<div class="space-y-3 mb-12">
+		<div class="faq-item group border border-base-300/30 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-accent/30 overflow-hidden bg-gray-800">
+			<input type="checkbox" id="faq-1" class="faq-toggle" />
+			<label for="faq-1" class="faq-label flex items-center justify-between cursor-pointer p-6 bg-gray-800 transition-all duration-300">
+				<span class="text-xl font-semibold text-gray-200 pr-4">Sind die Aufdrucke / Stickereien kochfest?</span>
+				<div class="faq-icon flex-shrink-0 w-6 h-6 relative text-accent">
+					<svg class="faq-icon-plus absolute inset-0 w-full h-full transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" /></svg>
+					<svg class="faq-icon-minus absolute inset-0 w-full h-full transition-all duration-300 opacity-0 scale-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4" /></svg>
+				</div>
+			</label>
+			<div class="faq-content overflow-hidden transition-all duration-300">
+				<div class="px-6 pb-6 pt-2">
+					<p class="text-gray-200 leading-relaxed">Ja. Wir können Kasacks und Berufsbekleidung so veredeln, dass die Aufdrucke und Stickereien kochfest sind und den üblichen Hygienevorschriften in Klinik und Praxis entsprechen. Gerne besprechen wir die genauen Anforderungen mit Ihnen.</p>
+				</div>
+			</div>
+		</div>
+		<div class="faq-item group border border-base-300/30 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-accent/30 overflow-hidden bg-gray-800">
+			<input type="checkbox" id="faq-2" class="faq-toggle" />
+			<label for="faq-2" class="faq-label flex items-center justify-between cursor-pointer p-6 bg-gray-800 transition-all duration-300">
+				<span class="text-xl font-semibold text-gray-200 pr-4">Können wir eigene Kasacks liefern?</span>
+				<div class="faq-icon flex-shrink-0 w-6 h-6 relative text-accent">
+					<svg class="faq-icon-plus absolute inset-0 w-full h-full transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" /></svg>
+					<svg class="faq-icon-minus absolute inset-0 w-full h-full transition-all duration-300 opacity-0 scale-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4" /></svg>
+				</div>
+			</label>
+			<div class="faq-content overflow-hidden transition-all duration-300">
+				<div class="px-6 pb-6 pt-2">
+					<p class="text-gray-200 leading-relaxed">In vielen Fällen ja. Wenn Sie bereits Kasacks oder Berufsbekleidung beziehen, können wir nur die Veredelung (Stickerei oder Druck) übernehmen. Nennen Sie uns Ihr Textil und die gewünschte Position – wir prüfen die Machbarkeit und erstellen ein Angebot.</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="divider my-12"></div>
+	<div id="inquiry-form" class="scroll-mt-20">
+		<InquiryForm
+			formType="themen"
+			sourcePageTitle={title}
+			sourcePageUrl="/arbeitskleidung/kasacks-besticken-medizin-bekleidung/"
+		/>
+	</div>
+</ThemeLayout>

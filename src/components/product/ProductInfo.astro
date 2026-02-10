@@ -48,70 +48,71 @@ const formatPrice = (price: number) => {
 		)}
 	</div>
 
-	<!-- Price and Quantity: compact modern layout -->
-	<div class="product-container rounded-2xl p-4 border border-primary/20">
-		<div class="flex flex-col gap-4">
-			<!-- Row 1: Quantity Selector -->
-			<div class="flex items-center justify-between">
-				<span class="text-xs font-semibold text-neutral/70 uppercase tracking-wider">Menge</span>
-				<div class="flex items-center gap-1.5 bg-base-100 rounded-lg p-1 shadow-sm border border-base-300/20">
-					<button
-						class="btn btn-ghost btn-sm btn-square h-8 w-8 min-h-0 p-0 text-neutral hover:text-primary hover:bg-primary/10 transition-all rounded-md"
-						id="quantity-decrease"
-						aria-label="Menge reduzieren"
-					>
-						<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4" />
-						</svg>
-					</button>
-					<input
-						type="number"
-						value="1"
-						min="1"
-						max="100"
-						class="input input-sm w-14 h-8 text-center text-sm font-bold no-spinner rounded-md border-0 bg-transparent focus:outline-none focus:ring-2 focus:ring-primary/30"
-						id="quantity-input"
-					/>
-					<button
-						class="btn btn-ghost btn-sm btn-square h-8 w-8 min-h-0 p-0 text-neutral hover:text-primary hover:bg-primary/10 transition-all rounded-md"
-						id="quantity-increase"
-						aria-label="Menge erhöhen"
-					>
-						<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-							<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
-						</svg>
-					</button>
+	<!-- Price and Quantity: compact modern layout (no card) -->
+	<div class="space-y-4" data-base-price={price} data-product-name={name}>
+		<!-- Quantity Selector -->
+		<div class="flex items-center justify-between">
+			<span class="text-sm font-semibold text-neutral">Menge wählen</span>
+			<div class="flex items-center gap-2 bg-base-200/50 rounded-lg px-2 py-1.5">
+				<button
+					type="button"
+					class="btn btn-ghost btn-xs btn-square h-7 w-7 min-h-0 p-0 text-neutral hover:text-primary transition-all"
+					data-quantity-action="decrease"
+					aria-label="Menge reduzieren"
+				>
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4" />
+					</svg>
+				</button>
+				<input
+					type="number"
+					value="1"
+					min="1"
+					max="100"
+					class="input input-xs w-16 h-7 text-center text-sm font-bold no-spinner border-0 bg-base-100 focus:outline-none focus:ring-1 focus:ring-primary/30"
+					data-quantity-input
+				/>
+				<button
+					type="button"
+					class="btn btn-ghost btn-xs btn-square h-7 w-7 min-h-0 p-0 text-neutral hover:text-primary transition-all"
+					data-quantity-action="increase"
+					aria-label="Menge erhöhen"
+				>
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+					</svg>
+				</button>
+			</div>
+		</div>
+
+		<!-- Pricing Information -->
+		<div class="flex items-end justify-between gap-4 py-3 border-y border-base-300/30">
+			<!-- Unit Price with discount -->
+			<div class="flex flex-col gap-1.5">
+				<span class="text-xs font-medium text-neutral/60">Preis pro Stück</span>
+				<div class="flex items-center gap-2">
+					<div class="flex flex-col items-start">
+						<span data-original-price-container class="hidden">
+							<span class="text-sm text-neutral/50 line-through tabular-nums" data-original-unit-price></span>
+						</span>
+						<div class="flex items-baseline gap-2">
+							<span class="text-2xl font-bold text-neutral tabular-nums" data-unit-price>
+								{formatPrice(price)}
+							</span>
+							<span data-discount-badge class="hidden badge badge-success badge-sm gap-1">
+								<span data-discount-percent class="text-xs font-bold"></span>
+							</span>
+						</div>
+					</div>
 				</div>
 			</div>
 
-			<!-- Divider -->
-			<div class="border-t border-base-300/30"></div>
-
-			<!-- Row 2: Pricing Information -->
-			<div class="flex items-center justify-between gap-3">
-				<!-- Unit Price -->
-				<div class="flex flex-col gap-1">
-					<span class="text-[10px] font-semibold text-neutral/60 uppercase tracking-wider">Stückpreis</span>
-					<div class="flex items-baseline gap-1.5">
-						<span id="original-price-container" class="hidden">
-							<span class="text-xs text-neutral/40 line-through tabular-nums" id="original-unit-price"></span>
-						</span>
-						<span class="text-lg font-bold text-neutral tabular-nums" id="unit-price">
-							{formatPrice(price)}
-						</span>
-						<span id="discount-badge" class="hidden badge badge-success badge-xs px-1.5 py-0 h-4 gap-0.5">
-							<span id="discount-percent" class="text-[10px] font-bold"></span>
-						</span>
-					</div>
-				</div>
-
-				<!-- Total Price - Emphasized -->
-				<div class="flex flex-col gap-1 items-end bg-primary/5 rounded-lg px-3 py-2 border border-primary/20">
-					<span class="text-[10px] font-semibold text-primary/80 uppercase tracking-wider">Gesamt</span>
-					<span class="text-2xl font-bold text-primary tabular-nums leading-none" id="total-price">
-						{formatPrice(price)}
-					</span>
-				</div>
+			<!-- Total Price -->
+			<div class="flex flex-col gap-1.5 items-end">
+				<span class="text-xs font-medium text-neutral/60">Gesamtpreis</span>
+				<span class="text-3xl font-bold text-primary tabular-nums leading-none" data-total-price>
+					{formatPrice(price)}
+				</span>
 			</div>
 		</div>
 	</div>
@@ -129,6 +130,194 @@ const formatPrice = (price: number) => {
 		</div>
 	</div>
 </div>
+
+<script>
+	// Quantity selector and pricing logic - runs immediately on component mount
+	(function initProductQuantity() {
+		const quantityInput = document.querySelector('[data-quantity-input]') as HTMLInputElement;
+		const decreaseBtn = document.querySelector('[data-quantity-action="decrease"]') as HTMLButtonElement;
+		const increaseBtn = document.querySelector('[data-quantity-action="increase"]') as HTMLButtonElement;
+		const totalPriceEl = document.querySelector('[data-total-price]') as HTMLElement;
+		const unitPriceEl = document.querySelector('[data-unit-price]') as HTMLElement;
+		const discountBadge = document.querySelector('[data-discount-badge]') as HTMLElement;
+		const discountPercent = document.querySelector('[data-discount-percent]') as HTMLElement;
+		const originalPriceContainer = document.querySelector('[data-original-price-container]') as HTMLElement;
+		const originalUnitPrice = document.querySelector('[data-original-unit-price]') as HTMLElement;
+		const priceContainer = document.querySelector('[data-base-price]') as HTMLElement;
+
+		if (!quantityInput || !totalPriceEl || !unitPriceEl || !priceContainer) {
+			console.error('ProductInfo: Required elements not found');
+			return;
+		}
+
+		const basePrice = parseFloat(priceContainer.getAttribute('data-base-price') || '0');
+		const productName = priceContainer.getAttribute('data-product-name') || 'Produkt';
+
+		// Store current price data globally so ProductActions can access it
+		(window as any).currentProductPrice = {
+			unitPrice: basePrice,
+			basePrice: basePrice,
+			discountPercent: 0,
+			total: basePrice,
+		};
+
+		const formatPrice = (price: number) => {
+			return new Intl.NumberFormat('de-DE', {
+				style: 'currency',
+				currency: 'EUR'
+			}).format(price);
+		};
+
+		const updatePriceDisplay = (priceData: {
+			unitPrice: number;
+			basePrice: number;
+			discountPercent: number;
+			total: number;
+		}) => {
+			// Store globally
+			(window as any).currentProductPrice = priceData;
+
+			// Update unit price
+			unitPriceEl.textContent = formatPrice(priceData.unitPrice);
+
+			// Update total price
+			totalPriceEl.textContent = formatPrice(priceData.total);
+
+			// Show/hide discount badge
+			if (priceData.discountPercent > 0) {
+				if (discountBadge && discountPercent) {
+					discountBadge.classList.remove('hidden');
+					discountPercent.textContent = `-${priceData.discountPercent.toFixed(0)}%`;
+				}
+				// Show original price with strikethrough
+				if (originalPriceContainer && originalUnitPrice) {
+					originalPriceContainer.classList.remove('hidden');
+					originalUnitPrice.textContent = formatPrice(priceData.basePrice);
+				}
+			} else {
+				if (discountBadge) {
+					discountBadge.classList.add('hidden');
+				}
+				if (originalPriceContainer) {
+					originalPriceContainer.classList.add('hidden');
+				}
+			}
+		};
+
+		const fetchPrice = async (quantity: number) => {
+			// Get product slug from the page
+			const productSlugMatch = window.location.pathname.match(/\/product\/([^\/]+)/);
+			const productSlug = productSlugMatch ? productSlugMatch[1] : null;
+
+			if (!productSlug) {
+				// Fallback to client-side calculation if no slug
+				const total = basePrice * quantity;
+				updatePriceDisplay({
+					unitPrice: basePrice,
+					basePrice: basePrice,
+					discountPercent: 0,
+					total: total,
+				});
+				return;
+			}
+
+			try {
+				const response = await fetch(`/api/products/${productSlug}/price?quantity=${quantity}`);
+				const result = await response.json();
+
+				if (result.success && result.data) {
+					updatePriceDisplay({
+						unitPrice: result.data.unitPrice,
+						basePrice: result.data.basePrice,
+						discountPercent: result.data.discountPercent,
+						total: result.data.total,
+					});
+				} else {
+					// Fallback on error
+					const total = basePrice * quantity;
+					updatePriceDisplay({
+						unitPrice: basePrice,
+						basePrice: basePrice,
+						discountPercent: 0,
+						total: total,
+					});
+				}
+			} catch (error) {
+				console.error('Error fetching price:', error);
+				// Fallback on error
+				const total = basePrice * quantity;
+				updatePriceDisplay({
+					unitPrice: basePrice,
+					basePrice: basePrice,
+					discountPercent: 0,
+					total: total,
+				});
+			}
+		};
+
+		const updatePriceTierHighlight = (quantity: number) => {
+			const tierRows = document.querySelectorAll('.price-tier-row');
+			tierRows.forEach((row) => {
+				const minQty = parseInt(row.getAttribute('data-min-quantity') || '0');
+				const maxQtyAttr = row.getAttribute('data-max-quantity');
+				const maxQty = maxQtyAttr === '999999' || !maxQtyAttr ? Infinity : parseInt(maxQtyAttr);
+
+				// Remove existing highlight classes
+				row.classList.remove('bg-success/20', 'border-l-4', 'border-success', 'shadow-sm');
+
+				// Check if current quantity falls within this tier
+				if (quantity >= minQty && quantity <= maxQty) {
+					row.classList.add('bg-success/20', 'border-l-4', 'border-success', 'shadow-sm');
+				}
+			});
+		};
+
+		const updateTotal = () => {
+			const quantity = parseInt(quantityInput.value) || 1;
+			fetchPrice(quantity);
+			updatePriceTierHighlight(quantity);
+		};
+
+		// Make quantity input value accessible globally
+		(window as any).getProductQuantity = () => parseInt(quantityInput.value) || 1;
+
+		// Initial price fetch
+		updateTotal();
+
+		// Event listeners for buttons
+		decreaseBtn?.addEventListener('click', (e) => {
+			e.preventDefault();
+			const current = parseInt(quantityInput.value) || 1;
+			if (current > 1) {
+				quantityInput.value = (current - 1).toString();
+				updateTotal();
+			}
+		});
+
+		increaseBtn?.addEventListener('click', (e) => {
+			e.preventDefault();
+			const current = parseInt(quantityInput.value) || 1;
+			if (current < 100) {
+				quantityInput.value = (current + 1).toString();
+				updateTotal();
+			}
+		});
+
+		quantityInput.addEventListener('input', () => {
+			const value = parseInt(quantityInput.value);
+			if (value < 1) quantityInput.value = '1';
+			if (value > 100) quantityInput.value = '100';
+			updateTotal();
+		});
+
+		// Prevent form submission on Enter key
+		quantityInput.addEventListener('keydown', (e) => {
+			if (e.key === 'Enter') {
+				e.preventDefault();
+			}
+		});
+	})();
+</script>
 
 <style>
 	/* Hide number input spinner buttons */

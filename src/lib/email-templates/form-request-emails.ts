@@ -1,4 +1,5 @@
 // Email templates for form request responses
+import { SITE_CONFIG } from "../../constants/site";
 
 export interface FormRequestEmailData {
   userName: string;
@@ -150,7 +151,7 @@ export function generateFormRequestResponseEmail(data: FormRequestEmailData): {
     <body>
       <div class="email-container">
         <div class="header">
-          <img src="https://selini-shirt.de/images/logo/logo-1.webp" alt="Selini-Shirt Logo" class="logo" style="height: 60px; width: auto;" />
+          <img src="${SITE_CONFIG.brand.logo.headerUrl}" alt="${SITE_CONFIG.brand.logo.alt}" class="logo" style="height: 60px; width: auto;" />
         </div>
         <div class="content">
           <h2>Hallo ${escapeHtml(data.userName)},</h2>
@@ -172,18 +173,18 @@ export function generateFormRequestResponseEmail(data: FormRequestEmailData): {
           <p style="margin-top: 30px; color: #262626;">
             Mit freundlichen Grüßen,<br>
             <strong>${escapeHtml(data.adminName)}</strong><br>
-            Das Team von Selini-Shirt
+            Das Team von BySelini
           </p>
         </div>
         <div class="footer">
-          <p><strong>Selini-Shirt</strong></p>
+          <p><strong>BySelini</strong></p>
           <p>
-            <a href="mailto:info@selini-shirt.de">info@selini-shirt.de</a>
+            <a href="mailto:${SITE_CONFIG.contact.email}">${SITE_CONFIG.contact.email}</a>
             &nbsp;|&nbsp;
-            Tel: +49 123 456789
+            Tel: ${SITE_CONFIG.contact.displayPhone}
           </p>
           <p style="margin-top: 15px;">
-            <a href="https://selini-shirt.de">selini-shirt.de</a>
+            <a href="${SITE_CONFIG.url}">${SITE_CONFIG.url.replace(/^https?:\/\//, '')}</a>
           </p>
         </div>
       </div>
@@ -192,7 +193,7 @@ export function generateFormRequestResponseEmail(data: FormRequestEmailData): {
   `;
 
   const text = `
-Selini-Shirt - Antwort auf Ihre Anfrage
+BySelini - Antwort auf Ihre Anfrage
 
 Hallo ${data.userName},
 
@@ -218,13 +219,13 @@ Falls Sie weitere Fragen haben, können Sie direkt auf diese E-Mail antworten od
 
 Mit freundlichen Grüßen,
 ${data.adminName}
-Das Team von Selini-Shirt
+Das Team von BySelini
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Selini-Shirt
-E-Mail: info@selini-shirt.de
-Tel: +49 123 456789
-Web: https://selini-shirt.de
+BySelini
+E-Mail: ${SITE_CONFIG.contact.email}
+Tel: ${SITE_CONFIG.contact.displayPhone}
+Web: ${SITE_CONFIG.url}
   `.trim();
 
   return { html, text };

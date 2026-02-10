@@ -1,6 +1,7 @@
 ---
 import Layout from './Layout.astro';
 import Navbar from '../components/Navbar.astro';
+import { SITE_CONFIG } from '../constants/site';
 
 interface Props {
 	title: string;
@@ -10,7 +11,7 @@ interface Props {
 const { title, description = title } = Astro.props;
 ---
 
-<Layout title={`${title} - DTF Transfer Print`} description={description}>
+<Layout title={`${title} - ${SITE_CONFIG.brand.name}`} description={description}>
 	<Navbar />
 
 	<!-- Legal Content Container -->

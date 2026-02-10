@@ -145,7 +145,7 @@ export const POST: APIRoute = async ({ request }) => {
         <body>
           <div class="email-container">
             <div class="header">
-              <img src="https://selini-shirt.de/images/logo/logo-1.webp" alt="Selini-Shirt Logo" class="logo" />
+              <img src="${SITE_CONFIG.brand.logo.headerUrl}" alt="${SITE_CONFIG.brand.logo.alt}" class="logo" />
             </div>
 
             <div class="content">
@@ -306,7 +306,7 @@ Antworten Sie direkt an: ${email}
         <body>
           <div class="email-container">
             <div class="header">
-              <img src="https://selini-shirt.de/images/logo/logo-1.webp" alt="Selini-Shirt Logo" class="logo" />
+              <img src="${SITE_CONFIG.brand.logo.headerUrl}" alt="${SITE_CONFIG.brand.logo.alt}" class="logo" />
             </div>
 
             <div class="content">

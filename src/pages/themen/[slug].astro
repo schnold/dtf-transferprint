@@ -1,0 +1,188 @@
+---
+import ThemeLayout from '../../layouts/ThemeLayout.astro';
+import InquiryForm from '../../components/InquiryForm.astro';
+import ContactCTASection from '../../components/ContactCTASection.astro';
+import ProsConsSection from '../../components/ProsConsSection.astro';
+import UseCasesSection from '../../components/UseCasesSection.astro';
+import { textilthemenSlugs } from '../../data/themen';
+
+export const prerender = true;
+
+export function getStaticPaths() {
+	return Object.entries(textilthemenSlugs).map(([slug, data]) => ({
+		params: { slug },
+		props: { title: data.title, description: data.description },
+	}));
+}
+
+const { slug } = Astro.params;
+const { title, description } = Astro.props;
+const placeholderImage = '/images/themen/placeholder.webp';
+const imageSlug = slug || '';
+---
+
+<ThemeLayout title={title} description={description}>
+	<!-- Hero Section -->
+	<div class="mb-12">
+		<h1 class="!mb-4">{title}</h1>
+		<p class="text-lg text-neutral/80 !mb-6">
+			{description}
+		</p>
+		<div class="alert alert-info mb-8">
+			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+			</svg>
+			<span><strong>Individuelle Beratung:</strong> Wir bieten Bedrucken und Besticken in verschiedenen Verfahren (DTF, Siebdruck, Sublimation, Stickerei). Gerne erstellen wir Ihnen ein unverbindliches Angebot – auch für kleine Auflagen.</span>
+		</div>
+	</div>
+
+	<!-- Quick Stats -->
+	<div class="stats stats-vertical lg:stats-horizontal shadow my-8 w-full">
+		<div class="stat">
+			<div class="stat-figure text-[#16a34a]">
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+				</svg>
+			</div>
+			<div class="stat-title">Qualität</div>
+			<div class="stat-value text-[#16a34a]">100%</div>
+			<div class="stat-desc">Professionelle Veredelung</div>
+		</div>
+		<div class="stat">
+			<div class="stat-figure text-secondary">
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.25 7.5l-.875 10.632M3.25 7.5h17.5L18 21.75 6 21.75 3.25 7.5zM17.25 7.5L12 10.5 6.75 7.5m10.5 0l-4.5 3m4.5-3l-4.5-3m4.5 3l-4.5 3" />
+				</svg>
+			</div>
+			<div class="stat-title">Mindestmenge</div>
+			<div class="stat-value text-secondary">1 Stk</div>
+			<div class="stat-desc">Auch Kleinauflagen</div>
+		</div>
+		<div class="stat">
+			<div class="stat-figure text-[#16a34a]">
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+				</svg>
+			</div>
+			<div class="stat-title">Schnelle Abwicklung</div>
+			<div class="stat-value text-[#16a34a]">2–5 Tg</div>
+			<div class="stat-desc">Kurzfristige Lieferung möglich</div>
+		</div>
+	</div>
+
+	<!-- Beispiele aus unserer Produktion -->
+	<h2>Beispiele aus unserer Produktion</h2>
+	<p class="text-neutral/70 mb-6">
+		Platzhalter für Ihre Fotos: Ersetzen Sie die Bilder in <code class="text-sm bg-base-200 px-1 rounded">/public/images/themen/</code> durch eigene Aufnahmen (z.B. <code class="text-sm bg-base-200 px-1 rounded">{imageSlug}.webp</code>).
+	</p>
+	<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+		<figure class="rounded-2xl overflow-hidden shadow-lg border border-base-300/30">
+			<img src={placeholderImage} alt={`${title} – Platzhalter Bild 1`} class="w-full aspect-[4/3] object-cover" width="400" height="300" loading="lazy" />
+			<figcaption class="p-4 bg-base-200 text-sm text-neutral/80">Platzhalter – Bild 1</figcaption>
+		</figure>
+		<figure class="rounded-2xl overflow-hidden shadow-lg border border-base-300/30">
+			<img src={placeholderImage} alt={`${title} – Platzhalter Bild 2`} class="w-full aspect-[4/3] object-cover" width="400" height="300" loading="lazy" />
+			<figcaption class="p-4 bg-base-200 text-sm text-neutral/80">Platzhalter – Bild 2</figcaption>
+		</figure>
+		<figure class="rounded-2xl overflow-hidden shadow-lg border border-base-300/30">
+			<img src={placeholderImage} alt={`${title} – Platzhalter Bild 3`} class="w-full aspect-[4/3] object-cover" width="400" height="300" loading="lazy" />
+			<figcaption class="p-4 bg-base-200 text-sm text-neutral/80">Platzhalter – Bild 3</figcaption>
+		</figure>
+		<figure class="rounded-2xl overflow-hidden shadow-lg border border-base-300/30">
+			<img src={placeholderImage} alt={`${title} – Platzhalter Bild 4`} class="w-full aspect-[4/3] object-cover" width="400" height="300" loading="lazy" />
+			<figcaption class="p-4 bg-base-200 text-sm text-neutral/80">Platzhalter – Bild 4</figcaption>
+		</figure>
+	</div>
+
+	<h2>Was wir für Sie tun</h2>
+	<p>
+		Für <strong>{title}</strong> bieten wir professionelle Textilveredelung in allen gängigen Verfahren: <a href="/dtf-transfers/" class="link link-primary">DTF-Druck</a>, <a href="/siebdruck/" class="link link-primary">Siebdruck</a>, <a href="/sublimation/" class="link link-primary">Sublimation</a> und <a href="/direkteinstickung/" class="link link-primary">Stickerei</a>. So finden wir gemeinsam die beste Lösung für Ihre Auflage, Ihr Material und Ihr Budget.
+	</p>
+	<p>
+		Ob Logo, Name, Nummer oder mehrfarbiges Motiv – wir beraten Sie gerne und erstellen ein unverbindliches Angebot. Auch bei kleinen Stückzahlen und kurzen Lieferzeiten sind wir Ihr Ansprechpartner.
+	</p>
+
+	<ProsConsSection
+		advantagesTitle="Ihre Vorteile"
+		disadvantagesTitle="Hinweise"
+		advantages={[
+			'<strong>Keine Mindestmenge</strong> – auch Einzelstücke und Kleinauflagen',
+			'<strong>Viele Verfahren</strong> – DTF, Siebdruck, Sublimation, Stickerei',
+			'<strong>Individuelle Beratung</strong> – kostenlos und unverbindlich',
+			'<strong>Schnelle Abwicklung</strong> – auch kurzfristige Lieferung möglich',
+			'<strong>Hohe Qualität</strong> – professionelle Verarbeitung',
+		]}
+		disadvantages={[
+			'<strong>Preis abhängig von Auflage und Verfahren</strong> – wir kalkulieren individuell',
+			'<strong>Lieferzeit abhängig von Auslastung</strong> – in der Regel wenige Werktage',
+		]}
+	/>
+
+	<UseCasesSection
+		title="Typische Einsatzgebiete"
+		introText={`Unser Angebot für <strong>${title}</strong> eignet sich unter anderem für:`}
+		columns="3"
+		items={[
+			{ iconPath: "M15.59 14.37a6 6 0 01-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 006.16-12.12A14.98 14.98 0 009.631 8.41", title: "Vereine & Teams", description: "Vereinskleidung, Mannschaftsoutfits, Fan-Artikel" },
+			{ iconPath: "M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 00.75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 00-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0112 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 01-.673-.38m0 0A2.18 2.18 0 013 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 013.413-.387m7.5 0V5.25A2.25 2.25 0 0013.5 3h-3a2.25 2.25 0 00-2.25 2.25v.894m7.5 0a48.667 48.667 0 00-7.5 0M12 12.75h.008v.008H12v-.008z", title: "Firmen & Events", description: "Werbetextilien, Events, Messen, Give-aways" },
+			{ iconPath: "M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z", title: "Privat & Kreativ", description: "Individuelle Geschenke, Kleinserien, Hobby" },
+		]}
+	/>
+
+	<div class="alert alert-info my-8">
+		<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
+			<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+		</svg>
+		<div>
+			<p><strong>Beratung gewünscht?</strong> Wir helfen Ihnen gerne bei der Auswahl des passenden Verfahrens und der richtigen Textilien. Kostenlose und unverbindliche Beratung.</p>
+		</div>
+	</div>
+
+	<ContactCTASection
+		title={`Angebot für ${title}`}
+		description="Fordern Sie jetzt ein kostenloses, unverbindliches Angebot an. Nennen Sie uns Ihre Wünsche zu Stückzahl, Motiv und Textil – wir kalkulieren für Sie."
+	/>
+
+	<h2 class="mt-16 mb-8">Häufige Fragen</h2>
+	<div class="space-y-3 mb-12">
+		<div class="faq-item group border border-base-300/30 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-accent/30 overflow-hidden bg-gray-800">
+			<input type="checkbox" id="faq-1" class="faq-toggle" />
+			<label for="faq-1" class="faq-label flex items-center justify-between cursor-pointer p-6 bg-gray-800 transition-all duration-300">
+				<span class="text-xl font-semibold text-gray-200 pr-4">Gibt es eine Mindestmenge?</span>
+				<div class="faq-icon flex-shrink-0 w-6 h-6 relative text-accent">
+					<svg class="faq-icon-plus absolute inset-0 w-full h-full transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" /></svg>
+					<svg class="faq-icon-minus absolute inset-0 w-full h-full transition-all duration-300 opacity-0 scale-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4" /></svg>
+				</div>
+			</label>
+			<div class="faq-content overflow-hidden transition-all duration-300">
+				<div class="px-6 pb-6 pt-2">
+					<p class="text-gray-200 leading-relaxed">Nein. Wir bieten auch Einzelstücke und Kleinauflagen an. Je nach Verfahren (z.B. DTF oder Sublimation) sind bereits ab 1 Stück attraktive Preise möglich.</p>
+				</div>
+			</div>
+		</div>
+		<div class="faq-item group border border-base-300/30 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-accent/30 overflow-hidden bg-gray-800">
+			<input type="checkbox" id="faq-2" class="faq-toggle" />
+			<label for="faq-2" class="faq-label flex items-center justify-between cursor-pointer p-6 bg-gray-800 transition-all duration-300">
+				<span class="text-xl font-semibold text-gray-200 pr-4">Welche Druckverfahren kommen infrage?</span>
+				<div class="faq-icon flex-shrink-0 w-6 h-6 relative text-accent">
+					<svg class="faq-icon-plus absolute inset-0 w-full h-full transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" /></svg>
+					<svg class="faq-icon-minus absolute inset-0 w-full h-full transition-all duration-300 opacity-0 scale-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4" /></svg>
+				</div>
+			</label>
+			<div class="faq-content overflow-hidden transition-all duration-300">
+				<div class="px-6 pb-6 pt-2">
+					<p class="text-gray-200 leading-relaxed">Wir setzen DTF-Druck, Siebdruck, Sublimation und Stickerei ein. Die beste Wahl hängt von Textil, Auflage und Motiv ab. In der Beratung klären wir das mit Ihnen.</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="divider my-12"></div>
+	<div id="inquiry-form" class="scroll-mt-20">
+		<InquiryForm
+			formType="themen"
+			sourcePageTitle={title}
+			sourcePageUrl={`/themen/${imageSlug}/`}
+		/>
+	</div>
+</ThemeLayout>

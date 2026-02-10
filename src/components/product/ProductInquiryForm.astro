@@ -93,6 +93,7 @@ const { productId, productName, productSlug } = Astro.props;
 			<input type="hidden" name="productId" value={productId} />
 			<input type="hidden" name="productName" value={productName} />
 			<input type="hidden" name="productSlug" value={productSlug} />
+			<input type="hidden" name="quantity" id="inquiry-quantity" value="1" />
 
 			<!-- Submit Button -->
 			<button
@@ -174,6 +175,16 @@ const { productId, productName, productSlug } = Astro.props;
 			successMessage?.classList.add('hidden');
 			errorMessage?.classList.add('hidden');
 
+			// Get quantity from global function (defined in ProductInfo)
+			const getQuantity = (window as any).getProductQuantity;
+			const quantity = getQuantity ? getQuantity() : 1;
+
+			// Update hidden quantity field
+			const quantityField = document.getElementById('inquiry-quantity') as HTMLInputElement;
+			if (quantityField) {
+				quantityField.value = quantity.toString();
+			}
+
 			// Get form data
 			const formData = new FormData(form);
 			const data = {
@@ -184,6 +195,7 @@ const { productId, productName, productSlug } = Astro.props;
 				productId: formData.get('productId') as string,
 				productName: formData.get('productName') as string,
 				productSlug: formData.get('productSlug') as string,
+				quantity: parseInt(formData.get('quantity') as string) || 1,
 			};
 
 			// Validate message length
