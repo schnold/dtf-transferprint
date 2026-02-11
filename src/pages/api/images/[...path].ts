@@ -6,22 +6,76 @@ import { GetObjectCommand } from '@aws-sdk/client-s3';
 export const prerender = false;
 
 /**
+ * Allowed R2 path prefixes for public image access
+ * Only images in these folders can be accessed via the proxy
+ */
+const ALLOWED_IMAGE_PREFIXES = [
+  'product-images/',
+  'category-images/',
+  'branding/',
+  'public-assets/',
+];
+
+/**
+ * Validates that a path is safe and allowed
+ * @param key - The R2 key to validate
+ * @returns true if valid, false otherwise
+ */
+function isValidImagePath(key: string): boolean {
+  // Reject empty or non-string keys
+  if (!key || typeof key !== 'string') {
+    return false;
+  }
+
+  // Reject paths with path traversal attempts
+  if (key.includes('..') || key.includes('~')) {
+    return false;
+  }
+
+  // Normalize the path (remove double slashes, etc.)
+  const normalized = key.replace(/\/+/g, '/').replace(/^\/+/, '');
+
+  // Check if the normalized path starts with an allowed prefix
+  const isAllowed = ALLOWED_IMAGE_PREFIXES.some(prefix =>
+    normalized.startsWith(prefix)
+  );
+
+  if (!isAllowed) {
+    return false;
+  }
+
+  // Additional checks: no null bytes, no control characters
+  if (/[\x00-\x1f\x7f]/.test(normalized)) {
+    return false;
+  }
+
+  return true;
+}
+
+/**
  * GET /api/images/[...path]
  * Proxy endpoint to serve images from R2
  * This allows images to be served even if the R2 bucket is not publicly accessible
+ * Only allows access to images in allowlisted folders
  */
 export const GET: APIRoute = async ({ params, request }) => {
   try {
     // Get the image path from the URL
     const path = params.path;
     if (!path) {
-      console.error('[Image Proxy] No path provided');
+      console.warn('[SECURITY] Image proxy called without path');
       return new Response('Image path required', { status: 400 });
     }
 
     // Extract the key from the path (everything after /api/images/)
     const key = Array.isArray(path) ? path.join('/') : path;
-    
+
+    // Validate the path for security
+    if (!isValidImagePath(key)) {
+      console.warn('[SECURITY] Invalid or unauthorized image path requested:', { key });
+      return new Response('Invalid image path', { status: 400 });
+    }
+
     console.log('[Image Proxy] Fetching image:', { key, bucket: R2_BUCKET_NAME });
 
     // Get the object from R2

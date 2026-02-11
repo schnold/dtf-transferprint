@@ -2,11 +2,46 @@ import type { APIRoute } from 'astro';
 import { sendEmail } from '../../lib/email';
 import { SITE_CONFIG } from '../../constants/site';
 import { createFormRequest } from '../../lib/db';
+import {
+  escapeHtml,
+  validateTextInput,
+  isValidEmail,
+  validatePhoneNumber,
+  INPUT_LIMITS,
+} from '../../lib/security';
+import { checkRateLimit, getRateLimitHeaders } from '../../lib/rate-limiter';
 
 export const prerender = false;
 
 export const POST: APIRoute = async ({ request }) => {
   try {
+    // Rate limiting
+    const clientIp = request.headers.get('x-forwarded-for')?.split(',')[0].trim()
+      || request.headers.get('cf-connecting-ip')
+      || 'unknown';
+
+    const rateLimitResult = checkRateLimit(clientIp, {
+      endpoint: 'product-inquiry-form',
+      maxRequests: 5,
+      windowSeconds: 900,
+    });
+
+    if (!rateLimitResult.allowed) {
+      return new Response(
+        JSON.stringify({
+          success: false,
+          error: 'Zu viele Anfragen. Bitte versuchen Sie es später erneut.',
+        }),
+        {
+          status: 429,
+          headers: {
+            'Content-Type': 'application/json',
+            ...getRateLimitHeaders(rateLimitResult)
+          }
+        }
+      );
+    }
+
     const body = await request.json();
     const { name, email, phone, message, productId, productName, productSlug } = body;
 
@@ -21,9 +56,20 @@ export const POST: APIRoute = async ({ request }) => {
       );
     }
 
-    // Basic email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+    // Validate name
+    const nameValidation = validateTextInput(name, 'Name', INPUT_LIMITS.name);
+    if (!nameValidation.isValid) {
+      return new Response(
+        JSON.stringify({
+          success: false,
+          error: nameValidation.error,
+        }),
+        { status: 400, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // Validate email
+    if (!isValidEmail(email)) {
       return new Response(
         JSON.stringify({
           success: false,
@@ -32,6 +78,51 @@ export const POST: APIRoute = async ({ request }) => {
         { status: 400, headers: { 'Content-Type': 'application/json' } }
       );
     }
+
+    // Validate phone if provided
+    if (phone) {
+      const phoneValidation = validatePhoneNumber(phone);
+      if (!phoneValidation.isValid) {
+        return new Response(
+          JSON.stringify({
+            success: false,
+            error: phoneValidation.error,
+          }),
+          { status: 400, headers: { 'Content-Type': 'application/json' } }
+        );
+      }
+    }
+
+    // Validate message
+    const messageValidation = validateTextInput(message, 'Nachricht', INPUT_LIMITS.message);
+    if (!messageValidation.isValid) {
+      return new Response(
+        JSON.stringify({
+          success: false,
+          error: messageValidation.error,
+        }),
+        { status: 400, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // Validate product name
+    const productNameValidation = validateTextInput(productName, 'Produktname', INPUT_LIMITS.subject);
+    if (!productNameValidation.isValid) {
+      return new Response(
+        JSON.stringify({
+          success: false,
+          error: productNameValidation.error,
+        }),
+        { status: 400, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // Create escaped versions for HTML emails
+    const nameEscaped = escapeHtml(name);
+    const emailEscaped = escapeHtml(email);
+    const phoneEscaped = phone ? escapeHtml(phone) : '';
+    const messageEscaped = escapeHtml(message);
+    const productNameEscaped = escapeHtml(productName);
 
     // Product URL for email
     const productUrl = `${SITE_CONFIG.url}/product/${productSlug}`;
@@ -187,7 +278,7 @@ export const POST: APIRoute = async ({ request }) => {
                 <h3 style="margin-top: 0;">Angefragtes Produkt:</h3>
                 <div class="field">
                   <div class="label">Produktname:</div>
-                  <div class="value">${productName}</div>
+                  <div class="value">${productNameEscaped}</div>
                 </div>
                 <a href="${productUrl}" class="button">Produkt ansehen</a>
               </div>
@@ -195,21 +286,21 @@ export const POST: APIRoute = async ({ request }) => {
               <h3>Kundeninformationen:</h3>
               <div class="field">
                 <div class="label">Name:</div>
-                <div class="value">${name}</div>
+                <div class="value">${nameEscaped}</div>
               </div>
               <div class="field">
                 <div class="label">E-Mail:</div>
-                <div class="value"><a href="mailto:${email}" style="color: #EBF222; text-decoration: none;">${email}</a></div>
+                <div class="value"><a href="mailto:${emailEscaped}" style="color: #EBF222; text-decoration: none;">${emailEscaped}</a></div>
               </div>
               ${phone ? `
               <div class="field">
                 <div class="label">Telefon:</div>
-                <div class="value">${phone}</div>
+                <div class="value">${phoneEscaped}</div>
               </div>
               ` : ''}
               <div class="field">
                 <div class="label">Nachricht:</div>
-                <div class="message-box">${message}</div>
+                <div class="message-box">${messageEscaped}</div>
               </div>
             </div>
 
@@ -220,7 +311,7 @@ export const POST: APIRoute = async ({ request }) => {
               <p>Tel: ${SITE_CONFIG.contact.displayPhone} · <a href="mailto:${SITE_CONFIG.contact.email}">${SITE_CONFIG.contact.email}</a></p>
               <div class="divider"></div>
               <p>Diese E-Mail wurde über das Produktanfrage-Formular auf selini-shirt.de gesendet.</p>
-              <p>Antworten Sie direkt an: <a href="mailto:${email}">${email}</a></p>
+              <p>Antworten Sie direkt an: <a href="mailto:${emailEscaped}">${emailEscaped}</a></p>
             </div>
           </div>
         </body>
@@ -254,7 +345,7 @@ Diese E-Mail wurde über das Produktanfrage-Formular auf selini-shirt.de gesende
 Antworten Sie direkt an: ${email}
     `.trim();
 
-    // Send email to company
+    // Send email to company (use unescaped for subject line)
     await sendEmail({
       to: SITE_CONFIG.contact.email,
       subject: `Produktanfrage: ${productName} - ${name}`,
@@ -369,16 +460,16 @@ Antworten Sie direkt an: ${email}
             <div class="content">
               <h2>Vielen Dank für Ihre Produktanfrage!</h2>
 
-              <p>Hallo ${name},</p>
+              <p>Hallo ${nameEscaped},</p>
               <p>vielen Dank für Ihr Interesse an unserem Produkt. Wir haben Ihre Anfrage erhalten und werden uns schnellstmöglich bei Ihnen melden.</p>
 
               <div class="product-box">
                 <strong>Angefragtes Produkt:</strong><br>
-                ${productName}
+                ${productNameEscaped}
               </div>
 
               <p><strong>Ihre Nachricht:</strong></p>
-              <div class="message-box">${message}</div>
+              <div class="message-box">${messageEscaped}</div>
 
               <p>In der Zwischenzeit können Sie gerne unser komplettes Produktsortiment durchstöbern oder bei weiteren Fragen direkt Kontakt mit uns aufnehmen.</p>
 
@@ -421,7 +512,7 @@ ${SITE_CONFIG.company.shortAddress}
 Tel: ${SITE_CONFIG.contact.displayPhone} · E-Mail: ${SITE_CONFIG.contact.email}
     `.trim();
 
-    // Send confirmation email to customer
+    // Send confirmation email to customer (use unescaped for subject line and 'to' field)
     await sendEmail({
       to: email,
       subject: `Ihre Produktanfrage: ${productName}`,

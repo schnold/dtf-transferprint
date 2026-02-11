@@ -2,15 +2,50 @@ import type { APIRoute } from 'astro';
 import { sendEmail } from '../../lib/email';
 import { SITE_CONFIG } from '../../constants/site';
 import { createFormRequest } from '../../lib/db';
+import {
+  escapeHtml,
+  validateTextInput,
+  isValidEmail,
+  validatePhoneNumber,
+  INPUT_LIMITS,
+} from '../../lib/security';
+import { checkRateLimit, getRateLimitHeaders } from '../../lib/rate-limiter';
 
 export const prerender = false;
 
 export const POST: APIRoute = async ({ request }) => {
   try {
+    // Rate limiting: 5 submissions per 15 minutes per IP
+    const clientIp = request.headers.get('x-forwarded-for')?.split(',')[0].trim()
+      || request.headers.get('cf-connecting-ip')
+      || 'unknown';
+
+    const rateLimitResult = checkRateLimit(clientIp, {
+      endpoint: 'contact-form',
+      maxRequests: 5,
+      windowSeconds: 900, // 15 minutes
+    });
+
+    if (!rateLimitResult.allowed) {
+      return new Response(
+        JSON.stringify({
+          success: false,
+          error: 'Zu viele Anfragen. Bitte versuchen Sie es später erneut.',
+        }),
+        {
+          status: 429,
+          headers: {
+            'Content-Type': 'application/json',
+            ...getRateLimitHeaders(rateLimitResult)
+          }
+        }
+      );
+    }
+
     const body = await request.json();
     const { name, email, phone, subject, message } = body;
 
-    // Validate required fields
+    // Validate required fields exist
     if (!name || !email || !subject || !message) {
       return new Response(
         JSON.stringify({
@@ -21,13 +56,32 @@ export const POST: APIRoute = async ({ request }) => {
       );
     }
 
-    // Basic email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+    // Validate and sanitize input with length limits
+    let validatedName: string;
+    let validatedEmail: string;
+    let validatedPhone: string = '';
+    let validatedSubject: string;
+    let validatedMessage: string;
+
+    try {
+      validatedName = validateTextInput(name, INPUT_LIMITS.NAME_MAX, 'Name');
+      validatedEmail = email.trim();
+
+      if (!isValidEmail(validatedEmail)) {
+        throw new Error('Ungültige E-Mail-Adresse');
+      }
+
+      if (phone) {
+        validatedPhone = validatePhoneNumber(phone);
+      }
+
+      validatedSubject = validateTextInput(subject, INPUT_LIMITS.SUBJECT_MAX, 'Betreff');
+      validatedMessage = validateTextInput(message, INPUT_LIMITS.MESSAGE_MAX, 'Nachricht');
+    } catch (validationError: any) {
       return new Response(
         JSON.stringify({
           success: false,
-          error: 'Bitte geben Sie eine gültige E-Mail-Adresse ein.',
+          error: validationError.message || 'Ungültige Eingabe',
         }),
         { status: 400, headers: { 'Content-Type': 'application/json' } }
       );
@@ -43,7 +97,14 @@ export const POST: APIRoute = async ({ request }) => {
       sonstiges: 'Sonstiges',
     };
 
-    const subjectText = subjectMap[subject] || subject;
+    const subjectText = subjectMap[validatedSubject] || validatedSubject;
+
+    // Escape all user input for HTML emails to prevent XSS
+    const nameEscaped = escapeHtml(validatedName);
+    const emailEscaped = escapeHtml(validatedEmail);
+    const phoneEscaped = escapeHtml(validatedPhone);
+    const subjectEscaped = escapeHtml(subjectText);
+    const messageEscaped = escapeHtml(validatedMessage);
 
     // Create email content
     const emailHtml = `
@@ -149,33 +210,33 @@ export const POST: APIRoute = async ({ request }) => {
             </div>
 
             <div class="content">
-              <h2>Neue Kontaktanfrage von ${name}</h2>
+              <h2>Neue Kontaktanfrage von ${nameEscaped}</h2>
 
               <div class="field">
                 <div class="label">Name</div>
-                <div class="value">${name}</div>
+                <div class="value">${nameEscaped}</div>
               </div>
 
               <div class="field">
                 <div class="label">E-Mail</div>
-                <div class="value"><a href="mailto:${email}" style="color: #EBF222; text-decoration: none;">${email}</a></div>
+                <div class="value"><a href="mailto:${emailEscaped}" style="color: #EBF222; text-decoration: none;">${emailEscaped}</a></div>
               </div>
 
-              ${phone ? `
+              ${validatedPhone ? `
               <div class="field">
                 <div class="label">Telefon</div>
-                <div class="value">${phone}</div>
+                <div class="value">${phoneEscaped}</div>
               </div>
               ` : ''}
 
               <div class="field">
                 <div class="label">Betreff</div>
-                <div class="value">${subjectText}</div>
+                <div class="value">${subjectEscaped}</div>
               </div>
 
               <div class="field">
                 <div class="label">Nachricht</div>
-                <div class="value" style="white-space: pre-wrap;">${message}</div>
+                <div class="value" style="white-space: pre-wrap;">${messageEscaped}</div>
               </div>
             </div>
 
@@ -186,7 +247,7 @@ export const POST: APIRoute = async ({ request }) => {
               <p>Tel: ${SITE_CONFIG.contact.displayPhone} · <a href="mailto:${SITE_CONFIG.contact.email}">${SITE_CONFIG.contact.email}</a></p>
               <div class="divider"></div>
               <p>Diese E-Mail wurde über das Kontaktformular auf selini-shirt.de gesendet.</p>
-              <p>Antworten Sie direkt an: <a href="mailto:${email}">${email}</a></p>
+              <p>Antworten Sie direkt an: <a href="mailto:${emailEscaped}">${emailEscaped}</a></p>
             </div>
           </div>
         </body>
@@ -196,13 +257,13 @@ export const POST: APIRoute = async ({ request }) => {
     const emailText = `
 Neue Kontaktanfrage - Selini-Shirt
 
-Name: ${name}
-E-Mail: ${email}
-${phone ? `Telefon: ${phone}` : ''}
+Name: ${validatedName}
+E-Mail: ${validatedEmail}
+${validatedPhone ? `Telefon: ${validatedPhone}` : ''}
 Betreff: ${subjectText}
 
 Nachricht:
-${message}
+${validatedMessage}
 
 ---
 Selini-Shirt
@@ -211,13 +272,13 @@ ${SITE_CONFIG.company.shortAddress}
 Tel: ${SITE_CONFIG.contact.displayPhone} · E-Mail: ${SITE_CONFIG.contact.email}
 
 Diese E-Mail wurde über das Kontaktformular auf selini-shirt.de gesendet.
-Antworten Sie direkt an: ${email}
+Antworten Sie direkt an: ${validatedEmail}
     `.trim();
 
     // Send email to company
     await sendEmail({
       to: SITE_CONFIG.contact.email,
-      subject: `Kontaktanfrage: ${subjectText} - ${name}`,
+      subject: `Kontaktanfrage: ${subjectText} - ${validatedName}`,
       html: emailHtml,
       text: emailText,
     });
@@ -316,11 +377,11 @@ Antworten Sie direkt an: ${email}
             <div class="content">
               <h2>Vielen Dank für Ihre Nachricht!</h2>
 
-              <p>Hallo ${name},</p>
+              <p>Hallo ${nameEscaped},</p>
               <p>vielen Dank für Ihre Kontaktanfrage. Wir haben Ihre Nachricht erhalten und werden uns schnellstmöglich bei Ihnen melden.</p>
 
               <p><strong>Ihre Anfrage:</strong></p>
-              <div class="message-box">${message}</div>
+              <div class="message-box">${messageEscaped}</div>
 
               <p>Mit freundlichen Grüßen,<br><strong>Das Team von Selini-Shirt</strong></p>
             </div>
@@ -339,12 +400,12 @@ Antworten Sie direkt an: ${email}
     const confirmationText = `
 Vielen Dank für Ihre Nachricht!
 
-Hallo ${name},
+Hallo ${validatedName},
 
 vielen Dank für Ihre Kontaktanfrage. Wir haben Ihre Nachricht erhalten und werden uns schnellstmöglich bei Ihnen melden.
 
 Ihre Anfrage:
-${message}
+${validatedMessage}
 
 Mit freundlichen Grüßen,
 Das Team von Selini-Shirt
@@ -358,7 +419,7 @@ Tel: ${SITE_CONFIG.contact.displayPhone} · E-Mail: ${SITE_CONFIG.contact.email}
 
     // Send confirmation email to user
     await sendEmail({
-      to: email,
+      to: validatedEmail,
       subject: 'Ihre Kontaktanfrage bei Selini-Shirt',
       html: confirmationHtml,
       text: confirmationText,
@@ -368,11 +429,11 @@ Tel: ${SITE_CONFIG.contact.displayPhone} · E-Mail: ${SITE_CONFIG.contact.email}
     try {
       await createFormRequest({
         formType: 'contact',
-        name,
-        email,
-        phone: phone || undefined,
-        subject,
-        message,
+        name: validatedName,
+        email: validatedEmail,
+        phone: validatedPhone || undefined,
+        subject: validatedSubject,
+        message: validatedMessage,
         ipAddress: request.headers.get('x-forwarded-for') || undefined,
         userAgent: request.headers.get('user-agent') || undefined,
       });

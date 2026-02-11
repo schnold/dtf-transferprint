@@ -1,8 +1,38 @@
 import type { APIRoute } from "astro";
 import "dotenv/config";
+import { timingSafeEqual } from "../../lib/security";
+import { checkRateLimit, getRateLimitHeaders } from "../../lib/rate-limiter";
 
 export const POST: APIRoute = async ({ request, cookies }) => {
   try {
+    // Rate limiting: 10 attempts per 15 minutes per IP
+    const clientIp = request.headers.get('x-forwarded-for')?.split(',')[0].trim()
+      || request.headers.get('cf-connecting-ip')
+      || 'unknown';
+
+    const rateLimitResult = checkRateLimit(clientIp, {
+      endpoint: 'block-auth',
+      maxRequests: 10,
+      windowSeconds: 900, // 15 minutes
+    });
+
+    if (!rateLimitResult.allowed) {
+      console.warn(`[SECURITY] Rate limit exceeded for block-auth from IP: ${clientIp}`);
+      return new Response(
+        JSON.stringify({
+          error: "Zu viele Versuche. Bitte versuchen Sie es später erneut.",
+          retryAfter: rateLimitResult.retryAfter
+        }),
+        {
+          status: 429,
+          headers: {
+            "Content-Type": "application/json",
+            ...getRateLimitHeaders(rateLimitResult)
+          }
+        }
+      );
+    }
+
     const { password } = await request.json();
     // Try both import.meta.env (Astro's way) and process.env (dotenv way)
     const blockPassword = import.meta.env.BLOCK_PASSWORD || process.env.BLOCK_PASSWORD;
@@ -24,8 +54,8 @@ export const POST: APIRoute = async ({ request, cookies }) => {
       );
     }
 
-    // Compare passwords (case-sensitive, exact match)
-    if (password && password.trim() === blockPassword.trim()) {
+    // Use timing-safe comparison to prevent timing attacks
+    if (password && timingSafeEqual(password.trim(), blockPassword.trim())) {
       // Set a secure cookie that expires in 7 days
       cookies.set("block_authenticated", "true", {
         path: "/",

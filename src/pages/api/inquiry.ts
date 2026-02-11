@@ -2,11 +2,46 @@ import type { APIRoute } from 'astro';
 import { sendEmail } from '../../lib/email';
 import { SITE_CONFIG } from '../../constants/site';
 import { createFormRequest } from '../../lib/db';
+import {
+  escapeHtml,
+  validateTextInput,
+  isValidEmail,
+  validatePhoneNumber,
+  INPUT_LIMITS,
+} from '../../lib/security';
+import { checkRateLimit, getRateLimitHeaders } from '../../lib/rate-limiter';
 
 export const prerender = false;
 
 export const POST: APIRoute = async ({ request }) => {
   try {
+    // Rate limiting
+    const clientIp = request.headers.get('x-forwarded-for')?.split(',')[0].trim()
+      || request.headers.get('cf-connecting-ip')
+      || 'unknown';
+
+    const rateLimitResult = checkRateLimit(clientIp, {
+      endpoint: 'inquiry-form',
+      maxRequests: 5,
+      windowSeconds: 900,
+    });
+
+    if (!rateLimitResult.allowed) {
+      return new Response(
+        JSON.stringify({
+          success: false,
+          error: 'Zu viele Anfragen. Bitte versuchen Sie es später erneut.',
+        }),
+        {
+          status: 429,
+          headers: {
+            'Content-Type': 'application/json',
+            ...getRateLimitHeaders(rateLimitResult)
+          }
+        }
+      );
+    }
+
     const body = await request.json();
     const {
       name,
@@ -33,9 +68,8 @@ export const POST: APIRoute = async ({ request }) => {
       );
     }
 
-    // Basic email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+    // Validate email
+    if (!isValidEmail(email)) {
       return new Response(
         JSON.stringify({
           success: false,
@@ -44,6 +78,121 @@ export const POST: APIRoute = async ({ request }) => {
         { status: 400, headers: { 'Content-Type': 'application/json' } }
       );
     }
+
+    // Validate name
+    const nameValidation = validateTextInput(name, INPUT_LIMITS.name.min, INPUT_LIMITS.name.max);
+    if (!nameValidation.isValid) {
+      return new Response(
+        JSON.stringify({
+          success: false,
+          error: nameValidation.error || 'Ungültiger Name.',
+        }),
+        { status: 400, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // Validate message
+    const messageValidation = validateTextInput(message, INPUT_LIMITS.message.min, INPUT_LIMITS.message.max);
+    if (!messageValidation.isValid) {
+      return new Response(
+        JSON.stringify({
+          success: false,
+          error: messageValidation.error || 'Ungültige Nachricht.',
+        }),
+        { status: 400, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // Validate phone if provided
+    if (phone) {
+      const phoneValidation = validatePhoneNumber(phone);
+      if (!phoneValidation.isValid) {
+        return new Response(
+          JSON.stringify({
+            success: false,
+            error: phoneValidation.error || 'Ungültige Telefonnummer.',
+          }),
+          { status: 400, headers: { 'Content-Type': 'application/json' } }
+        );
+      }
+    }
+
+    // Validate company if provided
+    if (company) {
+      const companyValidation = validateTextInput(company, 1, INPUT_LIMITS.company.max);
+      if (!companyValidation.isValid) {
+        return new Response(
+          JSON.stringify({
+            success: false,
+            error: companyValidation.error || 'Ungültiger Firmenname.',
+          }),
+          { status: 400, headers: { 'Content-Type': 'application/json' } }
+        );
+      }
+    }
+
+    // Validate product name if provided
+    if (productName) {
+      const productNameValidation = validateTextInput(productName, 1, INPUT_LIMITS.productName.max);
+      if (!productNameValidation.isValid) {
+        return new Response(
+          JSON.stringify({
+            success: false,
+            error: productNameValidation.error || 'Ungültiger Produktname.',
+          }),
+          { status: 400, headers: { 'Content-Type': 'application/json' } }
+        );
+      }
+    }
+
+    // Validate subject
+    const subjectValidation = validateTextInput(subject, 1, INPUT_LIMITS.subject.max);
+    if (!subjectValidation.isValid) {
+      return new Response(
+        JSON.stringify({
+          success: false,
+          error: subjectValidation.error || 'Ungültiger Betreff.',
+        }),
+        { status: 400, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // Validate optional text fields
+    if (pageTitle) {
+      const pageTitleValidation = validateTextInput(pageTitle, 1, INPUT_LIMITS.pageTitle.max);
+      if (!pageTitleValidation.isValid) {
+        return new Response(
+          JSON.stringify({
+            success: false,
+            error: pageTitleValidation.error || 'Ungültiger Seitentitel.',
+          }),
+          { status: 400, headers: { 'Content-Type': 'application/json' } }
+        );
+      }
+    }
+
+    if (sourceUrl) {
+      const sourceUrlValidation = validateTextInput(sourceUrl, 1, INPUT_LIMITS.url.max);
+      if (!sourceUrlValidation.isValid) {
+        return new Response(
+          JSON.stringify({
+            success: false,
+            error: sourceUrlValidation.error || 'Ungültige Quell-URL.',
+          }),
+          { status: 400, headers: { 'Content-Type': 'application/json' } }
+        );
+      }
+    }
+
+    // Create escaped versions for HTML emails
+    const nameEscaped = escapeHtml(name);
+    const emailEscaped = escapeHtml(email);
+    const phoneEscaped = phone ? escapeHtml(phone) : '';
+    const companyEscaped = company ? escapeHtml(company) : '';
+    const messageEscaped = escapeHtml(message);
+    const productNameEscaped = productName ? escapeHtml(productName) : '';
+    const pageTitleEscaped = pageTitle ? escapeHtml(pageTitle) : '';
+    const sourceUrlEscaped = sourceUrl ? escapeHtml(sourceUrl) : '';
 
     // Subject mapping for better email subjects
     const subjectMap: Record<string, string> = {
@@ -56,6 +205,7 @@ export const POST: APIRoute = async ({ request }) => {
     };
 
     const subjectText = subjectMap[subject] || subject;
+    const subjectTextEscaped = escapeHtml(subjectText);
 
     // Create email content for admin
     const adminEmailHtml = `
@@ -189,55 +339,55 @@ export const POST: APIRoute = async ({ request }) => {
               <h2>📋 Neue Anfrage erhalten</h2>
 
               <div style="margin-bottom: 20px;">
-                <span class="badge">${subjectText}</span>
-                ${pageTitle ? `<span class="badge">von: ${pageTitle}</span>` : ''}
+                <span class="badge">${subjectTextEscaped}</span>
+                ${pageTitle ? `<span class="badge">von: ${pageTitleEscaped}</span>` : ''}
               </div>
 
               <div class="field">
                 <div class="label">Name</div>
-                <div class="value">${name}</div>
+                <div class="value">${nameEscaped}</div>
               </div>
 
               <div class="field">
                 <div class="label">E-Mail</div>
-                <div class="value"><a href="mailto:${email}" style="color: #EBF222; text-decoration: none;">${email}</a></div>
+                <div class="value"><a href="mailto:${emailEscaped}" style="color: #EBF222; text-decoration: none;">${emailEscaped}</a></div>
               </div>
 
               ${phone ? `
               <div class="field">
                 <div class="label">Telefon</div>
-                <div class="value"><a href="tel:${phone}" style="color: #EBF222; text-decoration: none;">${phone}</a></div>
+                <div class="value"><a href="tel:${phoneEscaped}" style="color: #EBF222; text-decoration: none;">${phoneEscaped}</a></div>
               </div>
               ` : ''}
 
               ${company ? `
               <div class="field">
                 <div class="label">Firma</div>
-                <div class="value">${company}</div>
+                <div class="value">${companyEscaped}</div>
               </div>
               ` : ''}
 
               <div class="field">
                 <div class="label">Anfrage-Typ</div>
-                <div class="value">${subjectText}</div>
+                <div class="value">${subjectTextEscaped}</div>
               </div>
 
               ${productName ? `
               <div class="field">
                 <div class="label">Produkt</div>
-                <div class="value">${productName}</div>
+                <div class="value">${productNameEscaped}</div>
               </div>
               ` : ''}
 
               <div class="field">
                 <div class="label">Nachricht</div>
-                <div class="value" style="white-space: pre-wrap;">${message}</div>
+                <div class="value" style="white-space: pre-wrap;">${messageEscaped}</div>
               </div>
 
               ${sourceUrl ? `
               <div class="field">
                 <div class="label">Quelle</div>
-                <div class="value">${sourceUrl}</div>
+                <div class="value">${sourceUrlEscaped}</div>
               </div>
               ` : ''}
 
@@ -254,8 +404,8 @@ export const POST: APIRoute = async ({ request }) => {
               <p>${SITE_CONFIG.company.shortAddress}</p>
               <p>Tel: ${SITE_CONFIG.contact.displayPhone} · <a href="mailto:${SITE_CONFIG.contact.email}">${SITE_CONFIG.contact.email}</a></p>
               <div class="divider"></div>
-              <p>Diese Anfrage wurde über ${pageTitle || 'die Website'} gesendet.</p>
-              <p>Antworten Sie direkt an: <a href="mailto:${email}">${email}</a></p>
+              <p>Diese Anfrage wurde über ${pageTitleEscaped || 'die Website'} gesendet.</p>
+              <p>Antworten Sie direkt an: <a href="mailto:${emailEscaped}">${emailEscaped}</a></p>
             </div>
           </div>
         </body>
@@ -290,7 +440,7 @@ Antworten Sie direkt an: ${email}
     // Send email to admin
     await sendEmail({
       to: SITE_CONFIG.contact.email,
-      subject: `Neue Anfrage: ${subjectText} - ${name}`,
+      subject: `Neue Anfrage: ${subjectText} - ${name}`, // Email subject is plain text, use validated not escaped
       html: adminEmailHtml,
       text: adminEmailText,
     });
@@ -406,12 +556,12 @@ Antworten Sie direkt an: ${email}
             <div class="content">
               <h2>✓ Vielen Dank für Ihre Anfrage!</h2>
 
-              <p>Hallo ${name},</p>
+              <p>Hallo ${nameEscaped},</p>
               <p>vielen Dank für Ihre Anfrage. Wir haben Ihre Nachricht erhalten und werden uns schnellstmöglich bei Ihnen melden.</p>
 
               <div class="message-box">
                 <p><strong>Ihre Anfrage:</strong></p>
-                <p style="white-space: pre-wrap; margin: 10px 0 0 0; color: #595959;">${message}</p>
+                <p style="white-space: pre-wrap; margin: 10px 0 0 0; color: #595959;">${messageEscaped}</p>
               </div>
 
               <p>In der Regel antworten wir innerhalb von 24 Stunden. Bei dringenden Fragen können Sie uns auch telefonisch erreichen:</p>
