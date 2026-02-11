@@ -1,5 +1,17 @@
 ---
 import Layout from './Layout.astro';
+import {
+  LayoutDashboard,
+  Package,
+  Inbox,
+  Users,
+  Box,
+  FolderTree,
+  Truck,
+  FileText,
+  Settings,
+  User
+} from '@lucide/astro';
 
 interface Props {
   title: string;
@@ -9,62 +21,30 @@ interface Props {
 const { title, currentPage = 'dashboard' } = Astro.props;
 const user = Astro.locals.user;
 
+// Lucide icon components per tab
+const navIcons: Record<string, typeof LayoutDashboard> = {
+  dashboard: LayoutDashboard,
+  orders: Package,
+  anfragen: Inbox,
+  users: Users,
+  products: Box,
+  categories: FolderTree,
+  shipping: Truck,
+  'email-templates': FileText,
+  settings: Settings
+};
+
 // Navigation items
 const navItems = [
-  {
-    name: 'Dashboard',
-    href: '/admin',
-    icon: 'M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z',
-    id: 'dashboard'
-  },
-  {
-    name: 'Bestellungen',
-    href: '/admin/orders',
-    icon: 'M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z',
-    id: 'orders'
-  },
-  {
-    name: 'Anfragen',
-    href: '/admin/anfragen',
-    icon: 'M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75',
-    id: 'anfragen'
-  },
-  {
-    name: 'Benutzer',
-    href: '/admin/users',
-    icon: 'M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z',
-    id: 'users'
-  },
-  {
-    name: 'Produkte',
-    href: '/admin/products',
-    icon: 'M4 4h16v2H4V4zm0 5h16v2H4V9zm0 5h16v2H4v-2zm0 5h16v2H4v-2z',
-    id: 'products'
-  },
-  {
-    name: 'Kategorien',
-    href: '/admin/categories',
-    icon: 'M3 4h18v2H3V4zm0 7h12v2H3v-2zm0 7h18v2H3v-2z',
-    id: 'categories'
-  },
-  {
-    name: 'Versand',
-    href: '/admin/shipping',
-    icon: 'M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z',
-    id: 'shipping'
-  },
-  {
-    name: 'E-Mail-Vorlagen',
-    href: '/admin/email-templates',
-    icon: 'M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75',
-    id: 'email-templates'
-  },
-  {
-    name: 'Einstellungen',
-    href: '/admin/settings',
-    icon: 'M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94L14.4 2.81c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z',
-    id: 'settings'
-  }
+  { name: 'Dashboard', href: '/admin', id: 'dashboard' },
+  { name: 'Bestellungen', href: '/admin/orders', id: 'orders' },
+  { name: 'Anfragen', href: '/admin/anfragen', id: 'anfragen' },
+  { name: 'Benutzer', href: '/admin/users', id: 'users' },
+  { name: 'Produkte', href: '/admin/products', id: 'products' },
+  { name: 'Kategorien', href: '/admin/categories', id: 'categories' },
+  { name: 'Versand', href: '/admin/shipping', id: 'shipping' },
+  { name: 'E-Mail-Vorlagen', href: '/admin/email-templates', id: 'email-templates' },
+  { name: 'Einstellungen', href: '/admin/settings', id: 'settings' }
 ];
 ---
 
@@ -87,9 +67,7 @@ const navItems = [
               <p class="text-xs text-base-content/60">Administrator</p>
             </div>
             <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6" style="color: var(--color-metrics-text);">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
-              </svg>
+              <User class="w-6 h-6" stroke-width={1.5} />
             </div>
           </div>
         </div>
@@ -100,22 +78,23 @@ const navItems = [
     <div class="bg-base-100 border-b border-base-300">
       <div class="max-w-7xl lg:max-w-7xl-extended mx-auto px-4 sm:px-6 lg:px-8">
         <nav class="flex gap-1">
-          {navItems.map((item) => (
-            <a
-              href={item.href}
-              class:list={[
-                "flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors border-b-2",
-                currentPage === item.id
-                  ? "admin-tab-active"
-                  : "text-base-content/70 hover:text-base-content border-transparent hover:border-base-300"
-              ]}
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5" style="color: var(--color-metrics-text);">
-                <path d={item.icon} />
-              </svg>
-              {item.name}
-            </a>
-          ))}
+          {navItems.map((item) => {
+            const IconComponent = navIcons[item.id];
+            return (
+              <a
+                href={item.href}
+                class:list={[
+                  "flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors border-b-2",
+                  currentPage === item.id
+                    ? "admin-tab-active"
+                    : "text-base-content/70 hover:text-base-content border-transparent hover:border-base-300"
+                ]}
+              >
+                {IconComponent && <IconComponent class="w-5 h-5 shrink-0" stroke-width={1.5} />}
+                {item.name}
+              </a>
+            );
+          })}
         </nav>
       </div>
     </div>

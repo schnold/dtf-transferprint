@@ -8,6 +8,18 @@ export default defineConfig({
   output: "server",
   adapter: netlify(),
   integrations: [tailwind()],
+  image: {
+    // Enable image optimization
+    service: {
+      entrypoint: 'astro/assets/services/sharp'
+    },
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "**.gorfactory.es"
+      }
+    ]
+  },
   env: {
     schema: {
       PUBLIC_BETTER_AUTH_URL: envField.string({

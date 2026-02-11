@@ -1,0 +1,366 @@
+---
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import { getOrderWithDetails } from '../../../lib/db';
+import { FileText, Download, Eye, Package, User, MapPin, Clock } from '@lucide/astro';
+
+const { id } = Astro.params;
+
+if (!id) {
+	return Astro.redirect('/admin/orders');
+}
+
+// Fetch order with full details
+let order;
+try {
+	order = await getOrderWithDetails(id);
+} catch (error) {
+	console.error('Error fetching order:', error);
+	return Astro.redirect('/admin/orders');
+}
+
+if (!order) {
+	return Astro.redirect('/admin/orders');
+}
+
+const formatPrice = (price: number | string) => {
+	const numPrice = typeof price === 'string' ? parseFloat(price) : price;
+	return new Intl.NumberFormat('de-DE', {
+		style: 'currency',
+		currency: 'EUR'
+	}).format(numPrice);
+};
+
+const formatDate = (date: string | Date) => {
+	return new Intl.DateTimeFormat('de-DE', {
+		day: '2-digit',
+		month: '2-digit',
+		year: 'numeric',
+		hour: '2-digit',
+		minute: '2-digit',
+	}).format(new Date(date));
+};
+
+const formatFileSize = (bytes: number) => {
+	if (bytes < 1024) return `${bytes} B`;
+	if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+	return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+};
+
+const getStatusBadge = (status: string, fulfillmentStatus?: string) => {
+	if (status === 'processing' && fulfillmentStatus === 'unfulfilled') {
+		return 'badge-info';
+	} else if (status === 'processing' && fulfillmentStatus === 'fulfilled') {
+		return 'badge-warning';
+	} else if (status === 'shipped') {
+		return 'badge-primary';
+	} else if (status === 'delivered') {
+		return 'badge-success';
+	}
+	return 'badge-ghost';
+};
+
+const getStatusText = (status: string, fulfillmentStatus?: string) => {
+	if (status === 'processing' && fulfillmentStatus === 'unfulfilled') {
+		return 'In Bearbeitung';
+	} else if (status === 'processing' && fulfillmentStatus === 'fulfilled') {
+		return 'Versandfertig';
+	} else if (status === 'shipped') {
+		return 'Versendet';
+	} else if (status === 'delivered') {
+		return 'Abgeschlossen';
+	}
+	return status;
+};
+---
+
+<AdminLayout title={`Bestellung ${order.orderNumber}`} currentPage="orders">
+	<div class="max-w-7xl mx-auto">
+		<!-- Back Button -->
+		<div class="mb-6">
+			<a href="/admin/orders" class="btn btn-ghost btn-sm gap-2">
+				← Zurück zu Bestellungen
+			</a>
+		</div>
+
+		<!-- Order Header -->
+		<div class="bg-base-100 rounded-xl border border-base-300 shadow-sm p-6 mb-6">
+			<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+				<div>
+					<h1 class="text-3xl font-bold text-base-content mb-2">
+						Bestellung {order.orderNumber}
+					</h1>
+					<div class="flex flex-wrap gap-2">
+						<div class={`badge ${getStatusBadge(order.status, order.fulfillmentStatus)}`}>
+							{getStatusText(order.status, order.fulfillmentStatus)}
+						</div>
+						{order.paymentStatus === 'paid' && (
+							<div class="badge badge-success">Bezahlt</div>
+						)}
+					</div>
+				</div>
+				<div class="text-right">
+					<p class="text-3xl font-bold text-primary">{formatPrice(order.total)}</p>
+					<p class="text-sm text-base-content/60">
+						<Clock class="inline-block w-4 h-4 mr-1" />
+						{formatDate(order.createdAt)}
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+			<!-- Main Content -->
+			<div class="lg:col-span-2 space-y-6">
+				<!-- Order Items -->
+				<div class="bg-base-100 rounded-xl border border-base-300 shadow-sm overflow-hidden">
+					<div class="bg-gradient-to-r from-base-200/50 to-base-100/50 px-6 py-4 border-b border-base-300">
+						<h2 class="text-xl font-bold text-base-content flex items-center gap-2">
+							<Package class="w-5 h-5" />
+							Bestellte Artikel
+						</h2>
+					</div>
+					<div class="p-6 space-y-6">
+						{order.items.map((item: any) => (
+							<div class="border-b border-base-300 pb-6 last:border-0 last:pb-0">
+								<!-- Product Info -->
+								<div class="flex justify-between items-start mb-4">
+									<div>
+										<h3 class="font-bold text-lg text-base-content">{item.productName}</h3>
+										{item.sku && (
+											<p class="text-sm text-base-content/60">SKU: {item.sku}</p>
+										)}
+									</div>
+									<div class="text-right">
+										<p class="font-bold text-lg">{formatPrice(item.totalPrice)}</p>
+										<p class="text-sm text-base-content/60">
+											{item.quantity}x {formatPrice(item.unitPrice)}
+										</p>
+									</div>
+								</div>
+
+								<!-- Custom Options -->
+								{item.customOptions && (
+									<div class="bg-base-200/50 rounded-lg p-3 mb-4">
+										<p class="text-sm font-medium text-base-content/80 mb-2">Konfiguration:</p>
+										<div class="grid grid-cols-2 gap-2 text-sm">
+											{item.customOptions.widthMm && (
+												<p><strong>Breite:</strong> {item.customOptions.widthMm} mm</p>
+											)}
+											{item.customOptions.heightMm && (
+												<p><strong>Höhe:</strong> {item.customOptions.heightMm} mm</p>
+											)}
+										</div>
+									</div>
+								)}
+
+								<!-- Uploaded Design File -->
+								{item.uploadedFileUrl && (
+									<div class="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950/30 dark:to-indigo-950/30 rounded-lg p-4 border border-blue-200 dark:border-blue-800">
+										<h4 class="font-semibold text-base-content mb-3 flex items-center gap-2">
+											<FileText class="w-4 h-4" />
+											Hochgeladene Designdatei
+										</h4>
+
+										<!-- File Preview (for images) -->
+										{item.uploadedFileUrl.toLowerCase().match(/\.(png|jpg|jpeg)$/) && (
+											<div class="mb-4">
+												<img
+													src={item.uploadedFileUrl}
+													alt={item.uploadedFileName || 'Design'}
+													class="max-w-full h-auto max-h-64 rounded-lg border border-base-300 mx-auto"
+												/>
+											</div>
+										)}
+
+										<!-- File Info -->
+										<div class="space-y-2 mb-4">
+											<p class="text-sm">
+												<strong>Dateiname:</strong> {item.uploadedFileName || 'Unbekannt'}
+											</p>
+
+											{/* Display file metadata if available */}
+											{item.fileMetadata && (
+												<>
+													{item.fileMetadata.fileType && (
+														<p class="text-sm">
+															<strong>Typ:</strong> {item.fileMetadata.fileType.toUpperCase()}
+														</p>
+													)}
+													{item.fileMetadata.fileSize && (
+														<p class="text-sm">
+															<strong>Größe:</strong> {formatFileSize(item.fileMetadata.fileSize)}
+														</p>
+													)}
+													{item.fileMetadata.width && item.fileMetadata.height && (
+														<p class="text-sm">
+															<strong>Abmessungen:</strong> {item.fileMetadata.width} x {item.fileMetadata.height} px
+														</p>
+													)}
+													{item.fileMetadata.dpi && (
+														<p class="text-sm">
+															<strong>DPI:</strong> {item.fileMetadata.dpi}
+														</p>
+													)}
+													{item.fileMetadata.meetsRequirements !== undefined && (
+														<div class={`text-sm font-medium ${item.fileMetadata.meetsRequirements ? 'text-success' : 'text-warning'}`}>
+															{item.fileMetadata.meetsRequirements ? '✓ Erfüllt Qualitätsanforderungen' : '⚠ Qualitätswarnungen vorhanden'}
+														</div>
+													)}
+													{item.fileMetadata.warnings && item.fileMetadata.warnings.length > 0 && (
+														<div class="bg-warning/10 border border-warning/30 rounded-md p-2 mt-2">
+															<p class="text-xs font-medium text-warning mb-1">Warnungen:</p>
+															<ul class="text-xs list-disc list-inside space-y-1 text-base-content/80">
+																{item.fileMetadata.warnings.map((warning: string) => (
+																	<li>{warning}</li>
+																))}
+															</ul>
+														</div>
+													)}
+												</>
+											)}
+										</div>
+
+										<!-- Action Buttons -->
+										<div class="flex flex-wrap gap-2">
+											<a
+												href={item.uploadedFileUrl}
+												target="_blank"
+												class="btn btn-sm btn-primary gap-2"
+											>
+												<Eye class="w-4 h-4" />
+												Vollbild ansehen
+											</a>
+											<a
+												href={item.uploadedFileUrl}
+												download
+												class="btn btn-sm btn-outline gap-2"
+											>
+												<Download class="w-4 h-4" />
+												Herunterladen
+											</a>
+										</div>
+									</div>
+								)}
+							</div>
+						))}
+					</div>
+				</div>
+
+				<!-- Order Summary -->
+				<div class="bg-base-100 rounded-xl border border-base-300 shadow-sm overflow-hidden">
+					<div class="bg-gradient-to-r from-base-200/50 to-base-100/50 px-6 py-4 border-b border-base-300">
+						<h2 class="text-xl font-bold text-base-content">Zusammenfassung</h2>
+					</div>
+					<div class="p-6 space-y-3">
+						<div class="flex justify-between text-sm">
+							<span class="text-base-content/70">Zwischensumme</span>
+							<span class="font-medium">{formatPrice(order.subtotal)}</span>
+						</div>
+						{parseFloat(order.discountAmount) > 0 && (
+							<div class="flex justify-between text-sm text-success">
+								<span>
+									Rabatt
+									{order.discountCode && <span class="ml-1">({order.discountCode})</span>}
+								</span>
+								<span class="font-medium">-{formatPrice(order.discountAmount)}</span>
+							</div>
+						)}
+						{parseFloat(order.userDiscountPercent) > 0 && (
+							<div class="flex justify-between text-sm text-info">
+								<span>Kundenrabatt ({order.userDiscountPercent}%)</span>
+								<span class="font-medium">Inkludiert</span>
+							</div>
+						)}
+						<div class="flex justify-between text-sm">
+							<span class="text-base-content/70">Versand</span>
+							<span class="font-medium">{formatPrice(order.shippingCost)}</span>
+						</div>
+						<div class="flex justify-between text-sm">
+							<span class="text-base-content/70">MwSt. (19%)</span>
+							<span class="font-medium">{formatPrice(order.taxAmount)}</span>
+						</div>
+						<div class="border-t border-base-300 pt-3 mt-3">
+							<div class="flex justify-between text-lg font-bold">
+								<span>Gesamt</span>
+								<span class="text-primary">{formatPrice(order.total)}</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Sidebar -->
+			<div class="space-y-6">
+				<!-- Customer Info -->
+				<div class="bg-base-100 rounded-xl border border-base-300 shadow-sm overflow-hidden">
+					<div class="bg-gradient-to-r from-base-200/50 to-base-100/50 px-6 py-4 border-b border-base-300">
+						<h2 class="text-lg font-bold text-base-content flex items-center gap-2">
+							<User class="w-5 h-5" />
+							Kunde
+						</h2>
+					</div>
+					<div class="p-6">
+						<p class="font-medium text-base-content mb-1">{order.user.name}</p>
+						<p class="text-sm text-base-content/60">{order.user.email}</p>
+					</div>
+				</div>
+
+				<!-- Shipping Address -->
+				{order.shippingAddress && (
+					<div class="bg-base-100 rounded-xl border border-base-300 shadow-sm overflow-hidden">
+						<div class="bg-gradient-to-r from-base-200/50 to-base-100/50 px-6 py-4 border-b border-base-300">
+							<h2 class="text-lg font-bold text-base-content flex items-center gap-2">
+								<MapPin class="w-5 h-5" />
+								Versandadresse
+							</h2>
+						</div>
+						<div class="p-6 text-sm space-y-1">
+							<p class="font-medium">{order.shippingAddress.firstName} {order.shippingAddress.lastName}</p>
+							{order.shippingAddress.company && <p>{order.shippingAddress.company}</p>}
+							<p>{order.shippingAddress.street}</p>
+							{order.shippingAddress.addressLine2 && <p>{order.shippingAddress.addressLine2}</p>}
+							<p>{order.shippingAddress.postalCode} {order.shippingAddress.city}</p>
+							<p>{order.shippingAddress.country}</p>
+							{order.shippingAddress.phone && <p class="mt-2">Tel: {order.shippingAddress.phone}</p>}
+						</div>
+					</div>
+				)}
+
+				<!-- Tracking Info -->
+				{order.trackingNumber && (
+					<div class="bg-base-100 rounded-xl border border-base-300 shadow-sm overflow-hidden">
+						<div class="bg-gradient-to-r from-base-200/50 to-base-100/50 px-6 py-4 border-b border-base-300">
+							<h2 class="text-lg font-bold text-base-content">Sendungsverfolgung</h2>
+						</div>
+						<div class="p-6">
+							<p class="text-sm mb-2"><strong>Tracking-Nr.:</strong> {order.trackingNumber}</p>
+							{order.trackingUrl && (
+								<a href={order.trackingUrl} target="_blank" class="btn btn-sm btn-outline w-full">
+									Sendung verfolgen
+								</a>
+							)}
+						</div>
+					</div>
+				)}
+
+				<!-- Payment Info -->
+				<div class="bg-base-100 rounded-xl border border-base-300 shadow-sm overflow-hidden">
+					<div class="bg-gradient-to-r from-base-200/50 to-base-100/50 px-6 py-4 border-b border-base-300">
+						<h2 class="text-lg font-bold text-base-content">Zahlung</h2>
+					</div>
+					<div class="p-6 space-y-2 text-sm">
+						<p><strong>Status:</strong> <span class="badge badge-success badge-sm">Bezahlt</span></p>
+						<p><strong>Methode:</strong> PayPal</p>
+						{order.paypalOrderId && (
+							<p class="text-xs text-base-content/60">PayPal Order: {order.paypalOrderId}</p>
+						)}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</AdminLayout>
+
+<style>
+	/* Add any custom styles here */
+</style>

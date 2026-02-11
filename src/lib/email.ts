@@ -49,7 +49,12 @@ export async function sendEmail(options: EmailOptions): Promise<void> {
   const resendClient = getResendClient();
 
   try {
-    const fromEmail = process.env.RESEND_FROM_EMAIL || 'info@byselini.de';
+    // Normalize: if env value is "KEY=email" (e.g. misconfigured), use only the email part
+    let fromEmail = process.env.RESEND_FROM_EMAIL || 'info@byselini.de';
+    if (fromEmail.includes('=')) {
+      const afterFirstEq = fromEmail.indexOf('=') + 1;
+      fromEmail = fromEmail.slice(afterFirstEq).trim();
+    }
     const { data, error } = await resendClient.emails.send({
       from: `Selini-Shirt <${fromEmail}>`,
       to: options.to,

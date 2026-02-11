@@ -103,23 +103,39 @@ export const POST: APIRoute = async ({ request, locals }) => {
     const metadata = await extractFileMetadata(buffer, file.name, fileType, requirements);
 
     // Generate unique filename with user ID prefix for organization
+    // Upload to TEMP storage - will be migrated to permanent after payment
     const timestamp = Date.now();
     const sanitizedFileName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
-    const uniqueFileName = `design-files/${userId}/${timestamp}-${sanitizedFileName}`;
+    const uniqueFileName = `temp-uploads/${userId}/${timestamp}-${sanitizedFileName}`;
 
     // Upload to R2
     const fileUrl = await uploadToR2(buffer, uniqueFileName, file.type);
+
+    // Store temp file record in database
+    const sessionId = `temp-${userId}-${timestamp}`; // Session ID for tracking
+    const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours from now
+
+    const insertResult = await client.query(
+      `INSERT INTO "tempUploadedFiles"
+       ("userId", "sessionId", "tempFileUrl", "fileName", "fileSize", "fileType", "fileMetadata", "expiresAt")
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+       RETURNING id`,
+      [userId, sessionId, fileUrl, file.name, file.size, fileType, JSON.stringify(metadata), expiresAt]
+    );
+
+    const tempFileId = insertResult.rows[0].id;
 
     return new Response(
       JSON.stringify({
         success: true,
         data: {
+          tempFileId,
           fileUrl,
           fileName: file.name,
           fileSize: file.size,
           fileType,
           metadata,
-          message: 'Design file uploaded successfully',
+          message: 'Design file uploaded successfully to temporary storage',
         },
       }),
       { status: 200, headers: { 'Content-Type': 'application/json' } }

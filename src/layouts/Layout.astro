@@ -42,9 +42,14 @@ const {
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
+		<!-- Preconnect to external domains for faster resource loading -->
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-		<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+		<!-- Load fonts with display=swap to prevent FOIT (Flash of Invisible Text) -->
+		<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+		<noscript>
+			<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+		</noscript>
 		<title>{title}</title>
 		<SEOHead
 			title={title}
@@ -68,8 +73,9 @@ const {
 			foundingDate={foundingDate}
 		/>
 		{includeWebSiteSchema && <WebSiteSchema />}
-    <script>
+    <script type="module">
       // Simple intersection observer for scroll animations
+      // Using type="module" for better browser support and async loading
       document.addEventListener('DOMContentLoaded', () => {
         // Check if user prefers reduced motion
         // @ts-ignore

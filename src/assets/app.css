@@ -1,6 +1,18 @@
+/* Performance optimization: Load Tailwind layers */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Critical CSS: Font loading optimization */
+@font-face {
+  font-family: 'DM Sans';
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-display: swap;
+}
 
 /* Color Palette */
 :root {
@@ -172,6 +184,45 @@
 }
 
 .why-choose-title-brush.is-visible::after {
+  animation: hero-title-brush-swipe 1s cubic-bezier(0.33, 1, 0.28, 1) 0.2s both;
+}
+
+/* Brush stroke under testimonial section heading (animates when in view) */
+.testimonial-title-brush {
+  position: relative;
+  display: inline-block;
+}
+
+.testimonial-title-brush::after {
+  content: '';
+  position: absolute;
+  left: -2%;
+  right: -2%;
+  width: 104%;
+  bottom: 0.02em;
+  height: 0.65em;
+  background-color: var(--color-accent);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: left center;
+  mask-image: url('/images/hero-brushes/brush02.svg');
+  -webkit-mask-image: url('/images/hero-brushes/brush02.svg');
+  mask-size: cover;
+  mask-repeat: no-repeat;
+  mask-position: left center;
+  mask-origin: border-box;
+  -webkit-mask-size: cover;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: left center;
+  -webkit-mask-origin: border-box;
+  z-index: -1;
+  opacity: 0.35;
+  clip-path: inset(0 100% 0 0);
+  -webkit-clip-path: inset(0 100% 0 0);
+  transition: none;
+}
+
+.testimonial-title-brush.is-visible::after {
   animation: hero-title-brush-swipe 1s cubic-bezier(0.33, 1, 0.28, 1) 0.2s both;
 }
 
@@ -420,10 +471,10 @@
     text-decoration: underline;
   }
 
-  /* Ensure proper button sizing and padding */
+  /* Ensure proper button sizing and padding - minimum 48px touch targets for accessibility */
   .btn {
     padding: 0.75rem 1.5rem;
-    min-height: 3rem;
+    min-height: 3rem; /* 48px minimum for touch targets */
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -432,8 +483,65 @@
   /* Override small button sizing for better readability */
   .btn-sm {
     padding: 0.5rem 1rem;
-    min-height: 2.5rem;
+    min-height: 3rem; /* Updated from 2.5rem to 3rem for better touch targets */
     font-size: 0.875rem;
+  }
+
+  /* Touch target minimum sizes for mobile accessibility */
+  @media (max-width: 1024px) {
+    /* Ensure all interactive elements have minimum 48x48px touch targets */
+    button,
+    a.btn,
+    .btn,
+    input[type="button"],
+    input[type="submit"],
+    input[type="reset"] {
+      min-height: 3rem; /* 48px */
+      min-width: 3rem;
+    }
+
+    /* Links in navigation should have adequate spacing */
+    nav a,
+    .navbar a,
+    .menu a {
+      padding: 0.75rem 1rem;
+      min-height: 3rem;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    /* Dropdown items */
+    .dropdown-content li a,
+    .menu li a {
+      padding: 0.75rem 1.5rem;
+      min-height: 3rem;
+      display: flex;
+      align-items: center;
+    }
+
+    /* FAQ toggle labels */
+    .faq-label {
+      min-height: 3.5rem;
+      padding: 1rem 1.5rem;
+    }
+
+    /* Radio buttons and checkboxes - increase touch area */
+    input[type="radio"],
+    input[type="checkbox"],
+    .radio,
+    .checkbox {
+      min-width: 1.5rem;
+      min-height: 1.5rem;
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+
+    /* Icon buttons should have adequate size */
+    .btn-circle,
+    button[aria-label] {
+      min-width: 3rem;
+      min-height: 3rem;
+    }
   }
 
   /* Increase border radius for more rounded buttons */

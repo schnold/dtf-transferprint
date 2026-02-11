@@ -1,6 +1,7 @@
 ---
 import AdminLayout from '../../layouts/AdminLayout.astro';
 import { getAllOrders } from '../../lib/db';
+import { RefreshCw, PackageCheck, Truck, CircleCheck, Eye, FileText } from '@lucide/astro';
 
 // Fetch all orders
 const { orders, totalCount } = await getAllOrders({ limit: 100 });
@@ -56,17 +57,21 @@ const formatDate = (date: string) => {
 		</div>
 	</div>
 
-	<!-- Tab Navigation -->
-	<div role="tablist" class="tabs tabs-boxed mb-6 bg-base-200">
-		<a role="tab" class="tab tab-active" data-filter="all">Alle ({totalCount})</a>
-		<a role="tab" class="tab" data-filter="processing-unfulfilled">In Bearbeitung ({inProgressCount})</a>
-		<a role="tab" class="tab" data-filter="processing-fulfilled">Versandfertig ({readyCount})</a>
-		<a role="tab" class="tab" data-filter="shipped">Versendet ({shippedCount})</a>
-		<a role="tab" class="tab" data-filter="delivered">Abgeschlossen ({deliveredCount})</a>
-	</div>
+	<!-- Tab bar + Table (single panel) -->
+	<div class="orders-panel rounded-xl border border-base-300/50 shadow-md overflow-hidden bg-base-100">
+		<!-- Tab Navigation (real-tabs style) -->
+		<div class="orders-status-tabs">
+			<div role="tablist" class="orders-status-tablist">
+				<a role="tab" class="orders-status-tab orders-status-tab-active" data-filter="all" href="#">Alle ({totalCount})</a>
+				<a role="tab" class="orders-status-tab" data-filter="processing-unfulfilled" href="#">In Bearbeitung ({inProgressCount})</a>
+				<a role="tab" class="orders-status-tab" data-filter="processing-fulfilled" href="#">Versandfertig ({readyCount})</a>
+				<a role="tab" class="orders-status-tab" data-filter="shipped" href="#">Versendet ({shippedCount})</a>
+				<a role="tab" class="orders-status-tab" data-filter="delivered" href="#">Abgeschlossen ({deliveredCount})</a>
+			</div>
+		</div>
 
-	<!-- Orders Table -->
-	<div class="orders-table-wrapper bg-base-100 rounded-lg shadow-md border border-base-300/50">
+		<!-- Orders Table -->
+		<div class="orders-table-wrapper">
 		<table class="table table-sm">
 			<thead class="bg-gradient-to-r from-base-200/50 to-base-100/50">
 				<tr>
@@ -111,13 +116,27 @@ const formatDate = (date: string) => {
 						? 'Abgeschlossen'
 						: order.status;
 
+					// Check if order has uploaded files
+					const hasUploadedFiles = order.itemCount > 0; // Simplified check, could query for actual files
+
 					return (
 						<tr class={`hover ${filterClass}`} data-order-id={order.id}>
 							<td>
-								<div class="font-semibold text-neutral">{order.orderNumber}</div>
-								{order.paymentStatus === 'paid' && (
-									<span class="badge badge-xs badge-success">Bezahlt</span>
-								)}
+								<div class="flex items-center gap-2">
+									<div>
+										<div class="font-semibold text-neutral">{order.orderNumber}</div>
+										<div class="flex gap-1 mt-1">
+											{order.paymentStatus === 'paid' && (
+												<span class="badge badge-xs badge-success">Bezahlt</span>
+											)}
+											{hasUploadedFiles && (
+												<span class="badge badge-xs badge-info" title="Hat hochgeladene Dateien">
+													<FileText class="w-3 h-3" />
+												</span>
+											)}
+										</div>
+									</div>
+								</div>
 							</td>
 							<td>
 								<div class="font-medium">{order.userName || 'N/A'}</div>
@@ -131,49 +150,55 @@ const formatDate = (date: string) => {
 							<td class="text-sm">{formatDate(order.createdAt)}</td>
 							<td>
 								<div class="flex gap-1">
+									<!-- View Details -->
+									<div class="tooltip tooltip-top" data-tip="Details ansehen">
+										<a
+											href={`/admin/orders/${order.id}`}
+											class="btn btn-ghost btn-xs"
+										>
+											<Eye class="w-4 h-4 text-accent shrink-0" stroke-width={1.5} />
+										</a>
+									</div>
+
 									<!-- In Bearbeitung -->
-									<button
-										class="btn btn-ghost btn-xs tooltip"
-										data-tip="In Bearbeitung"
-										onclick={`updateStatus('${order.id}', 'processing', 'unfulfilled')`}
-									>
-										<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-info">
-											<path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
-										</svg>
-									</button>
+									<div class="tooltip tooltip-top" data-tip="In Bearbeitung">
+										<button
+											class="btn btn-ghost btn-xs"
+											onclick={`updateStatus('${order.id}', 'processing', 'unfulfilled')`}
+										>
+											<RefreshCw class="w-4 h-4 text-info shrink-0" stroke-width={1.5} />
+										</button>
+									</div>
 
 									<!-- Versandfertig -->
-									<button
-										class="btn btn-ghost btn-xs tooltip"
-										data-tip="Versandfertig"
-										onclick={`updateStatus('${order.id}', 'processing', 'fulfilled')`}
-									>
-										<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-warning">
-											<path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
-										</svg>
-									</button>
+									<div class="tooltip tooltip-top" data-tip="Versandfertig">
+										<button
+											class="btn btn-ghost btn-xs"
+											onclick={`updateStatus('${order.id}', 'processing', 'fulfilled')`}
+										>
+											<PackageCheck class="w-4 h-4 text-warning shrink-0" stroke-width={1.5} />
+										</button>
+									</div>
 
 									<!-- Versendet -->
-									<button
-										class="btn btn-ghost btn-xs tooltip"
-										data-tip="Versendet"
-										onclick={`openTrackingModal('${order.id}', '${order.orderNumber}')`}
-									>
-										<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-primary">
-											<path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.125-.504 1.125-1.125V11.25m-18 0v-1.5a1.5 1.5 0 011.5-1.5h1.5m-3 4.5h18m0 0v3.75a1.5 1.5 0 01-1.5 1.5H6a1.5 1.5 0 01-1.5-1.5V12m15 0V9.75a1.5 1.5 0 00-1.5-1.5h-12a1.5 1.5 0 00-1.5 1.5V12" />
-										</svg>
-									</button>
+									<div class="tooltip tooltip-top" data-tip="Versendet">
+										<button
+											class="btn btn-ghost btn-xs"
+											onclick={`openTrackingModal('${order.id}', '${order.orderNumber}')`}
+										>
+											<Truck class="w-4 h-4 text-primary shrink-0" stroke-width={1.5} />
+										</button>
+									</div>
 
 									<!-- Abgeschlossen -->
-									<button
-										class="btn btn-ghost btn-xs tooltip"
-										data-tip="Abgeschlossen"
-										onclick={`updateStatus('${order.id}', 'delivered')`}
-									>
-										<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-success">
-											<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-										</svg>
-									</button>
+									<div class="tooltip tooltip-top" data-tip="Abgeschlossen">
+										<button
+											class="btn btn-ghost btn-xs"
+											onclick={`updateStatus('${order.id}', 'delivered')`}
+										>
+											<CircleCheck class="w-4 h-4 text-success shrink-0" stroke-width={1.5} />
+										</button>
+									</div>
 								</div>
 							</td>
 						</tr>
@@ -181,6 +206,7 @@ const formatDate = (date: string) => {
 				})}
 			</tbody>
 		</table>
+		</div>
 	</div>
 
 	<!-- Tracking Modal -->
@@ -253,29 +279,25 @@ const formatDate = (date: string) => {
 
 <script>
 	// Tab filtering
-	const tabs = document.querySelectorAll('.tab');
-	const rows = document.querySelectorAll('#orders-table-body tr');
+	const tabs = document.querySelectorAll('.orders-status-tab');
+	const rows = document.querySelectorAll<HTMLElement>('#orders-table-body tr');
 
 	tabs.forEach(tab => {
 		tab.addEventListener('click', (e) => {
 			e.preventDefault();
 
 			// Update active tab
-			tabs.forEach(t => t.classList.remove('tab-active'));
-			tab.classList.add('tab-active');
+			tabs.forEach(t => t.classList.remove('orders-status-tab-active'));
+			tab.classList.add('orders-status-tab-active');
 
 			const filter = tab.getAttribute('data-filter');
 
 			// Filter rows
-			rows.forEach(row => {
+			rows.forEach((row) => {
 				if (filter === 'all') {
 					row.style.display = '';
 				} else {
-					if (row.classList.contains(`filter-${filter}`)) {
-						row.style.display = '';
-					} else {
-						row.style.display = 'none';
-					}
+					row.style.display = row.classList.contains(`filter-${filter}`) ? '' : 'none';
 				}
 			});
 		});
@@ -407,7 +429,62 @@ const formatDate = (date: string) => {
 		border-color: var(--color-metrics-text);
 	}
 
+	/* Status tabs: real tab bar look, active tab connects to content */
+	.orders-status-tabs {
+		border-bottom: 1px solid var(--color-base-300);
+		background: var(--color-base-200);
+	}
+
+	.orders-status-tablist {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0;
+		padding: 0 0.5rem 0 0.5rem;
+		min-height: 2.75rem;
+	}
+
+	.orders-status-tab {
+		display: inline-flex;
+		align-items: center;
+		padding: 0.5rem 1rem;
+		font-size: 0.875rem;
+		font-weight: 500;
+		color: var(--color-neutral);
+		background: transparent;
+		border: 1px solid transparent;
+		border-bottom: none;
+		border-radius: 0.375rem 0.375rem 0 0;
+		margin-bottom: -1px;
+		transition: background 0.15s, color 0.15s, border-color 0.15s;
+		text-decoration: none;
+		cursor: pointer;
+	}
+
+	.orders-status-tab:hover {
+		background: rgba(0, 0, 0, 0.05);
+		color: var(--color-neutral);
+	}
+
+	.orders-status-tab-active {
+		background: var(--color-base-100);
+		color: var(--color-neutral);
+		border-color: var(--color-base-300);
+		border-bottom: 1px solid var(--color-base-100);
+		font-weight: 600;
+	}
+
+	.orders-status-tab-active:hover {
+		background: var(--color-base-100);
+		color: var(--color-neutral);
+	}
+
 	.orders-table-wrapper {
 		overflow-x: auto;
+	}
+
+	/* Ensure tooltips in the actions column are visible above the table */
+	.orders-table-wrapper .tooltip {
+		position: relative;
+		z-index: 1;
 	}
 </style>

@@ -1812,4 +1812,29 @@ export async function getFormRequestStats(): Promise<FormRequestStats> {
   }
 }
 
+/**
+ * Delete a form request and its responses (admin only)
+ */
+export async function deleteFormRequest(requestId: string): Promise<boolean> {
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN');
+    await client.query(
+      'DELETE FROM form_request_responses WHERE form_request_id = $1',
+      [requestId]
+    );
+    const result = await client.query(
+      'DELETE FROM form_requests WHERE id = $1',
+      [requestId]
+    );
+    await client.query('COMMIT');
+    return (result.rowCount ?? 0) > 0;
+  } catch (e) {
+    await client.query('ROLLBACK');
+    throw e;
+  } finally {
+    client.release();
+  }
+}
+
 export { pool };

@@ -1,13 +1,32 @@
 import type { APIRoute } from 'astro';
 import { pool } from '../../../lib/db';
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, locals }) => {
   try {
-    const { email, gewerbebetreiber, umsatzsteuernummer } = await request.json();
+    const { email, companyName, umsatzsteuernummer, gewerbebetreiber } = await request.json();
+    const user = locals.user;
 
-    if (!email || typeof gewerbebetreiber !== 'boolean' || !umsatzsteuernummer) {
+    // If email is provided, this is a signup flow (before auth session exists)
+    // Otherwise, this is a profile update flow (requires auth)
+    if (!email && !user) {
       return new Response(
-        JSON.stringify({ error: 'Missing required fields' }),
+        JSON.stringify({ error: 'Unauthorized' }),
+        { status: 401, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+
+    if (!companyName || !umsatzsteuernummer) {
+      return new Response(
+        JSON.stringify({ error: 'Firmenname und Umsatzsteuer-ID sind erforderlich' }),
+        { status: 400, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // Validate German VAT number format
+    const vatRegex = /^DE[0-9]{9}$/;
+    if (!vatRegex.test(umsatzsteuernummer)) {
+      return new Response(
+        JSON.stringify({ error: 'Ungültige Umsatzsteuer-ID. Format: DE + 9 Ziffern' }),
         { status: 400, headers: { 'Content-Type': 'application/json' } }
       );
     }
@@ -15,12 +34,23 @@ export const POST: APIRoute = async ({ request }) => {
     // Update user with business information
     const client = await pool.connect();
     try {
-      await client.query(
-        `UPDATE "user"
-         SET "gewerbebetreiber" = $1, "umsatzsteuernummer" = $2
-         WHERE email = $3`,
-        [gewerbebetreiber, umsatzsteuernummer, email]
-      );
+      if (email) {
+        // Signup flow: update by email
+        await client.query(
+          `UPDATE "user"
+           SET "companyName" = $1, "umsatzsteuernummer" = $2, "gewerbebetreiber" = $3
+           WHERE email = $4`,
+          [companyName, umsatzsteuernummer, gewerbebetreiber ?? false, email]
+        );
+      } else if (user) {
+        // Profile update flow: update by user ID
+        await client.query(
+          `UPDATE "user"
+           SET "companyName" = $1, "umsatzsteuernummer" = $2
+           WHERE id = $3`,
+          [companyName, umsatzsteuernummer, user.id]
+        );
+      }
 
       return new Response(
         JSON.stringify({ success: true }),
@@ -32,7 +62,7 @@ export const POST: APIRoute = async ({ request }) => {
   } catch (error) {
     console.error('Error updating business info:', error);
     return new Response(
-      JSON.stringify({ error: 'Failed to update business information' }),
+      JSON.stringify({ error: 'Fehler beim Aktualisieren der Geschäftsinformationen' }),
       { status: 500, headers: { 'Content-Type': 'application/json' } }
     );
   }

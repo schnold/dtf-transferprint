@@ -64,19 +64,33 @@ export const R2_PUBLIC_URL = R2_CUSTOM_DOMAIN
 /**
  * Upload a file to R2
  * @param file - File buffer
- * @param fileName - Name for the file in R2
+ * @param fileName - Name for the file in R2 (or full path if already includes folder)
  * @param contentType - MIME type of the file
+ * @param folder - Optional folder prefix (e.g., 'product-images', 'category-images'). If not provided and fileName doesn't include a folder, 'product-images' will be used.
  * @returns Public URL of the uploaded file
  */
 export async function uploadToR2(
   file: Buffer,
   fileName: string,
-  contentType: string
+  contentType: string,
+  folder?: string
 ): Promise<string> {
   try {
     // Generate unique filename to prevent collisions
     const timestamp = Date.now();
-    const uniqueFileName = `${timestamp}-${fileName}`;
+
+    // Check if fileName already includes a folder path (e.g., 'design-files/user123/file.pdf')
+    const hasFolder = fileName.includes('/');
+
+    let uniqueFileName: string;
+    if (hasFolder) {
+      // File already has full path, just use it as-is
+      uniqueFileName = fileName;
+    } else {
+      // Add folder prefix if specified, otherwise default to product-images for backward compatibility
+      const folderPrefix = folder ? (folder.endsWith('/') ? folder : `${folder}/`) : 'product-images/';
+      uniqueFileName = `${folderPrefix}${timestamp}-${fileName}`;
+    }
 
     const upload = new Upload({
       client: r2Client,
@@ -95,20 +109,20 @@ export async function uploadToR2(
     return getR2PublicUrl(uniqueFileName);
   } catch (error: any) {
     console.error('Error uploading to R2:', error);
-    
+
     // Provide more specific error messages
     if (error?.Code === 'AccessDenied' || error?.name === 'AccessDenied') {
       throw new Error(
         'Access Denied: Check your R2 credentials (R2_ACCESS_KEY and R2_SECRET_KEY) and ensure the API token has "Object Read & Write" permissions'
       );
     }
-    
+
     if (error?.Code === 'NoSuchBucket' || error?.name === 'NoSuchBucket') {
       throw new Error(
         `Bucket not found: "${R2_BUCKET_NAME}". Verify your R2_API_KEY includes the correct bucket name.`
       );
     }
-    
+
     throw new Error(
       `Failed to upload file to R2: ${error?.message || 'Unknown error'}`
     );
@@ -118,14 +132,16 @@ export async function uploadToR2(
 /**
  * Upload multiple files to R2
  * @param files - Array of file buffers with metadata
+ * @param folder - Optional folder prefix for all files
  * @returns Array of public URLs
  */
 export async function uploadMultipleToR2(
-  files: { buffer: Buffer; fileName: string; contentType: string }[]
+  files: { buffer: Buffer; fileName: string; contentType: string }[],
+  folder?: string
 ): Promise<string[]> {
   try {
     const uploadPromises = files.map((file) =>
-      uploadToR2(file.buffer, file.fileName, file.contentType)
+      uploadToR2(file.buffer, file.fileName, file.contentType, folder)
     );
 
     return await Promise.all(uploadPromises);

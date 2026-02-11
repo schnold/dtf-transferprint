@@ -6,6 +6,7 @@ import { sendEmail } from '../../../lib/email';
 import { generateOrderConfirmationEmail } from '../../../lib/order-email-template';
 import { getBaseTemplate } from '../../../lib/email-templates';
 import { checkRateLimit, RateLimits, getRateLimitHeaders } from '../../../lib/rate-limiter';
+import { migrateCartFilesToPermanent } from '../../../lib/file-migration';
 
 /**
  * POST /api/checkout/capture-paypal-payment
@@ -194,6 +195,91 @@ export const POST: APIRoute = async ({ request, locals }) => {
     // Begin database transaction
     try {
       await client.query('BEGIN');
+
+      // ========================================
+      // MIGRATE FILES FROM TEMP TO PERMANENT
+      // ========================================
+      // Fetch cart items to check for uploaded files
+      const cartItemsResult = await client.query(
+        `SELECT id, "uploadedFileUrl", "uploadedFileName"
+         FROM "cartItems"
+         WHERE "userId" = $1`,
+        [userId]
+      );
+
+      const cartItems = cartItemsResult.rows;
+      const hasUploadedFiles = cartItems.some(
+        (item) => item.uploadedFileUrl && item.uploadedFileUrl.includes('temp-uploads/')
+      );
+
+      // If there are uploaded files, migrate them to permanent storage
+      if (hasUploadedFiles) {
+        console.log(`Migrating ${cartItems.length} cart file(s) to permanent storage...`);
+
+        // Generate order number first (needed for permanent file path)
+        const tempOrderNumber = `ORD-${Date.now()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+
+        // Migrate files
+        const migration = await migrateCartFilesToPermanent(cartItems, tempOrderNumber, userId);
+
+        if (!migration.success) {
+          // CRITICAL ERROR: Payment captured but file migration failed
+          const errorMessage = migration.errors.join('; ');
+          console.error('🚨 CRITICAL: File migration failed after PayPal capture', {
+            paypalOrderId,
+            paypalCaptureId: captureResult.captureId,
+            userId,
+            errors: migration.errors,
+          });
+
+          // Send alert email to admin (optional but recommended)
+          try {
+            await sendEmail({
+              to: process.env.ADMIN_EMAIL || 'admin@example.com',
+              subject: `🚨 CRITICAL: File Migration Failed - ${paypalOrderId}`,
+              html: `
+                <h2>File Migration Failed After Payment</h2>
+                <p><strong>PayPal Order ID:</strong> ${paypalOrderId}</p>
+                <p><strong>PayPal Capture ID:</strong> ${captureResult.captureId}</p>
+                <p><strong>User ID:</strong> ${userId}</p>
+                <p><strong>Errors:</strong></p>
+                <ul>${migration.errors.map((e) => `<li>${e}</li>`).join('')}</ul>
+                <p><strong>Action Required:</strong> Manually migrate files and create order.</p>
+              `,
+              text: `File migration failed. PayPal Order: ${paypalOrderId}, User: ${userId}, Errors: ${errorMessage}`,
+            });
+          } catch (emailError) {
+            console.error('Failed to send admin alert email:', emailError);
+          }
+
+          // Rollback transaction
+          await client.query('ROLLBACK');
+
+          return new Response(
+            JSON.stringify({
+              success: false,
+              error: {
+                message:
+                  'Zahlung erhalten, aber Datei-Upload fehlgeschlagen. Bitte kontaktieren Sie den Support.',
+                details: process.env.NODE_ENV === 'development' ? errorMessage : undefined,
+              },
+            }),
+            { status: 500 }
+          );
+        }
+
+        // Update cart items with permanent URLs
+        console.log(`Successfully migrated ${migration.urlMapping.size} file(s)`);
+
+        for (const [tempUrl, permanentUrl] of migration.urlMapping.entries()) {
+          await client.query(
+            `UPDATE "cartItems"
+             SET "uploadedFileUrl" = $1
+             WHERE "uploadedFileUrl" = $2 AND "userId" = $3`,
+            [permanentUrl, tempUrl, userId]
+          );
+        }
+      }
 
       // Create order record with pre-calculated amounts from session
       const order = await createOrder(

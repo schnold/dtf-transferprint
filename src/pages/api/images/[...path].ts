@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro';
 import { r2Client, R2_BUCKET_NAME } from '../../../lib/r2';
 import { GetObjectCommand } from '@aws-sdk/client-s3';
+import { pool } from '../../../lib/db';
 
 // Ensure this endpoint is not prerendered
 export const prerender = false;
@@ -14,6 +15,8 @@ const ALLOWED_IMAGE_PREFIXES = [
   'category-images/',
   'branding/',
   'public-assets/',
+  'design-files/', // Requires admin or order owner access
+  'temp-uploads/', // Requires file owner access
 ];
 
 /**
@@ -53,12 +56,62 @@ function isValidImagePath(key: string): boolean {
 }
 
 /**
+ * Check if user has access to a design file
+ * Design files are stored as: design-files/{orderId}/{filename}
+ * Access is granted to admins or the user who owns the order
+ */
+async function checkDesignFileAccess(key: string, userId: string | undefined, isAdmin: boolean): Promise<boolean> {
+  if (isAdmin) return true; // Admins can access all design files
+  if (!userId) return false; // Must be logged in
+
+  try {
+    // Extract orderId from path: design-files/{orderId}/{filename}
+    const parts = key.split('/');
+    if (parts.length < 3) return false;
+    const orderId = parts[1];
+
+    // Check if user owns this order
+    const client = await pool.connect();
+    try {
+      const result = await client.query(
+        'SELECT id FROM orders WHERE id = $1 AND "userId" = $2',
+        [orderId, userId]
+      );
+      return result.rows.length > 0;
+    } finally {
+      client.release();
+    }
+  } catch (error) {
+    console.error('Error checking design file access:', error);
+    return false;
+  }
+}
+
+/**
+ * Check if user has access to a temp file
+ * Temp files are stored as: temp-uploads/{userId}/{filename}
+ * Access is granted only to the user who uploaded the file
+ */
+function checkTempFileAccess(key: string, userId: string | undefined): boolean {
+  if (!userId) return false; // Must be logged in
+
+  // Extract userId from path: temp-uploads/{userId}/{filename}
+  const parts = key.split('/');
+  if (parts.length < 3) return false;
+  const fileUserId = parts[1];
+
+  // User can only access their own temp files
+  return fileUserId === userId;
+}
+
+/**
  * GET /api/images/[...path]
  * Proxy endpoint to serve images from R2
  * This allows images to be served even if the R2 bucket is not publicly accessible
  * Only allows access to images in allowlisted folders
+ * Enforces access control for design files and temp uploads
  */
-export const GET: APIRoute = async ({ params, request }) => {
+export const GET: APIRoute = async ({ params, request, locals }) => {
   try {
     // Get the image path from the URL
     const path = params.path;
@@ -74,6 +127,31 @@ export const GET: APIRoute = async ({ params, request }) => {
     if (!isValidImagePath(key)) {
       console.warn('[SECURITY] Invalid or unauthorized image path requested:', { key });
       return new Response('Invalid image path', { status: 400 });
+    }
+
+    // ========================================
+    // ACCESS CONTROL FOR PROTECTED FILES
+    // ========================================
+    const user = locals.user;
+    const userId = user?.id;
+    const isAdmin = user?.isAdmin || false;
+
+    // Check access for design files (order files)
+    if (key.startsWith('design-files/')) {
+      const hasAccess = await checkDesignFileAccess(key, userId, isAdmin);
+      if (!hasAccess) {
+        console.warn('[SECURITY] Unauthorized design file access attempt:', { key, userId });
+        return new Response('Forbidden - You do not have access to this file', { status: 403 });
+      }
+    }
+
+    // Check access for temp uploads
+    if (key.startsWith('temp-uploads/')) {
+      const hasAccess = checkTempFileAccess(key, userId);
+      if (!hasAccess) {
+        console.warn('[SECURITY] Unauthorized temp file access attempt:', { key, userId });
+        return new Response('Forbidden - You do not have access to this file', { status: 403 });
+      }
     }
 
     console.log('[Image Proxy] Fetching image:', { key, bucket: R2_BUCKET_NAME });

@@ -39,6 +39,8 @@ const heroImages: string[] = (() => {
 					fetchpriority={i === 0 ? "high" : "auto"}
 					loading={i === 0 ? "eager" : "lazy"}
 					decoding={i === 0 ? "sync" : "async"}
+					width={1920}
+					height={1080}
 				/>
 			))}
 		</div>
@@ -174,7 +176,7 @@ const heroImages: string[] = (() => {
 							<img src="/images/dienstleistungen/siebdruck/custom-logo-siebdruck-beispiel.webp" alt="Custom-Logo im Siebdruck – Beispiel" class="w-full h-full object-cover" width="400" height="300" loading="lazy" />
 						</figure>
 						<div class="card-body items-center text-center p-4 sm:p-6">
-							<h2 class="card-title text-gray-200 text-base sm:text-lg font-bold">Siebdruck</h2>
+							<h3 class="card-title text-gray-200 text-base sm:text-lg font-bold">Siebdruck</h3>
 							<p class="text-gray-200 text-sm sm:text-base">Professioneller Siebdruck für Großauflagen mit brillanten Farben und hervorragender Haltbarkeit.</p>
 						</div>
 					</a>
@@ -187,7 +189,7 @@ const heroImages: string[] = (() => {
 							<img src="/images/dienstleistungen/dtf/dtf-transfer-beispielbild.webp" alt="DTF-Transfer Beispiel – Direkt auf Textil" class="w-full h-full object-cover" width="400" height="300" loading="lazy" />
 						</figure>
 						<div class="card-body items-center text-center p-4 sm:p-6">
-							<h2 class="card-title text-gray-200 text-base sm:text-lg font-bold">DTF Transfers</h2>
+							<h3 class="card-title text-gray-200 text-base sm:text-lg font-bold">DTF Transfers</h3>
 							<p class="text-gray-200 text-sm sm:text-base">Hochwertige Direct-to-Film-Transfers für lebendige, langlebige Drucke auf jedem Stoff.</p>
 						</div>
 					</a>
@@ -200,7 +202,7 @@ const heroImages: string[] = (() => {
 							<img src="/images/dienstleistungen/sublimation/sublimation-beispiel-komplettes-shirt.webp" alt="Sublimationsdruck – komplettes Shirt mit fotorealistischem Druck" class="w-full h-full object-cover" width="400" height="300" loading="lazy" />
 						</figure>
 						<div class="card-body items-center text-center p-4 sm:p-6">
-							<h2 class="card-title text-gray-200 text-base sm:text-lg font-bold">Sublimation</h2>
+							<h3 class="card-title text-gray-200 text-base sm:text-lg font-bold">Sublimation</h3>
 							<p class="text-gray-200 text-sm sm:text-base">Lebendiger Sublimationsdruck für Polyester-Textilien mit fotorealistischer Qualität.</p>
 						</div>
 					</a>
@@ -213,7 +215,7 @@ const heroImages: string[] = (() => {
 							<img src="/images/dienstleistungen/flex-flock/flockdruck-selini-shirt-logo-blau.webp" alt="Flex und Flockfoliendruck – Selini-Shirt Logo in Blau" class="w-full h-full object-cover" width="400" height="300" loading="lazy" />
 						</figure>
 						<div class="card-body items-center text-center p-4 sm:p-6">
-							<h2 class="card-title text-gray-200 text-base sm:text-lg font-bold">Flex und Flockfoliendruck</h2>
+							<h3 class="card-title text-gray-200 text-base sm:text-lg font-bold">Flex und Flockfoliendruck</h3>
 							<p class="text-gray-200 text-sm sm:text-base">Strapazierfähiger Foliendruck für Beschriftungen und Logos in verschiedenen Farben.</p>
 						</div>
 					</a>
@@ -226,7 +228,7 @@ const heroImages: string[] = (() => {
 							<img src="/images/dienstleistungen/stickerei/selini-shirt-farbig-beispielstickung.webp" alt="Selini-Shirt – farbige Beispielstickung" class="w-full h-full object-cover" width="400" height="300" loading="lazy" />
 						</figure>
 						<div class="card-body items-center text-center p-4 sm:p-6">
-							<h2 class="card-title text-gray-200 text-base sm:text-lg font-bold">Stickerei</h2>
+							<h3 class="card-title text-gray-200 text-base sm:text-lg font-bold">Stickerei</h3>
 							<p class="text-gray-200 text-sm sm:text-base">Hochwertige Direktstickerei für elegante und langlebige Textilveredlung.</p>
 						</div>
 					</a>
@@ -239,7 +241,7 @@ const heroImages: string[] = (() => {
 							<img src="/images/dienstleistungen/einzelnamen-bedrucken/einzelnamendruck-beispiel.webp" alt="Einzelnamendruck – DTF-Personalisierung" class="w-full h-full object-cover" width="400" height="300" loading="lazy" />
 						</figure>
 						<div class="card-body items-center text-center p-4 sm:p-6">
-							<h2 class="card-title text-gray-200 text-base sm:text-lg font-bold">Einzelnamendruck</h2>
+							<h3 class="card-title text-gray-200 text-base sm:text-lg font-bold">Einzelnamendruck</h3>
 							<p class="text-gray-200 text-sm sm:text-base">Personalisierung mit Einzelnamen für Teams, Vereine und individuelle Projekte.</p>
 						</div>
 					</a>
@@ -252,7 +254,7 @@ const heroImages: string[] = (() => {
 							<img src="/images/dienstleistungen/einzelnamen-direkstickung/logo-david-stickung-detailaufnahme.webp" alt="Logo David – Stickung Detailaufnahme" class="w-full h-full object-cover" width="400" height="300" loading="lazy" />
 						</figure>
 						<div class="card-body items-center text-center p-4 sm:p-6">
-							<h2 class="card-title text-gray-200 text-base sm:text-lg font-bold">Einzelnamenstick</h2>
+							<h3 class="card-title text-gray-200 text-base sm:text-lg font-bold">Einzelnamenstick</h3>
 							<p class="text-gray-200 text-sm sm:text-base">Individuelle Namen gestickt für professionelle Textilveredelung.</p>
 						</div>
 					</a>
@@ -264,7 +266,7 @@ const heroImages: string[] = (() => {
 							<img src="/images/dienstleistungen/flex-flock/beispiel-flockdruck-fussbaltrikot.webp" alt="Flockdruck auf Fußballtrikot – Beispiel" class="w-full h-full object-cover" width="400" height="300" loading="lazy" />
 						</figure>
 						<div class="card-body items-center text-center p-4 sm:p-6">
-							<h2 class="card-title text-gray-200 text-base sm:text-lg font-bold">Flex & Flock Einzelnamen</h2>
+							<h3 class="card-title text-gray-200 text-base sm:text-lg font-bold">Flex & Flock Einzelnamen</h3>
 							<p class="text-gray-200 text-sm sm:text-base">Einzelnamen mit Flex- und Flockfolie für dauerhaften und farbenfrohen Druck.</p>
 						</div>
 					</a>
@@ -276,7 +278,7 @@ const heroImages: string[] = (() => {
 							<img src="/images/dienstleistungen/plastisol-transfer/plastisoltransfer-beispiel.webp" alt="Plastisol Transfer – Beispiel auf Textil" class="w-full h-full object-cover" width="400" height="300" loading="lazy" />
 						</figure>
 						<div class="card-body items-center text-center p-4 sm:p-6">
-							<h2 class="card-title text-gray-200 text-base sm:text-lg font-bold">Plastisol Transfer</h2>
+							<h3 class="card-title text-gray-200 text-base sm:text-lg font-bold">Plastisol Transfer</h3>
 							<p class="text-gray-200 text-sm sm:text-base">Robuste Plastisol-Transfers für intensive Farben und lange Haltbarkeit.</p>
 						</div>
 					</a>
@@ -288,7 +290,7 @@ const heroImages: string[] = (() => {
 							<img src="/images/dienstleistungen/reflekt-druck/reflektor-druck.webp" alt="Reflektordruck – lichtreflektierender Transfer für Arbeits- und Sicherheitsbekleidung" class="w-full h-full object-cover" width="400" height="300" loading="lazy" />
 						</figure>
 						<div class="card-body items-center text-center p-4 sm:p-6">
-							<h2 class="card-title text-gray-200 text-base sm:text-lg font-bold">Reflex Transfer</h2>
+							<h3 class="card-title text-gray-200 text-base sm:text-lg font-bold">Reflex Transfer</h3>
 							<p class="text-gray-200 text-sm sm:text-base">Reflektierende Transfers für Sichtbarkeit und Sicherheit im Dunkeln.</p>
 						</div>
 					</a>
@@ -300,7 +302,7 @@ const heroImages: string[] = (() => {
 							<img src="/images/dienstleistungen/gewebte-aufnäher/gestickte-patches.webp" alt="Gewebte Aufnäher – gestickte Patches im Vergleich" class="w-full h-full object-cover" width="400" height="300" loading="lazy" />
 						</figure>
 						<div class="card-body items-center text-center p-4 sm:p-6">
-							<h2 class="card-title text-gray-200 text-base sm:text-lg font-bold">Gewebte Aufnäher</h2>
+							<h3 class="card-title text-gray-200 text-base sm:text-lg font-bold">Gewebte Aufnäher</h3>
 							<p class="text-gray-200 text-sm sm:text-base">Hochwertige gewebte Aufnäher mit feinen Details und professioneller Verarbeitung.</p>
 						</div>
 					</a>
@@ -312,7 +314,7 @@ const heroImages: string[] = (() => {
 							<img src="/images/dienstleistungen/gewebte-lables/gewebtes-label-selini-shirt-logo.webp" alt="Gewebtes Label Selini-Shirt Logo – Beispiel für Textiletiketten" class="w-full h-full object-cover" width="400" height="300" loading="lazy" />
 						</figure>
 						<div class="card-body items-center text-center p-4 sm:p-6">
-							<h2 class="card-title text-gray-200 text-base sm:text-lg font-bold">Gewebte Label</h2>
+							<h3 class="card-title text-gray-200 text-base sm:text-lg font-bold">Gewebte Label</h3>
 							<p class="text-gray-200 text-sm sm:text-base">Individuelle gewebte Labels für Markenidentität und professionelle Präsentation.</p>
 						</div>
 					</a>
@@ -324,7 +326,7 @@ const heroImages: string[] = (() => {
 							<img src="/images/dienstleistungen/stick-patches/stick-patches.webp" alt="Stick-Patches – gestickte Aufnäher zum Aufnähen, Bügeln oder mit Klett" class="w-full h-full object-cover" width="400" height="300" loading="lazy" />
 						</figure>
 						<div class="card-body items-center text-center p-4 sm:p-6">
-							<h2 class="card-title text-gray-200 text-base sm:text-lg font-bold">Stick-Patches</h2>
+							<h3 class="card-title text-gray-200 text-base sm:text-lg font-bold">Stick-Patches</h3>
 							<p class="text-gray-200 text-sm sm:text-base">Gestickte Patches für Aufnäher und individuelle Textilgestaltung.</p>
 						</div>
 					</a>
@@ -406,7 +408,7 @@ const heroImages: string[] = (() => {
 			<div class="max-w-7xl mx-auto">
 				<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
 					<div class="lg:pl-8 lg:pr-8">
-						<h2 class="text-4xl md:text-5xl font-bold mb-4 text-white">
+						<h2 class="text-3xl md:text-4xl font-bold mb-4 text-white">
 							<span class="why-choose-title-brush">Warum uns wählen?</span>
 						</h2>
 						<p class="text-lg text-white/90 leading-relaxed">
@@ -503,7 +505,7 @@ const heroImages: string[] = (() => {
 	<section id="faq" class="py-24 bg-base-100">
 		<div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
 			<div class="text-center mb-16">
-				<h2 class="text-4xl md:text-5xl font-bold mb-4 text-neutral">Häufig gestellte Fragen zum DTF-Druckverfahren</h2>
+				<h2 class="text-3xl md:text-4xl font-bold mb-4 text-neutral">Häufig gestellte Fragen zum DTF-Druckverfahren</h2>
 				<p class="text-lg text-neutral/70 max-w-2xl mx-auto">
 					Hier finden Sie umfassende Antworten zu häufig gestellten Fragen über das DTF-Druckverfahren, unsere Produkte und Dienstleistungen. 
 					Unser Ziel ist es, Ihnen ein exzellentes Kundenerlebnis zu bieten und alle notwendigen Informationen bereitzustellen, 

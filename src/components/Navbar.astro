@@ -115,13 +115,13 @@ try {
 				<!-- Produkte Mega Menu (Dynamic Categories - Hierarchical) -->
 				{categoryHierarchy.length > 0 && (
 					<li class="dropdown mega-dropdown mega-dropdown-produkte flex-shrink-0 relative">
-						<label class="text-neutral/80 hover:text-neutral hover:bg-white/10 px-2 sm:px-3 lg:px-4 py-2 rounded-md transition-all duration-200 cursor-pointer flex items-center gap-1.5 text-sm lg:text-base font-medium">
+						<button type="button" class="text-neutral/80 hover:text-neutral hover:bg-white/10 px-2 sm:px-3 lg:px-4 py-2 rounded-md transition-all duration-200 cursor-pointer flex items-center gap-1.5 text-sm lg:text-base font-medium border-0 bg-transparent" aria-haspopup="true" aria-expanded="false" aria-label="Produkte menu">
 							<span>Produkte</span>
-							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 transition-transform duration-200">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 transition-transform duration-200" aria-hidden="true">
 								<path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
 							</svg>
-						</label>
-						<div class="mega-dropdown-content absolute top-full mt-2 bg-base-100 rounded-2xl shadow-2xl border border-base-300/30 p-6 max-w-[900px] opacity-0 invisible transform translate-y-2 transition-all duration-300 ease-out z-50 max-h-[80vh] overflow-y-auto">
+						</button>
+						<div class="mega-dropdown-content absolute top-full mt-2 bg-base-100 rounded-2xl shadow-2xl border border-base-300/30 p-6 max-w-[900px] opacity-0 invisible transform translate-y-2 transition-all duration-300 ease-out z-50 max-h-[80vh] overflow-y-auto" role="menu" aria-label="Produkte submenu">
 							<div class="grid grid-cols-2 gap-6">
 								<!-- Render all categories hierarchically in grid columns -->
 								{categoryHierarchy.map((category) => (
@@ -298,13 +298,13 @@ try {
 
 				<!-- Themen Mega Menu -->
 				<li class="dropdown mega-dropdown mega-dropdown-themen flex-shrink-0 relative">
-					<label class="text-neutral/80 hover:text-neutral hover:bg-white/10 px-2 sm:px-3 lg:px-4 py-2 rounded-md transition-all duration-200 cursor-pointer flex items-center gap-1.5 text-sm lg:text-base font-medium">
+					<button type="button" class="text-neutral/80 hover:text-neutral hover:bg-white/10 px-2 sm:px-3 lg:px-4 py-2 rounded-md transition-all duration-200 cursor-pointer flex items-center gap-1.5 text-sm lg:text-base font-medium border-0 bg-transparent" aria-haspopup="true" aria-expanded="false" aria-label="Themen menu">
 						<span>Themen</span>
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 transition-transform duration-200">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 transition-transform duration-200" aria-hidden="true">
 							<path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
 						</svg>
-					</label>
-					<div class="mega-dropdown-content absolute top-full mt-2 bg-base-100 rounded-2xl shadow-2xl border border-base-300/30 p-6 max-w-[800px] opacity-0 invisible transform translate-y-2 transition-all duration-300 ease-out z-50">
+					</button>
+					<div class="mega-dropdown-content absolute top-full mt-2 bg-base-100 rounded-2xl shadow-2xl border border-base-300/30 p-6 max-w-[800px] opacity-0 invisible transform translate-y-2 transition-all duration-300 ease-out z-50" role="menu" aria-label="Themen submenu">
 						<div class="mb-4 pb-4 border-b border-base-300/20">
 							<a href="/themen/" class="font-bold text-primary hover:underline text-base">Themen – Übersicht</a>
 						</div>
@@ -356,13 +356,13 @@ try {
 
 				<!-- Informationen Mega Menu -->
 				<li class="dropdown mega-dropdown mega-dropdown-informationen flex-shrink-0 relative">
-					<label class="text-neutral/80 hover:text-neutral hover:bg-white/10 px-2 sm:px-3 lg:px-4 py-2 rounded-md transition-all duration-200 cursor-pointer flex items-center gap-1.5 text-sm lg:text-base font-medium">
+					<button type="button" class="text-neutral/80 hover:text-neutral hover:bg-white/10 px-2 sm:px-3 lg:px-4 py-2 rounded-md transition-all duration-200 cursor-pointer flex items-center gap-1.5 text-sm lg:text-base font-medium border-0 bg-transparent" aria-haspopup="true" aria-expanded="false" aria-label="Informationen menu">
 						<span>Informationen</span>
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 transition-transform duration-200">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 transition-transform duration-200" aria-hidden="true">
 							<path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
 						</svg>
-					</label>
-					<div class="mega-dropdown-content absolute top-full mt-2 bg-base-100 rounded-2xl shadow-2xl border border-base-300/30 p-6 max-w-[750px] opacity-0 invisible transform translate-y-2 transition-all duration-300 ease-out z-50">
+					</button>
+					<div class="mega-dropdown-content absolute top-full mt-2 bg-base-100 rounded-2xl shadow-2xl border border-base-300/30 p-6 max-w-[750px] opacity-0 invisible transform translate-y-2 transition-all duration-300 ease-out z-50" role="menu" aria-label="Informationen submenu">
 						<div class="grid grid-cols-2 xl:grid-cols-3 gap-5">
 							<!-- Unternehmen -->
 							<div>
@@ -463,16 +463,17 @@ try {
 				<!-- Logged In: User Icon with Accent Color -->
 				<div class="dropdown relative user-dropdown">
 					<button
-						tabindex="0"
-						class="w-8 h-8 min-w-[2rem] min-h-[2rem] flex-shrink-0 rounded-full border-2 flex items-center justify-center hover:bg-accent/10 transition-all duration-200 cursor-pointer"
+						class="w-10 h-10 min-w-[2.5rem] min-h-[2.5rem] flex-shrink-0 rounded-full border-2 flex items-center justify-center hover:bg-accent/10 transition-all duration-200 cursor-pointer"
 						style="border-color: #4B5563;"
 						aria-label="User menu"
+						aria-haspopup="true"
+						aria-expanded="false"
 					>
 						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4" style="color: #4B5563;">
 							<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
 						</svg>
 					</button>
-					<ul tabindex="0" class="user-dropdown-content absolute right-0 top-full mt-3 z-[1] p-6 shadow-2xl bg-base-100 rounded-xl w-80 border border-base-300/30 overflow-hidden opacity-0 invisible transform translate-y-2 transition-all duration-300 ease-out">
+					<ul class="user-dropdown-content absolute right-0 top-full mt-3 z-[1] p-6 shadow-2xl bg-base-100 rounded-xl w-80 border border-base-300/30 overflow-hidden opacity-0 invisible transform translate-y-2 transition-all duration-300 ease-out" role="menu">
 						<!-- Header -->
 						<div class="pt-6 pb-4 bg-base-100 border-b border-base-200">
 							<div class="flex items-center gap-3 mb-2">
@@ -540,7 +541,7 @@ try {
 				<!-- Not Logged In: User Icon -->
 				<button
 					id="auth-icon-button"
-					class="w-8 h-8 min-w-[2rem] min-h-[2rem] flex-shrink-0 rounded-full border-2 flex items-center justify-center hover:bg-accent/10 transition-all duration-200 cursor-pointer"
+					class="w-10 h-10 min-w-[2.5rem] min-h-[2.5rem] flex-shrink-0 rounded-full border-2 flex items-center justify-center hover:bg-accent/10 transition-all duration-200 cursor-pointer"
 					style="border-color: #4B5563;"
 					aria-label="Sign in or Sign up"
 				>
@@ -552,12 +553,12 @@ try {
 
 			<!-- Mobile Menu Dropdown -->
 			<div class="dropdown dropdown-end lg:hidden" id="mobile-menu-dropdown">
-				<label tabindex="0" class="btn btn-ghost text-neutral hover:bg-white/10 px-2 sm:px-3" aria-label="Menu" id="mobile-menu-button">
-					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+				<button type="button" class="btn btn-ghost text-neutral hover:bg-white/10 px-2 sm:px-3 min-w-[3rem] min-h-[3rem]" aria-label="Menu" aria-haspopup="true" aria-expanded="false" id="mobile-menu-button">
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6" aria-hidden="true">
 						<path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
 					</svg>
-				</label>
-				<div tabindex="0" class="dropdown-content mt-3 bg-base-100 rounded-2xl shadow-2xl border border-base-300/30 p-6 w-[calc(100vw-2rem)] max-w-sm max-h-[calc(100vh-8rem)] overflow-y-auto overflow-x-hidden z-50" id="mobile-menu-content">
+				</button>
+				<div class="dropdown-content mt-3 bg-base-100 rounded-2xl shadow-2xl border border-base-300/30 p-6 w-[calc(100vw-2rem)] max-w-sm max-h-[calc(100vh-8rem)] overflow-y-auto overflow-x-hidden z-50" id="mobile-menu-content" role="menu">
 					<div class="space-y-4">
 						<!-- Produkte Section (Collapsible) - Hierarchical -->
 						<details class="mobile-menu-section" open>
@@ -909,9 +910,8 @@ try {
 
 <!-- Mega Menu Styles -->
 <style>
-	/* Navbar scroll animation */
+	/* Navbar scroll (no slide animation) */
 	.navbar-scroll-container {
-		transition: transform 0.3s ease-in-out;
 		transform: translateY(0);
 	}
 
@@ -940,6 +940,11 @@ try {
 		pointer-events: auto;
 	}
 
+	/* Mega menu button hover states */
+	.mega-dropdown button:hover > svg {
+		transform: rotate(180deg);
+	}
+
 	/* Center dropdowns on viewport, with overflow protection */
 	.mega-dropdown-content {
 		/* Center relative to parent dropdown */
@@ -958,11 +963,18 @@ try {
 	}
 
 	.mega-dropdown:hover .mega-dropdown-content,
+	.mega-dropdown:focus-within .mega-dropdown-content,
 	.mega-dropdown-content:hover {
 		opacity: 1;
 		visibility: visible;
 		transform: translateX(-50%) translateY(0);
 		transition-delay: 0s;
+	}
+
+	/* Set aria-expanded when dropdown is visible */
+	.mega-dropdown:hover button[aria-haspopup="true"],
+	.mega-dropdown:focus-within button[aria-haspopup="true"] {
+		aria-expanded: true;
 	}
 
 	/* Close dropdowns when scrolling */
@@ -1025,7 +1037,8 @@ try {
 		overflow-wrap: break-word;
 	}
 
-	.mega-dropdown:hover > label svg {
+	.mega-dropdown:hover > label svg,
+	.mega-dropdown:hover > button svg {
 		transform: rotate(180deg);
 	}
 

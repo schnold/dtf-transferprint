@@ -1,6 +1,7 @@
 ---
 import AdminLayout from '../../layouts/AdminLayout.astro';
 import { getAllFormRequests, getFormRequestStats } from '../../lib/db';
+import { Mail, ShoppingBag, Trash2 } from '@lucide/astro';
 
 // Server-side data fetching
 const requestsResult = await getAllFormRequests({ limit: 100 });
@@ -17,6 +18,12 @@ const subjectLabels: Record<string, string> = {
   'b2b': 'B2B / Wiederverkäufer',
   'sonstiges': 'Sonstiges'
 };
+
+const pendingCount = stats.pendingCount ?? 0;
+const inProgressCount = stats.inProgressCount ?? 0;
+const resolvedCount = stats.resolvedCount ?? 0;
+const contactCount = requests.filter((r: any) => r.formType === 'contact').length;
+const produktCount = requests.filter((r: any) => r.formType === 'produktanfrage').length;
 ---
 
 <AdminLayout title="Kontaktanfragen verwalten" currentPage="anfragen">
@@ -44,26 +51,6 @@ const subjectLabels: Record<string, string> = {
     </div>
   </div>
 
-  <!-- Filter Tabs -->
-  <div role="tablist" class="tabs tabs-boxed mb-6 bg-base-100">
-    <a role="tab" class="tab tab-active" data-filter="all">Alle</a>
-    <a role="tab" class="tab" data-filter="pending">Ausstehend</a>
-    <a role="tab" class="tab" data-filter="in_progress">In Bearbeitung</a>
-    <a role="tab" class="tab" data-filter="resolved">Gelöst</a>
-    <a role="tab" class="tab" data-filter="contact" data-filter-type="formType">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline-block mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-      </svg>
-      Kontaktanfragen
-    </a>
-    <a role="tab" class="tab" data-filter="produktanfrage" data-filter-type="formType">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline-block mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-      </svg>
-      Produktanfragen
-    </a>
-  </div>
-
   <!-- Search Input -->
   <div class="mb-4">
     <input 
@@ -74,8 +61,28 @@ const subjectLabels: Record<string, string> = {
     />
   </div>
 
-  <!-- Requests Table -->
-  <div class="overflow-x-auto bg-base-100 rounded-lg shadow">
+  <!-- Tab bar + Table (single panel, same style as orders) -->
+  <div class="anfragen-panel rounded-xl border border-base-300/50 shadow-md overflow-hidden bg-base-100">
+    <!-- Tab Navigation (real-tabs style) -->
+    <div class="anfragen-status-tabs">
+      <div role="tablist" class="anfragen-status-tablist">
+        <a role="tab" class="anfragen-status-tab anfragen-status-tab-active" data-filter="all" data-filter-type="status" href="#">Alle ({totalCount})</a>
+        <a role="tab" class="anfragen-status-tab" data-filter="pending" data-filter-type="status" href="#">Ausstehend ({pendingCount})</a>
+        <a role="tab" class="anfragen-status-tab" data-filter="in_progress" data-filter-type="status" href="#">In Bearbeitung ({inProgressCount})</a>
+        <a role="tab" class="anfragen-status-tab" data-filter="resolved" data-filter-type="status" href="#">Gelöst ({resolvedCount})</a>
+        <a role="tab" class="anfragen-status-tab" data-filter="contact" data-filter-type="formType" href="#">
+          <Mail class="w-4 h-4 shrink-0" stroke-width={1.5} />
+          Kontakt ({contactCount})
+        </a>
+        <a role="tab" class="anfragen-status-tab" data-filter="produktanfrage" data-filter-type="formType" href="#">
+          <ShoppingBag class="w-4 h-4 shrink-0" stroke-width={1.5} />
+          Produktanfragen ({produktCount})
+        </a>
+      </div>
+    </div>
+
+    <!-- Requests Table -->
+    <div class="anfragen-table-wrapper overflow-x-auto">
     <table class="table table-sm">
       <thead>
         <tr>
@@ -135,7 +142,7 @@ const subjectLabels: Record<string, string> = {
                 </span>
               </td>
               <td>
-                <div class="flex gap-2">
+                <div class="flex flex-wrap gap-1">
                   <button onclick={`viewRequest('${request.id}')`} class="btn btn-xs btn-primary">
                     Ansehen
                   </button>
@@ -144,6 +151,14 @@ const subjectLabels: Record<string, string> = {
                       Antworten
                     </button>
                   )}
+                  <button
+                    type="button"
+                    onclick={`deleteRequest('${request.id}')`}
+                    class="btn btn-xs btn-ghost text-error hover:bg-error/10"
+                    aria-label="Anfrage löschen"
+                  >
+                    <Trash2 class="w-4 h-4 shrink-0" stroke-width={1.5} />
+                  </button>
                 </div>
               </td>
             </tr>
@@ -151,6 +166,7 @@ const subjectLabels: Record<string, string> = {
         )}
       </tbody>
     </table>
+    </div>
   </div>
 
   <!-- Request Detail Modal -->
@@ -160,10 +176,11 @@ const subjectLabels: Record<string, string> = {
       <div id="modal-content" class="min-h-[200px]">
         <!-- Content populated by JavaScript -->
       </div>
-      <div class="modal-action">
+      <div class="modal-action flex-wrap">
         <button id="reply-from-detail-btn" class="btn btn-primary">Antworten</button>
         <button id="mark-in-progress-btn" class="btn btn-info">In Bearbeitung</button>
         <button id="mark-resolved-btn" class="btn btn-success">Als gelöst markieren</button>
+        <button id="delete-from-detail-btn" class="btn btn-ghost text-error hover:bg-error/10">Löschen</button>
         <form method="dialog">
           <button class="btn">Schließen</button>
         </form>
@@ -239,18 +256,19 @@ const subjectLabels: Record<string, string> = {
   // JavaScript for filtering, search, modals, and form submission
   let currentRequestId: string | null = null;
 
-  // Filter tabs
-  document.querySelectorAll('[data-filter]').forEach(tab => {
+  // Filter tabs (styled like orders page)
+  document.querySelectorAll('.anfragen-status-tab').forEach(tab => {
     tab.addEventListener('click', (e) => {
-      const target = e.target as HTMLElement;
+      e.preventDefault();
+      const target = e.currentTarget as HTMLElement;
       const filter = target.dataset.filter;
       const filterType = target.dataset.filterType || 'status';
-      if (filter) {
+      if (filter !== undefined) {
         filterRequests(filter, filterType);
 
         // Update active tab
-        document.querySelectorAll('[data-filter]').forEach(t => t.classList.remove('tab-active'));
-        target.classList.add('tab-active');
+        document.querySelectorAll('.anfragen-status-tab').forEach(t => t.classList.remove('anfragen-status-tab-active'));
+        target.classList.add('anfragen-status-tab-active');
       }
     });
   });
@@ -386,6 +404,14 @@ const subjectLabels: Record<string, string> = {
         resolvedBtn.onclick = () => changeStatus(requestId, 'resolved');
       }
 
+      const deleteBtn = document.getElementById('delete-from-detail-btn');
+      if (deleteBtn) {
+        deleteBtn.onclick = () => {
+          (document.getElementById('request-detail-modal') as HTMLDialogElement)?.close();
+          deleteRequest(requestId);
+        };
+      }
+
       (document.getElementById('request-detail-modal') as HTMLDialogElement)?.showModal();
     } else {
       showToast('Fehler beim Laden der Anfrage', 'error');
@@ -485,6 +511,22 @@ const subjectLabels: Record<string, string> = {
     }
   });
 
+  // Delete request
+  async function deleteRequest(requestId: string) {
+    if (!confirm('Anfrage wirklich unwiderruflich löschen? Alle Antworten und Notizen werden mit gelöscht.')) {
+      return;
+    }
+    const response = await fetch(`/api/admin/form-requests/${requestId}`, { method: 'DELETE' });
+    const result = await response.json();
+
+    if (result.success) {
+      showToast('Anfrage gelöscht', 'success');
+      setTimeout(() => location.reload(), 1000);
+    } else {
+      showToast(result.error?.message || 'Fehler beim Löschen', 'error');
+    }
+  }
+
   // Change status
   async function changeStatus(requestId: string, newStatus: string, reload = true) {
     const response = await fetch(`/api/admin/form-requests/${requestId}/status`, {
@@ -535,4 +577,62 @@ const subjectLabels: Record<string, string> = {
   (window as any).viewRequest = viewRequest;
   (window as any).openReplyModal = openReplyModal;
   (window as any).changeStatus = changeStatus;
+  (window as any).deleteRequest = deleteRequest;
 </script>
+
+<style>
+  /* Status tabs: same real-tab look as orders page */
+  .anfragen-status-tabs {
+    border-bottom: 1px solid var(--color-base-300);
+    background: var(--color-base-200);
+  }
+
+  .anfragen-status-tablist {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    padding: 0 0.5rem 0 0.5rem;
+    min-height: 2.75rem;
+  }
+
+  .anfragen-status-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-neutral);
+    background: transparent;
+    border: 1px solid transparent;
+    border-bottom: none;
+    border-radius: 0.375rem 0.375rem 0 0;
+    margin-bottom: -1px;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .anfragen-status-tab:hover {
+    background: rgba(0, 0, 0, 0.05);
+    color: var(--color-neutral);
+  }
+
+  .anfragen-status-tab-active {
+    background: var(--color-base-100);
+    color: var(--color-neutral);
+    border-color: var(--color-base-300);
+    border-bottom: 1px solid var(--color-base-100);
+    font-weight: 600;
+  }
+
+  .anfragen-status-tab-active:hover {
+    background: var(--color-base-100);
+    color: var(--color-neutral);
+  }
+
+  .anfragen-table-wrapper .tooltip {
+    position: relative;
+    z-index: 1;
+  }
+</style>

@@ -57,7 +57,7 @@ if (session) {
               placeholder="Passwort (min. 12 Zeichen)"
             />
             <p class="text-xs text-base-content/70 mt-1 px-2">
-              Nur Kleinbuchstaben erlaubt (min. 12 Zeichen)
+              Mindestens 12 Zeichen
             </p>
           </div>
           <div>
@@ -75,6 +75,21 @@ if (session) {
           </div>
 
           <div class="divider text-xs text-base-content/50">Geschäftsdaten</div>
+
+          <div>
+            <label for="companyName" class="sr-only">Firmenname</label>
+            <input
+              id="companyName"
+              name="companyName"
+              type="text"
+              required
+              class="input input-bordered w-full rounded-md"
+              placeholder="Firmenname"
+            />
+            <p class="text-xs text-base-content/70 mt-1 px-2">
+              Ihr vollständiger Firmenname
+            </p>
+          </div>
 
           <div>
             <label for="umsatzsteuernummer" class="sr-only">Umsatzsteuernummer (USt-IdNr.)</label>
@@ -151,8 +166,8 @@ if (session) {
   const successMessage = document.getElementById('success-message') as HTMLDivElement;
   const submitButton = document.getElementById('submit-button') as HTMLButtonElement;
 
-  // Password validation regex - only lowercase letters, minimum 12 characters
-  const passwordRegex = /^[a-z]{12,}$/;
+  // Password validation regex - minimum 12 characters, any characters allowed
+  const passwordRegex = /^.{12,}$/;
 
   // German VAT number validation regex (DE + 9 digits)
   const vatRegex = /^DE[0-9]{9}$/;
@@ -188,7 +203,7 @@ if (session) {
       return 'Passwort zu kurz. Mindestens 12 Zeichen erforderlich.';
     }
     if (errorLower.includes('password') && errorLower.includes('weak')) {
-      return 'Passwort zu schwach. Verwende nur Kleinbuchstaben (min. 12 Zeichen).';
+      return 'Passwort muss mindestens 12 Zeichen lang sein.';
     }
     if (errorLower.includes('passwords do not match')) {
       return 'Passwörter stimmen nicht überein.';
@@ -243,6 +258,7 @@ if (session) {
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
     const confirmPassword = formData.get('confirmPassword') as string;
+    const companyName = (formData.get('companyName') as string)?.trim();
     const umsatzsteuernummer = (formData.get('umsatzsteuernummer') as string)?.trim().toUpperCase();
     const gewerbebetreiber = formData.get('gewerbebetreiber') === 'on';
 
@@ -255,8 +271,13 @@ if (session) {
       // Validate password strength
       if (!passwordRegex.test(password)) {
         throw new Error(
-          'Passwort muss mindestens 12 Kleinbuchstaben enthalten (keine Großbuchstaben, Zahlen oder Sonderzeichen)'
+          'Passwort muss mindestens 12 Zeichen lang sein'
         );
+      }
+
+      // Validate company name
+      if (!companyName) {
+        throw new Error('Bitte geben Sie Ihren Firmennamen ein.');
       }
 
       // Validate Gewerbebetreiber checkbox
@@ -290,6 +311,7 @@ if (session) {
             body: JSON.stringify({
               email,
               gewerbebetreiber,
+              companyName,
               umsatzsteuernummer,
             }),
           });

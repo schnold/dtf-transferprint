@@ -145,6 +145,42 @@ import { SITE_CONFIG } from '../constants/site';
             />
           </div>
 
+          <!-- Company Name -->
+          <div>
+            <label for="signup-company" class="block text-xs font-medium text-base-content/70 mb-1.5">
+              Firmenname
+            </label>
+            <input
+              id="signup-company"
+              type="text"
+              name="companyName"
+              placeholder="Ihre Firma GmbH"
+              class="input input-sm input-bordered w-full text-sm focus:input-primary"
+              required
+              autocomplete="organization"
+            />
+          </div>
+
+          <!-- VAT Number -->
+          <div>
+            <label for="signup-vat" class="block text-xs font-medium text-base-content/70 mb-1.5">
+              Umsatzsteuer-ID (USt-IdNr.)
+            </label>
+            <input
+              id="signup-vat"
+              type="text"
+              name="vatNumber"
+              placeholder="DE123456789"
+              class="input input-sm input-bordered w-full text-sm focus:input-primary"
+              required
+              autocomplete="off"
+              pattern="^DE[0-9]{9}$"
+            />
+            <p class="text-xs text-base-content/40 mt-1.5">
+              Format: DE + 9 Ziffern (z.B. DE123456789)
+            </p>
+          </div>
+
           <!-- Password -->
           <div>
             <label for="signup-password" class="block text-xs font-medium text-base-content/70 mb-1.5">
@@ -490,17 +526,9 @@ import { SITE_CONFIG } from '../constants/site';
         throw new Error(result.error.message || 'Anmeldung fehlgeschlagen');
       }
 
-      // Show loading overlay
-      if ((window as any).showLoadingOverlay) {
-        (window as any).showLoadingOverlay();
-      }
-
+      // Close modal and redirect on success
       modal.close();
-
-      // Small delay to show the loading overlay before reload
-      setTimeout(() => {
-        window.location.reload();
-      }, 100);
+      window.location.href = '/';
     } catch (error) {
       console.error('Login error:', error);
       const errorMsg = error instanceof Error ? error.message : 'Ein Fehler ist aufgetreten';
@@ -532,12 +560,29 @@ import { SITE_CONFIG } from '../constants/site';
     const name = formData.get('name') as string;
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
+    const companyName = (formData.get('companyName') as string)?.trim();
+    const vatNumber = (formData.get('vatNumber') as string)?.trim().toUpperCase();
 
     try {
       if (password.length < 8) {
         throw new Error('Passwort muss mindestens 8 Zeichen enthalten');
       }
 
+      // Validate company name
+      if (!companyName) {
+        throw new Error('Bitte geben Sie Ihren Firmennamen ein');
+      }
+
+      // Validate VAT number format
+      const vatRegex = /^DE[0-9]{9}$/;
+      if (!vatNumber) {
+        throw new Error('Bitte geben Sie Ihre Umsatzsteuer-ID ein');
+      }
+      if (!vatRegex.test(vatNumber)) {
+        throw new Error('Ungültige Umsatzsteuer-ID. Format: DE + 9 Ziffern (z.B. DE123456789)');
+      }
+
+      // Sign up with standard Better Auth fields
       const result = await authClient.signUp.email({
         email,
         password,
@@ -548,6 +593,27 @@ import { SITE_CONFIG } from '../constants/site';
         throw new Error(result.error.message || 'Registrierung fehlgeschlagen');
       }
 
+      // If signup successful, store business info in database
+      if (!result.error && result.data) {
+        try {
+          // Store custom business fields via API endpoint
+          await fetch('/api/auth/update-business-info', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              email,
+              gewerbebetreiber: true,
+              companyName,
+              umsatzsteuernummer: vatNumber,
+            }),
+          });
+        } catch (err) {
+          console.error('Failed to save business info:', err);
+          // Continue anyway - user is created, business info can be added later
+        }
+      }
+
+      // Show success message
       signupSuccess.classList.remove('hidden');
       signupForm.reset();
       signupButton.innerHTML = `
@@ -557,18 +623,11 @@ import { SITE_CONFIG } from '../constants/site';
         <span class="ml-2">Erfolgreich!</span>
       `;
 
+      // Close modal and redirect after showing success message
       setTimeout(() => {
-        // Show loading overlay
-        if ((window as any).showLoadingOverlay) {
-          (window as any).showLoadingOverlay();
-        }
-
         modal.close();
-
-        setTimeout(() => {
-          window.location.reload();
-        }, 100);
-      }, 2000);
+        window.location.href = '/';
+      }, 1500);
     } catch (error) {
       console.error('Signup error:', error);
       const errorMsg = error instanceof Error ? error.message : 'Ein Fehler ist aufgetreten';

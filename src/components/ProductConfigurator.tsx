@@ -1,6 +1,12 @@
 import { useState, useEffect } from 'react';
 import type { Product, PriceTier } from '@/types/database';
 import { calculatePrice, formatPrice, isValidProductConfiguration } from '@/lib/utils/pricing';
+import {
+  validateFileBeforeUpload,
+  formatFileSize,
+  type ClientValidationResult,
+  type FileMetadata,
+} from '@/lib/utils/client-file-validation';
 import PriceTierTable from './PriceTierTable';
 
 interface ProductConfiguratorProps {
@@ -28,6 +34,9 @@ export default function ProductConfigurator({
   const [errors, setErrors] = useState<string[]>([]);
   const [isUploading, setIsUploading] = useState(false);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
+  const [isValidating, setIsValidating] = useState(false);
+  const [validationResult, setValidationResult] = useState<ClientValidationResult | null>(null);
+  const [fileMetadata, setFileMetadata] = useState<FileMetadata | null>(null);
 
   // Calculate price whenever configuration changes
   const priceCalculation = calculatePrice(
@@ -45,37 +54,61 @@ export default function ProductConfigurator({
     }
   }, [product, widthMm, heightMm]);
 
-  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
-    // Validate file type
-    const allowedTypes = product.allowedFileTypes?.split(',').map((t) => t.trim()) || ['PDF'];
-    const fileExtension = file.name.split('.').pop()?.toUpperCase();
+    // Reset previous state
+    setValidationResult(null);
+    setFileMetadata(null);
+    setUploadedFile(null);
+    setUploadedFileUrl(null);
 
-    if (!allowedTypes.includes(fileExtension || '')) {
-      setErrors([`Only ${allowedTypes.join(', ')} files are allowed`]);
+    // Run client-side validation
+    setIsValidating(true);
+
+    try {
+      const requirements = {
+        allowedFileTypes: product.allowedFileTypes || 'PDF',
+        maxFileSizeMb: product.maxFileSizeMb || 255,
+        requiredDpi: product.requiredDpi,
+        requiredMinWidth: product.requiredMinWidth,
+        requiredMinHeight: product.requiredMinHeight,
+      };
+
+      const result = await validateFileBeforeUpload(file, requirements);
+      setValidationResult(result);
+      setFileMetadata(result.metadata || null);
+
+      if (result.valid) {
+        setUploadedFile(file);
+        setErrors([]);
+      } else {
+        setErrors(result.errors);
+      }
+    } catch (error) {
+      console.error('Validation error:', error);
+      setErrors(['Dateivalidierung fehlgeschlagen']);
+    } finally {
+      setIsValidating(false);
+    }
+  };
+
+  const handleFileUpload = async () => {
+    if (!uploadedFile) return;
+    if (!validationResult?.valid) {
+      setErrors(['Bitte beheben Sie die Validierungsfehler vor dem Hochladen']);
       return;
     }
 
-    // Validate file size
-    const maxSizeMB = product.maxFileSizeMb || 255;
-    const fileSizeMB = file.size / 1024 / 1024;
-
-    if (fileSizeMB > maxSizeMB) {
-      setErrors([`File size cannot exceed ${maxSizeMB}MB`]);
-      return;
-    }
-
-    setUploadedFile(file);
     setIsUploading(true);
 
     try {
-      // Upload file to server (implement your upload logic here)
       const formData = new FormData();
-      formData.append('file', file);
+      formData.append('file', uploadedFile);
+      formData.append('productId', product.id);
 
-      const response = await fetch('/api/upload', {
+      const response = await fetch('/api/upload/design-file', {
         method: 'POST',
         body: formData,
       });
@@ -85,12 +118,18 @@ export default function ProductConfigurator({
       }
 
       const data = await response.json();
-      setUploadedFileUrl(data.url);
+
+      if (!data.success) {
+        throw new Error(data.error?.message || 'Upload failed');
+      }
+
+      setUploadedFileUrl(data.data.fileUrl);
       setErrors([]);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Upload error:', error);
-      setErrors(['File upload failed. Please try again.']);
+      setErrors([error.message || 'Datei-Upload fehlgeschlagen. Bitte versuchen Sie es erneut.']);
       setUploadedFile(null);
+      setUploadedFileUrl(null);
     } finally {
       setIsUploading(false);
     }
@@ -149,14 +188,16 @@ export default function ProductConfigurator({
     <div className="product-configurator space-y-6">
       {/* File Upload Section */}
       {product.acceptsFileUpload && (
-        <div className="file-upload-section border rounded-lg p-4">
+        <div className="file-upload-section border rounded-lg p-4 space-y-3">
           <label className="block text-sm font-medium mb-2">
-            {locale === 'de-DE' ? 'Datei hochladen' : 'Upload File'}
+            {locale === 'de-DE' ? 'Designdatei hochladen' : 'Upload Design File'}
           </label>
+
+          {/* File Input */}
           <div className="flex items-center gap-4">
             <input
               type="file"
-              onChange={handleFileUpload}
+              onChange={handleFileSelect}
               accept={product.allowedFileTypes?.split(',').map((t) => `.${t.trim().toLowerCase()}`).join(',')}
               className="block w-full text-sm text-gray-500
                 file:mr-4 file:py-2 file:px-4
@@ -164,17 +205,142 @@ export default function ProductConfigurator({
                 file:text-sm file:font-semibold
                 file:bg-blue-50 file:text-blue-700
                 hover:file:bg-blue-100"
-              disabled={isUploading}
+              disabled={isUploading || isValidating}
             />
           </div>
-          <p className="text-xs text-gray-500 mt-2">
+
+          {/* Requirements */}
+          <p className="text-xs text-gray-500">
             {locale === 'de-DE' ? 'Akzeptiert' : 'Accepts'}: {product.allowedFileTypes} (
             {locale === 'de-DE' ? 'Max.' : 'Max'}: {product.maxFileSizeMb}MB)
+            {product.requiredMinWidth && product.requiredMinHeight && (
+              <span>
+                {' '}
+                • {locale === 'de-DE' ? 'Min. Abmessungen' : 'Min. dimensions'}:{' '}
+                {product.requiredMinWidth}x{product.requiredMinHeight}px
+              </span>
+            )}
+            {product.requiredDpi && (
+              <span>
+                {' '}
+                • {locale === 'de-DE' ? 'Empfohlene DPI' : 'Recommended DPI'}: {product.requiredDpi}
+              </span>
+            )}
           </p>
-          {uploadedFile && (
-            <p className="text-sm text-green-600 mt-2">
-              ✓ {uploadedFile.name} ({(uploadedFile.size / 1024 / 1024).toFixed(2)}MB)
-            </p>
+
+          {/* Validating State */}
+          {isValidating && (
+            <div className="flex items-center gap-2 text-sm text-blue-600">
+              <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                  fill="none"
+                />
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                />
+              </svg>
+              <span>{locale === 'de-DE' ? 'Datei wird validiert...' : 'Validating file...'}</span>
+            </div>
+          )}
+
+          {/* Validation Errors */}
+          {validationResult && !validationResult.valid && (
+            <div className="bg-red-50 border border-red-200 rounded-md p-3">
+              <p className="text-sm font-medium text-red-800 mb-1">
+                {locale === 'de-DE' ? 'Validierungsfehler:' : 'Validation Errors:'}
+              </p>
+              {validationResult.errors.map((error, index) => (
+                <p key={index} className="text-sm text-red-600">
+                  • {error}
+                </p>
+              ))}
+            </div>
+          )}
+
+          {/* File Metadata & Warnings */}
+          {validationResult && validationResult.valid && fileMetadata && (
+            <div className="bg-green-50 border border-green-200 rounded-md p-3 space-y-2">
+              <p className="text-sm font-medium text-green-800">
+                ✓ {locale === 'de-DE' ? 'Datei erfolgreich validiert' : 'File successfully validated'}
+              </p>
+              <div className="text-sm text-gray-700 space-y-1">
+                <p>
+                  <strong>{locale === 'de-DE' ? 'Dateiname' : 'Filename'}:</strong> {uploadedFile?.name}
+                </p>
+                <p>
+                  <strong>{locale === 'de-DE' ? 'Typ' : 'Type'}:</strong> {fileMetadata.fileType}
+                </p>
+                <p>
+                  <strong>{locale === 'de-DE' ? 'Größe' : 'Size'}:</strong>{' '}
+                  {formatFileSize(fileMetadata.fileSize)}
+                </p>
+                {fileMetadata.width && fileMetadata.height && (
+                  <p>
+                    <strong>{locale === 'de-DE' ? 'Abmessungen' : 'Dimensions'}:</strong>{' '}
+                    {fileMetadata.width} x {fileMetadata.height}px
+                  </p>
+                )}
+              </div>
+              {validationResult.warnings.length > 0 && (
+                <div className="text-sm text-yellow-700 space-y-1 mt-2 pt-2 border-t border-green-300">
+                  {validationResult.warnings.map((warning, index) => (
+                    <p key={index}>• {warning}</p>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Upload Button */}
+          {uploadedFile && validationResult?.valid && !uploadedFileUrl && (
+            <button
+              onClick={handleFileUpload}
+              disabled={isUploading}
+              className="w-full bg-blue-600 text-white py-2 px-4 rounded-md font-semibold
+                hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed
+                transition-colors flex items-center justify-center gap-2"
+            >
+              {isUploading ? (
+                <>
+                  <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                      fill="none"
+                    />
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    />
+                  </svg>
+                  <span>{locale === 'de-DE' ? 'Wird hochgeladen...' : 'Uploading...'}</span>
+                </>
+              ) : (
+                <span>{locale === 'de-DE' ? 'Datei hochladen' : 'Upload File'}</span>
+              )}
+            </button>
+          )}
+
+          {/* Uploaded Successfully */}
+          {uploadedFileUrl && (
+            <div className="bg-blue-50 border border-blue-200 rounded-md p-3">
+              <p className="text-sm text-blue-800">
+                ✓ {locale === 'de-DE' ? 'Datei erfolgreich hochgeladen!' : 'File uploaded successfully!'}
+              </p>
+            </div>
           )}
         </div>
       )}

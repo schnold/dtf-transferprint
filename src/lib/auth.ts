@@ -144,6 +144,10 @@ export const auth = betterAuth({
         type: "boolean",
         defaultValue: false,
       },
+      companyName: {
+        type: "string",
+        required: false,
+      },
       umsatzsteuernummer: {
         type: "string",
         required: false,

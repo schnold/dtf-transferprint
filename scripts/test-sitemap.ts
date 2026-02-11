@@ -68,12 +68,15 @@ async function testSitemap() {
         console.log('   ✓ All product slugs are valid\n');
       }
 
-      // Count static pages
-      const staticPageCount = 62; // As defined in sitemap.xml.ts
-      const totalUrls = staticPageCount + result.rows.length;
+      // Count URLs: static pages + themen (from data/themen) + products
+      const { textilthemenSlugs, sportbekleidungSlugs } = await import('../src/data/themen');
+      const themenCount = Object.keys(textilthemenSlugs).length + Object.keys(sportbekleidungSlugs).length;
+      const staticPageCount = 64; // Static pages in sitemap.xml.ts (incl. /themen, arbeitskleidung)
+      const totalUrls = staticPageCount + themenCount + result.rows.length;
 
       console.log('5. URL Summary:');
       console.log(`   Static pages: ${staticPageCount}`);
+      console.log(`   Themen pages: ${themenCount}`);
       console.log(`   Product pages: ${result.rows.length}`);
       console.log(`   Total URLs in sitemap: ${totalUrls}\n`);
 

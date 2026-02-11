@@ -1,5 +1,6 @@
 import type { APIRoute } from 'astro';
 import { pool } from '@/lib/db';
+import { textilthemenSlugs, sportbekleidungSlugs } from '@/data/themen';
 
 // Define your site URL
 const SITE_URL = import.meta.env.PUBLIC_BETTER_AUTH_URL || 'https://selini-shirt.de';
@@ -25,6 +26,10 @@ const staticPages: SitemapURL[] = [
   { loc: '/team', changefreq: 'monthly', priority: 0.5 },
   { loc: '/karriere', changefreq: 'monthly', priority: 0.5 },
   { loc: '/unternehmen', changefreq: 'monthly', priority: 0.6 },
+
+  // Themen (overview) and Arbeitskleidung
+  { loc: '/themen', changefreq: 'monthly', priority: 0.7 },
+  { loc: '/arbeitskleidung/kasacks-besticken-medizin-bekleidung', changefreq: 'monthly', priority: 0.6 },
 
   // Info pages
   { loc: '/faq', changefreq: 'monthly', priority: 0.7 },
@@ -63,6 +68,34 @@ const staticPages: SitemapURL[] = [
   { loc: '/checkout', changefreq: 'daily', priority: 0.5 },
   { loc: '/orders', changefreq: 'weekly', priority: 0.4 },
 ];
+
+/** Build themen URLs from data/themen – updates automatically when themes are added. */
+function getThemenUrls(): SitemapURL[] {
+  const urls: SitemapURL[] = [];
+  const currentDate = new Date().toISOString();
+
+  // Textilthemen: /themen/[slug]/
+  for (const slug of Object.keys(textilthemenSlugs)) {
+    urls.push({
+      loc: `/themen/${slug}/`,
+      lastmod: currentDate,
+      changefreq: 'monthly',
+      priority: 0.7,
+    });
+  }
+
+  // Sportbekleidung: /themen/sportbekleidung-bedrucken/[slug]/
+  for (const slug of Object.keys(sportbekleidungSlugs)) {
+    urls.push({
+      loc: `/themen/sportbekleidung-bedrucken/${slug}/`,
+      lastmod: currentDate,
+      changefreq: 'monthly',
+      priority: 0.7,
+    });
+  }
+
+  return urls;
+}
 
 async function getProductUrls(): Promise<SitemapURL[]> {
   const client = await pool.connect();
@@ -112,8 +145,11 @@ ${urlEntries}
 
 export const GET: APIRoute = async () => {
   try {
-    // Get product URLs from database
+    // Get product URLs from database (dynamic: new products appear automatically)
     const productUrls = await getProductUrls();
+
+    // Get themen URLs from data/themen (dynamic: new themes in data file appear automatically)
+    const themenUrls = getThemenUrls();
 
     // Get current date for lastmod of static pages
     const currentDate = new Date().toISOString();
@@ -124,8 +160,8 @@ export const GET: APIRoute = async () => {
       lastmod: page.lastmod || currentDate,
     }));
 
-    // Combine all URLs
-    const allUrls = [...staticPagesWithDate, ...productUrls];
+    // Combine all URLs: static + themen content + products
+    const allUrls = [...staticPagesWithDate, ...themenUrls, ...productUrls];
 
     // Generate sitemap XML
     const sitemap = generateSitemapXML(allUrls);
