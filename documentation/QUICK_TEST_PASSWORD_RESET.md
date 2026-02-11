@@ -119,10 +119,10 @@ For production/full email testing:
 
 ```env
 # Already in your .env:
-BETTER_AUTH_SECRET=yPLFG+be2N4NQQ9kpMXtLvZ/UXpFwCOJ6VaVlAVIpMQ=
+BETTER_AUTH_SECRET=your-secret-key-here  # Generate: openssl rand -base64 32
 BETTER_AUTH_URL=http://localhost:4321
 PUBLIC_BETTER_AUTH_URL=http://localhost:4321
-RESEND_API_KEY=re_Tp8YXcqK_7Ap1jan5hjBeJGW4iACMPvKL
+RESEND_API_KEY=re_xxxxxxxxxxxxxxxxxxxx  # Your Resend API key
 RESEND_FROM_EMAIL=info@selini-shirt.de
 ```
 

@@ -2,6 +2,13 @@
   command = "npm run build"
   publish = "dist"
 
+# Secrets scanning configuration
+[build.environment]
+  # Exclude documentation and example files from secrets scanning
+  SECRETS_SCAN_OMIT_PATHS = "documentation/**,*.example,.env.example"
+  # Allow intentionally public environment variables
+  SECRETS_SCAN_OMIT_KEYS = "PUBLIC_BETTER_AUTH_URL,PAYPAL_MODE"
+
 [[headers]]
   for = "/*"
   [headers.values]
