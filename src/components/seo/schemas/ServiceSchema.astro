@@ -1,0 +1,58 @@
+---
+import { SITE_CONFIG } from '../../../constants/site';
+
+interface Props {
+	name: string;
+	description: string;
+	url: string;
+	serviceType?: string;
+	areaServed?: string;
+}
+
+const {
+	name,
+	description,
+	url,
+	serviceType = "Printing Service",
+	areaServed = "Deutschland"
+} = Astro.props;
+
+const schema = {
+	"@context": "https://schema.org",
+	"@type": "Service",
+	"name": name,
+	"description": description,
+	"url": url,
+	"serviceType": serviceType,
+	"provider": {
+		"@type": "Organization",
+		"@id": `${SITE_CONFIG.url}/#organization`,
+		"name": SITE_CONFIG.brand.name
+	},
+	"areaServed": {
+		"@type": "Country",
+		"name": areaServed
+	},
+	"availableChannel": {
+		"@type": "ServiceChannel",
+		"serviceUrl": url,
+		"servicePhone": {
+			"@type": "ContactPoint",
+			"telephone": SITE_CONFIG.contact.phone,
+			"contactType": "customer service"
+		},
+		"serviceLocation": {
+			"@type": "Place",
+			"address": {
+				"@type": "PostalAddress",
+				"streetAddress": SITE_CONFIG.company.address,
+				"addressLocality": SITE_CONFIG.company.city,
+				"postalCode": SITE_CONFIG.company.postalCode,
+				"addressCountry": "DE"
+			}
+		}
+	}
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />

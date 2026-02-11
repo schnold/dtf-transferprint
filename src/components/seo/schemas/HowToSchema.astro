@@ -1,0 +1,99 @@
+---
+import { SITE_CONFIG } from '../../../constants/site';
+
+interface HowToStep {
+	name: string;
+	text: string;
+	image?: string;
+	url?: string;
+}
+
+interface HowToTool {
+	name: string;
+	image?: string;
+}
+
+interface HowToSupply {
+	name: string;
+	image?: string;
+}
+
+interface Props {
+	name: string;
+	description: string;
+	image?: string;
+	totalTime?: string; // ISO 8601 duration format (e.g., "PT10M" for 10 minutes)
+	steps: HowToStep[];
+	tools?: HowToTool[];
+	supplies?: HowToSupply[];
+	estimatedCost?: {
+		currency: string;
+		value: string;
+	};
+}
+
+const {
+	name,
+	description,
+	image,
+	totalTime,
+	steps,
+	tools,
+	supplies,
+	estimatedCost
+} = Astro.props;
+
+const schema = {
+	"@context": "https://schema.org",
+	"@type": "HowTo",
+	"name": name,
+	"description": description,
+	...(image && {
+		"image": {
+			"@type": "ImageObject",
+			"url": image.startsWith('http') ? image : `${SITE_CONFIG.url}${image}`
+		}
+	}),
+	...(totalTime && { "totalTime": totalTime }),
+	"step": steps.map((step, index) => ({
+		"@type": "HowToStep",
+		"position": index + 1,
+		"name": step.name,
+		"text": step.text,
+		...(step.image && {
+			"image": {
+				"@type": "ImageObject",
+				"url": step.image.startsWith('http') ? step.image : `${SITE_CONFIG.url}${step.image}`
+			}
+		}),
+		...(step.url && { "url": step.url })
+	})),
+	...(tools && tools.length > 0 && {
+		"tool": tools.map(tool => ({
+			"@type": "HowToTool",
+			"name": tool.name,
+			...(tool.image && {
+				"image": tool.image.startsWith('http') ? tool.image : `${SITE_CONFIG.url}${tool.image}`
+			})
+		}))
+	}),
+	...(supplies && supplies.length > 0 && {
+		"supply": supplies.map(supply => ({
+			"@type": "HowToSupply",
+			"name": supply.name,
+			...(supply.image && {
+				"image": supply.image.startsWith('http') ? supply.image : `${SITE_CONFIG.url}${supply.image}`
+			})
+		}))
+	}),
+	...(estimatedCost && {
+		"estimatedCost": {
+			"@type": "MonetaryAmount",
+			"currency": estimatedCost.currency,
+			"value": estimatedCost.value
+		}
+	})
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />

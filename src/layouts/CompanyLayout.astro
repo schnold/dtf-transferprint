@@ -1,6 +1,9 @@
 ---
 import Layout from './Layout.astro';
 import Navbar from '../components/Navbar.astro';
+import BreadcrumbSchema from '../components/seo/schemas/BreadcrumbSchema.astro';
+import LocalBusinessSchema from '../components/seo/schemas/LocalBusinessSchema.astro';
+import { SITE_CONFIG } from '../constants/site';
 
 interface Props {
 	title: string;
@@ -8,6 +11,13 @@ interface Props {
 }
 
 const { title, description = title } = Astro.props;
+
+// Generate breadcrumb data for schema
+const breadcrumbs = [
+	{ name: 'Startseite', url: `${SITE_CONFIG.url}/` },
+	{ name: 'Unternehmen', url: `${SITE_CONFIG.url}/unternehmen/` },
+	{ name: title, url: `${SITE_CONFIG.url}${Astro.url.pathname}` }
+];
 ---
 
 <Layout title={`${title} - DTF Transfer Print`} description={description}>
@@ -34,6 +44,10 @@ const { title, description = title } = Astro.props;
 				<slot />
 			</article>
 		</div>
+
+		<!-- SEO Schemas -->
+		<BreadcrumbSchema items={breadcrumbs} />
+		<LocalBusinessSchema />
 	</main>
 </Layout>
 

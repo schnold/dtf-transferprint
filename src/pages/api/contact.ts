@@ -182,6 +182,8 @@ export const POST: APIRoute = async ({ request }) => {
             <div class="footer">
               <p><strong>Selini-Shirt</strong></p>
               <p>Hochwertige Direct-to-Film Transferdruck-Dienstleistungen</p>
+              <p>${SITE_CONFIG.company.shortAddress}</p>
+              <p>Tel: ${SITE_CONFIG.contact.displayPhone} · <a href="mailto:${SITE_CONFIG.contact.email}">${SITE_CONFIG.contact.email}</a></p>
               <div class="divider"></div>
               <p>Diese E-Mail wurde über das Kontaktformular auf selini-shirt.de gesendet.</p>
               <p>Antworten Sie direkt an: <a href="mailto:${email}">${email}</a></p>
@@ -205,6 +207,8 @@ ${message}
 ---
 Selini-Shirt
 Hochwertige Direct-to-Film Transferdruck-Dienstleistungen
+${SITE_CONFIG.company.shortAddress}
+Tel: ${SITE_CONFIG.contact.displayPhone} · E-Mail: ${SITE_CONFIG.contact.email}
 
 Diese E-Mail wurde über das Kontaktformular auf selini-shirt.de gesendet.
 Antworten Sie direkt an: ${email}
@@ -324,8 +328,8 @@ Antworten Sie direkt an: ${email}
             <div class="footer">
               <p><strong>Selini-Shirt</strong></p>
               <p>Hochwertige Direct-to-Film Transferdruck-Dienstleistungen</p>
-              <div class="divider"></div>
-              <p>${SITE_CONFIG.contact.email} | ${SITE_CONFIG.contact.phone}</p>
+              <p>${SITE_CONFIG.company.shortAddress}</p>
+              <p>Tel: ${SITE_CONFIG.contact.displayPhone} · <a href="mailto:${SITE_CONFIG.contact.email}">${SITE_CONFIG.contact.email}</a></p>
             </div>
           </div>
         </body>
@@ -348,8 +352,8 @@ Das Team von Selini-Shirt
 ---
 Selini-Shirt
 Hochwertige Direct-to-Film Transferdruck-Dienstleistungen
-${SITE_CONFIG.contact.email}
-${SITE_CONFIG.contact.phone}
+${SITE_CONFIG.company.shortAddress}
+Tel: ${SITE_CONFIG.contact.displayPhone} · E-Mail: ${SITE_CONFIG.contact.email}
     `.trim();
 
     // Send confirmation email to user

@@ -4,6 +4,7 @@ import { capturePayPalOrder } from '../../../lib/paypal';
 import { createOrder } from '../../../lib/db';
 import { sendEmail } from '../../../lib/email';
 import { generateOrderConfirmationEmail } from '../../../lib/order-email-template';
+import { getBaseTemplate } from '../../../lib/email-templates';
 import { checkRateLimit, RateLimits, getRateLimitHeaders } from '../../../lib/rate-limiter';
 
 /**
@@ -267,18 +268,9 @@ export const POST: APIRoute = async ({ request, locals }) => {
           price: formatPrice(parseFloat(item.totalPrice)),
         }));
 
-        // Get base template function from email-templates
-        const getBaseTemplate = (content: string, unsubscribeUrl: string, title: string = 'DTF Transfer Print'): string => {
-          // Simplified version - in production, import from email-templates
-          return `<!DOCTYPE html>
-<html lang="de">
-<head>
-  <meta charset="UTF-8">
-  <title>${title}</title>
-</head>
-<body>${content}</body>
-</html>`;
-        };
+        // Use shared email base template with order-specific footer reason
+        const getOrderBaseTemplate = (content: string, unsubscribeUrl: string, title?: string): string =>
+          getBaseTemplate(content, unsubscribeUrl, title ?? 'Bestellbestätigung - Selini-Shirt', 'weil Sie eine Bestellung bei Selini-Shirt aufgegeben haben.');
 
         const { html, text } = generateOrderConfirmationEmail(
           {
@@ -303,7 +295,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
             taxAmount: formatPrice(parseFloat(order.taxAmount)),
             orderUrl: `${process.env.BETTER_AUTH_URL || 'http://localhost:4321'}/order/${order.orderNumber}`,
           },
-          getBaseTemplate
+          getOrderBaseTemplate
         );
 
         await sendEmail({

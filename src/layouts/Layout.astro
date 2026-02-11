@@ -4,13 +4,34 @@ import Footer from "../components/Footer.astro";
 import BlockOverlay from "../components/BlockOverlay.astro";
 import CookieBanner from "../components/CookieBanner.astro";
 import LoadingOverlay from "../components/LoadingOverlay.astro";
+import SEOHead from "../components/seo/SEOHead.astro";
+import OrganizationSchema from "../components/seo/schemas/OrganizationSchema.astro";
+import WebSiteSchema from "../components/seo/schemas/WebSiteSchema.astro";
 
 interface Props {
 	title?: string;
 	description?: string;
+	image?: string;
+	type?: 'website' | 'article' | 'product';
+	noindex?: boolean;
+	includeWebSiteSchema?: boolean; // For homepage only
+	organizationRating?: {
+		ratingValue: number;
+		reviewCount: number;
+	};
+	foundingDate?: string;
 }
 
-const { title = "DTF Transfer Print - Professional Print Solutions", description = "High-quality DTF transfers, custom printing, and fast turnaround times. Your vision, our expertise." } = Astro.props;
+const {
+	title = "DTF Transfer Print - Professional Print Solutions",
+	description = "High-quality DTF transfers, custom printing, and fast turnaround times. Your vision, our expertise.",
+	image,
+	type = 'website',
+	noindex = false,
+	includeWebSiteSchema = false,
+	organizationRating,
+	foundingDate
+} = Astro.props;
 ---
 
 <!doctype html>
@@ -25,6 +46,14 @@ const { title = "DTF Transfer Print - Professional Print Solutions", description
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 		<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 		<title>{title}</title>
+		<SEOHead
+			title={title}
+			description={description}
+			canonical={Astro.url.href}
+			image={image}
+			type={type}
+			noindex={noindex}
+		/>
 	</head>
 	<body class="flex flex-col min-h-screen bg-base-200 bg-gradient-to-br from-base-200 via-base-100 to-base-200">
 		<BlockOverlay />
@@ -34,6 +63,11 @@ const { title = "DTF Transfer Print - Professional Print Solutions", description
 		</div>
 		<Footer />
     <CookieBanner />
+		<OrganizationSchema
+			aggregateRating={organizationRating}
+			foundingDate={foundingDate}
+		/>
+		{includeWebSiteSchema && <WebSiteSchema />}
     <script>
       // Simple intersection observer for scroll animations
       document.addEventListener('DOMContentLoaded', () => {

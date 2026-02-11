@@ -178,10 +178,11 @@ export function generateFormRequestResponseEmail(data: FormRequestEmailData): {
         </div>
         <div class="footer">
           <p><strong>BySelini</strong></p>
+          <p>${SITE_CONFIG.company.shortAddress}</p>
           <p>
-            <a href="mailto:${SITE_CONFIG.contact.email}">${SITE_CONFIG.contact.email}</a>
-            &nbsp;|&nbsp;
             Tel: ${SITE_CONFIG.contact.displayPhone}
+            &nbsp;·&nbsp;
+            <a href="mailto:${SITE_CONFIG.contact.email}">${SITE_CONFIG.contact.email}</a>
           </p>
           <p style="margin-top: 15px;">
             <a href="${SITE_CONFIG.url}">${SITE_CONFIG.url.replace(/^https?:\/\//, '')}</a>
@@ -223,8 +224,9 @@ Das Team von BySelini
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 BySelini
-E-Mail: ${SITE_CONFIG.contact.email}
+${SITE_CONFIG.company.shortAddress}
 Tel: ${SITE_CONFIG.contact.displayPhone}
+E-Mail: ${SITE_CONFIG.contact.email}
 Web: ${SITE_CONFIG.url}
   `.trim();
 

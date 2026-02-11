@@ -1,4 +1,5 @@
 import { generateUnsubscribeToken } from './email';
+import { SITE_CONFIG } from '../constants/site';
 
 /**
  * HTML escape function to prevent XSS in email templates
@@ -185,6 +186,8 @@ Fragen zu Ihrer Bestellung? Kontaktieren Sie uns: ${data.baseUrl}/contact
 ---
 Selini-Shirt
 Hochwertige Direct-to-Film Transferdruck-Dienstleistungen
+${SITE_CONFIG.company.shortAddress}
+Tel: ${SITE_CONFIG.contact.displayPhone} · E-Mail: ${SITE_CONFIG.contact.email}
 
 Abmelden: ${unsubscribeUrl}
   `.trim();

@@ -1,16 +1,28 @@
 ---
 import Layout from './Layout.astro';
 import Navbar from '../components/Navbar.astro';
+import BreadcrumbSchema from '../components/seo/schemas/BreadcrumbSchema.astro';
+import ArticleSchema from '../components/seo/schemas/ArticleSchema.astro';
+import { SITE_CONFIG } from '../constants/site';
 
 interface Props {
 	title: string;
 	description?: string;
+	image?: string;
+	type?: 'website' | 'article' | 'product';
 }
 
-const { title, description = title } = Astro.props;
+const { title, description = title, image, type = 'article' } = Astro.props;
+
+// Generate breadcrumb data for schema
+const breadcrumbs = [
+	{ name: 'Startseite', url: `${SITE_CONFIG.url}/` },
+	{ name: 'Themen', url: `${SITE_CONFIG.url}/themen/` },
+	{ name: title, url: `${SITE_CONFIG.url}${Astro.url.pathname}` }
+];
 ---
 
-<Layout title={`${title} - DTF Transfer Print`} description={description}>
+<Layout title={`${title} - DTF Transfer Print`} description={description} image={image} type={type}>
 	<Navbar />
 
 	<main class="min-h-screen bg-base-200 bg-gradient-to-br from-base-200 via-base-100 to-base-200">
@@ -31,6 +43,15 @@ const { title, description = title } = Astro.props;
 				<slot />
 			</article>
 		</div>
+
+		<!-- SEO Schemas -->
+		<BreadcrumbSchema items={breadcrumbs} />
+		<ArticleSchema
+			headline={title}
+			description={description}
+			url={Astro.url.href}
+			image={image}
+		/>
 	</main>
 </Layout>
 

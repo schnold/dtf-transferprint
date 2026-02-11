@@ -584,7 +584,8 @@ const formatPrice = (price: number) => {
 		document.querySelectorAll('.quantity-decrease').forEach((button) => {
 			button.addEventListener('click', async (e) => {
 				e.preventDefault();
-				const buttonElement = e.currentTarget as HTMLElement;
+				const buttonElement = e.currentTarget;
+				if (!buttonElement || !(buttonElement instanceof HTMLElement)) return;
 				const cartItemId = buttonElement.getAttribute('data-cart-item-id');
 				if (!cartItemId) return;
 
@@ -595,12 +596,12 @@ const formatPrice = (price: number) => {
 					// Disable buttons during update
 					const cartItemElement = document.querySelector(`[data-cart-item-id="${cartItemId}"]`);
 					const buttons = cartItemElement?.querySelectorAll('button');
-					buttons?.forEach(btn => (btn as HTMLButtonElement).disabled = true);
+					buttons?.forEach(btn => { btn.disabled = true; });
 
 					await updateCartItemQuantity(cartItemId, currentQuantity - 1);
 
 					// Re-enable buttons after update
-					buttons?.forEach(btn => (btn as HTMLButtonElement).disabled = false);
+					buttons?.forEach(btn => { btn.disabled = false; });
 				}
 			});
 		});
@@ -608,7 +609,8 @@ const formatPrice = (price: number) => {
 		document.querySelectorAll('.quantity-increase').forEach((button) => {
 			button.addEventListener('click', async (e) => {
 				e.preventDefault();
-				const buttonElement = e.currentTarget as HTMLElement;
+				const buttonElement = e.currentTarget;
+				if (!buttonElement || !(buttonElement instanceof HTMLElement)) return;
 				const cartItemId = buttonElement.getAttribute('data-cart-item-id');
 				if (!cartItemId) return;
 
@@ -618,12 +620,12 @@ const formatPrice = (price: number) => {
 				// Disable buttons during update
 				const cartItemElement = document.querySelector(`[data-cart-item-id="${cartItemId}"]`);
 				const buttons = cartItemElement?.querySelectorAll('button');
-				buttons?.forEach(btn => (btn as HTMLButtonElement).disabled = true);
+				buttons?.forEach(btn => { btn.disabled = true; });
 
 				await updateCartItemQuantity(cartItemId, currentQuantity + 1);
 
 				// Re-enable buttons after update
-				buttons?.forEach(btn => (btn as HTMLButtonElement).disabled = false);
+				buttons?.forEach(btn => { btn.disabled = false; });
 			});
 		});
 
@@ -631,7 +633,9 @@ const formatPrice = (price: number) => {
 			button.addEventListener('click', (e) => {
 				e.preventDefault();
 				e.stopPropagation();
-				const cartItemId = (e.currentTarget as HTMLElement).getAttribute('data-cart-item-id');
+				const target = e.currentTarget;
+				if (!target || !(target instanceof HTMLElement)) return;
+				const cartItemId = target.getAttribute('data-cart-item-id');
 				if (!cartItemId) return;
 
 				removeCartItem(cartItemId);
@@ -912,7 +916,9 @@ const formatPrice = (price: number) => {
 	const attachShippingProfileListeners = () => {
 		document.querySelectorAll('.shipping-profile-radio').forEach((radio) => {
 			radio.addEventListener('change', async (e) => {
-				const profileId = (e.target as HTMLInputElement).getAttribute('data-profile-id');
+				const target = e.target;
+				if (!target || !(target instanceof HTMLInputElement)) return;
+				const profileId = target.getAttribute('data-profile-id');
 				if (!profileId) return;
 
 				try {

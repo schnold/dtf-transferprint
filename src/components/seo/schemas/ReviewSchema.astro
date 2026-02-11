@@ -1,0 +1,67 @@
+---
+import { SITE_CONFIG } from '../../../constants/site';
+
+interface Review {
+	author: string;
+	rating: number; // 1-5
+	reviewBody: string;
+	datePublished?: string;
+}
+
+interface Props {
+	// For Product or Service or Organization
+	itemReviewed: {
+		type: 'Product' | 'Service' | 'Organization' | 'LocalBusiness';
+		name: string;
+		image?: string;
+	};
+	aggregateRating?: {
+		ratingValue: number; // e.g., 4.8
+		reviewCount: number; // e.g., 127
+		bestRating?: number; // default 5
+		worstRating?: number; // default 1
+	};
+	reviews?: Review[];
+}
+
+const { itemReviewed, aggregateRating, reviews } = Astro.props;
+
+const schema = {
+	"@context": "https://schema.org",
+	"@type": itemReviewed.type,
+	"name": itemReviewed.name,
+	...(itemReviewed.image && {
+		"image": itemReviewed.image.startsWith('http')
+			? itemReviewed.image
+			: `${SITE_CONFIG.url}${itemReviewed.image}`
+	}),
+	...(aggregateRating && {
+		"aggregateRating": {
+			"@type": "AggregateRating",
+			"ratingValue": aggregateRating.ratingValue.toString(),
+			"reviewCount": aggregateRating.reviewCount.toString(),
+			"bestRating": (aggregateRating.bestRating || 5).toString(),
+			"worstRating": (aggregateRating.worstRating || 1).toString()
+		}
+	}),
+	...(reviews && reviews.length > 0 && {
+		"review": reviews.map(review => ({
+			"@type": "Review",
+			"author": {
+				"@type": "Person",
+				"name": review.author
+			},
+			"reviewRating": {
+				"@type": "Rating",
+				"ratingValue": review.rating.toString(),
+				"bestRating": "5",
+				"worstRating": "1"
+			},
+			"reviewBody": review.reviewBody,
+			...(review.datePublished && { "datePublished": review.datePublished })
+		}))
+	})
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />

@@ -201,7 +201,12 @@ const EMAIL_STYLES = `
   </style>
 `;
 
-function getBaseTemplate(content: string, unsubscribeUrl: string, title: string = 'Selini-Shirt'): string {
+export function getBaseTemplate(
+  content: string,
+  unsubscribeUrl: string,
+  title: string = 'Selini-Shirt',
+  footerReason: string = 'weil Sie ein Konto bei Selini-Shirt erstellt haben.'
+): string {
   return `
     <!DOCTYPE html>
     <html lang="de">
@@ -223,12 +228,14 @@ function getBaseTemplate(content: string, unsubscribeUrl: string, title: string 
         <div class="footer">
           <p><strong>Selini-Shirt</strong></p>
           <p>Hochwertige Direct-to-Film Transferdruck-Dienstleistungen</p>
+          <p>${SITE_CONFIG.company.shortAddress}</p>
+          <p>Tel: ${SITE_CONFIG.contact.displayPhone} · <a href="mailto:${SITE_CONFIG.contact.email}">${SITE_CONFIG.contact.email}</a></p>
           <div class="divider"></div>
           <p>
             <a href="${unsubscribeUrl}">Von E-Mails abmelden</a>
           </p>
           <p style="margin-top: 15px;">
-            Diese E-Mail wurde Ihnen gesendet, weil Sie ein Konto bei Selini-Shirt erstellt haben.
+            Diese E-Mail wurde Ihnen gesendet, ${footerReason}
           </p>
         </div>
       </div>
@@ -288,6 +295,8 @@ Sicherheitshinweis: Wenn Sie kein Konto bei Selini-Shirt erstellt haben, können
 ---
 Selini-Shirt
 Hochwertige Direct-to-Film Transferdruck-Dienstleistungen
+${SITE_CONFIG.company.shortAddress}
+Tel: ${SITE_CONFIG.contact.displayPhone} · E-Mail: ${SITE_CONFIG.contact.email}
 
 Abmelden: ${unsubscribeUrl}
   `.trim();
@@ -359,6 +368,8 @@ Aus Sicherheitsgründen empfehlen wir:
 ---
 Selini-Shirt
 Hochwertige Direct-to-Film Transferdruck-Dienstleistungen
+${SITE_CONFIG.company.shortAddress}
+Tel: ${SITE_CONFIG.contact.displayPhone} · E-Mail: ${SITE_CONFIG.contact.email}
 
 Abmelden: ${unsubscribeUrl}
   `.trim();
@@ -426,6 +437,8 @@ Benötigen Sie Hilfe? Besuchen Sie unsere Funktionsseite: ${data.baseUrl}/eigens
 ---
 Selini-Shirt
 Hochwertige Direct-to-Film Transferdruck-Dienstleistungen
+${SITE_CONFIG.company.shortAddress}
+Tel: ${SITE_CONFIG.contact.displayPhone} · E-Mail: ${SITE_CONFIG.contact.email}
 
 Abmelden: ${unsubscribeUrl}
   `.trim();

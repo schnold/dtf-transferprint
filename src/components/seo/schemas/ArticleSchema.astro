@@ -1,0 +1,94 @@
+---
+import { SITE_CONFIG } from '../../../constants/site';
+
+interface PersonAuthor {
+	type: 'Person';
+	name: string;
+	jobTitle?: string;
+	description?: string;
+	knowsAbout?: string[];
+	credential?: string;
+	url?: string;
+}
+
+interface Props {
+	headline: string;
+	description: string;
+	url: string;
+	image?: string;
+	datePublished?: string;
+	dateModified?: string;
+	author?: string | PersonAuthor; // Can be simple string or detailed Person object
+	wordCount?: number;
+	keywords?: string[];
+}
+
+const {
+	headline,
+	description,
+	url,
+	image,
+	datePublished = new Date().toISOString(),
+	dateModified = new Date().toISOString(),
+	author = SITE_CONFIG.brand.name,
+	wordCount,
+	keywords
+} = Astro.props;
+
+// Build author schema based on type
+const authorSchema = typeof author === 'string'
+	? {
+		"@type": "Organization",
+		"@id": `${SITE_CONFIG.url}/#organization`,
+		"name": author
+	}
+	: {
+		"@type": "Person",
+		"name": author.name,
+		...(author.jobTitle && { "jobTitle": author.jobTitle }),
+		...(author.description && { "description": author.description }),
+		...(author.knowsAbout && { "knowsAbout": author.knowsAbout }),
+		...(author.credential && { "credential": author.credential }),
+		...(author.url && { "url": author.url }),
+		"worksFor": {
+			"@type": "Organization",
+			"@id": `${SITE_CONFIG.url}/#organization`,
+			"name": SITE_CONFIG.brand.name
+		}
+	};
+
+const schema = {
+	"@context": "https://schema.org",
+	"@type": "Article",
+	"headline": headline,
+	"description": description,
+	"url": url,
+	"datePublished": datePublished,
+	"dateModified": dateModified,
+	"author": authorSchema,
+	"publisher": {
+		"@type": "Organization",
+		"@id": `${SITE_CONFIG.url}/#organization`,
+		"name": SITE_CONFIG.brand.name,
+		"logo": {
+			"@type": "ImageObject",
+			"url": `${SITE_CONFIG.url}/images/logo/logo-1.png`
+		}
+	},
+	...(image && {
+		"image": {
+			"@type": "ImageObject",
+			"url": image.startsWith('http') ? image : `${SITE_CONFIG.url}${image}`
+		}
+	}),
+	...(wordCount && { "wordCount": wordCount }),
+	...(keywords && keywords.length > 0 && { "keywords": keywords.join(', ') }),
+	"inLanguage": "de-DE",
+	"mainEntityOfPage": {
+		"@type": "WebPage",
+		"@id": url
+	}
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />

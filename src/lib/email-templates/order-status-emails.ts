@@ -213,6 +213,8 @@ function getBaseTemplate(content: string, unsubscribeUrl: string, title: string 
         <div class="footer">
           <p><strong>Selini-Shirt</strong></p>
           <p>Hochwertige Direct-to-Film Transferdruck-Dienstleistungen</p>
+          <p>${SITE_CONFIG.company.shortAddress}</p>
+          <p>Tel: ${SITE_CONFIG.contact.displayPhone} · <a href="mailto:${SITE_CONFIG.contact.email}">${SITE_CONFIG.contact.email}</a></p>
           <div class="divider"></div>
           <p>
             <a href="${unsubscribeUrl}">Von E-Mails abmelden</a>
@@ -283,6 +285,8 @@ Bei Fragen zu Ihrer Bestellung können Sie uns jederzeit kontaktieren.
 ---
 Selini-Shirt
 Hochwertige Direct-to-Film Transferdruck-Dienstleistungen
+${SITE_CONFIG.company.shortAddress}
+Tel: ${SITE_CONFIG.contact.displayPhone} · E-Mail: ${SITE_CONFIG.contact.email}
 
 Abmelden: ${unsubscribeUrl}
 `;
@@ -346,6 +350,8 @@ Vielen Dank für Ihr Vertrauen in Selini-Shirt!
 ---
 Selini-Shirt
 Hochwertige Direct-to-Film Transferdruck-Dienstleistungen
+${SITE_CONFIG.company.shortAddress}
+Tel: ${SITE_CONFIG.contact.displayPhone} · E-Mail: ${SITE_CONFIG.contact.email}
 
 Abmelden: ${unsubscribeUrl}
 `;
@@ -422,6 +428,8 @@ Wir hoffen, dass Sie mit Ihrer Bestellung zufrieden sein werden!
 ---
 Selini-Shirt
 Hochwertige Direct-to-Film Transferdruck-Dienstleistungen
+${SITE_CONFIG.company.shortAddress}
+Tel: ${SITE_CONFIG.contact.displayPhone} · E-Mail: ${SITE_CONFIG.contact.email}
 
 Abmelden: ${unsubscribeUrl}
 `;
@@ -493,6 +501,8 @@ Wir würden uns freuen, Sie bald wieder bei Selini-Shirt begrüßen zu dürfen!
 ---
 Selini-Shirt
 Hochwertige Direct-to-Film Transferdruck-Dienstleistungen
+${SITE_CONFIG.company.shortAddress}
+Tel: ${SITE_CONFIG.contact.displayPhone} · E-Mail: ${SITE_CONFIG.contact.email}
 
 Abmelden: ${unsubscribeUrl}
 `;

@@ -2,6 +2,25 @@
 User-agent: *
 Allow: /
 
+# Explicitly allow AI crawlers for Generative Engine Optimization (GEO)
+User-agent: GPTBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
 # Disallow admin and authentication pages
 Disallow: /admin/
 Disallow: /auth/

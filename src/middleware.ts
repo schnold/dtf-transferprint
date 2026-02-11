@@ -4,11 +4,21 @@ import { defineMiddleware } from "astro:middleware";
 import { pool } from "./lib/db";
 
 export const onRequest = defineMiddleware(async (context, next) => {
+  // Skip middleware entirely for static/prerendered content pages
+  // These pages don't need auth checks and will be generated at build time
+  const staticContentPaths = ['/themen/', '/arbeitskleidung/'];
+  const isStaticContent = staticContentPaths.some(path => context.url.pathname.startsWith(path));
+
+  if (isStaticContent) {
+    // Skip all middleware processing for static content
+    return next();
+  }
+
   // Check for password protection (block overlay)
   // Try both import.meta.env (Astro's way) and process.env (dotenv way)
   const blockPassword = import.meta.env.BLOCK_PASSWORD || process.env.BLOCK_PASSWORD;
-  
-  // Get the session from the request first (needed for block auth check)
+
+  // Get the session from the request
   const session = await auth.api.getSession({
     headers: context.request.headers,
   });

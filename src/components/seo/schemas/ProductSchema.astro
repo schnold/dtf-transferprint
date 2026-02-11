@@ -1,0 +1,56 @@
+---
+import { SITE_CONFIG } from '../../../constants/site';
+
+interface Props {
+	name: string;
+	description: string;
+	image: string;
+	price?: string;
+	sku?: string;
+	availability?: 'InStock' | 'OutOfStock' | 'PreOrder' | 'SoldOut';
+	url?: string;
+}
+
+const {
+	name,
+	description,
+	image,
+	price,
+	sku,
+	availability = 'InStock',
+	url = Astro.url.href
+} = Astro.props;
+
+const absoluteImageUrl = image.startsWith('http') ? image : `${SITE_CONFIG.url}${image}`;
+
+const schema = {
+	"@context": "https://schema.org",
+	"@type": "Product",
+	"name": name,
+	"description": description,
+	"image": absoluteImageUrl,
+	"url": url,
+	"brand": {
+		"@type": "Organization",
+		"@id": `${SITE_CONFIG.url}/#organization`,
+		"name": SITE_CONFIG.brand.name
+	},
+	...(sku && { "sku": sku }),
+	...(price && {
+		"offers": {
+			"@type": "Offer",
+			"price": price,
+			"priceCurrency": "EUR",
+			"availability": `https://schema.org/${availability}`,
+			"url": url,
+			"seller": {
+				"@type": "Organization",
+				"@id": `${SITE_CONFIG.url}/#organization`,
+				"name": SITE_CONFIG.brand.name
+			}
+		}
+	})
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />

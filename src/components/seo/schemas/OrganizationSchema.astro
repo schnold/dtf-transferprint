@@ -1,0 +1,74 @@
+---
+import { SITE_CONFIG } from '../../../constants/site';
+
+interface Props {
+	aggregateRating?: {
+		ratingValue: number;
+		reviewCount: number;
+		bestRating?: number;
+		worstRating?: number;
+	};
+	foundingDate?: string; // e.g., "1994"
+}
+
+const { aggregateRating, foundingDate } = Astro.props;
+
+const schema = {
+	"@context": "https://schema.org",
+	"@type": "Organization",
+	"@id": `${SITE_CONFIG.url}/#organization`,
+	"name": SITE_CONFIG.brand.name,
+	"legalName": SITE_CONFIG.company.legalName,
+	"url": SITE_CONFIG.url,
+	"logo": {
+		"@type": "ImageObject",
+		"url": `${SITE_CONFIG.url}/images/logo/logo-1.png`,
+		"width": "200",
+		"height": "60"
+	},
+	"description": SITE_CONFIG.brand.tagline,
+	"address": {
+		"@type": "PostalAddress",
+		"streetAddress": SITE_CONFIG.company.address,
+		"postalCode": SITE_CONFIG.company.postalCode,
+		"addressLocality": SITE_CONFIG.company.city,
+		"addressCountry": "DE"
+	},
+	"contactPoint": {
+		"@type": "ContactPoint",
+		"telephone": SITE_CONFIG.contact.phone,
+		"email": SITE_CONFIG.contact.email,
+		"contactType": "customer service",
+		"areaServed": "DE",
+		"availableLanguage": "German"
+	},
+	"areaServed": {
+		"@type": "Country",
+		"name": "Deutschland"
+	},
+	"knowsAbout": [
+		"DTF-Druck",
+		"Direct-to-Film Printing",
+		"Textildruck",
+		"Siebdruck",
+		"Stickerei",
+		"Transferdruck",
+		"Flex- und Flockdruck",
+		"Plastisoltransfer",
+		"Sublimationsdruck"
+	],
+	"knowsLanguage": "de",
+	...(foundingDate && { "foundingDate": foundingDate }),
+	...(aggregateRating && {
+		"aggregateRating": {
+			"@type": "AggregateRating",
+			"ratingValue": aggregateRating.ratingValue.toString(),
+			"reviewCount": aggregateRating.reviewCount.toString(),
+			"bestRating": (aggregateRating.bestRating || 5).toString(),
+			"worstRating": (aggregateRating.worstRating || 1).toString()
+		}
+	})
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />

@@ -13,6 +13,7 @@ import {
 } from '../../../lib/email-templates/order-status-emails';
 import { generateFormRequestResponseEmail } from '../../../lib/email-templates/form-request-emails';
 import { generateOrderConfirmationEmail } from '../../../lib/order-email-template';
+import { getBaseTemplate } from '../../../lib/email-templates';
 
 /**
  * POST /api/admin/test-email
@@ -88,21 +89,9 @@ export const POST: APIRoute = async ({ request, locals }) => {
         break;
 
       case 'order-confirmation':
-        // Base template function for order confirmation
-        const getBaseTemplate = (
-          content: string,
-          unsubscribeUrl: string,
-          title: string = 'Selini-Shirt'
-        ): string => {
-          return `<!DOCTYPE html>
-<html lang="de">
-<head>
-  <meta charset="UTF-8">
-  <title>${title}</title>
-</head>
-<body>${content}</body>
-</html>`;
-        };
+        // Use shared base template with order-specific footer reason
+        const getOrderBaseTemplate = (content: string, unsubscribeUrl: string, title?: string): string =>
+          getBaseTemplate(content, unsubscribeUrl, title ?? 'Selini-Shirt', 'weil Sie eine Bestellung bei Selini-Shirt aufgegeben haben.');
 
         emailContent = generateOrderConfirmationEmail(
           {
@@ -121,7 +110,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
             taxAmount: '€14,02',
             orderUrl: `${baseUrl}/orders/TEST-${Date.now()}`,
           },
-          getBaseTemplate
+          getOrderBaseTemplate
         );
         subject = 'Bestellbestätigung - Selini-Shirt (TEST)';
         break;

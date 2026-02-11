@@ -4,13 +4,14 @@ import InquiryForm from '../../../components/InquiryForm.astro';
 import ContactCTASection from '../../../components/ContactCTASection.astro';
 import ProsConsSection from '../../../components/ProsConsSection.astro';
 import UseCasesSection from '../../../components/UseCasesSection.astro';
+import FAQSchema from '../../../components/seo/schemas/FAQSchema.astro';
 import { sportbekleidungSlugs } from '../../../data/themen';
 import type { ThemeMetric, ThemeFAQ } from '../../../data/themen';
-import { 
-	Wind, Zap, Feather, Palette, Droplets, Users, Timer, Shield, 
-	Sun, Pocket, Award, Layers, Briefcase, Monitor, MousePointer, Minimize2, 
-	Activity, Thermometer, Maximize, Sliders, Clock, TrendingUp, ShoppingBag, Tag 
-} from 'lucide-astro';
+import {
+	Wind, Zap, Feather, Palette, Droplets, Users, Timer, Shield,
+	Sun, Pocket, Award, Layers, Briefcase, Monitor, MousePointer, Minimize2,
+	Activity, Thermometer, Maximize, Sliders, Clock, TrendingUp, ShoppingBag, Tag
+} from '@lucide/astro';
 
 export const prerender = true;
 
@@ -182,6 +183,9 @@ const currentFaqs = faqs || defaultFaqs;
 			</div>
 		))}
 	</div>
+
+	<!-- FAQ Schema for SEO -->
+	<FAQSchema faqs={currentFaqs} />
 
 	<div class="divider my-12"></div>
 	<div id="inquiry-form" class="scroll-mt-20">

@@ -4,6 +4,7 @@ import InquiryForm from '../../components/InquiryForm.astro';
 import ContactCTASection from '../../components/ContactCTASection.astro';
 import ProsConsSection from '../../components/ProsConsSection.astro';
 import UseCasesSection from '../../components/UseCasesSection.astro';
+import FAQSchema from '../../components/seo/schemas/FAQSchema.astro';
 import { textilthemenSlugs } from '../../data/themen';
 
 export const prerender = true;
@@ -19,6 +20,18 @@ const { slug } = Astro.params;
 const { title, description } = Astro.props;
 const placeholderImage = '/images/themen/placeholder.webp';
 const imageSlug = slug || '';
+
+// FAQ data for schema
+const faqs = [
+	{
+		question: "Gibt es eine Mindestmenge?",
+		answer: "Nein. Wir bieten auch Einzelstücke und Kleinauflagen an. Je nach Verfahren (z.B. DTF oder Sublimation) sind bereits ab 1 Stück attraktive Preise möglich."
+	},
+	{
+		question: "Welche Druckverfahren kommen infrage?",
+		answer: "Wir setzen DTF-Druck, Siebdruck, Sublimation und Stickerei ein. Die beste Wahl hängt von Textil, Auflage und Motiv ab. In der Beratung klären wir das mit Ihnen."
+	}
+];
 ---
 
 <ThemeLayout title={title} description={description}>
@@ -176,6 +189,9 @@ const imageSlug = slug || '';
 			</div>
 		</div>
 	</div>
+
+	<!-- FAQ Schema for SEO -->
+	<FAQSchema faqs={faqs} />
 
 	<div class="divider my-12"></div>
 	<div id="inquiry-form" class="scroll-mt-20">

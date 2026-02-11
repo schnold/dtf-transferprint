@@ -1,0 +1,55 @@
+---
+import { SITE_CONFIG } from '../../constants/site';
+
+interface Props {
+	title: string;
+	description: string;
+	canonical?: string;
+	image?: string;
+	imageAlt?: string;
+	type?: 'website' | 'article' | 'product';
+	locale?: string;
+	noindex?: boolean;
+}
+
+const {
+	title,
+	description,
+	canonical = Astro.url.href,
+	image = `${SITE_CONFIG.url}/images/logo/logo-1.webp`,
+	imageAlt = SITE_CONFIG.brand.logo.alt,
+	type = 'website',
+	locale = 'de_DE',
+	noindex = false,
+} = Astro.props;
+
+// Ensure image URL is absolute
+const absoluteImageUrl = image.startsWith('http') ? image : `${SITE_CONFIG.url}${image}`;
+
+// Ensure canonical URL is absolute
+const absoluteCanonicalUrl = canonical.startsWith('http') ? canonical : `${SITE_CONFIG.url}${canonical}`;
+---
+
+<!-- Canonical URL -->
+<link rel="canonical" href={absoluteCanonicalUrl} />
+
+<!-- Robots -->
+{noindex && <meta name="robots" content="noindex, nofollow" />}
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content={type} />
+<meta property="og:url" content={absoluteCanonicalUrl} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={absoluteImageUrl} />
+<meta property="og:image:alt" content={imageAlt} />
+<meta property="og:locale" content={locale} />
+<meta property="og:site_name" content={SITE_CONFIG.brand.name} />
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:url" content={absoluteCanonicalUrl} />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={absoluteImageUrl} />
+<meta name="twitter:image:alt" content={imageAlt} />

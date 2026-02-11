@@ -1,0 +1,33 @@
+---
+import { SITE_CONFIG } from '../../../constants/site';
+
+interface Props {
+	searchUrl?: string; // URL template for search, e.g., "/search?q={search_term_string}"
+}
+
+const { searchUrl = "/search?q={search_term_string}" } = Astro.props;
+
+const schema = {
+	"@context": "https://schema.org",
+	"@type": "WebSite",
+	"@id": `${SITE_CONFIG.url}/#website`,
+	"url": SITE_CONFIG.url,
+	"name": SITE_CONFIG.brand.name,
+	"description": SITE_CONFIG.brand.tagline,
+	"publisher": {
+		"@type": "Organization",
+		"@id": `${SITE_CONFIG.url}/#organization`
+	},
+	"potentialAction": {
+		"@type": "SearchAction",
+		"target": {
+			"@type": "EntryPoint",
+			"urlTemplate": `${SITE_CONFIG.url}${searchUrl}`
+		},
+		"query-input": "required name=search_term_string"
+	},
+	"inLanguage": "de-DE"
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />

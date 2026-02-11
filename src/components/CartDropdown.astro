@@ -3,27 +3,11 @@ import { pool } from '../lib/db';
 
 const user = Astro.locals.user;
 
-// Fetch cart with price tier information
+// Initialize empty cart state - client-side JavaScript will populate it
+// This avoids accessing Astro.request.headers in prerendered pages
 let cartItems: any[] = [];
 let hasCartItems = false;
 let subtotal = 0;
-
-if (user) {
-	const response = await fetch(`${Astro.url.origin}/api/cart/get`, {
-		headers: {
-			'Cookie': Astro.request.headers.get('Cookie') || '',
-		},
-	});
-	
-	if (response.ok) {
-		const result = await response.json();
-		if (result.success) {
-			cartItems = result.data.items || [];
-			hasCartItems = cartItems.length > 0;
-			subtotal = result.data.subtotal || 0;
-		}
-	}
-}
 
 const formatPrice = (price: number) => {
 	return new Intl.NumberFormat('de-DE', {
@@ -735,6 +719,14 @@ const formatPrice = (price: number) => {
 	// Event listeners
 	document.addEventListener('DOMContentLoaded', () => {
 		console.log('CartDropdown: DOM Content Loaded');
+
+		// Fetch and display cart data on page load (for authenticated users)
+		const cartIconButton = document.getElementById('cart-icon-button');
+		if (cartIconButton) {
+			// User is logged in, fetch cart data
+			updateCartUI(false);
+		}
+
 		// Attach initial event listeners
 		attachCartItemListeners();
 

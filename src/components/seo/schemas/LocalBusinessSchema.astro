@@ -1,0 +1,42 @@
+---
+import { SITE_CONFIG } from '../../../constants/site';
+
+const schema = {
+	"@context": "https://schema.org",
+	"@type": ["Organization", "LocalBusiness", "Store"],
+	"@id": `${SITE_CONFIG.url}/#localbusiness`,
+	"name": SITE_CONFIG.brand.name,
+	"legalName": SITE_CONFIG.company.legalName,
+	"url": SITE_CONFIG.url,
+	"logo": {
+		"@type": "ImageObject",
+		"url": `${SITE_CONFIG.url}/images/logo/logo-1.png`
+	},
+	"description": SITE_CONFIG.brand.tagline,
+	"address": {
+		"@type": "PostalAddress",
+		"streetAddress": SITE_CONFIG.company.address,
+		"postalCode": SITE_CONFIG.company.postalCode,
+		"addressLocality": SITE_CONFIG.company.city,
+		"addressRegion": "Berlin",
+		"addressCountry": "DE"
+	},
+	"geo": {
+		"@type": "GeoCoordinates",
+		"latitude": "52.4547",
+		"longitude": "13.3347"
+	},
+	"telephone": SITE_CONFIG.contact.phone,
+	"email": SITE_CONFIG.contact.email,
+	"priceRange": "€€",
+	"currenciesAccepted": "EUR",
+	"paymentAccepted": ["Credit Card", "Bank Transfer", "PayPal"],
+	"openingHours": "Mo-Fr 09:00-17:00",
+	"areaServed": {
+		"@type": "Country",
+		"name": "Deutschland"
+	}
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />

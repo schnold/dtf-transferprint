@@ -251,6 +251,8 @@ export const POST: APIRoute = async ({ request }) => {
             <div class="footer">
               <p><strong>Selini-Shirt</strong></p>
               <p>Hochwertige Direct-to-Film Transferdruck-Dienstleistungen</p>
+              <p>${SITE_CONFIG.company.shortAddress}</p>
+              <p>Tel: ${SITE_CONFIG.contact.displayPhone} · <a href="mailto:${SITE_CONFIG.contact.email}">${SITE_CONFIG.contact.email}</a></p>
               <div class="divider"></div>
               <p>Diese Anfrage wurde über ${pageTitle || 'die Website'} gesendet.</p>
               <p>Antworten Sie direkt an: <a href="mailto:${email}">${email}</a></p>
@@ -278,6 +280,8 @@ ${sourceUrl ? `Quelle: ${sourceUrl}` : ''}
 ---
 Selini-Shirt
 Hochwertige Direct-to-Film Transferdruck-Dienstleistungen
+${SITE_CONFIG.company.shortAddress}
+Tel: ${SITE_CONFIG.contact.displayPhone} · E-Mail: ${SITE_CONFIG.contact.email}
 
 Diese Anfrage wurde über ${pageTitle || 'die Website'} gesendet.
 Antworten Sie direkt an: ${email}
@@ -412,7 +416,7 @@ Antworten Sie direkt an: ${email}
 
               <p>In der Regel antworten wir innerhalb von 24 Stunden. Bei dringenden Fragen können Sie uns auch telefonisch erreichen:</p>
               <p style="text-align: center; font-size: 18px; margin: 20px 0;">
-                <strong><a href="tel:${SITE_CONFIG.contact.phone}" style="color: #EBF222; text-decoration: none;">${SITE_CONFIG.contact.phone}</a></strong>
+                <strong><a href="tel:${SITE_CONFIG.contact.phone}" style="color: #EBF222; text-decoration: none;">${SITE_CONFIG.contact.displayPhone}</a></strong>
               </p>
 
               <p>Mit freundlichen Grüßen,<br><strong>Das Team von Selini-Shirt</strong></p>
@@ -427,8 +431,8 @@ Antworten Sie direkt an: ${email}
             <div class="footer">
               <p><strong>Selini-Shirt</strong></p>
               <p>Hochwertige Direct-to-Film Transferdruck-Dienstleistungen</p>
-              <div class="divider"></div>
-              <p>${SITE_CONFIG.contact.email} | ${SITE_CONFIG.contact.phone}</p>
+              <p>${SITE_CONFIG.company.shortAddress}</p>
+              <p>Tel: ${SITE_CONFIG.contact.displayPhone} · <a href="mailto:${SITE_CONFIG.contact.email}">${SITE_CONFIG.contact.email}</a></p>
             </div>
           </div>
         </body>
@@ -446,7 +450,7 @@ Ihre Anfrage:
 ${message}
 
 In der Regel antworten wir innerhalb von 24 Stunden. Bei dringenden Fragen können Sie uns auch telefonisch erreichen:
-${SITE_CONFIG.contact.phone}
+${SITE_CONFIG.contact.displayPhone}
 
 Mit freundlichen Grüßen,
 Das Team von Selini-Shirt
@@ -454,8 +458,8 @@ Das Team von Selini-Shirt
 ---
 Selini-Shirt
 Hochwertige Direct-to-Film Transferdruck-Dienstleistungen
-${SITE_CONFIG.contact.email}
-${SITE_CONFIG.contact.phone}
+${SITE_CONFIG.company.shortAddress}
+Tel: ${SITE_CONFIG.contact.displayPhone} · E-Mail: ${SITE_CONFIG.contact.email}
     `.trim();
 
     // Send confirmation email to user
