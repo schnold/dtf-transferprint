@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import { SITE_CONFIG } from '../../constants/site';
 
 const session = Astro.locals.session;
 
@@ -12,6 +13,18 @@ if (session) {
 <Layout title="Login - DTF Transfer Print">
   <div class="min-h-screen flex items-center justify-center bg-base-200 py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-md w-full space-y-8">
+      <div class="flex justify-center">
+        <a href="/" class="flex items-center no-underline">
+          <img
+            src={SITE_CONFIG.brand.logo.primary}
+            srcset={SITE_CONFIG.brand.logo.primary2x ? `${SITE_CONFIG.brand.logo.primary} 1x, ${SITE_CONFIG.brand.logo.primary2x} 2x` : undefined}
+            alt={SITE_CONFIG.brand.logo.alt}
+            class="h-10 sm:h-12 w-auto object-contain"
+            width={200}
+            height={60}
+          />
+        </a>
+      </div>
       <div>
         <h2 class="mt-6 text-center text-3xl font-extrabold">
           Bei deinem Konto anmelden

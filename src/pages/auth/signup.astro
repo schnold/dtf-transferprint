@@ -57,7 +57,7 @@ if (session) {
               placeholder="Passwort (min. 12 Zeichen)"
             />
             <p class="text-xs text-base-content/70 mt-1 px-2">
-              Muss Groß- und Kleinbuchstaben, Zahlen und Sonderzeichen enthalten
+              Nur Kleinbuchstaben erlaubt (min. 12 Zeichen)
             </p>
           </div>
           <div>
@@ -151,8 +151,8 @@ if (session) {
   const successMessage = document.getElementById('success-message') as HTMLDivElement;
   const submitButton = document.getElementById('submit-button') as HTMLButtonElement;
 
-  // Password validation regex
-  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{12,}$/;
+  // Password validation regex - only lowercase letters, minimum 12 characters
+  const passwordRegex = /^[a-z]{12,}$/;
 
   // German VAT number validation regex (DE + 9 digits)
   const vatRegex = /^DE[0-9]{9}$/;
@@ -188,7 +188,7 @@ if (session) {
       return 'Passwort zu kurz. Mindestens 12 Zeichen erforderlich.';
     }
     if (errorLower.includes('password') && errorLower.includes('weak')) {
-      return 'Passwort zu schwach. Verwende Groß- und Kleinbuchstaben, Zahlen und Sonderzeichen.';
+      return 'Passwort zu schwach. Verwende nur Kleinbuchstaben (min. 12 Zeichen).';
     }
     if (errorLower.includes('passwords do not match')) {
       return 'Passwörter stimmen nicht überein.';
@@ -255,7 +255,7 @@ if (session) {
       // Validate password strength
       if (!passwordRegex.test(password)) {
         throw new Error(
-          'Passwort muss mindestens 12 Zeichen lang sein und Groß- und Kleinbuchstaben, Zahlen und Sonderzeichen enthalten'
+          'Passwort muss mindestens 12 Kleinbuchstaben enthalten (keine Großbuchstaben, Zahlen oder Sonderzeichen)'
         );
       }
 

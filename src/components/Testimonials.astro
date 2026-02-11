@@ -6,33 +6,37 @@ interface Props {
 
 const { 
 	title = "Kundenbewertungen, die uns stolz machen",
-	subtitle = "Unsere Bewertungen auf Google und Trustpilot spiegeln wider, was uns antreibt: Service, der überzeugt."
+	subtitle = "Unsere Bewertungen auf Google spiegeln wider, was uns antreibt: Service, Qualität und Professionalität."
 } = Astro.props;
+
+const GOOGLE_PROFILE_URL = "https://maps.app.goo.gl/RUx3953YcBxNfUqA8";
+const RATING = "4,9";
+const RATING_MAX = "5";
 
 const testimonials = [
 	{
-		name: "Simon",
-		text: "Ich habe die Meterware bei PrintPunk bestellt und muss sagen, das Preisleistungsverhältnis ist super. Die Produktion erfolgt schnell und auch die Lieferung wird unmittelbar abgewickelt. Ich hatte Kontakt mit dem Kundenservice und meine Fragen und Anliegen wurden sowohl per Telefon, als auch per E-Mail direkt kompetent und unkompliziert beantwortet. Mit der Qualität des Drucks bin ich ebenfalls zufrieden."
+		name: "Claudius Wagner",
+		text: "Wir haben anlässlich unserer Hochzeit 20 Decken mit den Initialen unserer Gäste besticken lassen. Obwohl die Anfrage relativ kurzfristig von uns kam, wurden wir sehr gut beraten und der Auftrag sehr schnell umgesetzt. Das Ergebnis war von sehr guter Qualität und schöner als erwartet. Wir waren jedenfalls rundum zufrieden und unsere Gäste waren begeistert. Jederzeit gerne wieder."
 	},
 	{
-		name: "Johanna",
-		text: "Als B2B Kunden sind wir super zufrieden mit PrintPunk! Toller und vor allen Dingen freundlicher Kundenservice. Super schnelle und zuverlässige Lieferung. Die DTF Logos haben eine gute Qualität und die Handhabung der Bestellung ist auch super simpel. Flexible Zahlungsmethoden unterstützen die Leichtigkeit im Bestellprozess. Immer wieder PrintPunk!🫶🏻🥳"
+		name: "Hans Meyer",
+		text: "Habe bei Selini einen recht komplexen Stickauftrag mit mehreren Farben im Logo platziert. War zu Anfang etwas skeptisch ob das Resultat meinen hohen Qualitätsansprüchen gerecht wird. Ich muss sagen: Das Logo sieht besser aus, als ich es erwartet hatte. Mit viel Liebe zum Detail hat mir der Inhaber die Arbeitsschritte erklärt und den Auftrag mit hoher Präzision ausgeführt. Daumen hoch und fünf Sterne für Qualität und Termintreue."
 	},
 	{
-		name: "Michael",
-		text: "Die erste Bestellung ist schief gegangen was zu guter letzt meine Schuld war. Kurzer Anruf genügte und schnell war eine Lösung gefunden. Die neue Lieferung war super. Schnelle Lieferung, super Qualität und preiswert. Mit Sicherheit war das nicht meine letzte Bestellung. Danke"
+		name: "Lili",
+		text: "Habe T-Shirts für mein Orchester (80 Stück) bestellt und sie innerhalb von einer Woche bekommen! Die Arbeit war sehr gut und ordentlich, alle waren von dem Ergebnis begeistert. Kann ich nur empfehlen!"
 	},
 	{
-		name: "Mehmo",
-		text: "Sodele...Ich möchte mich auch unter den mehr als zufriedenen Kunden von PrintPunk einreihen. Aktuell einen Fall gehabt. Kurzer Anruf und alle wieder Top. War aber auch schon davor sehr zufrieden. Weiter so Jungs und Mädels..."
+		name: "Theo Savvidis",
+		text: "Hier kommt ein Meister seiner Klasse wenn es um Textilveredelung geht. Ein großes Lob an seine Fingerfertigkeit, bis jetzt dachte ich das sind Eigenschaften eines Uhrenmachers. Unsere neuen T-Shirts mit Logo sind ein Mehrwert für unser Restaurant."
 	},
 	{
-		name: "Robert",
-		text: "Schnelle Lieferzeit,auch ohne Expressbestellung. Eine Bisher immer verlässliche Firma. Die Qualität der DTF Bögen ist konstant,im Gegensatz zu manch anderen Mitbewerbern. (Farbe, Presszeit usw.) Ein breiteres Soriment wär schön,damit ich alles bei einem Anbieter bestellen könnte. (z.B. UV-DTF) 5/5 Sternen (nach ca. 10 Bestellungen)"
+		name: "Julian Bethke",
+		text: "Wir haben unsere Tischläufer mit sensiblen handgewebten Stoff besticken lassen und sind sehr sehr zufrieden mit der Arbeit! Gerasimos hat sich bei der Vorbesprechung viel Zeit genommen und präzise und fein gearbeitet – das alles zum unschlagbaren Preis! Ich kann Selini Stickerei nur wärmstens weiterempfehlen!"
 	},
 	{
-		name: "Atlas Lions",
-		text: "Der Geschäftsführer hat mir die DTF-Bögen persönlich nach Darmstadt gebracht nachdem es bei einer Expressbestellung eine kleine Lieferverzögerung gab => ein Beweis für den hervorragenden Service und ein echtes Zeichen von Engagement"
+		name: "Efe Yashar",
+		text: "Für die Mitarbeiter unseres Cafés haben wir die Arbeitskleidung bei Selini in Auftrag gegeben. Wir sind sehr zufrieden mit der tollen Qualität, dem Service und der Beratung sowie dem Preis-Leistungs-Verhältnis."
 	}
 ];
 ---
@@ -42,7 +46,27 @@ const testimonials = [
 		<!-- Header -->
 		<div class="text-center mb-16">
 			<h2 class="text-4xl md:text-5xl font-bold mb-4 text-neutral">{title}</h2>
-			<p class="text-lg text-neutral/70 max-w-2xl mx-auto">{subtitle}</p>
+			<p class="text-lg text-neutral/70 max-w-2xl mx-auto mb-6">{subtitle}</p>
+			<a
+				href={GOOGLE_PROFILE_URL}
+				target="_blank"
+				rel="noopener noreferrer"
+				class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-base-100 border border-base-300/30 shadow-sm hover:shadow-md hover:border-primary/30 transition-all duration-300 no-underline"
+				aria-label="Google Bewertungen ansehen"
+			>
+				<span class="flex gap-0.5" aria-hidden="true">
+					{Array.from({ length: 5 }).map((_, i) => (
+						<svg class="w-5 h-5 fill-current" style={i < 5 ? "color: var(--color-yellow-accent);" : "color: var(--color-neutral-content);"} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+							<path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+						</svg>
+					))}
+				</span>
+				<span class="font-semibold text-neutral">{RATING} von {RATING_MAX} Sternen</span>
+				<span class="text-neutral/60 text-sm">auf Google</span>
+				<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-neutral/60" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+				</svg>
+			</a>
 		</div>
 
 		<!-- Testimonials Grid -->
@@ -91,7 +115,7 @@ const testimonials = [
 											<path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
 										</svg>
 									</div>
-									<span class="text-xs text-neutral/60 ml-1">Verifizierter Kunde</span>
+									<span class="text-xs text-neutral/60 ml-1">Google Rezension</span>
 								</div>
 							</div>
 						</div>

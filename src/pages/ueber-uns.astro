@@ -4,14 +4,42 @@ import ContactCTASection from '../components/ContactCTASection.astro';
 
 const title = 'Über Selini-Shirt – Ihre Druckerei in Berlin';
 const description = 'Selini-Shirt ist Ihre professionelle Textildruckerei in Berlin. Von DTF-Druck über Siebdruck bis Stickerei – wir veredeln Ihre Textilien mit modernster Technik und Leidenschaft für Qualität.';
+
+const reviewSlides = [
+	{ name: 'Claudius Wagner', text: 'Wir haben anlässlich unserer Hochzeit 20 Decken mit den Initialen unserer Gäste besticken lassen. Obwohl die Anfrage kurzfristig kam, wurden wir sehr gut beraten und der Auftrag sehr schnell umgesetzt. Das Ergebnis war von sehr guter Qualität. Jederzeit gerne wieder.' },
+	{ name: 'Hans Meyer', text: 'Habe bei Selini einen recht komplexen Stickauftrag mit mehreren Farben im Logo platziert. Das Logo sieht besser aus, als ich es erwartet hatte. Mit viel Liebe zum Detail und hoher Präzision ausgeführt. Fünf Sterne für Qualität und Termintreue.' },
+	{ name: 'Theo Savvidis', text: 'Hier kommt ein Meister seiner Klasse wenn es um Textilveredelung geht. Ein großes Lob an seine Fingerfertigkeit. Unsere neuen T-Shirts mit Logo sind ein Mehrwert für unser Restaurant.' },
+];
+const GOOGLE_REVIEWS_URL = 'https://maps.app.goo.gl/RUx3953YcBxNfUqA8';
 ---
 
 <CompanyLayout title={title} description={description}>
 	<h1>Über Selini-Shirt</h1>
 
-	<p class="text-neutral/70 text-lg mb-8">
+	<p class="text-neutral/70 text-lg mb-4">
 		Ihre professionelle Textildruckerei in Berlin – von DTF-Transfers über Siebdruck bis Stickerei
 	</p>
+
+	<a
+		href="https://maps.app.goo.gl/RUx3953YcBxNfUqA8"
+		target="_blank"
+		rel="noopener noreferrer"
+		class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-base-100 border border-base-300/30 shadow-sm hover:shadow-md hover:border-primary/30 transition-all duration-300 no-underline mb-8"
+		aria-label="Google Bewertungen ansehen"
+	>
+		<span class="flex gap-0.5" aria-hidden="true">
+			<svg class="w-5 h-5 fill-current" style="color: var(--color-yellow-accent);" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+			<svg class="w-5 h-5 fill-current" style="color: var(--color-yellow-accent);" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+			<svg class="w-5 h-5 fill-current" style="color: var(--color-yellow-accent);" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+			<svg class="w-5 h-5 fill-current" style="color: var(--color-yellow-accent);" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+			<svg class="w-5 h-5 fill-current" style="color: var(--color-yellow-accent);" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+		</span>
+		<span class="font-semibold text-neutral">4,9 von 5 Sternen</span>
+		<span class="text-neutral/60 text-sm">auf Google</span>
+		<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-neutral/60" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+			<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+		</svg>
+	</a>
 
 	<img
 		src="/images/dienstleistungen/stickerei/selini-shirt print raum mit maschinen.webp"
@@ -444,6 +472,89 @@ const description = 'Selini-Shirt ist Ihre professionelle Textildruckerei in Ber
 		</div>
 	</div>
 
+	<!-- Review carousel: compact rotating slide cards -->
+	<section class="my-12 review-carousel-section">
+		<div class="flex flex-wrap items-center justify-between gap-4 mb-4">
+			<div>
+				<h2 class="text-2xl font-bold mb-0.5">Das sagen unsere Kunden</h2>
+				<p class="text-neutral/70 text-sm">Google Bewertungen</p>
+			</div>
+			<a href={GOOGLE_REVIEWS_URL} target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-sm gap-1.5 text-neutral/70 hover:text-primary">
+				Alle ansehen
+				<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+			</a>
+		</div>
+		<div class="review-carousel relative overflow-hidden rounded-xl border border-base-300/50 bg-base-300/40">
+			<div class="review-carousel-track flex transition-transform duration-500 ease-out" id="review-carousel-track" style={`width: ${reviewSlides.length * 100}%`}>
+				{reviewSlides.map((slide) => (
+					<div class="review-carousel-slide flex-shrink-0 p-2 md:p-3" style={`width: ${100 / reviewSlides.length}%`}>
+						<div class="review-carousel-card max-w-2xl mx-auto h-full rounded-lg bg-white border border-base-300/40 shadow-sm px-5 py-4 md:px-6 md:py-5">
+							<p class="text-neutral/80 text-sm md:text-base leading-relaxed mb-3 line-clamp-3">&ldquo;{slide.text}&rdquo;</p>
+							<div class="flex items-center justify-between gap-3">
+								<div class="flex items-center gap-2 min-w-0">
+									<div class="avatar placeholder flex-shrink-0">
+										<div class="bg-primary/20 text-primary rounded-full w-8 h-8 flex items-center justify-center ring-1 ring-base-300/50">
+											<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" /></svg>
+										</div>
+									</div>
+									<span class="font-semibold text-neutral text-sm truncate">{slide.name}</span>
+								</div>
+								<div class="flex gap-0.5 flex-shrink-0" aria-hidden="true">
+									{[1,2,3,4,5].map(() => (
+										<svg class="w-4 h-4 fill-current" style="color: var(--color-yellow-accent);" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+									))}
+								</div>
+							</div>
+						</div>
+					</div>
+				))}
+			</div>
+			<button type="button" class="review-carousel-prev absolute left-2 md:left-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-white/95 shadow-md border border-base-300/30 hover:bg-white hover:shadow-lg flex items-center justify-center text-neutral/70 hover:text-neutral transition-all" aria-label="Vorherige Bewertung">
+				<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6" /></svg>
+			</button>
+			<button type="button" class="review-carousel-next absolute right-2 md:right-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-white/95 shadow-md border border-base-300/30 hover:bg-white hover:shadow-lg flex items-center justify-center text-neutral/70 hover:text-neutral transition-all" aria-label="Nächste Bewertung">
+				<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6" /></svg>
+			</button>
+			<div class="flex justify-center gap-1.5 py-3" role="tablist" aria-label="Bewertung auswählen">
+				{reviewSlides.map((_, i) => (
+					<button type="button" class="review-carousel-dot w-2 h-2 rounded-full bg-base-300/60 hover:bg-base-content/40 transition-all aria-[selected=true]:bg-primary aria-[selected=true]:w-5" aria-label={`Bewertung ${i + 1}`} aria-selected={i === 0} data-index={i} />
+				))}
+			</div>
+		</div>
+		<script>
+			(function () {
+				const trackEl = document.getElementById('review-carousel-track');
+				if (!trackEl) return;
+				const slides = trackEl.querySelectorAll('.review-carousel-slide');
+				const dots = document.querySelectorAll('.review-carousel-dot');
+				const prevBtn = document.querySelector('.review-carousel-prev');
+				const nextBtn = document.querySelector('.review-carousel-next');
+				const total = slides.length;
+				if (total === 0) return;
+
+				let current = 0;
+				const AUTOPLAY_MS = 6000;
+
+				function goTo(index: number) {
+					current = (index + total) % total;
+					const offset = -current * (100 / total);
+					(trackEl as HTMLElement).style.transform = `translateX(${offset}%)`;
+					dots.forEach((d, i) => d.setAttribute('aria-selected', i === current ? 'true' : 'false'));
+				}
+
+				function next() { goTo(current + 1); }
+				function prev() { goTo(current - 1); }
+
+				dots.forEach((d, i) => d.addEventListener('click', () => goTo(i)));
+				if (prevBtn) prevBtn.addEventListener('click', prev);
+				if (nextBtn) nextBtn.addEventListener('click', next);
+
+				let autoplay = setInterval(next, AUTOPLAY_MS);
+				document.addEventListener('visibilitychange', () => { if (document.hidden) clearInterval(autoplay); });
+			})();
+		</script>
+	</section>
+
 	<!-- CTA Section -->
 	<ContactCTASection
 		title="Bereit für Ihr Textilprojekt?"
@@ -511,5 +622,24 @@ const description = 'Selini-Shirt ist Ihre professionelle Textildruckerei in Ber
 	/* Smooth transition for card elements */
 	.hover-3d .card * {
 		transition: transform 0.3s ease;
+	}
+
+	/* Review carousel: one slide visible, compact */
+	.review-carousel-section .review-carousel {
+		min-height: 7.5rem;
+	}
+	.review-carousel-section .review-carousel-track {
+		display: flex;
+		flex-wrap: nowrap;
+	}
+	.review-carousel-section .review-carousel-slide {
+		box-sizing: border-box;
+		min-width: 0;
+	}
+	.review-carousel-section .review-carousel-slide p {
+		display: -webkit-box;
+		-webkit-line-clamp: 3;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
 	}
 </style>
