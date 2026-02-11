@@ -6,8 +6,8 @@
 [build.environment]
   # Exclude documentation and example files from secrets scanning
   SECRETS_SCAN_OMIT_PATHS = "documentation/**,*.example,.env.example"
-  # Allow intentionally public environment variables
-  SECRETS_SCAN_OMIT_KEYS = "PUBLIC_BETTER_AUTH_URL,PAYPAL_MODE"
+  # Allow intentionally public environment variables (site URL and non-sensitive config)
+  SECRETS_SCAN_OMIT_KEYS = "PUBLIC_BETTER_AUTH_URL,BETTER_AUTH_URL,PAYPAL_MODE"
 
 [[headers]]
   for = "/*"
