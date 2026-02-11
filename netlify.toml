@@ -40,9 +40,10 @@
     # Note: Adjust 'unsafe-inline' and 'unsafe-eval' as needed for your app
     Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.paypal.com https://www.paypalobjects.com https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://www.paypal.com https://*.r2.cloudflarestorage.com https://www.google-analytics.com; frame-src 'self' https://www.paypal.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self';"
 
-# Force HTTPS redirect
-[[redirects]]
-  from = "http://*"
-  to = "https://:splat"
-  status = 301
-  force = true
+# Force HTTPS redirect (Netlify handles this automatically for custom domains)
+# This is optional - Netlify auto-redirects HTTP to HTTPS for custom domains
+# [[redirects]]
+#   from = "http://*"
+#   to = "https://:splat"
+#   status = 301
+#   force = false

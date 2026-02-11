@@ -18,14 +18,26 @@ const pool = new Pool({
   },
 });
 
-const redis = new Redis({
-  url: process.env.UPSTASH_REDIS_REST_URL!,
-  token: process.env.UPSTASH_REDIS_REST_TOKEN!,
-});
+// Redis configuration - handle missing env vars gracefully during build
+const redis = process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN
+  ? new Redis({
+      url: process.env.UPSTASH_REDIS_REST_URL,
+      token: process.env.UPSTASH_REDIS_REST_TOKEN,
+    })
+  : null;
 
 const BASE_URL = process.env.BETTER_AUTH_URL || "http://localhost:4321";
 
+// Generate a temporary secret for build time if not provided
+// In production, BETTER_AUTH_SECRET must be set in environment variables
+const AUTH_SECRET = process.env.BETTER_AUTH_SECRET ||
+  (process.env.NODE_ENV === 'production'
+    ? (() => { throw new Error('BETTER_AUTH_SECRET must be set in production') })()
+    : 'dev-secret-do-not-use-in-production-' + Date.now()
+  );
+
 export const auth = betterAuth({
+  secret: AUTH_SECRET,
   database: pool,
 
   // Email verification configuration
