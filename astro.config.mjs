@@ -1,12 +1,16 @@
 // @ts-check
 import { defineConfig, envField } from "astro/config";
 import tailwind from "@astrojs/tailwind";
-import netlify from "@astrojs/netlify";
+import node from "@astrojs/node";
 import { fileURLToPath } from "url";
 
 export default defineConfig({
   output: "server",
-  adapter: netlify(),
+  adapter: node({ mode: "standalone" }),
+  server: {
+    port: process.env.PORT ? Number(process.env.PORT) : 4321,
+    host: true,
+  },
   integrations: [tailwind()],
   image: {
     // Enable image optimization

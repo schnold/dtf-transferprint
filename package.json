@@ -6,6 +6,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
+    "start": "node ./dist/server/entry.mjs",
     "astro": "astro",
     "migrate": "tsx scripts/run-migrations.ts",
     "test:sitemap": "tsx scripts/test-sitemap.ts",
@@ -14,6 +15,7 @@
   "dependencies": {
     "@astrojs/check": "^0.9.6",
     "@astrojs/netlify": "^6.6.3",
+    "@astrojs/node": "^9.5.3",
     "@aws-sdk/client-s3": "^3.966.0",
     "@aws-sdk/lib-storage": "^3.966.0",
     "@lucide/astro": "^0.562.0",

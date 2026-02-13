@@ -1,0 +1,11 @@
+# Render Blueprint – use this if you create the service from repo (Infrastructure as Code).
+# If the service already exists in the dashboard, set Start Command there to: npm start
+services:
+  - type: web
+    runtime: node
+    name: dtf-transferprint
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
