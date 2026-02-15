@@ -6,7 +6,14 @@ import CategoryIcon from './CategoryIcon.astro';
 import PromoBanner from './PromoBanner.astro';
 import { pool } from '../lib/db';
 
-const user = Astro.locals.user;
+const user = Astro.locals.user as typeof Astro.locals.user & { isAdmin?: boolean } | null;
+
+/** Product shape from nav category query (json_agg) */
+interface NavProduct {
+	slug: string;
+	name: string;
+	basePrice?: number | string;
+}
 
 // Optimized query: Fetch ALL categories hierarchically with their products in ONE query using recursive CTE
 const client = await pool.connect();
@@ -77,9 +84,9 @@ try {
 
 	categoriesWithProducts = result.rows.map(cat => ({
 		...cat,
-		products: (Array.isArray(cat.products) ? cat.products : []).map(p => ({
+		products: (Array.isArray(cat.products) ? cat.products : []).map((p: NavProduct) => ({
 			...p,
-			basePrice: parseFloat(p.basePrice || 0),
+			basePrice: parseFloat(String(p.basePrice ?? 0)),
 		})),
 		level: parseInt(cat.level || 0)
 	}));
@@ -107,6 +114,7 @@ try {
 					width={200}
 					height={60}
 					fetchpriority="high"
+					decoding="async"
 				/>
 			</a>
 		</div>
@@ -137,7 +145,7 @@ try {
 												</h3>
 												{category.products.length > 0 && (
 													<ul class="space-y-2 mb-4">
-														{category.products.map((product) => (
+														{category.products.map((product: NavProduct) => (
 															<li>
 																<a href={`/product/${product.slug}`} class="text-neutral/70 menu-link-hover text-sm py-1.5 transition-colors block break-words">
 																	{product.name}
@@ -160,7 +168,7 @@ try {
 												</h4>
 												{category.products.length > 0 && (
 													<ul class="space-y-1.5 ml-6">
-														{category.products.map((product) => (
+														{category.products.map((product: NavProduct) => (
 															<li>
 																<a href={`/product/${product.slug}`} class="text-neutral/60 menu-link-hover text-xs py-1 transition-colors block break-words">
 																	{product.name}
@@ -206,10 +214,10 @@ try {
 					</li>
 				)}
 
-				<!-- Dienstleistungen Mega Menu -->
+				<!-- Druckarten Mega Menu -->
 				<li class="dropdown mega-dropdown mega-dropdown-dienstleistungen flex-shrink-0 relative">
 					<label class="text-neutral/80 hover:text-neutral hover:bg-white/10 px-2 sm:px-3 lg:px-4 py-2 rounded-md transition-all duration-200 cursor-pointer flex items-center gap-1.5 text-sm lg:text-base font-medium">
-						<span>Dienstleistungen</span>
+						<span>Druckarten</span>
 						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 transition-transform duration-200">
 							<path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
 						</svg>
@@ -587,7 +595,7 @@ try {
 												</h4>
 												{category.products.length > 0 && (
 													<ul class="space-y-2 pl-6 mb-3">
-														{category.products.slice(0, 8).map((product) => (
+														{category.products.slice(0, 8).map((product: NavProduct) => (
 															<li>
 																<a href={`/product/${product.slug}`} class="text-neutral/70 menu-link-hover text-sm py-1 transition-colors block">
 																	{product.name}
@@ -610,7 +618,7 @@ try {
 												</h5>
 												{category.products.length > 0 && (
 													<ul class="space-y-1.5 pl-6 mb-3">
-														{category.products.slice(0, 6).map((product) => (
+														{category.products.slice(0, 6).map((product: NavProduct) => (
 															<li>
 																<a href={`/product/${product.slug}`} class="text-neutral/60 menu-link-hover text-xs py-1 transition-colors block">
 																	{product.name}
@@ -629,14 +637,14 @@ try {
 							</div>
 						</details>
 
-						<!-- Dienstleistungen Section (Collapsible) -->
+						<!-- Druckarten Section (Collapsible) -->
 						<details class="mobile-menu-section">
 							<summary class="font-bold text-neutral text-lg flex items-center justify-between cursor-pointer py-2">
 								<span class="flex items-center gap-2">
 									<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5" style="color: var(--color-metrics-text);">
 										<path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
 									</svg>
-									Dienstleistungen
+									Druckarten
 								</span>
 								<svg class="mobile-menu-chevron w-5 h-5 transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
 									<path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
@@ -1118,7 +1126,7 @@ try {
 			width: 900px;
 		}
 
-		/* Dienstleistungen dropdown: 600px (matches max-w-[600px]) */
+		/* Druckarten dropdown: 600px (matches max-w-[600px]) */
 		.mega-dropdown-dienstleistungen .mega-dropdown-content {
 			width: 600px;
 		}
@@ -1268,7 +1276,7 @@ try {
 				// Close menu
 				mobileMenuButton.blur();
 				mobileMenuContent.blur();
-				document.activeElement?.blur();
+				(document.activeElement as HTMLElement | null)?.blur();
 				isMenuOpen = false;
 			} else {
 				// Open menu

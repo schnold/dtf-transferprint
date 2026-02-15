@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import type { PriceTier, Product } from '@/types/database';
+import type { PriceTier, PriceTierDisplay, Product } from '@/types/database';
 import { formatPriceTiersForDisplay, formatPrice, getSavingsText } from '@/lib/utils/pricing';
 
 interface PriceTierTableProps {
@@ -117,7 +117,7 @@ export default function PriceTierTable({
       </div>
 
       {/* Show info about reaching next tier */}
-      {displayTiers.some((tier) => !tier.isUnlocked) && (
+      {displayTiers.some((tier: PriceTierDisplay) => !tier.isUnlocked) && (
         <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-md">
           <p className="text-sm text-blue-800">
             {locale === 'de-DE'

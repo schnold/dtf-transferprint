@@ -10,39 +10,70 @@ import WhyChooseUsSections from '../components/WhyChooseUsSections.astro';
 
 const HERO_IMAGE_DIR = join(process.cwd(), 'public', 'images', 'landing-page', 'hero');
 const HERO_WEBP_EXT = /\.webp$/i;
+// Get base hero images (exclude sized versions)
 const heroImages: string[] = (() => {
 	try {
-		return readdirSync(HERO_IMAGE_DIR)
+		const files = readdirSync(HERO_IMAGE_DIR)
 			.filter((f) => HERO_WEBP_EXT.test(f))
+			.filter((f) => !f.includes('-mobile') && !f.includes('-tablet') && !f.includes('-desktop'))
 			.sort()
-			.map((f) => `/images/landing-page/hero/${f}`);
+			.map((f) => `/images/landing-page/hero/${f.replace('.webp', '')}`); // Remove extension for responsive handling
+		return files;
 	} catch {
 		return [];
 	}
 })();
 ---
 
-<Layout title="DTF Transfer Print - Professionelle Drucklösungen">
+<Layout
+	title="DTF Transfer Print - Professionelle Drucklösungen"
+	preloadHeroImage={`${heroImages[0]}-desktop.webp`}
+>
 	<Navbar />
 
 	<!-- Hero Section with rotating background images -->
 	<section class="hero overflow-hidden relative -mt-[7.5rem] hero-bg-cover" style="height: calc(100vh + 7.4rem); min-height: calc(100vh + 7.4rem); background-color: #1a1a1a; margin-bottom: 0;">
 		<!-- Background image layers (cycle every 10s; images from public/images/landing-page/hero/) -->
 		<div class="absolute inset-0" aria-hidden="true" style="height: 100%; width: 100%;">
-			{heroImages.map((src, i) => (
-				<img
-					class={`hero-bg-layer absolute inset-0 w-full h-full object-cover transition-opacity duration-[2s] ease-in-out ${i === 0 ? 'opacity-100' : 'opacity-0'}`}
-					src={i === 0 ? src : undefined}
-					data-bg-src={i === 0 ? undefined : src}
-					data-preload={i === 0 ? 'true' : 'false'}
-					alt={i === 0 ? "Hero Background" : ""}
-					fetchpriority={i === 0 ? "high" : "auto"}
-					loading={i === 0 ? "eager" : "lazy"}
-					decoding={i === 0 ? "sync" : "async"}
-					width={1920}
-					height={1080}
-				/>
-			))}
+			{heroImages.map((baseSrc, i) => {
+				// Create responsive image sources
+				const mobileSrc = `${baseSrc}-mobile.webp`;
+				const tabletSrc = `${baseSrc}-tablet.webp`;
+				const desktopSrc = `${baseSrc}-desktop.webp`;
+
+				// For the first image, use srcset for responsive loading
+				if (i === 0) {
+					return (
+						<img
+							class="hero-bg-layer absolute inset-0 w-full h-full object-cover transition-opacity duration-[2s] ease-in-out opacity-100"
+							src={desktopSrc}
+							srcset={`${mobileSrc} 640w, ${tabletSrc} 1024w, ${desktopSrc} 1920w`}
+							sizes="100vw"
+							alt="Hero Background"
+							fetchpriority="high"
+							loading="eager"
+							decoding="sync"
+							width={1920}
+							height={1080}
+						/>
+					);
+				} else {
+					// For other images, store all sizes and lazy load via JS
+					return (
+						<img
+							class="hero-bg-layer absolute inset-0 w-full h-full object-cover transition-opacity duration-[2s] ease-in-out opacity-0"
+							data-bg-src-mobile={mobileSrc}
+							data-bg-src-tablet={tabletSrc}
+							data-bg-src-desktop={desktopSrc}
+							alt=""
+							loading="lazy"
+							decoding="async"
+							width={1920}
+							height={1080}
+						/>
+					);
+				}
+			})}
 		</div>
 		<!-- Dark overlay over background images -->
 		<div class="absolute inset-0 bg-black/20 pointer-events-none z-[1]" aria-hidden="true"></div>
@@ -109,16 +140,45 @@ const heroImages: string[] = (() => {
 			if (layers.length === 0) return;
 			let current = 0;
 			let loadedImages = new Set<number>();
+			let interval: number | undefined;
 
 			// Mark first image as loaded
 			loadedImages.add(0);
 
-			// Lazy load images as they're needed
-			function loadImage(index: number) {
+			// Determine which image size to load based on viewport width
+			function getResponsiveSource(layer: HTMLImageElement): string | null {
+				const width = window.innerWidth;
+				if (width <= 640) {
+					return layer.getAttribute('data-bg-src-mobile');
+				} else if (width <= 1024) {
+					return layer.getAttribute('data-bg-src-tablet');
+				} else {
+					return layer.getAttribute('data-bg-src-desktop');
+				}
+			}
+
+			// Lazy load images as they're needed with priority hints
+			function loadImage(index: number, priority: boolean = false) {
 				if (loadedImages.has(index)) return;
 				const layer = layers[index] as HTMLImageElement;
-				const bgSrc = layer.getAttribute('data-bg-src');
+				const bgSrc = getResponsiveSource(layer);
+
 				if (bgSrc) {
+					// Use fetchpriority if this is a high priority image
+					if (priority && 'fetchPriority' in layer) {
+						layer.fetchPriority = 'high';
+					}
+
+					// Set up responsive srcset
+					const mobileSrc = layer.getAttribute('data-bg-src-mobile');
+					const tabletSrc = layer.getAttribute('data-bg-src-tablet');
+					const desktopSrc = layer.getAttribute('data-bg-src-desktop');
+
+					if (mobileSrc && tabletSrc && desktopSrc) {
+						layer.srcset = `${mobileSrc} 640w, ${tabletSrc} 1024w, ${desktopSrc} 1920w`;
+						layer.sizes = '100vw';
+					}
+
 					layer.src = bgSrc;
 					loadedImages.add(index);
 				}
@@ -126,9 +186,16 @@ const heroImages: string[] = (() => {
 
 			function goTo(index: number) {
 				current = index;
-				// Load current and next image
-				loadImage(current);
-				loadImage((current + 1) % layers.length);
+				// Load current image with high priority
+				loadImage(current, true);
+				// Preload next image in background
+				const nextIndex = (current + 1) % layers.length;
+				const callback = () => loadImage(nextIndex);
+				if ('requestIdleCallback' in window) {
+					requestIdleCallback(callback);
+				} else {
+					setTimeout(callback, 100);
+				}
 
 				layers.forEach((el, i) => {
 					(el as HTMLElement).style.opacity = i === current ? '1' : '0';
@@ -143,17 +210,42 @@ const heroImages: string[] = (() => {
 				goTo((current + 1) % layers.length);
 			}
 
+			function startCarousel() {
+				interval = setInterval(showNext, HERO_INTERVAL_MS);
+			}
+
+			function stopCarousel() {
+				if (interval) clearInterval(interval);
+			}
+
+			// User interaction handlers
 			dots.forEach((dot, i) => {
-				dot.addEventListener('click', () => goTo(i));
+				dot.addEventListener('click', () => {
+					stopCarousel();
+					goTo(i);
+					startCarousel();
+				});
 			});
 
-			const t = setInterval(showNext, HERO_INTERVAL_MS);
+			// Pause carousel when page is hidden
 			document.addEventListener('visibilitychange', () => {
-				if (document.hidden) clearInterval(t);
+				if (document.hidden) {
+					stopCarousel();
+				} else {
+					startCarousel();
+				}
 			});
 
-			// Preload next image after a short delay
-			setTimeout(() => loadImage(1), 1000);
+			// Start carousel
+			startCarousel();
+
+			// Preload next image after page load completes
+			const preloadNext = () => loadImage(1);
+			if ('requestIdleCallback' in window) {
+				requestIdleCallback(preloadNext, { timeout: 2000 });
+			} else {
+				setTimeout(preloadNext, 2000);
+			}
 		})();
 	</script>
 
@@ -395,10 +487,13 @@ const heroImages: string[] = (() => {
 				src="/images/landing-page/still-life-cmyk-toners-composition (1).webp"
 				alt="CMYK Druckkartuschen - Professionelle Druckqualität mit präzisen Farben"
 				formats={['avif', 'webp']}
+				widths={[640, 1024, 1920]}
+				sizes="100vw"
 				width={1920}
 				height={800}
 				loading="lazy"
 				decoding="async"
+				fetchpriority="low"
 				class="w-full h-full object-cover"
 			/>
 		</div>

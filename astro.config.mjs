@@ -40,5 +40,17 @@ export default defineConfig({
         "@": fileURLToPath(new URL("./src", import.meta.url)),
       },
     },
+    build: {
+      cssCodeSplit: true, // Split CSS into chunks for better caching
+      minify: 'esbuild', // Use esbuild for faster minification
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            // Split vendor CSS
+            'vendor': ['@astrojs/tailwind'],
+          },
+        },
+      },
+    },
   },
 });
