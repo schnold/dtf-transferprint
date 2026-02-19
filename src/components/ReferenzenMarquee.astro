@@ -1,0 +1,129 @@
+---
+import { readdirSync } from 'fs';
+import { join } from 'path';
+
+// Dynamically load all logos from public/images/landing-page/referenzen
+const REFERENZEN_DIR = join(process.cwd(), 'public', 'images', 'landing-page', 'referenzen');
+const logos = (() => {
+	try {
+		const files = readdirSync(REFERENZEN_DIR);
+		return files
+			.filter(file => /\.(png|jpe?g|svg|webp)$/i.test(file))
+			.map(file => ({
+				name: file.replace(/\.[^/.]+$/, "").replace(/-/g, " "),
+				src: `/images/landing-page/referenzen/${file}`
+			}));
+	} catch (e) {
+		console.error('Error reading referenzen directory:', e);
+		return [];
+	}
+})();
+
+// Double the logos for a smooth infinite loop
+const displayLogos = [...logos, ...logos];
+---
+
+<div class="referenzen-marquee-wrapper py-16 bg-base-100 overflow-hidden relative">
+	<div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl lg:max-w-7xl-extended relative">
+		<!-- Heading -->
+		<div class="text-center mb-12">
+			<h2 class="text-2xl md:text-3xl font-medium text-neutral/50 transition-colors duration-300">Unsere Referenzen & Kunden</h2>
+		</div>
+
+		<div class="marquee-container relative">
+			<!-- Left gradient -->
+			<div class="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-base-100 via-base-100/90 to-transparent z-10 pointer-events-none"></div>
+
+			<!-- Right gradient -->
+			<div class="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-base-100 via-base-100/90 to-transparent z-10 pointer-events-none"></div>
+
+			<div class="marquee-track">
+				{displayLogos.map((logo) => (
+					<div class="marquee-item">
+						<img 
+							src={encodeURI(logo.src)} 
+							alt={`${logo.name} Logo`} 
+							class="logo-image" 
+							loading="lazy"
+							decoding="async"
+						/>
+					</div>
+				))}
+			</div>
+		</div>
+	</div>
+</div>
+
+<style>
+	.referenzen-marquee-wrapper {
+		position: relative;
+	}
+
+	.marquee-container {
+		width: 100%;
+		overflow: hidden;
+	}
+
+	.marquee-track {
+		display: flex;
+		gap: 5rem;
+		animation: scroll 60s linear infinite;
+		width: fit-content;
+		padding: 1.5rem 0;
+	}
+
+	/* Adjust speed based on number of items for consistency */
+	@media (max-width: 768px) {
+		.marquee-track {
+			animation-duration: 40s;
+			gap: 3rem;
+		}
+	}
+
+	.marquee-item {
+		flex-shrink: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: transparent !important;
+		border: none !important;
+		border-width: 0 !important;
+		outline: none !important;
+		box-shadow: none !important;
+	}
+
+	.logo-image {
+		display: block;
+		width: auto;
+		height: 180px;
+		max-width: 400px;
+		object-fit: contain;
+		background: transparent !important;
+		border: 0 !important;
+		border-width: 0 !important;
+		border-style: none !important;
+		outline: 0 !important;
+		outline-style: none !important;
+		box-shadow: none !important;
+		filter: none !important;
+		-webkit-appearance: none !important;
+		appearance: none !important;
+		clip-path: inset(5px);
+		/* Keeping logos in original color as requested */
+		opacity: 1;
+	}
+
+	@keyframes scroll {
+		0% {
+			transform: translateX(0);
+		}
+		100% {
+			transform: translateX(-50%);
+		}
+	}
+
+	/* Pause on hover for accessibility and better viewing */
+	.marquee-track:hover {
+		animation-play-state: paused;
+	}
+</style>

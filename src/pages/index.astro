@@ -5,20 +5,39 @@ import { Picture } from 'astro:assets';
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.astro';
 import LogoCarousel from '../components/LogoCarousel.astro';
+import ReferenzenMarquee from '../components/ReferenzenMarquee.astro';
 import Testimonials from '../components/Testimonials.astro';
 import WhyChooseUsSections from '../components/WhyChooseUsSections.astro';
 
 const HERO_IMAGE_DIR = join(process.cwd(), 'public', 'images', 'landing-page', 'hero');
 const HERO_WEBP_EXT = /\.webp$/i;
-// Get base hero images (exclude sized versions)
-const heroImages: string[] = (() => {
+const HERO_JPG_EXT = /\.jpe?g$/i;
+
+type HeroImage = { desktop: string; mobile: string; tablet: string };
+
+// Get base hero images (webp with responsive variants + plain jpgs)
+const heroImages: HeroImage[] = (() => {
 	try {
-		const files = readdirSync(HERO_IMAGE_DIR)
+		const files = readdirSync(HERO_IMAGE_DIR);
+
+		const webpImages: HeroImage[] = files
 			.filter((f) => HERO_WEBP_EXT.test(f))
 			.filter((f) => !f.includes('-mobile') && !f.includes('-tablet') && !f.includes('-desktop'))
 			.sort()
-			.map((f) => `/images/landing-page/hero/${f.replace('.webp', '')}`); // Remove extension for responsive handling
-		return files;
+			.map((f) => {
+				const base = `/images/landing-page/hero/${f.replace('.webp', '')}`;
+				return { desktop: `${base}-desktop.webp`, mobile: `${base}-mobile.webp`, tablet: `${base}-tablet.webp` };
+			});
+
+		const jpgImages: HeroImage[] = files
+			.filter((f) => HERO_JPG_EXT.test(f))
+			.sort()
+			.map((f) => {
+				const src = `/images/landing-page/hero/${f}`;
+				return { desktop: src, mobile: src, tablet: src };
+			});
+
+		return [...webpImages, ...jpgImages];
 	} catch {
 		return [];
 	}
@@ -27,7 +46,7 @@ const heroImages: string[] = (() => {
 
 <Layout
 	title="DTF Transfer Print - Professionelle Drucklösungen"
-	preloadHeroImage={`${heroImages[0]}-desktop.webp`}
+	preloadHeroImage={heroImages[0]?.desktop}
 >
 	<Navbar />
 
@@ -35,19 +54,14 @@ const heroImages: string[] = (() => {
 	<section class="hero overflow-hidden relative -mt-[7.5rem] hero-bg-cover" style="height: calc(100vh + 7.4rem); min-height: calc(100vh + 7.4rem); background-color: #1a1a1a; margin-bottom: 0;">
 		<!-- Background image layers (cycle every 10s; images from public/images/landing-page/hero/) -->
 		<div class="absolute inset-0" aria-hidden="true" style="height: 100%; width: 100%;">
-			{heroImages.map((baseSrc, i) => {
-				// Create responsive image sources
-				const mobileSrc = `${baseSrc}-mobile.webp`;
-				const tabletSrc = `${baseSrc}-tablet.webp`;
-				const desktopSrc = `${baseSrc}-desktop.webp`;
-
+			{heroImages.map(({ desktop, mobile, tablet }, i) => {
 				// For the first image, use srcset for responsive loading
 				if (i === 0) {
 					return (
 						<img
 							class="hero-bg-layer absolute inset-0 w-full h-full object-cover transition-opacity duration-[2s] ease-in-out opacity-100"
-							src={desktopSrc}
-							srcset={`${mobileSrc} 640w, ${tabletSrc} 1024w, ${desktopSrc} 1920w`}
+							src={desktop}
+							srcset={`${mobile} 640w, ${tablet} 1024w, ${desktop} 1920w`}
 							sizes="100vw"
 							alt="Hero Background"
 							fetchpriority="high"
@@ -62,9 +76,9 @@ const heroImages: string[] = (() => {
 					return (
 						<img
 							class="hero-bg-layer absolute inset-0 w-full h-full object-cover transition-opacity duration-[2s] ease-in-out opacity-0"
-							data-bg-src-mobile={mobileSrc}
-							data-bg-src-tablet={tabletSrc}
-							data-bg-src-desktop={desktopSrc}
+							data-bg-src-mobile={mobile}
+							data-bg-src-tablet={tablet}
+							data-bg-src-desktop={desktop}
 							alt=""
 							loading="lazy"
 							decoding="async"
@@ -249,8 +263,8 @@ const heroImages: string[] = (() => {
 		})();
 	</script>
 
-	<!-- Logo Carousel -->
-	<LogoCarousel />
+	<!-- Referenzen Marquee -->
+	<ReferenzenMarquee />
 
 	<!-- Services Section -->
 	<section id="services" class="py-24 bg-base-100">
@@ -549,8 +563,8 @@ const heroImages: string[] = (() => {
 						</svg>
 					</div>
 					<div class="stat-title">Zufriedene Kunden</div>
-					<div class="stat-value">10K+</div>
-					<div class="stat-desc">Zufriedene Kunden weltweit</div>
+					<div class="stat-value">1K+</div>
+					<div class="stat-desc">4.9/5 Sternen auf Google</div>
 				</div>
 
 				<div class="stat">
@@ -595,6 +609,7 @@ const heroImages: string[] = (() => {
 
 	<!-- Testimonials Section -->
 	<Testimonials />
+
 
 	<!-- FAQ Section -->
 	<section id="faq" class="py-24 bg-base-100">
