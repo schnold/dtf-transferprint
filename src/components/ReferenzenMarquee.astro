@@ -67,15 +67,19 @@ const displayLogos = [...logos, ...logos];
 	.marquee-track {
 		display: flex;
 		gap: 5rem;
-		animation: scroll 60s linear infinite;
+		animation: scroll 80s linear infinite;
 		width: fit-content;
 		padding: 1.5rem 0;
+		will-change: transform;
+		transform: translate3d(0, 0, 0);
+		backface-visibility: hidden;
+		perspective: 1000px;
 	}
 
 	/* Adjust speed based on number of items for consistency */
 	@media (max-width: 768px) {
 		.marquee-track {
-			animation-duration: 40s;
+			animation-duration: 55s;
 			gap: 3rem;
 		}
 	}
@@ -122,8 +126,4 @@ const displayLogos = [...logos, ...logos];
 		}
 	}
 
-	/* Pause on hover for accessibility and better viewing */
-	.marquee-track:hover {
-		animation-play-state: paused;
-	}
 </style>
