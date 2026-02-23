@@ -168,65 +168,119 @@ const formatPrice = (price: number) => {
 	)}
 
 	<!-- Create/Edit Modal -->
-	<dialog id="service-modal" class="modal">
-		<div class="modal-box max-w-2xl">
-			<form method="dialog">
-				<button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-			</form>
-			<h3 class="font-bold text-lg mb-4" id="modal-title">Zusatzleistung erstellen</h3>
+	<dialog id="service-modal" class="modal modal-bottom sm:modal-middle">
+		<div class="modal-box max-w-2xl shadow-2xl border border-base-300/50">
+			<!-- Modal Header -->
+			<div class="flex items-center justify-between pb-5 mb-7 border-b border-base-300/20">
+				<div class="flex items-center gap-3">
+					<div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-primary">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z" />
+							<path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6z" />
+						</svg>
+					</div>
+					<div>
+						<h3 class="font-bold text-xl text-base-content" id="modal-title">Zusatzleistung erstellen</h3>
+						<p class="text-sm text-base-content/60 mt-0.5" id="modal-subtitle">Fügen Sie einen neuen zusätzlichen Service hinzu</p>
+					</div>
+				</div>
+				<form method="dialog">
+					<button class="btn btn-sm btn-circle btn-ghost hover:bg-base-300 transition-colors">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+						</svg>
+					</button>
+				</form>
+			</div>
 
-			<form id="service-form" class="space-y-4">
+			<form id="service-form" class="space-y-7">
 				<input type="hidden" id="service-id" name="id" />
 
-				<div class="form-control">
-					<label class="label">
-						<span class="label-text font-medium">Name *</span>
-					</label>
-					<input type="text" id="service-name" name="name" placeholder="z.B. Profi Datencheck" class="input input-bordered" required />
-				</div>
-
-				<div class="form-control">
-					<label class="label">
-						<span class="label-text font-medium">Beschreibung</span>
-					</label>
-					<textarea id="service-description" name="description" placeholder="Kurze Beschreibung der Leistung" class="textarea textarea-bordered" rows="3"></textarea>
-				</div>
-
-				<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-					<div class="form-control">
-						<label class="label">
-							<span class="label-text font-medium">Preis (€) *</span>
-						</label>
-						<input type="number" id="service-price" name="price" placeholder="20.00" step="0.01" min="0" class="input input-bordered" required />
-						<label class="label">
-							<span class="label-text-alt">Pro Warenkorb-Artikel (nicht pro Menge)</span>
-						</label>
+				<!-- Service Details Section -->
+				<div>
+					<div class="mb-5">
+						<h4 class="text-sm font-semibold text-base-content uppercase tracking-wide mb-1">Leistungsdetails</h4>
+						<p class="text-xs text-base-content/60">Name und Beschreibung der Zusatzleistung</p>
 					</div>
 
-					<div class="form-control">
-						<label class="label">
-							<span class="label-text font-medium">Anzeigereihenfolge</span>
-						</label>
-						<input type="number" id="service-display-order" name="displayOrder" placeholder="0" min="0" class="input input-bordered" />
-						<label class="label">
-							<span class="label-text-alt">Niedrigere Zahlen werden zuerst angezeigt</span>
-						</label>
+					<div class="space-y-4">
+						<div class="form-control">
+							<div class="mb-2">
+								<label class="text-sm font-medium text-base-content">Name <span class="text-error">*</span></label>
+							</div>
+							<input type="text" id="service-name" name="name" placeholder="z.B. Profi Datencheck" class="input input-bordered focus:input-primary transition-all" required />
+						</div>
+
+						<div class="form-control">
+							<div class="mb-2">
+								<label class="text-sm font-medium text-base-content">Beschreibung <span class="text-xs text-base-content/50">(Optional)</span></label>
+								<p class="text-xs text-base-content/50 mt-0.5">Kurze Beschreibung der Leistung für Kunden</p>
+							</div>
+							<textarea id="service-description" name="description" placeholder="Was beinhaltet diese Leistung?" class="textarea textarea-bordered focus:textarea-primary transition-all" rows="3"></textarea>
+						</div>
 					</div>
 				</div>
 
-				<div class="form-control">
-					<label class="label cursor-pointer gap-2 justify-start">
-						<input type="checkbox" id="service-is-active" name="isActive" class="checkbox" style="--checkbox-color: var(--color-metrics-text);" checked />
-						<span class="label-text font-medium">Aktiv</span>
-					</label>
-					<label class="label">
-						<span class="label-text-alt">Inaktive Leistungen werden nicht in Produkten angezeigt</span>
-					</label>
+				<!-- Pricing Section -->
+				<div>
+					<div class="mb-5">
+						<h4 class="text-sm font-semibold text-base-content uppercase tracking-wide mb-1">Preisgestaltung</h4>
+						<p class="text-xs text-base-content/60">Preis und Anzeigereihenfolge festlegen</p>
+					</div>
+
+					<div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-4">
+						<div class="form-control">
+							<div class="mb-2">
+								<label class="text-sm font-medium text-base-content">Preis (€) <span class="text-error">*</span></label>
+								<p class="text-xs text-base-content/50 mt-0.5">Pro Warenkorb-Artikel (nicht pro Menge)</p>
+							</div>
+							<input type="number" id="service-price" name="price" placeholder="20.00" step="0.01" min="0" class="input input-bordered focus:input-primary transition-all" required />
+						</div>
+
+						<div class="form-control">
+							<div class="mb-2">
+								<label class="text-sm font-medium text-base-content">Anzeigereihenfolge <span class="text-xs text-base-content/50">(Optional)</span></label>
+								<p class="text-xs text-base-content/50 mt-0.5">Niedrigere Zahlen werden zuerst angezeigt</p>
+							</div>
+							<input type="number" id="service-display-order" name="displayOrder" placeholder="0" min="0" class="input input-bordered focus:input-primary transition-all" />
+						</div>
+					</div>
 				</div>
 
-				<div class="modal-action">
-					<button type="button" class="btn btn-ghost" onclick="document.getElementById('service-modal').close()">Abbrechen</button>
-					<button type="submit" class="btn btn-admin-primary">Speichern</button>
+				<!-- Settings Section -->
+				<div>
+					<div class="mb-5">
+						<h4 class="text-sm font-semibold text-base-content uppercase tracking-wide mb-1">Einstellungen</h4>
+						<p class="text-xs text-base-content/60">Sichtbarkeit dieser Leistung steuern</p>
+					</div>
+
+					<div class="bg-base-200/30 rounded-lg p-4 border border-base-300/30">
+						<label class="label cursor-pointer justify-start gap-3 py-1">
+							<input type="checkbox" id="service-is-active" name="isActive" class="checkbox checkbox-primary" checked />
+							<div>
+								<span class="text-sm font-medium text-base-content">Aktiv</span>
+								<p class="text-xs text-base-content/50 mt-1">Inaktive Leistungen werden nicht in Produkten angezeigt</p>
+							</div>
+						</label>
+					</div>
+				</div>
+
+				<div id="service-form-error" class="text-error text-sm hidden"></div>
+
+				<!-- Modal Footer -->
+				<div class="flex gap-3 pt-6 border-t border-base-300/30">
+					<button type="button" class="btn btn-ghost flex-1" onclick="document.getElementById('service-modal').close()">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+						</svg>
+						Abbrechen
+					</button>
+					<button type="submit" class="btn btn-admin-primary flex-1 gap-2">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+						</svg>
+						Speichern
+					</button>
 				</div>
 			</form>
 		</div>
@@ -292,8 +346,12 @@ const formatPrice = (price: number) => {
 		const modal = document.getElementById('service-modal') as HTMLDialogElement;
 		const form = document.getElementById('service-form') as HTMLFormElement;
 		const title = document.getElementById('modal-title');
+		const subtitle = document.getElementById('modal-subtitle');
+		const errorEl = document.getElementById('service-form-error');
 
 		if (title) title.textContent = 'Zusatzleistung erstellen';
+		if (subtitle) subtitle.textContent = 'Fügen Sie einen neuen zusätzlichen Service hinzu';
+		if (errorEl) { errorEl.textContent = ''; errorEl.classList.add('hidden'); }
 		form.reset();
 		(document.getElementById('service-id') as HTMLInputElement).value = '';
 		(document.getElementById('service-is-active') as HTMLInputElement).checked = true;
@@ -304,8 +362,12 @@ const formatPrice = (price: number) => {
 	(window as any).openEditModal = async (serviceId: string) => {
 		const modal = document.getElementById('service-modal') as HTMLDialogElement;
 		const title = document.getElementById('modal-title');
+		const subtitle = document.getElementById('modal-subtitle');
+		const errorEl = document.getElementById('service-form-error');
 
 		if (title) title.textContent = 'Zusatzleistung bearbeiten';
+		if (subtitle) subtitle.textContent = 'Bearbeiten Sie die Details dieser Leistung';
+		if (errorEl) { errorEl.textContent = ''; errorEl.classList.add('hidden'); }
 
 		try {
 			const response = await fetch(`/api/admin/zusatzleistungen/${serviceId}`);
@@ -336,6 +398,8 @@ const formatPrice = (price: number) => {
 
 		const form = e.target as HTMLFormElement;
 		const formData = new FormData(form);
+		const errorEl = document.getElementById('service-form-error');
+		const submitBtn = form.querySelector('button[type="submit"]') as HTMLButtonElement;
 
 		const serviceId = (document.getElementById('service-id') as HTMLInputElement).value;
 		const isEdit = !!serviceId;
@@ -347,6 +411,9 @@ const formatPrice = (price: number) => {
 			displayOrder: parseInt(formData.get('displayOrder') as string) || 0,
 			isActive: (document.getElementById('service-is-active') as HTMLInputElement).checked,
 		};
+
+		if (errorEl) { errorEl.textContent = ''; errorEl.classList.add('hidden'); }
+		if (submitBtn) submitBtn.disabled = true;
 
 		try {
 			const url = isEdit ? `/api/admin/zusatzleistungen/${serviceId}` : '/api/admin/zusatzleistungen';
@@ -361,14 +428,21 @@ const formatPrice = (price: number) => {
 			const result = await response.json();
 
 			if (result.success) {
-				alert(isEdit ? 'Zusatzleistung aktualisiert!' : 'Zusatzleistung erstellt!');
 				window.location.reload();
 			} else {
-				alert('Fehler: ' + result.error.message);
+				if (errorEl) {
+					errorEl.textContent = result.error?.message || 'Fehler beim Speichern der Zusatzleistung';
+					errorEl.classList.remove('hidden');
+				}
 			}
 		} catch (error) {
 			console.error('Error saving service:', error);
-			alert('Fehler beim Speichern der Zusatzleistung');
+			if (errorEl) {
+				errorEl.textContent = 'Fehler beim Speichern der Zusatzleistung';
+				errorEl.classList.remove('hidden');
+			}
+		} finally {
+			if (submitBtn) submitBtn.disabled = false;
 		}
 	});
 

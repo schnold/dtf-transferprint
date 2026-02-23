@@ -55,198 +55,234 @@ try {
   client.release();
 }
 
-// Get current icon or default to box
-const currentIcon = getIcon(category.icon || 'box') || getIcon('box')!;
+// Get current icon (null = no icon selected)
+const currentIcon = category.icon ? getIcon(category.icon) ?? null : null;
 ---
 
 <AdminLayout title="Edit Category" currentPage="categories">
-  <div class="max-w-4xl mx-auto">
-    <div class="mb-6">
-      <h1 class="text-3xl font-bold">Kategorie bearbeiten</h1>
-      <p class="text-base-content/60 mt-1">Aktualisieren Sie die Kategorie "{category.name}"</p>
+  <div class="max-w-3xl mx-auto">
+    <!-- Page Header -->
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold text-base-content">Kategorie bearbeiten</h1>
+      <p class="text-base-content/60 mt-1">Aktualisieren Sie die Kategorie „{category.name}"</p>
     </div>
 
     <form id="categoryForm" class="space-y-6">
+
       <!-- Basic Information -->
-      <div class="card bg-base-100 shadow-xl">
-        <div class="card-body">
-          <h2 class="card-title">Grundinformationen</h2>
+      <div class="bg-base-100 border border-base-300/50 rounded-xl shadow-sm">
+        <div class="px-6 pt-6 pb-5 border-b border-base-300/20">
+          <h2 class="text-sm font-semibold text-base-content uppercase tracking-wide">Grundinformationen</h2>
+          <p class="text-xs text-base-content/60 mt-0.5">Name, Slug und Beschreibung der Kategorie</p>
+        </div>
+        <div class="px-6 py-6 space-y-5">
 
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text">Kategoriename *</span>
-            </label>
-            <input
-              type="text"
-              name="name"
-              required
-              class="input input-bordered"
-              placeholder="DTF Transfer"
-              id="categoryName"
-              value={category.name}
-            />
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-5">
+            <div class="form-control">
+              <div class="mb-2">
+                <label class="text-sm font-medium text-base-content">Kategoriename <span class="text-error">*</span></label>
+              </div>
+              <input
+                type="text"
+                name="name"
+                required
+                class="input input-bordered focus:input-primary transition-all"
+                placeholder="DTF Transfer"
+                id="categoryName"
+                value={category.name}
+              />
+            </div>
+
+            <div class="form-control">
+              <div class="mb-2">
+                <label class="text-sm font-medium text-base-content">Slug <span class="text-error">*</span></label>
+                <p class="text-xs text-base-content/50 mt-0.5">URL-freundlicher Identifier</p>
+              </div>
+              <input
+                type="text"
+                name="slug"
+                required
+                class="input input-bordered focus:input-primary transition-all"
+                placeholder="dtf-transfer"
+                id="categorySlug"
+                value={category.slug}
+              />
+            </div>
           </div>
 
           <div class="form-control">
-            <label class="label">
-              <span class="label-text">Slug *</span>
-              <span class="label-text-alt">URL-freundlicher Identifier</span>
-            </label>
-            <input
-              type="text"
-              name="slug"
-              required
-              class="input input-bordered"
-              placeholder="dtf-transfer"
-              id="categorySlug"
-              value={category.slug}
-            />
-            <label class="label">
-              <span class="label-text-alt">Wird automatisch aus dem Namen generiert</span>
-            </label>
-          </div>
-
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text">Beschreibung</span>
-            </label>
+            <div class="mb-2">
+              <label class="text-sm font-medium text-base-content">Beschreibung <span class="text-xs text-base-content/50">(Optional)</span></label>
+            </div>
             <textarea
               name="description"
-              class="textarea textarea-bordered h-24"
+              class="textarea textarea-bordered focus:textarea-primary transition-all h-24"
               placeholder="Optionale Beschreibung der Kategorie"
             >{category.description || ''}</textarea>
           </div>
 
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text">Übergeordnete Kategorie</span>
-              <span class="label-text-alt">Leer lassen für Hauptkategorie</span>
-            </label>
-            <select name="parentId" class="select select-bordered">
-              <option value="">Keine (Hauptkategorie)</option>
-              {categories.rows.map((cat) => (
-                <option value={cat.id} selected={cat.id === category.parentId}>
-                  {[...Array(cat.level)].map(() => '  ')} {cat.name}
-                </option>
-              ))}
-            </select>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-5">
+            <div class="form-control">
+              <div class="mb-2">
+                <label class="text-sm font-medium text-base-content">Übergeordnete Kategorie <span class="text-xs text-base-content/50">(Optional)</span></label>
+                <p class="text-xs text-base-content/50 mt-0.5">Leer lassen für Hauptkategorie</p>
+              </div>
+              <select name="parentId" class="select select-bordered focus:select-primary transition-all">
+                <option value="">Keine (Hauptkategorie)</option>
+                {categories.rows.map((cat) => (
+                  <option value={cat.id} selected={cat.id === category.parentId}>
+                    {[...Array(cat.level)].map(() => '  ')} {cat.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div class="form-control">
+              <div class="mb-2">
+                <label class="text-sm font-medium text-base-content">Anzeigereihenfolge</label>
+                <p class="text-xs text-base-content/50 mt-0.5">Niedrigere Zahlen erscheinen zuerst</p>
+              </div>
+              <input
+                type="number"
+                name="displayOrder"
+                value={category.displayOrder || 0}
+                class="input input-bordered focus:input-primary transition-all"
+                placeholder="0"
+              />
+            </div>
           </div>
 
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text">Anzeigereihenfolge</span>
-              <span class="label-text-alt">Niedrigere Zahlen erscheinen zuerst</span>
-            </label>
-            <input
-              type="number"
-              name="displayOrder"
-              value={category.displayOrder || 0}
-              class="input input-bordered"
-              placeholder="0"
-            />
-          </div>
         </div>
       </div>
 
       <!-- Icon Selection -->
-      <div class="card bg-base-100 shadow-xl">
-        <div class="card-body">
-          <h2 class="card-title">Icon für Navbar-Menü</h2>
-          <p class="text-sm text-base-content/60 mb-4">Wählen Sie ein Icon, das in der Navbar-Dropdown-Menü angezeigt wird</p>
+      <div class="bg-base-100 border border-base-300/50 rounded-xl shadow-sm" style="overflow: visible;">
+        <div class="px-6 pt-6 pb-5 border-b border-base-300/20">
+          <h2 class="text-sm font-semibold text-base-content uppercase tracking-wide">Icon für Navbar-Menü</h2>
+          <p class="text-xs text-base-content/60 mt-0.5">Wählen Sie ein Icon, das im Navbar-Dropdown angezeigt wird</p>
+        </div>
+        <div class="px-6 py-6" style="overflow: visible;">
 
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text">Icon auswählen</span>
-            </label>
-            <div class="dropdown dropdown-bottom w-full">
-              <label tabindex="0" class="btn btn-outline w-full justify-between" id="iconSelectButton">
-                <span class="flex items-center gap-2">
-                  <svg id="selectedIconPreview" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d={currentIcon.svg} />
-                  </svg>
-                  <span id="selectedIconLabel">{currentIcon.label}</span>
-                </span>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                </svg>
-              </label>
-              <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-full max-h-96 overflow-y-auto shadow-lg border border-base-300 p-2">
-                {Object.entries(getIconsByCategory()).map(([category, icons]) => {
-                  return (
-                    <>
-                      <li class="menu-title">
-                        <span>{category}</span>
-                      </li>
-                      {icons.map((icon) => (
-                        <li>
-                          <a
-                            class="icon-option flex items-center gap-3"
-                            data-icon-value={icon.value}
-                            data-icon-svg={icon.svg}
-                            data-icon-label={icon.label}
-                          >
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                              <path stroke-linecap="round" stroke-linejoin="round" d={icon.svg} />
-                            </svg>
-                            <span>{icon.label}</span>
-                          </a>
-                        </li>
-                      ))}
-                    </>
-                  );
-                })}
-              </ul>
+          <div class="form-control" style="overflow: visible; position: relative;">
+            <div class="mb-2">
+              <label class="text-sm font-medium text-base-content">Icon auswählen</label>
             </div>
-            <input type="hidden" name="icon" id="iconInput" value={category.icon || 'box'} />
+
+            <!-- Custom icon picker -->
+            <div class="icon-picker" id="iconPicker" style="position: relative;">
+              <button
+                type="button"
+                id="iconPickerToggle"
+                class="input input-bordered focus:input-primary transition-all w-full flex items-center justify-between cursor-pointer text-left"
+              >
+                <span class="flex items-center gap-2">
+                  <span id="selectedIconPreviewWrap" class="w-5 h-5 shrink-0 flex items-center justify-center">
+                    {currentIcon
+                      ? <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5" set:html={currentIcon.svgContent} />
+                      : <span class="w-5 h-5 rounded border-2 border-dashed border-base-content/30 block"></span>
+                    }
+                  </span>
+                  <span id="selectedIconLabel">{currentIcon ? currentIcon.label : 'Kein Icon'}</span>
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 shrink-0 text-base-content/50">
+                  <path d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                </svg>
+              </button>
+
+              <!-- Dropdown panel (rendered above via JS positioning) -->
+              <div
+                id="iconDropdownPanel"
+                class="hidden bg-base-100 border border-base-300 rounded-xl shadow-xl w-full max-h-72 overflow-y-auto p-2"
+                style="position: absolute; z-index: 9999; top: calc(100% + 4px); left: 0;"
+              >
+                <!-- No icon option -->
+                <div class="px-2 pt-2 pb-1">
+                  <span class="text-xs font-semibold text-base-content/50 uppercase tracking-wide">Ohne Icon</span>
+                </div>
+                <button
+                  type="button"
+                  class="icon-option flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-base-200 transition-colors text-left w-full mb-1"
+                  data-icon-value=""
+                  data-icon-svg=""
+                  data-icon-label="Kein Icon"
+                >
+                  <span class="w-5 h-5 rounded border-2 border-dashed border-base-content/30 shrink-0 block"></span>
+                  <span class="text-sm text-base-content">Kein Icon</span>
+                </button>
+
+                {Object.entries(getIconsByCategory()).map(([cat, icons]) => (
+                  <>
+                    <div class="px-2 pt-3 pb-1">
+                      <span class="text-xs font-semibold text-base-content/50 uppercase tracking-wide">{cat}</span>
+                    </div>
+                    <div class="grid grid-cols-1 gap-0.5">
+                      {icons.map((icon) => (
+                        <button
+                          type="button"
+                          class="icon-option flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-base-200 transition-colors text-left w-full"
+                          data-icon-value={icon.value}
+                          data-icon-svg={icon.svgContent}
+                          data-icon-label={icon.label}
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 shrink-0 text-base-content/70" set:html={icon.svgContent} />
+                          <span class="text-sm text-base-content">{icon.label}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </>
+                ))}
+              </div>
+            </div>
+
+            <input type="hidden" name="icon" id="iconInput" value={category.icon || ''} />
           </div>
+
         </div>
       </div>
 
-      <!-- Media -->
-      <div class="card bg-base-100 shadow-xl">
-        <div class="card-body">
-          <h2 class="card-title">Bild</h2>
+      <!-- Media & Status -->
+      <div class="bg-base-100 border border-base-300/50 rounded-xl shadow-sm">
+        <div class="px-6 pt-6 pb-5 border-b border-base-300/20">
+          <h2 class="text-sm font-semibold text-base-content uppercase tracking-wide">Bild & Status</h2>
+          <p class="text-xs text-base-content/60 mt-0.5">Kategoriebild und Sichtbarkeit</p>
+        </div>
+        <div class="px-6 py-6 space-y-5">
 
           <div class="form-control">
-            <label class="label">
-              <span class="label-text">Bild-URL</span>
-              <span class="label-text-alt">Optional</span>
-            </label>
+            <div class="mb-2">
+              <label class="text-sm font-medium text-base-content">Bild-URL <span class="text-xs text-base-content/50">(Optional)</span></label>
+            </div>
             <input
               type="url"
               name="imageUrl"
-              class="input input-bordered"
+              class="input input-bordered focus:input-primary transition-all"
               placeholder="https://example.com/image.jpg"
               value={category.imageUrl || ''}
             />
           </div>
-        </div>
-      </div>
 
-      <!-- Status -->
-      <div class="card bg-base-100 shadow-xl">
-        <div class="card-body">
-          <h2 class="card-title">Status</h2>
-
-          <div class="form-control">
-            <label class="label cursor-pointer">
-              <span class="label-text">Kategorie aktivieren</span>
-              <input
-                type="checkbox"
-                name="isActive"
-                checked={category.isActive}
-                class="checkbox checkbox-success"
-              />
-            </label>
+          <div class="flex items-center justify-between py-3 px-4 bg-base-200/50 rounded-lg border border-base-300/30">
+            <div>
+              <p class="text-sm font-medium text-base-content">Kategorie aktivieren</p>
+              <p class="text-xs text-base-content/50 mt-0.5">Deaktivierte Kategorien sind im Shop nicht sichtbar</p>
+            </div>
+            <input
+              type="checkbox"
+              name="isActive"
+              checked={category.isActive}
+              class="checkbox checkbox-success"
+            />
           </div>
+
         </div>
       </div>
 
-      <!-- Submit -->
-      <div class="flex gap-4">
+      <!-- Actions -->
+      <div class="flex gap-3 pt-2">
         <button type="submit" class="btn btn-primary flex-1">Änderungen speichern</button>
         <a href="/admin/categories" class="btn btn-ghost">Abbrechen</a>
       </div>
+
     </form>
   </div>
 
@@ -267,29 +303,42 @@ const currentIcon = getIcon(category.icon || 'box') || getIcon('box')!;
       slugInput.value = slug;
     });
 
-    // Icon dropdown selection handler
+    // Custom icon picker
+    const toggle = document.getElementById('iconPickerToggle');
+    const panel = document.getElementById('iconDropdownPanel');
+
+    toggle.addEventListener('click', () => {
+      panel.classList.toggle('hidden');
+    });
+
+    // Close on outside click
+    document.addEventListener('click', (e) => {
+      if (!toggle.contains(e.target) && !panel.contains(e.target)) {
+        panel.classList.add('hidden');
+      }
+    });
+
+    // Icon selection
     document.querySelectorAll('.icon-option').forEach(option => {
-      option.addEventListener('click', (e) => {
-        e.preventDefault();
+      option.addEventListener('click', () => {
         const iconValue = option.getAttribute('data-icon-value');
         const iconSvg = option.getAttribute('data-icon-svg');
         const iconLabel = option.getAttribute('data-icon-label');
-        
-        // Update hidden input
+
         document.getElementById('iconInput').value = iconValue;
-        
-        // Update button preview
-        const preview = document.getElementById('selectedIconPreview');
+
+        const wrap = document.getElementById('selectedIconPreviewWrap');
         const label = document.getElementById('selectedIconLabel');
-        if (preview) {
-          preview.querySelector('path').setAttribute('d', iconSvg);
+        if (wrap) {
+          if (iconSvg) {
+            wrap.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">${iconSvg}</svg>`;
+          } else {
+            wrap.innerHTML = `<span class="w-5 h-5 rounded border-2 border-dashed border-base-content/30 block"></span>`;
+          }
         }
-        if (label) {
-          label.textContent = iconLabel;
-        }
-        
-        // Close dropdown
-        document.querySelector('.dropdown').blur();
+        if (label) label.textContent = iconLabel;
+
+        panel.classList.add('hidden');
       });
     });
 

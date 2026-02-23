@@ -67,6 +67,18 @@ export async function createPayPalOrder(breakdown: OrderBreakdown) {
               currency_code: 'EUR',
               value: totalDiscount.toFixed(2),
             },
+            handling: {
+              currency_code: 'EUR',
+              value: '0.00',
+            },
+            insurance: {
+              currency_code: 'EUR',
+              value: '0.00',
+            },
+            shipping_discount: {
+              currency_code: 'EUR',
+              value: '0.00',
+            },
           },
         },
         description: 'DTF Transferprint Bestellung',
@@ -109,7 +121,7 @@ export async function capturePayPalOrder(orderId: string) {
   const client = getPayPalClient();
 
   const request = new paypal.orders.OrdersCaptureRequest(orderId);
-  request.requestBody({});
+  request.requestBody({} as import('@paypal/checkout-server-sdk').orders.OrdersCapture.RequestData);
 
   try {
     const response = await client.execute(request);

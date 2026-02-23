@@ -151,54 +151,44 @@ const formatDate = (date: string) => {
 							<td>
 								<div class="flex gap-1">
 									<!-- View Details -->
-									<div class="tooltip tooltip-top" data-tip="Details ansehen">
-										<a
-											href={`/admin/orders/${order.id}`}
-											class="btn btn-ghost btn-xs"
-										>
-											<Eye class="w-4 h-4 text-accent shrink-0" stroke-width={1.5} />
-										</a>
-									</div>
+									<a
+										href={`/admin/orders/${order.id}`}
+										class="btn btn-ghost btn-xs"
+									>
+										<Eye class="w-4 h-4 text-base-content/40 shrink-0" stroke-width={1.5} />
+									</a>
 
 									<!-- In Bearbeitung -->
-									<div class="tooltip tooltip-top" data-tip="In Bearbeitung">
-										<button
-											class="btn btn-ghost btn-xs"
-											onclick={`updateStatus('${order.id}', 'processing', 'unfulfilled')`}
-										>
-											<RefreshCw class="w-4 h-4 text-info shrink-0" stroke-width={1.5} />
-										</button>
-									</div>
+									<button
+										class="btn btn-ghost btn-xs"
+										onclick={`updateStatus('${order.id}', 'processing', 'unfulfilled')`}
+									>
+										<RefreshCw class="w-4 h-4 text-base-content/40 shrink-0" stroke-width={1.5} />
+									</button>
 
 									<!-- Versandfertig -->
-									<div class="tooltip tooltip-top" data-tip="Versandfertig">
-										<button
-											class="btn btn-ghost btn-xs"
-											onclick={`updateStatus('${order.id}', 'processing', 'fulfilled')`}
-										>
-											<PackageCheck class="w-4 h-4 text-warning shrink-0" stroke-width={1.5} />
-										</button>
-									</div>
+									<button
+										class="btn btn-ghost btn-xs"
+										onclick={`updateStatus('${order.id}', 'processing', 'fulfilled')`}
+									>
+										<PackageCheck class="w-4 h-4 text-base-content/40 shrink-0" stroke-width={1.5} />
+									</button>
 
 									<!-- Versendet -->
-									<div class="tooltip tooltip-top" data-tip="Versendet">
-										<button
-											class="btn btn-ghost btn-xs"
-											onclick={`openTrackingModal('${order.id}', '${order.orderNumber}')`}
-										>
-											<Truck class="w-4 h-4 text-primary shrink-0" stroke-width={1.5} />
-										</button>
-									</div>
+									<button
+										class="btn btn-ghost btn-xs"
+										onclick={`openTrackingModal('${order.id}', '${order.orderNumber}')`}
+									>
+										<Truck class="w-4 h-4 text-base-content/40 shrink-0" stroke-width={1.5} />
+									</button>
 
 									<!-- Abgeschlossen -->
-									<div class="tooltip tooltip-top" data-tip="Abgeschlossen">
-										<button
-											class="btn btn-ghost btn-xs"
-											onclick={`updateStatus('${order.id}', 'delivered')`}
-										>
-											<CircleCheck class="w-4 h-4 text-success shrink-0" stroke-width={1.5} />
-										</button>
-									</div>
+									<button
+										class="btn btn-ghost btn-xs"
+										onclick={`updateStatus('${order.id}', 'delivered')`}
+									>
+										<CircleCheck class="w-4 h-4 text-base-content/40 shrink-0" stroke-width={1.5} />
+									</button>
 								</div>
 							</td>
 						</tr>
@@ -480,11 +470,5 @@ const formatDate = (date: string) => {
 
 	.orders-table-wrapper {
 		overflow-x: auto;
-	}
-
-	/* Ensure tooltips in the actions column are visible above the table */
-	.orders-table-wrapper .tooltip {
-		position: relative;
-		z-index: 1;
 	}
 </style>

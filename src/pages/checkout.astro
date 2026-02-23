@@ -64,6 +64,42 @@ try {
   addressClient.release();
 }
 
+// Fetch available zusatzleistungen per cart item
+const cartItemServicesMap: Record<string, { available: any[]; selectedIds: string[] }> = {};
+
+if (cartItems.length > 0) {
+  const servicesClient = await pool.connect();
+  try {
+    for (const item of cartItems) {
+      const availableResult = await servicesClient.query(
+        `SELECT z.id, z.name, z.description, z.price
+         FROM "zusatzleistungen" z
+         INNER JOIN "productZusatzleistungen" pz ON z.id = pz."zusatzleistungId"
+         WHERE pz."productId" = $1
+           AND z."isActive" = true
+           AND pz."isEnabled" = true
+         ORDER BY z."displayOrder" ASC, z."createdAt" ASC`,
+        [item.productId]
+      );
+
+      const selectedResult = await servicesClient.query(
+        'SELECT "zusatzleistungId" FROM "cartItemZusatzleistungen" WHERE "cartItemId" = $1',
+        [item.id]
+      );
+
+      cartItemServicesMap[item.id] = {
+        available: availableResult.rows.map((row) => ({
+          ...row,
+          price: parseFloat(row.price),
+        })),
+        selectedIds: selectedResult.rows.map((row) => row.zusatzleistungId),
+      };
+    }
+  } finally {
+    servicesClient.release();
+  }
+}
+
 // Fetch active shipping profiles
 const shippingClient = await pool.connect();
 let shippingProfiles: any[] = [];
@@ -164,25 +200,42 @@ const formatPrice = (price: number) => {
                   <h2 class="text-lg font-semibold mb-4">Bestellübersicht</h2>
                   <div class="space-y-3">
                     {cartItems.map((item) => (
-                      <div class="flex gap-4 py-3 border-b border-base-300/30 last:border-0">
+                      <div class="flex gap-4 py-3 border-b border-base-300/30 last:border-0" data-checkout-item-id={item.id}>
                         {item.productImage && (
                           <img
                             src={item.productImage}
                             alt={item.productName}
-                            class="w-16 h-16 object-cover rounded"
+                            class="w-16 h-16 object-cover rounded flex-shrink-0"
                           />
                         )}
-                        <div class="flex-1">
+                        <div class="flex-1 min-w-0">
                           <h3 class="font-medium text-sm">{item.productName}</h3>
                           <p class="text-xs text-neutral/60">Menge: {item.quantity}</p>
-                          {item.zusatzleistungen && item.zusatzleistungen.length > 0 && (
-                            <p class="text-xs text-neutral/60">
-                              + {item.zusatzleistungen.length} Zusatzleistung(en)
-                            </p>
+
+                          {/* Zusatzleistungen checkboxes */}
+                          {cartItemServicesMap[item.id]?.available.length > 0 && (
+                            <div class="mt-2 pt-2 border-t border-base-300/20 space-y-1.5">
+                              <p class="text-xs font-semibold text-neutral/50 uppercase tracking-wide">Zusatzleistungen</p>
+                              {cartItemServicesMap[item.id].available.map((service) => (
+                                <label class="flex items-center justify-between gap-2 cursor-pointer group">
+                                  <div class="flex items-center gap-2">
+                                    <input
+                                      type="checkbox"
+                                      class="checkbox checkbox-primary checkbox-xs service-checkbox"
+                                      data-cart-item-id={item.id}
+                                      data-service-id={service.id}
+                                      checked={cartItemServicesMap[item.id].selectedIds.includes(service.id)}
+                                    />
+                                    <span class="text-xs text-neutral/70 group-hover:text-neutral transition-colors">{service.name}</span>
+                                  </div>
+                                  <span class="text-xs font-medium text-neutral/60 whitespace-nowrap">+{formatPrice(service.price)}</span>
+                                </label>
+                              ))}
+                            </div>
                           )}
                         </div>
-                        <div class="text-right">
-                          <p class="font-medium">{formatPrice(item.totalWithServices)}</p>
+                        <div class="text-right flex-shrink-0">
+                          <p class="font-medium checkout-item-total" data-checkout-item-id={item.id}>{formatPrice(item.totalWithServices)}</p>
                           {item.currentSavings > 0 && (
                             <p class="text-xs text-success">
                               -{formatPrice(item.currentSavings)} gespart
@@ -386,128 +439,177 @@ const formatPrice = (price: number) => {
   </div>
 
   {/* Address Modal */}
-  <dialog id="address-modal" class="modal">
-    <div class="modal-box w-11/12 max-w-2xl">
-      <h3 class="font-bold text-lg mb-4">Neue Adresse hinzufügen</h3>
-      <form id="address-form" class="space-y-4">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text">Vorname *</span>
-            </label>
-            <input
-              type="text"
-              name="firstName"
-              required
-              class="input input-bordered"
-              placeholder="Max"
-            />
+  <dialog id="address-modal" class="modal modal-bottom sm:modal-middle">
+    <div class="modal-box max-w-3xl shadow-2xl border border-base-300/50">
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between pb-5 mb-7 border-b border-base-300/20">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-primary">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
           </div>
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text">Nachname *</span>
-            </label>
-            <input
-              type="text"
-              name="lastName"
-              required
-              class="input input-bordered"
-              placeholder="Mustermann"
-            />
+          <div>
+            <h3 class="font-bold text-xl text-base-content">Neue Adresse hinzufügen</h3>
+            <p class="text-sm text-base-content/60 mt-0.5">Fügen Sie eine neue Liefer- oder Rechnungsadresse hinzu</p>
           </div>
         </div>
+        <form method="dialog">
+          <button class="btn btn-sm btn-circle btn-ghost hover:bg-base-300 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </form>
+      </div>
 
-        <div class="form-control">
-          <label class="label">
-            <span class="label-text">Firma (optional)</span>
-          </label>
-          <input type="text" name="company" class="input input-bordered" placeholder="Firma GmbH" />
-        </div>
-
-        <div class="form-control">
-          <label class="label">
-            <span class="label-text">Straße und Hausnummer *</span>
-          </label>
-          <input
-            type="text"
-            name="addressLine1"
-            required
-            class="input input-bordered"
-            placeholder="Musterstraße 123"
-          />
-        </div>
-
-        <div class="form-control">
-          <label class="label">
-            <span class="label-text">Adresszusatz (optional)</span>
-          </label>
-          <input
-            type="text"
-            name="addressLine2"
-            class="input input-bordered"
-            placeholder="2. Stock, Wohnung 5"
-          />
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text">Postleitzahl *</span>
-            </label>
-            <input
-              type="text"
-              name="postalCode"
-              required
-              class="input input-bordered"
-              placeholder="12345"
-            />
+      <form id="address-form" class="space-y-7">
+        <!-- Personal Information Section -->
+        <div>
+          <div class="mb-5">
+            <h4 class="text-sm font-semibold text-base-content uppercase tracking-wide mb-1">Persönliche Daten</h4>
+            <p class="text-xs text-base-content/60">Geben Sie Ihre persönlichen Informationen ein</p>
           </div>
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text">Stadt *</span>
-            </label>
-            <input
-              type="text"
-              name="city"
-              required
-              class="input input-bordered"
-              placeholder="Berlin"
-            />
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-4">
+            <div class="form-control">
+              <div class="mb-2">
+                <label class="text-sm font-medium text-base-content">Vorname <span class="text-error">*</span></label>
+              </div>
+              <input type="text" name="firstName" class="input input-bordered focus:input-primary transition-all" placeholder="Max" required />
+            </div>
+            <div class="form-control">
+              <div class="mb-2">
+                <label class="text-sm font-medium text-base-content">Nachname <span class="text-error">*</span></label>
+              </div>
+              <input type="text" name="lastName" class="input input-bordered focus:input-primary transition-all" placeholder="Mustermann" required />
+            </div>
+          </div>
+
+          <div class="form-control mt-4">
+            <div class="mb-2">
+              <label class="text-sm font-medium text-base-content">Firma <span class="text-xs text-base-content/50">(Optional)</span></label>
+            </div>
+            <input type="text" name="company" class="input input-bordered focus:input-primary transition-all" placeholder="Firma GmbH" />
           </div>
         </div>
 
-        <div class="form-control">
-          <label class="label">
-            <span class="label-text">Telefon (optional)</span>
-          </label>
-          <input type="tel" name="phone" class="input input-bordered" placeholder="+49 123 456789" />
+        <!-- Address Information Section -->
+        <div>
+          <div class="mb-5">
+            <h4 class="text-sm font-semibold text-base-content uppercase tracking-wide mb-1">Adressinformationen</h4>
+            <p class="text-xs text-base-content/60">Geben Sie Ihre vollständige Lieferadresse ein</p>
+          </div>
+
+          <div class="space-y-4">
+            <div class="form-control">
+              <div class="mb-2">
+                <label class="text-sm font-medium text-base-content">Straße und Hausnummer <span class="text-error">*</span></label>
+              </div>
+              <input type="text" name="addressLine1" class="input input-bordered focus:input-primary transition-all" placeholder="Musterstraße 123" required />
+            </div>
+
+            <div class="form-control">
+              <div class="mb-2">
+                <label class="text-sm font-medium text-base-content">Adresszusatz <span class="text-xs text-base-content/50">(Optional)</span></label>
+                <p class="text-xs text-base-content/50 mt-0.5">z.B. Stockwerk, Appartment</p>
+              </div>
+              <input type="text" name="addressLine2" class="input input-bordered focus:input-primary transition-all" placeholder="2. Stock, Wohnung 5" />
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-4">
+              <div class="form-control">
+                <div class="mb-2">
+                  <label class="text-sm font-medium text-base-content">Postleitzahl <span class="text-error">*</span></label>
+                </div>
+                <input type="text" name="postalCode" class="input input-bordered focus:input-primary transition-all" placeholder="12345" required />
+              </div>
+              <div class="form-control">
+                <div class="mb-2">
+                  <label class="text-sm font-medium text-base-content">Stadt <span class="text-error">*</span></label>
+                </div>
+                <input type="text" name="city" class="input input-bordered focus:input-primary transition-all" placeholder="Berlin" required />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-4">
+              <div class="form-control">
+                <div class="mb-2">
+                  <label class="text-sm font-medium text-base-content">Bundesland <span class="text-xs text-base-content/50">(Optional)</span></label>
+                </div>
+                <input type="text" name="stateProvince" class="input input-bordered focus:input-primary transition-all" placeholder="Berlin" />
+              </div>
+              <div class="form-control">
+                <div class="mb-2">
+                  <label class="text-sm font-medium text-base-content">Land <span class="text-error">*</span></label>
+                </div>
+                <select name="country" class="select select-bordered focus:select-primary transition-all" required>
+                  <option value="DE">🇩🇪 Deutschland</option>
+                  <option value="AT">🇦🇹 Österreich</option>
+                  <option value="CH">🇨🇭 Schweiz</option>
+                </select>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div class="form-control">
-          <label class="label cursor-pointer justify-start gap-2">
-            <input type="checkbox" name="isDefault" class="checkbox checkbox-primary" />
-            <span class="label-text">Als Standardadresse festlegen</span>
-          </label>
+        <!-- Contact Information Section -->
+        <div>
+          <div class="mb-5">
+            <h4 class="text-sm font-semibold text-base-content uppercase tracking-wide mb-1">Kontaktinformationen</h4>
+            <p class="text-xs text-base-content/60">Für Rückfragen zur Lieferung</p>
+          </div>
+
+          <div class="form-control">
+            <div class="mb-2">
+              <label class="text-sm font-medium text-base-content">Telefon <span class="text-xs text-base-content/50">(Optional)</span></label>
+              <p class="text-xs text-base-content/50 mt-0.5">Für Lieferbenachrichtigungen</p>
+            </div>
+            <input type="tel" name="phone" class="input input-bordered focus:input-primary transition-all" placeholder="+49 123 456789" />
+          </div>
         </div>
 
-        <div class="form-control">
-          <label class="label cursor-pointer justify-start gap-2">
-            <input type="checkbox" name="useBothAddresses" class="checkbox checkbox-primary" checked />
-            <span class="label-text">Auch als Rechnungsadresse verwenden</span>
-          </label>
+        <!-- Options Section -->
+        <div>
+          <div class="mb-5">
+            <h4 class="text-sm font-semibold text-base-content uppercase tracking-wide mb-1">Einstellungen</h4>
+            <p class="text-xs text-base-content/60">Legen Sie die Standardoptionen fest</p>
+          </div>
+
+          <div class="bg-base-200/30 rounded-lg p-4 border border-base-300/30 space-y-3">
+            <label class="label cursor-pointer justify-start gap-3 py-1">
+              <input type="checkbox" name="isDefault" class="checkbox checkbox-primary" />
+              <div>
+                <span class="text-sm font-medium text-base-content">Als Standardadresse festlegen</span>
+                <p class="text-xs text-base-content/50 mt-1">Diese Adresse wird automatisch beim Checkout ausgewählt</p>
+              </div>
+            </label>
+            <label class="label cursor-pointer justify-start gap-3 py-1">
+              <input type="checkbox" name="useBothAddresses" class="checkbox checkbox-primary" checked />
+              <div>
+                <span class="text-sm font-medium text-base-content">Auch als Rechnungsadresse verwenden</span>
+                <p class="text-xs text-base-content/50 mt-1">Die Lieferadresse wird ebenfalls als Rechnungsadresse gespeichert</p>
+              </div>
+            </label>
+          </div>
         </div>
 
         <div id="address-form-error" class="text-error text-sm hidden"></div>
 
-        <div class="modal-action">
-          <button
-            type="button"
-            class="btn"
-            onclick="document.getElementById('address-modal').close()"
-          >
+        <!-- Modal Footer -->
+        <div class="flex gap-3 pt-6 border-t border-base-300/30">
+          <button type="button" class="btn btn-ghost flex-1" onclick="document.getElementById('address-modal').close()">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
             Abbrechen
           </button>
-          <button type="submit" class="btn btn-primary">Adresse speichern</button>
+          <button type="submit" class="btn btn-primary flex-1 gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+            </svg>
+            Adresse speichern
+          </button>
         </div>
       </form>
     </div>
@@ -520,6 +622,9 @@ const formatPrice = (price: number) => {
     let appliedDiscountCode = null;
     let currentShippingCost = 0;
     let currentShippingProfile = null;
+
+    // Mutable subtotal — updated when zusatzleistungen change
+    let liveSubtotal = subtotal;
 
     // Escape HTML to prevent XSS
     function escapeHtml(text) {
@@ -545,10 +650,21 @@ const formatPrice = (price: number) => {
       return basePrice;
     }
 
+    // Update the subtotal and user-discount line in the summary sidebar
+    function updateSubtotalDisplay() {
+      const subtotalEl = document.getElementById('summary-subtotal');
+      if (subtotalEl) subtotalEl.textContent = formatPrice(liveSubtotal);
+
+      const userDiscountEl = document.getElementById('summary-user-discount');
+      if (userDiscountEl) {
+        userDiscountEl.textContent = '-' + formatPrice(liveSubtotal * (userDiscountPercent / 100));
+      }
+    }
+
     // Calculate and update summary
     function updateSummary() {
-      const userDiscount = subtotal * (userDiscountPercent / 100);
-      const subtotalAfterUserDiscount = subtotal - userDiscount;
+      const userDiscount = liveSubtotal * (userDiscountPercent / 100);
+      const subtotalAfterUserDiscount = liveSubtotal - userDiscount;
 
       // Campaign discount will be validated server-side
       const taxableAmount = subtotalAfterUserDiscount + currentShippingCost;
@@ -588,7 +704,7 @@ const formatPrice = (price: number) => {
 
         if (result.success && result.data) {
           currentShippingProfile = result.data;
-          currentShippingCost = calculateShippingCost(currentShippingProfile, subtotal);
+          currentShippingCost = calculateShippingCost(currentShippingProfile, liveSubtotal);
           updateSummary();
         }
       } catch (error) {
@@ -652,7 +768,8 @@ const formatPrice = (price: number) => {
         addressLine2: formData.get('addressLine2') || null,
         city: formData.get('city'),
         postalCode: formData.get('postalCode'),
-        country: 'DE',
+        stateProvince: formData.get('stateProvince') || null,
+        country: formData.get('country') || 'DE',
         phone: formData.get('phone') || null,
         isDefault: formData.get('isDefault') === 'on',
         addressType: formData.get('useBothAddresses') === 'on' ? 'both' : 'shipping',
@@ -767,6 +884,58 @@ const formatPrice = (price: number) => {
     function onPayPalApprove(data) {
       window.location.href = `/checkout/success?token=${data.orderID}`;
     }
+
+    // Handle zusatzleistungen checkbox changes at checkout
+    document.querySelectorAll('.service-checkbox').forEach((checkbox) => {
+      checkbox.addEventListener('change', async (e) => {
+        const target = e.target;
+        const cartItemId = target.dataset.cartItemId;
+        if (!cartItemId) return;
+
+        // Disable all checkboxes for this item while updating
+        const itemCheckboxes = document.querySelectorAll(`.service-checkbox[data-cart-item-id="${cartItemId}"]`);
+        itemCheckboxes.forEach((cb) => { cb.disabled = true; });
+
+        // Collect all currently selected service IDs for this cart item
+        const selectedIds = Array.from(itemCheckboxes)
+          .filter((cb) => cb.checked)
+          .map((cb) => cb.dataset.serviceId);
+
+        try {
+          const response = await fetch('/api/cart/update-services', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ cartItemId, zusatzleistungIds: selectedIds }),
+          });
+
+          const result = await response.json();
+
+          if (result.success) {
+            // Update item total in the order summary list
+            const itemTotalEl = document.querySelector(`.checkout-item-total[data-checkout-item-id="${cartItemId}"]`);
+            if (itemTotalEl) itemTotalEl.textContent = formatPrice(result.data.itemTotal);
+
+            // Update the live subtotal and recalculate everything
+            liveSubtotal = result.data.newSubtotal;
+            updateSubtotalDisplay();
+            // Recalculate shipping with new subtotal
+            if (currentShippingProfile) {
+              currentShippingCost = calculateShippingCost(currentShippingProfile, liveSubtotal);
+            }
+            updateSummary();
+          } else {
+            // Revert the checkbox on failure
+            target.checked = !target.checked;
+            console.error('Failed to update service:', result.error?.message);
+          }
+        } catch (error) {
+          target.checked = !target.checked;
+          console.error('Error updating service:', error);
+        } finally {
+          itemCheckboxes.forEach((cb) => { cb.disabled = false; });
+        }
+      });
+    });
 
     // Initialize summary
     updateSummary();

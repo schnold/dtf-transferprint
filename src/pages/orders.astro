@@ -252,9 +252,9 @@ const getPaymentStatusLabel = (status: string) => {
                       Details ansehen
                     </a>
                     {order.paymentStatus === 'paid' && order.status !== 'cancelled' && (
-                      <button class="btn btn-sm btn-ghost" disabled>
+                      <a class="btn btn-sm btn-ghost" href="/kontakt/">
                         Support kontaktieren
-                      </button>
+                      </a>
                     )}
                   </div>
                 </div>

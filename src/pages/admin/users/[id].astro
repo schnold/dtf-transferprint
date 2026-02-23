@@ -125,7 +125,44 @@ const formatDate = (date: Date) => {
 
             <div>
               <label class="label"><span class="label-text text-sm font-medium opacity-60">Rabatt</span></label>
-              <p class="text-base font-semibold">{user.discountPercent || 0}%</p>
+              <div class="flex items-center gap-2">
+                <span class="text-base font-semibold" id="discount-display">{user.discountPercent || 0}%</span>
+                <button
+                  onclick="document.getElementById('discount-edit-section').classList.toggle('hidden')"
+                  class="btn btn-ghost btn-xs"
+                  title="Rabatt bearbeiten"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-3.5 h-3.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                  </svg>
+                </button>
+              </div>
+              <div id="discount-edit-section" class="hidden mt-2">
+                <form id="discount-form" class="flex items-center gap-2">
+                  <input
+                    type="number"
+                    id="discount-input"
+                    min="0"
+                    max="100"
+                    step="0.01"
+                    value={user.discountPercent || 0}
+                    class="input input-bordered input-sm w-24"
+                    placeholder="0"
+                  />
+                  <span class="text-sm text-base-content/60">%</span>
+                  <button type="submit" class="btn btn-primary btn-sm" id="discount-save-btn">
+                    Speichern
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-ghost btn-sm"
+                    onclick="document.getElementById('discount-edit-section').classList.add('hidden')"
+                  >
+                    Abbrechen
+                  </button>
+                </form>
+                <p id="discount-feedback" class="text-xs mt-1 hidden"></p>
+              </div>
             </div>
 
             <div>
@@ -844,6 +881,60 @@ const formatDate = (date: Date) => {
     } catch (error) {
       console.error('Error updating address:', error);
       alert('Fehler beim Aktualisieren der Adresse');
+    }
+  });
+
+  // Discount form
+  const discountForm = document.getElementById('discount-form');
+  discountForm?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const input = document.getElementById('discount-input');
+    const feedback = document.getElementById('discount-feedback');
+    const saveBtn = document.getElementById('discount-save-btn');
+    const display = document.getElementById('discount-display');
+
+    const value = parseFloat(input.value);
+    if (isNaN(value) || value < 0 || value > 100) {
+      feedback.textContent = 'Bitte geben Sie einen Wert zwischen 0 und 100 ein.';
+      feedback.className = 'text-xs mt-1 text-error';
+      feedback.classList.remove('hidden');
+      return;
+    }
+
+    saveBtn.disabled = true;
+    saveBtn.textContent = 'Speichern...';
+    feedback.classList.add('hidden');
+
+    try {
+      const response = await fetch('/api/admin/users/update-discount', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: userId, discountPercent: value }),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        display.textContent = value.toFixed(2).replace(/\.?0+$/, '') + '%';
+        feedback.textContent = 'Rabatt erfolgreich gespeichert.';
+        feedback.className = 'text-xs mt-1 text-success';
+        feedback.classList.remove('hidden');
+        setTimeout(() => {
+          document.getElementById('discount-edit-section').classList.add('hidden');
+          feedback.classList.add('hidden');
+        }, 1500);
+      } else {
+        feedback.textContent = result.error || 'Fehler beim Speichern.';
+        feedback.className = 'text-xs mt-1 text-error';
+        feedback.classList.remove('hidden');
+      }
+    } catch (err) {
+      feedback.textContent = 'Netzwerkfehler. Bitte versuchen Sie es erneut.';
+      feedback.className = 'text-xs mt-1 text-error';
+      feedback.classList.remove('hidden');
+    } finally {
+      saveBtn.disabled = false;
+      saveBtn.textContent = 'Speichern';
     }
   });
 
