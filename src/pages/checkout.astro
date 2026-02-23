@@ -182,7 +182,7 @@ const formatPrice = (price: number) => {
                           )}
                         </div>
                         <div class="text-right">
-                          <p class="font-medium">{formatPrice(item.lineTotal)}</p>
+                          <p class="font-medium">{formatPrice(item.totalWithServices)}</p>
                           {item.currentSavings > 0 && (
                             <p class="text-xs text-success">
                               -{formatPrice(item.currentSavings)} gespart
