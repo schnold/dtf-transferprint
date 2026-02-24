@@ -4,8 +4,8 @@ import { pool } from '@/lib/db';
 export const PUT: APIRoute = async ({ params, request, locals }) => {
   try {
     // Check if user is admin
-    const session = locals.session;
-    if (!session?.user?.isAdmin) {
+    const user = locals.user;
+    if (!user?.isAdmin) {
       return new Response(JSON.stringify({
         success: false,
         error: { message: 'Unauthorized - Admin access required' }

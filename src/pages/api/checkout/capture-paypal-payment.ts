@@ -192,6 +192,44 @@ export const POST: APIRoute = async ({ request, locals }) => {
       );
     }
 
+    // Verify captured payment status and amount to prevent payment tampering.
+    const expectedTotal = parseFloat(session.total);
+    if (
+      captureResult.status !== 'COMPLETED' ||
+      captureResult.captureStatus !== 'COMPLETED'
+    ) {
+      return new Response(
+        JSON.stringify({
+          success: false,
+          error: { message: 'Payment was not completed successfully' },
+        }),
+        { status: 400 }
+      );
+    }
+
+    if (captureResult.captureCurrency && captureResult.captureCurrency !== 'EUR') {
+      return new Response(
+        JSON.stringify({
+          success: false,
+          error: { message: 'Invalid payment currency' },
+        }),
+        { status: 400 }
+      );
+    }
+
+    if (
+      typeof captureResult.captureAmount === 'number' &&
+      Math.abs(captureResult.captureAmount - expectedTotal) > 0.01
+    ) {
+      return new Response(
+        JSON.stringify({
+          success: false,
+          error: { message: 'Captured payment amount mismatch' },
+        }),
+        { status: 400 }
+      );
+    }
+
     // Begin database transaction
     try {
       await client.query('BEGIN');

@@ -18,6 +18,18 @@ export const GET: APIRoute = async ({ request }) => {
   const authHeader = request.headers.get('authorization');
   const cronSecret = process.env.CRON_SECRET;
 
+  // Fail closed in production if the cron secret is missing.
+  if (process.env.NODE_ENV === 'production' && !cronSecret) {
+    console.error('[Cleanup Cron] CRON_SECRET is not configured in production');
+    return new Response(
+      JSON.stringify({
+        success: false,
+        error: 'Service misconfigured',
+      }),
+      { status: 503, headers: { 'Content-Type': 'application/json' } }
+    );
+  }
+
   // If CRON_SECRET is set, verify the request
   if (cronSecret && authHeader !== `Bearer ${cronSecret}`) {
     console.warn('[Cleanup Cron] Unauthorized access attempt');

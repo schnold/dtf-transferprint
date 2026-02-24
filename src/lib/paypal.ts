@@ -125,14 +125,20 @@ export async function capturePayPalOrder(orderId: string) {
 
   try {
     const response = await client.execute(request);
+    const capture = response.result.purchase_units?.[0]?.payments?.captures?.[0];
 
     // Get capture ID from the response
-    const captureId = response.result.purchase_units?.[0]?.payments?.captures?.[0]?.id;
+    const captureId = capture?.id;
+    const captureValue = capture?.amount?.value;
+    const captureCurrency = capture?.amount?.currency_code;
 
     return {
       id: response.result.id,
       captureId: captureId || '',
       status: response.result.status,
+      captureStatus: capture?.status || '',
+      captureAmount: captureValue ? parseFloat(captureValue) : null,
+      captureCurrency: captureCurrency || null,
       payer: response.result.payer,
     };
   } catch (error: any) {

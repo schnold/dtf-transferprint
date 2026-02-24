@@ -1,12 +1,7 @@
 ---
 import AdminLayout from '../../../layouts/AdminLayout.astro';
 import { pool } from '../../../lib/db';
-import ProductImageUpload from '../../../components/ProductImageUpload.astro';
 
-// Note: Admin check is handled by middleware.ts
-// If we reach here, user is already verified as admin
-
-// Fetch categories for dropdown
 const client = await pool.connect();
 try {
   var categories = await client.query(`
@@ -19,531 +14,521 @@ try {
 }
 ---
 
+<style>
+  .tab-radio-modern { @apply cursor-pointer; }
+  .tab-label-modern {
+    @apply px-5 py-3 rounded-xl flex items-center gap-2 font-semibold text-sm border-2 border-transparent select-none whitespace-nowrap;
+    background-color: rgba(156, 163, 175, 0.3);
+    color: rgba(107, 114, 128, 0.8);
+  }
+  .tab-label-modern:hover { background-color: rgba(156, 163, 175, 0.4); }
+  .tab-radio-modern input:checked + .tab-label-modern {
+    background-color: rgba(75, 85, 99, 1);
+    color: rgba(255, 255, 255, 1);
+  }
+  .card-modern {
+    @apply bg-base-100 rounded-2xl shadow-md border hover:shadow-xl overflow-hidden;
+    border-color: rgba(166, 166, 166, 0.3);
+  }
+</style>
+
 <AdminLayout title="Neues Produkt erstellen" currentPage="products">
-  <!-- Page Header -->
-  <div class="flex items-center justify-between mb-6">
-    <div class="flex items-center gap-4">
-      <a href="/admin/products" class="btn btn-ghost btn-sm">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-        </svg>
-        Zurück
-      </a>
-      <div>
-        <h1 class="text-2xl font-bold text-base-content">Neues Produkt erstellen</h1>
-        <p class="text-sm text-base-content/70 mt-1">Fügen Sie ein neues Produkt zum Katalog hinzu</p>
+  <div class="breadcrumbs text-sm mb-4">
+    <ul>
+      <li><a href="/admin" class="link link-hover">Admin</a></li>
+      <li><a href="/admin/products" class="link link-hover">Produkte</a></li>
+      <li class="font-semibold">Neu</li>
+    </ul>
+  </div>
+
+  <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-6">
+    <div>
+      <div class="flex items-center gap-3 mb-2">
+        <h1 class="text-3xl font-bold text-base-content">Neues Produkt erstellen</h1>
+        <span class="badge badge-primary badge-lg">Entwurf</span>
       </div>
+      <p class="text-sm text-base-content/70">Gleiche Tabs wie in der Bearbeitungsansicht.</p>
+    </div>
+    <a href="/admin/products" class="btn btn-ghost gap-2">Zurück</a>
+  </div>
+
+  <div class="stats stats-vertical lg:stats-horizontal shadow-lg w-full mb-6 border border-base-300/50">
+    <div class="stat place-items-center">
+      <div class="stat-title">Grundpreis</div>
+      <div class="stat-value text-gray-600">0.00EUR</div>
+      <div class="stat-desc">Pro Stueck</div>
+    </div>
+
+    <div class="stat place-items-center">
+      <div class="stat-title">Kategorie</div>
+      <div class="stat-value text-2xl text-gray-600">N/A</div>
+      <div class="stat-desc">Keine SKU</div>
+    </div>
+
+    <div class="stat place-items-center">
+      <div class="stat-title">Preisstaffeln</div>
+      <div class="stat-value text-gray-600">1</div>
+      <div class="stat-desc">Staffeln konfiguriert</div>
+    </div>
+
+    <div class="stat place-items-center">
+      <div class="stat-title">Bilder</div>
+      <div class="stat-value text-gray-600">0</div>
+      <div class="stat-desc">0 Primaerbild</div>
     </div>
   </div>
 
   <form id="productForm" class="space-y-6">
-    <!-- Basic Information -->
-    <div class="card bg-gradient-to-br from-base-100 to-base-200/30 border border-base-300/30 shadow-xl rounded-2xl">
-      <div class="card-body">
-        <h2 class="card-title text-lg mb-4 text-base-content">Grundinformationen</h2>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-4">
-          <div class="form-control">
-            <div class="mb-2">
-              <label class="text-sm font-medium text-base-content">
-                Produktname <span class="text-error">*</span>
-              </label>
-            </div>
-            <input type="text" name="name" required class="input input-bordered focus:input-primary" placeholder="DTF Laufmeter Blockout Meterware" />
-          </div>
-
-          <div class="form-control">
-            <div class="mb-2">
-              <label class="text-sm font-medium text-base-content">
-                URL-Slug <span class="text-error">*</span>
-              </label>
-              <p class="text-xs text-base-content/50 mt-0.5">URL-freundliche Kennung</p>
-            </div>
-            <input type="text" name="slug" required class="input input-bordered focus:input-primary" placeholder="dtf-laufmeter-blockout-meterware" />
-          </div>
-
-          <div class="form-control">
-            <div class="mb-2">
-              <label class="text-sm font-medium text-base-content">
-                Kategorie <span class="text-error">*</span>
-              </label>
-            </div>
-            <select name="categoryId" required class="select select-bordered focus:select-primary">
-              <option value="">Kategorie auswählen...</option>
-              {categories.rows.map((cat) => (
-                <option value={cat.id}>{cat.name}</option>
-              ))}
-            </select>
-          </div>
-
-          <div class="form-control">
-            <div class="mb-2">
-              <label class="text-sm font-medium text-base-content">
-                Artikelnummer (SKU) <span class="text-xs text-base-content/50">(Optional)</span>
-              </label>
-            </div>
-            <input type="text" name="sku" class="input input-bordered focus:input-primary" placeholder="DTF-BLOCKOUT-5M" />
-          </div>
-        </div>
-
-        <div class="form-control mt-4">
-          <div class="mb-2">
-            <label class="text-sm font-medium text-base-content">
-              Kurzbeschreibung <span class="text-error">*</span>
-            </label>
-            <p class="text-xs text-base-content/50 mt-0.5">Wird in Produktlisten und Karten verwendet</p>
-          </div>
-          <textarea name="shortDescription" required class="textarea textarea-bordered focus:textarea-primary resize-none" rows="3" placeholder="Kurze Beschreibung für Produktkarten"></textarea>
-        </div>
-
-        <div class="form-control mt-4">
-          <div class="mb-2">
-            <label class="text-sm font-medium text-base-content">
-              Vollständige Beschreibung <span class="text-error">*</span>
-            </label>
-            <p class="text-xs text-base-content/50 mt-0.5">Vollständige Produktdetails auf der Produktseite</p>
-          </div>
-          <textarea name="description" required class="textarea textarea-bordered focus:textarea-primary resize-none" rows="6" placeholder="Detaillierte Produktbeschreibung"></textarea>
+    <div class="bg-base-100/50 backdrop-blur-sm rounded-3xl shadow-2xl border border-base-300/20 overflow-hidden">
+      <div class="bg-gradient-to-r from-base-200/40 via-base-100/40 to-base-200/40 p-3 border-b border-base-300/20">
+        <div role="tablist" class="flex gap-2 flex-wrap">
+          <label class="tab-radio-modern">
+            <input type="radio" name="product_tabs" value="basic" class="hidden peer" checked />
+            <span class="tab-label-modern">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clip-rule="evenodd"/>
+              </svg>
+              Grundinformationen
+            </span>
+          </label>
+          <label class="tab-radio-modern">
+            <input type="radio" name="product_tabs" value="pricing" class="hidden peer" />
+            <span class="tab-label-modern">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z"/>
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clip-rule="evenodd"/>
+              </svg>
+              Preise
+            </span>
+          </label>
+          <label class="tab-radio-modern">
+            <input type="radio" name="product_tabs" value="images" class="hidden peer" />
+            <span class="tab-label-modern">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/>
+              </svg>
+              Bilder
+            </span>
+          </label>
+          <label class="tab-radio-modern">
+            <input type="radio" name="product_tabs" value="dtf" class="hidden peer" />
+            <span class="tab-label-modern">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"/>
+              </svg>
+              Typ
+            </span>
+          </label>
+          <label class="tab-radio-modern">
+            <input type="radio" name="product_tabs" value="seo" class="hidden peer" />
+            <span class="tab-label-modern">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z" clip-rule="evenodd"/>
+              </svg>
+              SEO
+            </span>
+          </label>
+          <label class="tab-radio-modern">
+            <input type="radio" name="product_tabs" value="specs" class="hidden peer" />
+            <span class="tab-label-modern">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/>
+                <path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"/>
+              </svg>
+              Technische Daten
+            </span>
+          </label>
         </div>
       </div>
-    </div>
 
-    <!-- Pricing -->
-    <div class="card bg-gradient-to-br from-base-100 to-base-200/30 border border-base-300/30 shadow-xl rounded-2xl">
-      <div class="card-body">
-        <h2 class="card-title text-lg mb-4 text-base-content">Preise</h2>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-x-4 gap-y-4">
-          <div class="form-control">
-            <div class="mb-2">
-              <label class="text-sm font-medium text-base-content">
-                Grundpreis (€) <span class="text-error">*</span>
-              </label>
+      <div id="basic-panel" class="tab-panel p-6">
+        <div class="max-w-7xl mx-auto space-y-6">
+          <div class="alert alert-info">
+            <span><span class="text-error font-bold">*</span> Pflichtfeld</span>
+          </div>
+          <div class="card-modern">
+            <div class="card-body p-6">
+              <h3 class="text-xl font-bold mb-6">Grundinformationen</h3>
+              <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                <div class="form-control">
+                  <label class="label"><span class="label-text">Produktname <span class="text-error">*</span></span></label>
+                  <input type="text" name="name" required class="input input-bordered" placeholder="Produktname" />
+                </div>
+                <div class="form-control">
+                  <label class="label"><span class="label-text">URL-Slug <span class="text-error">*</span></span></label>
+                  <input type="text" name="slug" required class="input input-bordered font-mono" placeholder="url-slug" />
+                </div>
+                <div class="form-control">
+                  <label class="label"><span class="label-text">Kategorie <span class="text-error">*</span></span></label>
+                  <select name="categoryId" required class="select select-bordered">
+                    <option value="">Kategorie auswaehlen...</option>
+                    {categories.rows.map((cat) => (<option value={cat.id}>{cat.name}</option>))}
+                  </select>
+                </div>
+                <div class="form-control">
+                  <label class="label"><span class="label-text">SKU</span></label>
+                  <input type="text" name="sku" class="input input-bordered" placeholder="SKU (optional)" />
+                </div>
+              </div>
+              <div class="space-y-4 mt-4">
+                <div class="form-control">
+                  <label class="label"><span class="label-text">Kurzbeschreibung <span class="text-error">*</span></span></label>
+                  <textarea name="shortDescription" required class="textarea textarea-bordered w-full" rows="3" placeholder="Kurzbeschreibung"></textarea>
+                </div>
+                <div class="form-control">
+                  <label class="label"><span class="label-text">Vollstaendige Beschreibung <span class="text-error">*</span></span></label>
+                  <textarea name="description" required class="textarea textarea-bordered w-full" rows="6" placeholder="Vollstaendige Beschreibung"></textarea>
+                </div>
+              </div>
             </div>
-            <input type="number" name="basePrice" step="0.01" required class="input input-bordered focus:input-primary" placeholder="14.99" />
           </div>
 
-          <div class="form-control">
-            <div class="mb-2">
-              <label class="text-sm font-medium text-base-content">
-                Vergleichspreis (€) <span class="text-xs text-base-content/50">(Optional)</span>
-              </label>
+          <div class="card-modern">
+            <div class="card-body p-6">
+              <h3 class="text-xl font-bold mb-6">Status und Einstellungen</h3>
+              <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                <label class="flex items-center gap-3 p-4 rounded-xl bg-base-200/60 border border-base-300/40"><input type="checkbox" name="isActive" class="toggle toggle-success" checked /><span>Aktiv</span></label>
+                <label class="flex items-center gap-3 p-4 rounded-xl bg-base-200/60 border border-base-300/40"><input type="checkbox" name="isFeatured" class="toggle toggle-primary" /><span>Empfohlen</span></label>
+                <label class="flex items-center gap-3 p-4 rounded-xl bg-base-200/60 border border-base-300/40"><input type="checkbox" name="trackInventory" class="toggle toggle-warning" /><span>Lagerbestand verfolgen</span></label>
+                <label class="flex items-center gap-3 p-4 rounded-xl bg-base-200/60 border border-base-300/40"><input type="checkbox" name="requiresShipping" class="toggle" checked /><span>Versand erforderlich</span></label>
+              </div>
             </div>
-            <input type="number" name="compareAtPrice" step="0.01" class="input input-bordered focus:input-primary" placeholder="19.99" />
-          </div>
-
-          <div class="form-control">
-            <div class="mb-2">
-              <label class="text-sm font-medium text-base-content">
-                Berechnungsmethode
-              </label>
-            </div>
-            <select name="priceCalculationMethod" class="select select-bordered focus:select-primary">
-              <option value="per_piece">Pro Stück</option>
-              <option value="per_meter">Pro Meter</option>
-              <option value="per_area">Pro Fläche (m²)</option>
-            </select>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- DTF-Specific Fields -->
-    <div class="card bg-gradient-to-br from-base-100 to-base-200/30 border border-base-300/30 shadow-xl rounded-2xl">
-      <div class="card-body">
-        <h2 class="card-title text-lg mb-4 text-base-content">DTF-Einstellungen</h2>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div class="form-control">
-            <label class="label cursor-pointer justify-start gap-3 p-4 bg-base-100 rounded-xl border border-base-300/50 hover:bg-base-200/80 hover:border-base-300  shadow-sm">
-              <input type="checkbox" name="isBlockout" class="toggle toggle-primary" />
-              <div class="flex-1">
-                <span class="label-text font-semibold">Blockout-Produkt</span>
-                <p class="text-xs text-base-content/60 mt-1">Spezieller Blockout-DTF-Transfer</p>
-              </div>
-            </label>
-          </div>
-
-          <div class="form-control">
-            <label class="label cursor-pointer justify-start gap-3 p-4 bg-base-100 rounded-xl border border-base-300/50 hover:bg-base-200/80 hover:border-base-300  shadow-sm">
-              <input type="checkbox" id="acceptsFileUpload" name="acceptsFileUpload" class="toggle toggle-secondary" />
-              <div class="flex-1">
-                <span class="label-text font-semibold">Datei-Upload erlauben</span>
-                <p class="text-xs text-base-content/60 mt-1">Kunden können Design-Dateien hochladen</p>
-              </div>
-            </label>
-          </div>
-
-          <div class="form-control">
-            <label class="label cursor-pointer justify-start gap-3 p-4 bg-base-100 rounded-xl border border-base-300/50 hover:bg-base-200/80 hover:border-base-300  shadow-sm">
-              <input type="checkbox" name="requiresInquiry" class="toggle toggle-accent" />
-              <div class="flex-1">
-                <span class="label-text font-semibold">Nur Anfrage (kein direkter Kauf)</span>
-                <p class="text-xs text-base-content/60 mt-1">Anstelle von Kaufen-Button wird ein Anfrageformular angezeigt</p>
-              </div>
-            </label>
-          </div>
-        </div>
-
-        <div id="fileUploadSettings" class="hidden mt-4 space-y-4">
-          <div class="divider"></div>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-4">
+      <div id="pricing-panel" class="tab-panel p-6 hidden">
+        <div class="max-w-7xl mx-auto space-y-6">
+          <div class="card-modern"><div class="card-body p-6 grid grid-cols-1 lg:grid-cols-3 gap-4">
             <div class="form-control">
-              <div class="mb-2">
-                <label class="text-sm font-medium text-base-content">Max. Dateigröße (MB)</label>
-              </div>
-              <input type="number" name="maxFileSizeMb" value="255" class="input input-bordered focus:input-primary" />
+              <label class="label"><span class="label-text">Grundpreis <span class="text-error">*</span></span></label>
+              <input type="number" name="basePrice" step="0.01" required class="input input-bordered" placeholder="Grundpreis" />
             </div>
-
             <div class="form-control">
-              <div class="mb-2">
-                <label class="text-sm font-medium text-base-content">Erlaubte Dateitypen</label>
-                <p class="text-xs text-base-content/50 mt-0.5">Kommagetrennte Liste von Dateierweiterungen</p>
+              <label class="label"><span class="label-text">Vergleichspreis</span></label>
+              <input type="number" name="compareAtPrice" step="0.01" class="input input-bordered" placeholder="Vergleichspreis (optional)" />
+            </div>
+            <div class="form-control">
+              <label class="label"><span class="label-text">Berechnungsmethode</span></label>
+              <select name="priceCalculationMethod" class="select select-bordered"><option value="per_piece">Pro Stueck</option><option value="per_meter">Pro Meter</option><option value="per_area">Pro Flaeche (m2)</option></select>
+            </div>
+          </div></div>
+          <div class="card-modern">
+            <div class="card-body p-6">
+              <div class="flex justify-between items-center mb-4"><h3 class="text-xl font-bold">Preisstaffeln</h3><button type="button" id="addTierBtn" class="btn btn-primary btn-sm">Hinzufuegen</button></div>
+              <div id="priceTiersContainer" class="space-y-3">
+                <div class="tier-row card bg-base-100 border border-base-300/50"><div class="card-body p-4 grid grid-cols-1 md:grid-cols-4 gap-3">
+                  <input type="number" name="tier_minQty[]" value="0" required class="input input-bordered input-sm" />
+                  <input type="number" name="tier_discount[]" value="0" step="0.01" required class="input input-bordered input-sm" />
+                  <input type="number" name="tier_price[]" value="14.99" step="0.01" required class="input input-bordered input-sm" />
+                  <div class="join w-full"><input type="number" name="tier_order[]" value="1" required class="input input-bordered input-sm join-item flex-1" /><button type="button" class="btn btn-error btn-sm join-item remove-tier">X</button></div>
+                </div></div>
               </div>
-              <input type="text" name="allowedFileTypes" value="PDF" class="input input-bordered focus:input-primary" placeholder="PDF, PNG, JPG" />
             </div>
           </div>
-
-          <div class="divider">Abmessungen</div>
-
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-x-4 gap-y-4">
-            <div class="form-control">
-              <div class="mb-2">
-                <label class="text-sm font-medium text-base-content">Max. Breite (mm)</label>
-              </div>
-              <input type="number" name="maxWidthMm" value="560" class="input input-bordered focus:input-primary" />
-            </div>
-
-            <div class="form-control">
-              <div class="mb-2">
-                <label class="text-sm font-medium text-base-content">Min. Höhe (mm)</label>
-              </div>
-              <input type="number" name="minHeightMm" value="100" class="input input-bordered focus:input-primary" />
-            </div>
-
-            <div class="form-control">
-              <div class="mb-2">
-                <label class="text-sm font-medium text-base-content">Max. Höhe (mm)</label>
-              </div>
-              <input type="number" name="maxHeightMm" value="5000" class="input input-bordered focus:input-primary" />
-            </div>
-          </div>
-        </div>
-
-        <div class="form-control mt-4">
-          <div class="mb-2">
-            <label class="text-sm font-medium text-base-content">Drucktechnologie</label>
-          </div>
-          <input type="text" name="printTechnology" value="DTF" class="input input-bordered focus:input-primary" />
         </div>
       </div>
-    </div>
 
-    <!-- Price Tiers -->
-    <div class="card bg-gradient-to-br from-base-100 to-base-200/30 border border-base-300/30 shadow-xl rounded-2xl">
-      <div class="card-body">
-        <div class="flex justify-between items-center mb-4">
-          <div>
-            <h2 class="card-title text-lg text-base-content">Preisstaffeln</h2>
-            <p class="text-sm text-base-content/60 mt-1">Die erste Staffel ist der Grundpreis (0% Rabatt). Weitere Staffeln berechnen sich automatisch. Jede Staffel gilt ab der Mindestmenge und ist unbegrenzt.</p>
+      <div id="images-panel" class="tab-panel p-6 hidden">
+        <div class="max-w-7xl mx-auto">
+          <div class="card bg-base-100 shadow-lg border border-base-300/30">
+            <div class="card-body space-y-4">
+              <h3 class="text-xl font-bold">Produktbilder</h3>
+              <p class="text-sm text-base-content/70">Bilder werden direkt nach dem Erstellen automatisch hochgeladen.</p>
+              <label class="label cursor-pointer justify-start gap-3">
+                <input type="checkbox" id="create-set-as-primary" class="checkbox checkbox-primary" checked />
+                <span class="label-text">Erstes Bild als Primärbild setzen</span>
+              </label>
+              <input
+                type="file"
+                id="create-image-upload-input"
+                accept="image/jpeg,image/jpg,image/png,image/webp,image/gif"
+                multiple
+                class="file-input file-input-bordered w-full"
+              />
+              <div id="create-image-preview" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 hidden"></div>
+            </div>
           </div>
-          <button type="button" id="addTierBtn" class="btn btn-primary btn-sm gap-2 shadow-md hover:shadow-lg ">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-            </svg>
-            Preisstaffel hinzufügen
-          </button>
         </div>
+      </div>
 
-        <div id="priceTiersContainer" class="space-y-3">
-          <!-- Default tier -->
-          <div class="tier-row card bg-base-100 border border-base-300/50 shadow-sm rounded-xl hover:shadow-md ">
-            <div class="card-body p-4">
-              <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
-                <div class="form-control">
-                  <label class="label">
-                    <span class="label-text font-medium text-sm">Min. Menge</span>
-                  </label>
-                  <input type="number" name="tier_minQty[]" value="0" required class="input input-bordered input-sm focus:input-primary" />
-                </div>
-                <div class="form-control">
-                  <label class="label">
-                    <span class="label-text font-medium text-sm">Rabatt %</span>
-                  </label>
-                  <input type="number" name="tier_discount[]" value="0" step="0.01" required class="input input-bordered input-sm focus:input-primary" />
-                </div>
-                <div class="form-control">
-                  <label class="label">
-                    <span class="label-text font-medium text-sm">Preis (€)</span>
-                  </label>
-                  <input type="number" name="tier_price[]" value="14.99" step="0.01" required class="input input-bordered input-sm focus:input-primary" />
-                </div>
-                <div class="form-control">
-                  <label class="label">
-                    <span class="label-text font-medium text-sm">Reihenfolge</span>
-                  </label>
-                  <div class="join w-full">
-                    <input type="number" name="tier_order[]" value="1" required class="input input-bordered input-sm join-item flex-1 focus:input-primary " />
-                    <button type="button" class="btn btn-error btn-sm join-item remove-tier">
-                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                    </button>
-                  </div>
+      <div id="dtf-panel" class="tab-panel p-6 hidden">
+        <div class="card-modern"><div class="card-body p-6 space-y-4">
+          <label class="flex items-center gap-3"><input type="checkbox" name="isBlockout" class="toggle toggle-primary" /><span>Blockout-Produkt</span></label>
+          <label class="flex items-center gap-3"><input type="checkbox" id="acceptsFileUpload" name="acceptsFileUpload" class="toggle toggle-secondary" /><span>Datei-Upload erlauben</span></label>
+          <label class="flex items-center gap-3"><input type="checkbox" name="requiresInquiry" class="toggle toggle-accent" /><span>Nur Anfrage</span></label>
+          <div id="fileUploadSettings" class="hidden grid grid-cols-1 md:grid-cols-2 gap-4">
+            <input type="number" name="maxFileSizeMb" value="255" class="input input-bordered" placeholder="Max. Dateigroesse MB" />
+            <input type="text" name="allowedFileTypes" value="PDF" class="input input-bordered" placeholder="Erlaubte Dateitypen" />
+            <input type="number" name="requiredDpi" value="300" class="input input-bordered" min="72" max="600" placeholder="Min. DPI (nur PNG)" />
+            <input type="number" name="requiredMinWidth" class="input input-bordered" min="1" placeholder="Min. Breite px (optional, nur PNG)" />
+            <input type="number" name="requiredMinHeight" class="input input-bordered" min="1" placeholder="Min. Hoehe px (optional, nur PNG)" />
+            <input type="number" name="maxWidthMm" value="560" class="input input-bordered" placeholder="Max. Breite mm" />
+            <input type="number" name="minHeightMm" value="100" class="input input-bordered" placeholder="Min. Hoehe mm" />
+            <input type="number" name="maxHeightMm" value="5000" class="input input-bordered" placeholder="Max. Hoehe mm" />
+          </div>
+          <input type="text" name="printTechnology" value="DTF" class="input input-bordered" placeholder="Drucktechnologie" />
+        </div></div>
+      </div>
+
+      <div id="seo-panel" class="tab-panel p-6 hidden">
+        <div class="card-modern"><div class="card-body p-6 space-y-4">
+          <input type="text" name="metaTitle" class="input input-bordered" placeholder="Meta-Titel (optional)" maxlength="60" />
+          <textarea name="metaDescription" class="textarea textarea-bordered" rows="4" placeholder="Meta-Beschreibung (optional)" maxlength="160"></textarea>
+        </div></div>
+      </div>
+
+      <div id="specs-panel" class="tab-panel p-6 hidden">
+        <div class="max-w-7xl mx-auto">
+          <div class="card bg-base-100 shadow-lg border border-base-300/30">
+            <div class="card-body">
+              <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold">Produktspezifikationen</h3>
+                <button type="button" id="addSpecBtn" class="btn btn-primary btn-sm">Spezifikation hinzufügen</button>
+              </div>
+              <div id="specificationsContainer" class="space-y-3">
+                <div class="text-center py-8 text-base-content/50" id="specsEmptyState">
+                  <p class="text-sm font-medium">Noch keine Spezifikationen hinzugefügt</p>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- Inventory & Status -->
-    <div class="card bg-gradient-to-br from-base-100 to-base-200/30 border border-base-300/30 shadow-xl rounded-2xl">
-      <div class="card-body">
-        <h2 class="card-title text-lg mb-4 text-base-content">Lagerbestand & Status</h2>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div class="form-control">
-            <label class="label cursor-pointer justify-start gap-3 p-4 bg-base-100 rounded-xl border border-base-300/50 hover:bg-base-200/80 hover:border-base-300  shadow-sm">
-              <input type="checkbox" name="trackInventory" class="toggle toggle-warning" />
-              <div class="flex-1">
-                <span class="label-text font-semibold">Lagerbestand verfolgen</span>
-                <p class="text-xs text-base-content/60 mt-1">Lagerbestände überwachen</p>
-              </div>
-            </label>
-          </div>
-
-          <div class="form-control">
-            <label class="label cursor-pointer justify-start gap-3 p-4 bg-base-100 rounded-xl border border-base-300/50 hover:bg-base-200/80 hover:border-base-300  shadow-sm">
-              <input type="checkbox" name="requiresShipping" checked class="toggle" />
-              <div class="flex-1">
-                <span class="label-text font-semibold">Benötigt Versand</span>
-                <p class="text-xs text-base-content/60 mt-1">Produkt benötigt Versand</p>
-              </div>
-            </label>
-          </div>
-
-          <div class="form-control">
-            <label class="label cursor-pointer justify-start gap-3 p-4 bg-base-100 rounded-xl border border-base-300/50 hover:bg-base-200/80 hover:border-base-300  shadow-sm">
-              <input type="checkbox" name="isActive" checked class="toggle toggle-success" />
-              <div class="flex-1">
-                <span class="label-text font-semibold">Aktiv</span>
-                <p class="text-xs text-base-content/60 mt-1">Produkt ist für Kunden sichtbar</p>
-              </div>
-            </label>
-          </div>
-
-          <div class="form-control">
-            <label class="label cursor-pointer justify-start gap-3 p-4 bg-base-100 rounded-xl border border-base-300/50 hover:bg-base-200/80 hover:border-base-300  shadow-sm">
-              <input type="checkbox" name="isFeatured" class="toggle toggle-info" />
-              <div class="flex-1">
-                <span class="label-text font-semibold">Empfohlen</span>
-                <p class="text-xs text-base-content/60 mt-1">In empfohlenen Bereichen anzeigen</p>
-              </div>
-            </label>
+      <div class="border-t-2 border-primary/20 p-6 bg-gradient-to-r from-base-100 via-base-200/30 to-base-100">
+        <div class="flex flex-col lg:flex-row justify-between items-center gap-4">
+          <div class="text-sm text-base-content/60">Bilder und technische Daten aus den Tabs werden beim Erstellen direkt übernommen.</div>
+          <div class="flex gap-3">
+            <a href="/admin/products" class="btn btn-ghost btn-lg">Abbrechen</a>
+            <button type="submit" class="btn btn-primary btn-lg">Produkt erstellen</button>
           </div>
         </div>
-      </div>
-    </div>
-
-    <!-- Product Images -->
-    <div class="card bg-gradient-to-br from-base-100 to-base-200/30 border border-base-300/30 shadow-xl rounded-2xl">
-      <div class="card-body">
-        <h2 class="card-title text-lg mb-4 text-base-content">Produktbilder</h2>
-        <p class="text-sm text-base-content/60 mb-4">Bilder können nach dem Erstellen des Produkts hinzugefügt werden</p>
-        <ProductImageUpload />
-      </div>
-    </div>
-
-    <!-- SEO -->
-    <div class="card bg-gradient-to-br from-base-100 to-base-200/30 border border-base-300/30 shadow-xl rounded-2xl">
-      <div class="card-body">
-        <h2 class="card-title text-lg mb-4 text-base-content">SEO-Einstellungen</h2>
-
-        <div class="form-control">
-          <label class="label">
-            <span class="label-text font-semibold">Meta-Titel</span>
-            <span class="label-text-alt text-base-content/60">Optional</span>
-          </label>
-          <input type="text" name="metaTitle" class="input input-bordered focus:input-primary " placeholder="Leer lassen, um Produktnamen zu verwenden" maxlength="60" />
-          <label class="label">
-            <span class="label-text-alt">Wird in Suchergebnissen und Browser-Tabs verwendet</span>
-          </label>
-        </div>
-
-        <div class="form-control">
-          <label class="label">
-            <span class="label-text font-semibold">Meta-Beschreibung</span>
-            <span class="label-text-alt text-base-content/60">Optional</span>
-          </label>
-          <textarea name="metaDescription" class="textarea textarea-bordered h-24 focus:textarea-primary " placeholder="Leer lassen, um Kurzbeschreibung zu verwenden" maxlength="160"></textarea>
-          <label class="label">
-            <span class="label-text-alt">Erscheint in Suchergebnissen unter dem Titel</span>
-          </label>
-        </div>
-
-        <div class="alert alert-info mt-4">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-          </svg>
-          <span class="text-sm">SEO-Felder sind optional. Wenn leer gelassen, werden Produktname und Kurzbeschreibung verwendet.</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Submit -->
-    <div class="flex flex-col md:flex-row justify-between items-center gap-4 p-4 bg-gradient-to-r from-base-100 to-base-200/30 border border-base-300/30 rounded-2xl">
-      <div class="text-sm text-base-content/60">
-        <span class="font-medium">Hinweis:</span> Produktbilder können nach dem Erstellen hinzugefügt werden
-      </div>
-      <div class="flex gap-3">
-        <a href="/admin/products" class="btn btn-ghost">Abbrechen</a>
-        <button type="submit" class="btn btn-primary gap-2 shadow-md hover:shadow-lg ">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-          </svg>
-          Produkt erstellen
-        </button>
       </div>
     </div>
   </form>
 </AdminLayout>
 
 <script>
-  // Toggle file upload settings
+  function showToast(message, type = 'error') {
+    document.querySelectorAll('.create-toast').forEach((el) => el.remove());
+    const toast = document.createElement('div');
+    const alertClass = type === 'success' ? 'alert-success' : type === 'info' ? 'alert-info' : 'alert-error';
+    toast.className = 'toast toast-bottom toast-start create-toast z-50';
+    toast.innerHTML = `<div class="alert ${alertClass}"><span>${message}</span></div>`;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+  }
+
+  const tabRadios = document.querySelectorAll('input[name="product_tabs"]');
+  const tabPanels = {
+    basic: document.getElementById('basic-panel'),
+    pricing: document.getElementById('pricing-panel'),
+    images: document.getElementById('images-panel'),
+    dtf: document.getElementById('dtf-panel'),
+    seo: document.getElementById('seo-panel'),
+    specs: document.getElementById('specs-panel')
+  };
+  function showTab(tabName) {
+    Object.values(tabPanels).forEach(panel => panel?.classList.add('hidden'));
+    tabPanels[tabName]?.classList.remove('hidden');
+  }
+  tabRadios.forEach(radio => radio.addEventListener('change', (e) => e.target.checked && showTab(e.target.value)));
+  showTab('basic');
+
   document.getElementById('acceptsFileUpload')?.addEventListener('change', (e) => {
     const settings = document.getElementById('fileUploadSettings');
-    if (settings) {
-      settings.classList.toggle('hidden', !e.target.checked);
-    }
+    if (settings) settings.classList.toggle('hidden', !e.target.checked);
   });
 
-  // Calculate tier price based on discount and base price
   function calculateTierPrice(discountPercent, basePrice) {
     const discount = parseFloat(discountPercent) || 0;
     const base = parseFloat(basePrice) || 0;
     return (base * (1 - discount / 100)).toFixed(2);
   }
-
-  // Update all tier prices when base price changes
   function updateAllTierPrices() {
-    const basePriceInput = document.querySelector('[name="basePrice"]');
-    const basePrice = parseFloat(basePriceInput?.value) || 0;
-
+    const basePrice = parseFloat(document.querySelector('[name="basePrice"]')?.value) || 0;
     document.querySelectorAll('.tier-row').forEach(row => {
-      const discountInput = row.querySelector('[name="tier_discount[]"]');
+      const discount = parseFloat(row.querySelector('[name="tier_discount[]"]')?.value) || 0;
       const priceInput = row.querySelector('[name="tier_price[]"]');
-      const discount = parseFloat(discountInput?.value) || 0;
-
-      if (priceInput) {
-        priceInput.value = calculateTierPrice(discount, basePrice);
-      }
+      if (priceInput) priceInput.value = calculateTierPrice(discount, basePrice);
     });
   }
-
-  // Update tier price when discount changes
-  function updateTierPrice(tierRow) {
-    const basePriceInput = document.querySelector('[name="basePrice"]');
-    const basePrice = parseFloat(basePriceInput?.value) || 0;
-    const discountInput = tierRow.querySelector('[name="tier_discount[]"]');
-    const priceInput = tierRow.querySelector('[name="tier_price[]"]');
-    const discount = parseFloat(discountInput?.value) || 0;
-
-    if (priceInput) {
-      priceInput.value = calculateTierPrice(discount, basePrice);
-    }
-  }
-
-  // Listen to base price changes
-  document.querySelector('[name="basePrice"]')?.addEventListener('input', () => {
-    updateAllTierPrices();
-  });
-
-  // Listen to discount changes on existing tiers
+  document.querySelector('[name="basePrice"]')?.addEventListener('input', updateAllTierPrices);
   document.querySelectorAll('.tier-row').forEach(row => {
-    const discountInput = row.querySelector('[name="tier_discount[]"]');
-    discountInput?.addEventListener('input', () => {
-      updateTierPrice(row);
+    row.querySelector('[name="tier_discount[]"]')?.addEventListener('input', () => {
+      const base = parseFloat(document.querySelector('[name="basePrice"]')?.value) || 0;
+      const discount = parseFloat(row.querySelector('[name="tier_discount[]"]')?.value) || 0;
+      const priceInput = row.querySelector('[name="tier_price[]"]');
+      if (priceInput) priceInput.value = calculateTierPrice(discount, base);
     });
   });
 
-  // Add price tier
   let tierCount = document.querySelectorAll('.tier-row').length;
   document.getElementById('addTierBtn')?.addEventListener('click', () => {
     tierCount++;
     const container = document.getElementById('priceTiersContainer');
-    const basePriceInput = document.querySelector('[name="basePrice"]');
-    const basePrice = parseFloat(basePriceInput?.value) || 0;
-
+    const basePrice = parseFloat(document.querySelector('[name="basePrice"]')?.value) || 0;
     const tier = document.createElement('div');
-    tier.className = 'tier-row card bg-base-100 border border-base-300/50 shadow-sm rounded-xl hover:shadow-md ';
-    tier.innerHTML = `
-      <div class="card-body p-4">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text font-medium text-sm">Min. Menge</span>
-            </label>
-            <input type="number" name="tier_minQty[]" value="${tierCount * 5}" required class="input input-bordered input-sm focus:input-primary " />
-          </div>
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text font-medium text-sm">Rabatt %</span>
-            </label>
-            <input type="number" name="tier_discount[]" value="10" step="0.01" required class="input input-bordered input-sm focus:input-primary " />
-          </div>
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text font-medium text-sm">Preis (€)</span>
-              <span class="label-text-alt text-xs">Auto-berechnet</span>
-            </label>
-            <input type="number" name="tier_price[]" value="${calculateTierPrice(10, basePrice)}" step="0.01" required class="input input-bordered input-sm focus:input-primary  bg-base-200" readonly />
-          </div>
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text font-medium text-sm">Reihenfolge</span>
-            </label>
-            <div class="join w-full">
-              <input type="number" name="tier_order[]" value="${tierCount}" required class="input input-bordered input-sm join-item flex-1 focus:input-primary " />
-              <button type="button" class="btn btn-error btn-sm join-item remove-tier">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
+    tier.className = 'tier-row card bg-base-100 border border-base-300/50';
+    tier.innerHTML = `<div class="card-body p-4 grid grid-cols-1 md:grid-cols-4 gap-3"><input type="number" name="tier_minQty[]" value="${tierCount * 5}" required class="input input-bordered input-sm" /><input type="number" name="tier_discount[]" value="10" step="0.01" required class="input input-bordered input-sm" /><input type="number" name="tier_price[]" value="${calculateTierPrice(10, basePrice)}" step="0.01" required class="input input-bordered input-sm bg-base-200" readonly /><div class="join w-full"><input type="number" name="tier_order[]" value="${tierCount}" required class="input input-bordered input-sm join-item flex-1" /><button type="button" class="btn btn-error btn-sm join-item remove-tier">X</button></div></div>`;
+    container?.appendChild(tier);
+  });
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('.remove-tier')) {
+      const tiers = document.querySelectorAll('.tier-row');
+      if (tiers.length > 1) e.target.closest('.tier-row')?.remove();
+      else showToast('Mindestens eine Preisstaffel ist erforderlich', 'error');
+    }
+  });
+
+  let selectedCreateImages = [];
+  const createImageInput = document.getElementById('create-image-upload-input');
+  const createImagePreview = document.getElementById('create-image-preview');
+
+  if (createImageInput) {
+    createImageInput.addEventListener('change', (e) => {
+      const files = Array.from(e.target.files || []);
+      selectedCreateImages = files;
+      if (createImagePreview) {
+        createImagePreview.innerHTML = '';
+        createImagePreview.classList.toggle('hidden', files.length === 0);
+      }
+      files.forEach((file, index) => {
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          const preview = document.createElement('div');
+          preview.className = 'relative group';
+          preview.innerHTML = `
+            <div class="aspect-square bg-base-200 rounded-lg overflow-hidden shadow-sm border border-base-300/50">
+              <img src="${ev.target.result}" alt="Vorschau ${index + 1}" class="w-full h-full object-cover" />
             </div>
+            <button type="button" class="remove-create-preview absolute top-2 right-2 bg-error text-error-content p-1 rounded-full" data-index="${index}">x</button>
+          `;
+          createImagePreview?.appendChild(preview);
+        };
+        reader.readAsDataURL(file);
+      });
+    });
+  }
+
+  createImagePreview?.addEventListener('click', (e) => {
+    const removeBtn = e.target.closest('.remove-create-preview');
+    if (!removeBtn) return;
+    const index = parseInt(removeBtn.dataset.index, 10);
+    selectedCreateImages.splice(index, 1);
+    const dt = new DataTransfer();
+    selectedCreateImages.forEach((file) => dt.items.add(file));
+    if (createImageInput) createImageInput.files = dt.files;
+    createImageInput?.dispatchEvent(new Event('change'));
+  });
+
+  let specCount = 0;
+  const specificationsContainer = document.getElementById('specificationsContainer');
+  const specsEmptyState = document.getElementById('specsEmptyState');
+
+  function renderSpecRow(order) {
+    const row = document.createElement('div');
+    row.className = 'spec-row card bg-base-100 border border-base-300/50';
+    row.innerHTML = `
+      <div class="card-body p-4">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-3 items-end">
+          <div class="col-span-12 md:col-span-3 form-control">
+            <label class="label"><span class="label-text text-sm">Bezeichnung</span></label>
+            <input type="text" class="input input-bordered input-sm spec-label" placeholder="z.B. Material" />
+          </div>
+          <div class="col-span-12 md:col-span-3 form-control">
+            <label class="label"><span class="label-text text-sm">Schlüssel</span></label>
+            <input type="text" class="input input-bordered input-sm spec-key" placeholder="z.B. material" />
+          </div>
+          <div class="col-span-12 md:col-span-4 form-control">
+            <label class="label"><span class="label-text text-sm">Wert</span></label>
+            <input type="text" class="input input-bordered input-sm spec-value" placeholder="z.B. Baumwolle" />
+          </div>
+          <div class="col-span-10 md:col-span-1 form-control">
+            <label class="label"><span class="label-text text-sm">Ordnung</span></label>
+            <input type="number" class="input input-bordered input-sm spec-order" value="${order}" />
+          </div>
+          <div class="col-span-2 md:col-span-1">
+            <button type="button" class="btn btn-error btn-sm remove-spec w-full">x</button>
           </div>
         </div>
       </div>
     `;
-    container?.appendChild(tier);
+    return row;
+  }
 
-    // Add event listener to the new tier's discount input
-    const newTier = container?.lastElementChild;
-    const discountInput = newTier?.querySelector('[name="tier_discount[]"]');
-    discountInput?.addEventListener('input', () => {
-      updateTierPrice(newTier);
-    });
+  document.getElementById('addSpecBtn')?.addEventListener('click', () => {
+    specCount += 1;
+    specsEmptyState?.remove();
+    specificationsContainer?.appendChild(renderSpecRow(specCount));
   });
 
-  // Remove price tier
   document.addEventListener('click', (e) => {
-    if (e.target.closest('.remove-tier')) {
-      const tiers = document.querySelectorAll('.tier-row');
-      if (tiers.length > 1) {
-        e.target.closest('.tier-row')?.remove();
-      } else {
-        alert('Mindestens eine Preisstaffel ist erforderlich');
-      }
+    const removeSpecBtn = e.target.closest('.remove-spec');
+    if (!removeSpecBtn) return;
+    removeSpecBtn.closest('.spec-row')?.remove();
+    if (specificationsContainer && specificationsContainer.querySelectorAll('.spec-row').length === 0) {
+      specificationsContainer.innerHTML = `
+        <div class="text-center py-8 text-base-content/50" id="specsEmptyState">
+          <p class="text-sm font-medium">Noch keine Spezifikationen hinzugefügt</p>
+        </div>
+      `;
     }
   });
 
-  // Form submission
+  function collectSpecifications() {
+    const rows = document.querySelectorAll('.spec-row');
+    const specs = [];
+    rows.forEach((row) => {
+      const label = row.querySelector('.spec-label')?.value?.trim();
+      const key = row.querySelector('.spec-key')?.value?.trim();
+      const value = row.querySelector('.spec-value')?.value?.trim();
+      const order = parseInt(row.querySelector('.spec-order')?.value || '0', 10);
+      if (label && key && value) {
+        specs.push({
+          id: `new-${Math.random().toString(36).slice(2, 10)}`,
+          specLabel: label,
+          specKey: key,
+          specValue: value,
+          displayOrder: Number.isNaN(order) ? 0 : order
+        });
+      }
+    });
+    return specs;
+  }
+
   document.getElementById('productForm')?.addEventListener('submit', async (e) => {
     e.preventDefault();
-
     const formData = new FormData(e.target);
+    const getText = (name) => String(formData.get(name) || '').trim();
+
+    const missingFields = [];
+    const invalidFields = [];
+    if (!getText('name')) missingFields.push('Produktname');
+    if (!getText('slug')) missingFields.push('URL-Slug');
+    if (!getText('categoryId')) missingFields.push('Kategorie');
+    if (!getText('shortDescription')) missingFields.push('Kurzbeschreibung');
+    if (!getText('description')) missingFields.push('Vollständige Beschreibung');
+
+    const basePriceRaw = getText('basePrice');
+    const basePriceNum = parseFloat(basePriceRaw);
+    if (!basePriceRaw) missingFields.push('Grundpreis');
+    else if (Number.isNaN(basePriceNum) || basePriceNum < 0) invalidFields.push('Grundpreis');
+
+    const compareAtPriceRaw = getText('compareAtPrice');
+    if (compareAtPriceRaw && (Number.isNaN(parseFloat(compareAtPriceRaw)) || parseFloat(compareAtPriceRaw) < 0)) {
+      invalidFields.push('Vergleichspreis');
+    }
+
+    if (missingFields.length > 0 || invalidFields.length > 0) {
+      const parts = [];
+      if (missingFields.length > 0) parts.push(`Pflichtfelder fehlen: ${missingFields.join(', ')}`);
+      if (invalidFields.length > 0) parts.push(`Ungültige Werte: ${invalidFields.join(', ')}`);
+      showToast(parts.join(' | '), 'error');
+      return;
+    }
+
     const data = {
       name: formData.get('name'),
       slug: formData.get('slug'),
@@ -559,6 +544,9 @@ try {
       requiresInquiry: formData.get('requiresInquiry') === 'on',
       maxFileSizeMb: parseInt(formData.get('maxFileSizeMb')) || 255,
       allowedFileTypes: formData.get('allowedFileTypes') || 'PDF',
+      requiredDpi: parseInt(formData.get('requiredDpi')) || 300,
+      requiredMinWidth: parseInt(formData.get('requiredMinWidth')) || null,
+      requiredMinHeight: parseInt(formData.get('requiredMinHeight')) || null,
       maxWidthMm: parseInt(formData.get('maxWidthMm')) || null,
       minHeightMm: parseInt(formData.get('minHeightMm')) || null,
       maxHeightMm: parseInt(formData.get('maxHeightMm')) || null,
@@ -571,54 +559,70 @@ try {
       metaDescription: formData.get('metaDescription'),
       priceTiers: []
     };
-
-    // Collect price tiers
     const minQties = formData.getAll('tier_minQty[]');
     const discounts = formData.getAll('tier_discount[]');
     const prices = formData.getAll('tier_price[]');
     const orders = formData.getAll('tier_order[]');
-
     for (let i = 0; i < minQties.length; i++) {
-      data.priceTiers.push({
-        minQuantity: parseInt(minQties[i]),
-        maxQuantity: null, // Always open-ended
-        discountPercent: parseFloat(discounts[i]),
-        pricePerUnit: parseFloat(prices[i]),
-        displayOrder: parseInt(orders[i])
-      });
+      data.priceTiers.push({ minQuantity: parseInt(minQties[i]), maxQuantity: null, discountPercent: parseFloat(discounts[i]), pricePerUnit: parseFloat(prices[i]), displayOrder: parseInt(orders[i]) });
     }
-
     const submitBtn = e.target.querySelector('button[type="submit"]');
     const originalText = submitBtn.innerHTML;
     submitBtn.disabled = true;
     submitBtn.innerHTML = '<span class="loading loading-spinner loading-sm"></span> Wird erstellt...';
-
     try {
-      const response = await fetch('/api/admin/products/create', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-      });
-
+      const response = await fetch('/api/admin/products/create', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
       const result = await response.json();
-
       if (result.success) {
-        // Show success toast
-        const toast = document.createElement('div');
-        toast.className = 'toast toast-bottom toast-start';
-        toast.innerHTML = '<div class="alert alert-success"><span>Produkt erfolgreich erstellt! Sie können jetzt Bilder hinzufügen.</span></div>';
-        document.body.appendChild(toast);
-        setTimeout(() => toast.remove(), 3000);
+        const productId = result.data.productId;
+        const postCreateErrors = [];
 
-        // Redirect to edit page to allow image upload
-        setTimeout(() => {
-          window.location.href = `/admin/products/${result.data.productId}/edit`;
-        }, 1500);
+        const specs = collectSpecifications();
+        if (specs.length > 0) {
+          try {
+            const specsResponse = await fetch(`/api/admin/products/${productId}/specifications`, {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ specifications: specs })
+            });
+            if (!specsResponse.ok) {
+              postCreateErrors.push('Spezifikationen');
+            }
+          } catch {
+            postCreateErrors.push('Spezifikationen');
+          }
+        }
+
+        if (selectedCreateImages.length > 0) {
+          try {
+            const imageFormData = new FormData();
+            imageFormData.append('productId', productId);
+            const isPrimary = document.getElementById('create-set-as-primary')?.checked;
+            imageFormData.append('isPrimary', isPrimary ? 'true' : 'false');
+            selectedCreateImages.forEach((file) => imageFormData.append('images', file));
+
+            const imageResponse = await fetch('/api/admin/products/upload-image', {
+              method: 'POST',
+              body: imageFormData
+            });
+            if (!imageResponse.ok) {
+              postCreateErrors.push('Bilder');
+            }
+          } catch {
+            postCreateErrors.push('Bilder');
+          }
+        }
+
+        if (postCreateErrors.length > 0) {
+          showToast(`Produkt erstellt, aber diese Daten konnten nicht vollständig gespeichert werden: ${postCreateErrors.join(', ')}`, 'info');
+        }
+
+        window.location.href = `/admin/products/${productId}/edit`;
       } else {
         throw new Error(result.error?.message || 'Fehler beim Erstellen des Produkts');
       }
     } catch (error) {
-      alert('Fehler beim Erstellen des Produkts: ' + error.message);
+      showToast('Fehler beim Erstellen des Produkts: ' + error.message, 'error');
       submitBtn.disabled = false;
       submitBtn.innerHTML = originalText;
     }

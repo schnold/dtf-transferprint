@@ -3,6 +3,53 @@ import { auth } from "./lib/auth";
 import { defineMiddleware } from "astro:middleware";
 import { pool } from "./lib/db";
 
+const MUTATING_METHODS = new Set(["POST", "PUT", "PATCH", "DELETE"]);
+
+function getAllowedOrigins(request: Request, currentUrl: URL): Set<string> {
+  const origins = new Set<string>();
+  const envOrigins = [
+    process.env.BETTER_AUTH_URL,
+    process.env.PUBLIC_BETTER_AUTH_URL,
+  ].filter((value): value is string => Boolean(value));
+
+  for (const origin of envOrigins) {
+    origins.add(origin.replace(/\/+$/, ""));
+  }
+
+  const forwardedHost = request.headers.get("x-forwarded-host");
+  const host = forwardedHost || request.headers.get("host");
+  if (host) {
+    const forwardedProto = request.headers.get("x-forwarded-proto");
+    const protocol = forwardedProto || currentUrl.protocol.replace(":", "");
+    origins.add(`${protocol}://${host}`);
+  }
+
+  return origins;
+}
+
+function applySecurityHeaders(response: Response, requestUrl: URL): void {
+  const headers = response.headers;
+
+  if (!headers.has("X-Frame-Options")) {
+    headers.set("X-Frame-Options", "DENY");
+  }
+  if (!headers.has("X-Content-Type-Options")) {
+    headers.set("X-Content-Type-Options", "nosniff");
+  }
+  if (!headers.has("Referrer-Policy")) {
+    headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+  }
+  if (!headers.has("Permissions-Policy")) {
+    headers.set("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
+  }
+  if (!headers.has("Content-Security-Policy")) {
+    headers.set("Content-Security-Policy", "base-uri 'self'; frame-ancestors 'none'; object-src 'none'");
+  }
+  if (requestUrl.protocol === "https:" && !headers.has("Strict-Transport-Security")) {
+    headers.set("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload");
+  }
+}
+
 export const onRequest = defineMiddleware(async (context, next) => {
   // Skip middleware entirely for static/prerendered content pages
   // These pages don't need auth checks and will be generated at build time
@@ -11,7 +58,26 @@ export const onRequest = defineMiddleware(async (context, next) => {
 
   if (isStaticContent) {
     // Skip all middleware processing for static content
-    return next();
+    const response = await next();
+    applySecurityHeaders(response, context.url);
+    return response;
+  }
+
+  const isApiRequest = context.url.pathname.startsWith("/api/");
+  const isCronRoute = context.url.pathname.startsWith("/api/cron/");
+
+  // Enforce same-origin requests for state-changing API operations to reduce CSRF risk.
+  if (isApiRequest && !isCronRoute && MUTATING_METHODS.has(context.request.method)) {
+    const origin = context.request.headers.get("origin");
+    const allowedOrigins = getAllowedOrigins(context.request, context.url);
+    if (!origin || !allowedOrigins.has(origin.replace(/\/+$/, ""))) {
+      const blockedResponse = new Response(
+        JSON.stringify({ error: "Forbidden origin" }),
+        { status: 403, headers: { "Content-Type": "application/json" } }
+      );
+      applySecurityHeaders(blockedResponse, context.url);
+      return blockedResponse;
+    }
   }
 
   // Check for password protection (block overlay)
@@ -42,10 +108,12 @@ export const onRequest = defineMiddleware(async (context, next) => {
         const hasValidSession = session?.user != null;
         
         if (context.url.pathname.startsWith("/api/") && !isPublicRoute && !(isCartApi && hasValidSession)) {
-          return new Response(
+          const unauthorizedResponse = new Response(
             JSON.stringify({ error: "Authentication required" }),
             { status: 401, headers: { "Content-Type": "application/json" } }
           );
+          applySecurityHeaders(unauthorizedResponse, context.url);
+          return unauthorizedResponse;
         }
         // For pages, let them load but the overlay will block access
       }
@@ -77,7 +145,9 @@ export const onRequest = defineMiddleware(async (context, next) => {
 
         if (result.rows.length === 0) {
           console.warn(`[SECURITY] User not found in database: ${session.user.id}`);
-          return new Response("Unauthorized: User not found", { status: 403 });
+          const unauthorizedResponse = new Response("Unauthorized: User not found", { status: 403 });
+          applySecurityHeaders(unauthorizedResponse, context.url);
+          return unauthorizedResponse;
         }
 
         const user = result.rows[0];
@@ -85,14 +155,18 @@ export const onRequest = defineMiddleware(async (context, next) => {
         // Check if account is locked
         if (user.accountLocked) {
           console.warn(`[SECURITY] Locked account attempted admin access: User ID ${session.user.id}`);
-          return new Response("Unauthorized: Account is locked", { status: 403 });
+          const unauthorizedResponse = new Response("Unauthorized: Account is locked", { status: 403 });
+          applySecurityHeaders(unauthorizedResponse, context.url);
+          return unauthorizedResponse;
         }
 
         // Verify admin status from database (not from session)
         if (!user.isAdmin) {
           // Log security incident without exposing full email (use ID instead)
           console.warn(`[SECURITY] Non-admin attempted admin access: User ID ${session.user.id}, Path: ${context.url.pathname}`);
-          return new Response("Unauthorized: Admin access required", { status: 403 });
+          const unauthorizedResponse = new Response("Unauthorized: Admin access required", { status: 403 });
+          applySecurityHeaders(unauthorizedResponse, context.url);
+          return unauthorizedResponse;
         }
 
         // Log admin access without exposing sensitive PII
@@ -105,9 +179,13 @@ export const onRequest = defineMiddleware(async (context, next) => {
       }
     } catch (error) {
       console.error("[SECURITY] Database check failed:", error);
-      return new Response("Internal Server Error", { status: 500 });
+      const errorResponse = new Response("Internal Server Error", { status: 500 });
+      applySecurityHeaders(errorResponse, context.url);
+      return errorResponse;
     }
   }
 
-  return next();
+  const response = await next();
+  applySecurityHeaders(response, context.url);
+  return response;
 });

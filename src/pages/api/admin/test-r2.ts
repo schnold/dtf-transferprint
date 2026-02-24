@@ -9,8 +9,8 @@ import { ListObjectsV2Command } from '@aws-sdk/client-s3';
 export const GET: APIRoute = async ({ locals }) => {
   try {
     // Check if user is admin
-    const session = locals.session;
-    if (!session?.user?.isAdmin) {
+    const user = locals.user;
+    if (!user?.isAdmin) {
       return new Response(
         JSON.stringify({
           success: false,

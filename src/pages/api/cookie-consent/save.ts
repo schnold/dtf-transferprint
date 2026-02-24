@@ -1,5 +1,19 @@
 import type { APIRoute } from 'astro';
 import { pool } from '../../../lib/db';
+import { createHash, createHmac } from 'crypto';
+
+function anonymizeIp(ip: string): string {
+  if (!ip || ip === 'unknown') return 'unknown';
+  if (ip.includes('.')) {
+    const parts = ip.split('.');
+    if (parts.length === 4) return `${parts[0]}.${parts[1]}.${parts[2]}.0`;
+  }
+  if (ip.includes(':')) {
+    const parts = ip.split(':');
+    return `${parts.slice(0, 4).join(':')}::`;
+  }
+  return 'unknown';
+}
 
 /**
  * API endpoint to save cookie consent preferences
@@ -34,10 +48,17 @@ export const POST: APIRoute = async ({ request, locals, clientAddress }) => {
 				);
 			} else {
 				// Guest user: Save to cookieConsents table
-				// Generate session ID from request headers (IP + User Agent hash)
 				const userAgent = request.headers.get('user-agent') || 'unknown';
 				const ipAddress = clientAddress || 'unknown';
-				const sessionId = `${ipAddress}_${Buffer.from(userAgent).toString('base64').substring(0, 20)}`;
+				const anonymizedIp = anonymizeIp(ipAddress);
+				const consentSecret =
+					process.env.COOKIE_CONSENT_HASH_SECRET ||
+					process.env.BETTER_AUTH_SECRET ||
+					'dev-cookie-consent-secret';
+				const userAgentHash = createHash('sha256').update(userAgent).digest('hex');
+				const sessionId = `consent_${createHmac('sha256', consentSecret)
+					.update(`${anonymizedIp}|${userAgentHash}`)
+					.digest('hex')}`;
 
 				// Check if consent already exists for this session
 				const existingConsent = await client.query(
@@ -61,7 +82,7 @@ export const POST: APIRoute = async ({ request, locals, clientAddress }) => {
 						`INSERT INTO "cookieConsents" 
 						("sessionId", "ipAddress", "userAgent", "consentData", "consentVersion")
 						VALUES ($1, $2, $3, $4, $5)`,
-						[sessionId, ipAddress, userAgent, JSON.stringify(consent), version || '1.0']
+						[sessionId, anonymizedIp, userAgentHash, JSON.stringify(consent), version || '1.0']
 					);
 				}
 			}
