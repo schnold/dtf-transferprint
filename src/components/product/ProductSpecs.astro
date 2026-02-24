@@ -13,24 +13,22 @@ const specs = specifications.filter(spec => spec.label && spec.value);
 ---
 
 <div class="product-specs">
-	<h2 class="text-2xl font-bold text-neutral mb-6">Technische Details</h2>
+	<h2 class="text-2xl font-bold text-neutral mb-6">Produktspezifikationen</h2>
 
-	<div class="card bg-base-200/50 shadow-sm border border-base-300/30">
-		<div class="card-body p-6">
-			<table class="table table-zebra">
-				<tbody>
-					{specs.map((spec) => (
-						<tr class="border-base-300/30">
-							<td class="font-semibold text-neutral w-1/3">
-								{spec.label}
-							</td>
-							<td class="text-neutral/70">
-								{spec.value}
-							</td>
-						</tr>
-					))}
-				</tbody>
-			</table>
-		</div>
+	<div class="rounded-xl overflow-hidden border border-base-300/30 shadow-sm">
+		<table class="table table-zebra w-full">
+			<tbody>
+				{specs.map((spec) => (
+					<tr>
+						<td class="font-semibold text-neutral w-1/3 text-sm">
+							{spec.label}
+						</td>
+						<td class="text-neutral/70 text-sm">
+							{spec.value}
+						</td>
+					</tr>
+				))}
+			</tbody>
+		</table>
 	</div>
 </div>

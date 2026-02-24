@@ -29,7 +29,9 @@
       "Bash(head:*)",
       "Bash(cd /c/Users/lukas/Desktop/Projects/dtf-transferprint && npm audit 2>&1)",
       "Bash(python:*)",
-      "Bash(cd:*)"
+      "Bash(cd:*)",
+      "Bash(echo No python found:*)",
+      "Bash(py:*)"
     ]
   }
 }

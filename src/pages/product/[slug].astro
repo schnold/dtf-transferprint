@@ -7,6 +7,7 @@ import ProductSpecs from '../../components/product/ProductSpecs.astro';
 import ProductActions from '../../components/product/ProductActions.astro';
 import ProductInquiryForm from '../../components/product/ProductInquiryForm.astro';
 import ProductReviews from '../../components/product/ProductReviews.astro';
+import ReferenzenMarquee from '../../components/ReferenzenMarquee.astro';
 import { pool } from '@/lib/db';
 
 const { slug } = Astro.params;
@@ -91,64 +92,14 @@ const images = productImages.rows.map(img => img.url);
 const basePrice = parseFloat(product.basePrice);
 const inStock = product.trackInventory ? (product.inventoryQuantity > 0) : true;
 
-// Build specifications from custom database specs first
-const specifications = [];
+// Custom specs from productSpecifications table (admin "Technische Daten" tab)
+const customSpecsList = customSpecs.rows.map(spec => ({
+	label: spec.specLabel,
+	value: spec.specValue
+}));
 
-// Add custom specifications from productSpecifications table
-customSpecs.rows.forEach(spec => {
-	specifications.push({
-		label: spec.specLabel,
-		value: spec.specValue
-	});
-});
 
-// Add auto-generated specs from product fields (if not already in custom specs)
-const customKeys = customSpecs.rows.map(s => s.specKey);
-
-if (product.printTechnology && !customKeys.includes('printTechnology')) {
-	specifications.push({ label: 'Drucktechnologie', value: product.printTechnology });
-}
-
-if (product.isBlockout && !customKeys.includes('isBlockout')) {
-	specifications.push({ label: 'Typ', value: 'Blockout DTF' });
-}
-
-if (product.maxWidthMm && !customKeys.includes('maxWidthMm')) {
-	specifications.push({ label: 'Maximale Breite', value: `${product.maxWidthMm}mm` });
-}
-
-if (product.minHeightMm && product.maxHeightMm && !customKeys.includes('heightRange')) {
-	specifications.push({ label: 'Höhenbereich', value: `${product.minHeightMm} - ${product.maxHeightMm}mm` });
-}
-
-if (product.acceptsFileUpload && !customKeys.includes('fileUpload')) {
-	specifications.push({ label: 'Datei-Upload', value: 'Möglich' });
-	specifications.push({ label: 'Erlaubte Formate', value: product.allowedFileTypes || 'PDF' });
-	specifications.push({ label: 'Max. Dateigröße', value: `${product.maxFileSizeMb || 255}MB` });
-}
-
-if (product.priceCalculationMethod && !customKeys.includes('priceCalculationMethod')) {
-	const methodMap = {
-		'per_piece': 'Pro Stück',
-		'per_meter': 'Pro Laufmeter',
-		'per_area': 'Pro m²'
-	};
-	specifications.push({ label: 'Preisberechnung', value: methodMap[product.priceCalculationMethod] || 'Pro Stück' });
-}
-
-if (product.requiresShipping && !customKeys.includes('requiresShipping')) {
-	specifications.push({ label: 'Versand', value: 'Erforderlich' });
-}
-
-if (product.sku && !customKeys.includes('sku')) {
-	specifications.push({ label: 'SKU', value: product.sku });
-}
-
-// Add price tiers to description if available
-let enrichedDescription = product.description;
-if (priceTiers.rows.length > 0) {
-	enrichedDescription += '\n\nMengenrabatte verfügbar: Je mehr Sie bestellen, desto günstiger wird der Stückpreis!';
-}
+const enrichedDescription = product.description;
 
 const pageTitle = product.metaTitle || `${product.name} - DTF Transfer Print`;
 const pageDescription = product.metaDescription || product.shortDescription;
@@ -450,7 +401,7 @@ const relatedProducts = relatedProductsResult.rows.map(p => ({
 		</div>
 
 		<!-- Product Description Section -->
-		<section class="mb-32">
+		<section class="mb-20">
 			<div class="max-w-4xl">
 				<h2 class="text-3xl md:text-4xl font-bold text-neutral mb-8">Über dieses Produkt</h2>
 				<div class="text-neutral/70 leading-relaxed text-lg md:text-xl prose max-w-none">
@@ -459,10 +410,10 @@ const relatedProducts = relatedProductsResult.rows.map(p => ({
 			</div>
 		</section>
 
-		<!-- Product Specifications -->
-		{specifications.length > 0 && (
+		<!-- Produktspezifikationen -->
+		{customSpecsList.length > 0 && (
 			<section class="mb-32">
-				<ProductSpecs specifications={specifications} />
+				<ProductSpecs specifications={customSpecsList} />
 			</section>
 		)}
 
@@ -515,6 +466,101 @@ const relatedProducts = relatedProductsResult.rows.map(p => ({
 			</section>
 		)}
 	</div>
+
+	<!-- Brand / About Section -->
+	<section class="border-t border-base-300/30 py-20">
+		<div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl lg:max-w-7xl-extended">
+			<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+				<div>
+					<p class="text-sm font-semibold uppercase tracking-widest text-primary mb-3">Über Selini-Shirt</p>
+					<h2 class="text-3xl md:text-4xl font-bold text-neutral mb-6">Berlins Textildruck-Spezialisten</h2>
+					<p class="text-neutral/70 text-lg leading-relaxed mb-6">
+						<strong>Selini-Shirt</strong> ist Ihre erste Adresse für professionelle Textilveredelung in Berlin. Seit unserer Gründung haben wir uns darauf spezialisiert, Textilien jeder Art mit höchster Qualität zu bedrucken und zu besticken.
+					</p>
+					<p class="text-neutral/70 leading-relaxed mb-8">
+						In unserer modernen Produktionsstätte vereinen wir traditionelles Handwerk mit innovativer Technologie. Unser erfahrenes Team arbeitet täglich daran, die Erwartungen unserer Kunden nicht nur zu erfüllen, sondern zu übertreffen.
+					</p>
+					<div class="grid grid-cols-2 gap-4 mb-8">
+						<div class="flex items-start gap-3">
+							<div class="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+								<svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+								</svg>
+							</div>
+							<div>
+								<div class="font-semibold text-neutral text-sm">Höchste Qualität</div>
+								<div class="text-neutral/60 text-xs mt-0.5">Brillante Farben, scharfe Details</div>
+							</div>
+						</div>
+						<div class="flex items-start gap-3">
+							<div class="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+								<svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+								</svg>
+							</div>
+							<div>
+								<div class="font-semibold text-neutral text-sm">Schnelle Lieferung</div>
+								<div class="text-neutral/60 text-xs mt-0.5">Zuverlässig und pünktlich</div>
+							</div>
+						</div>
+						<div class="flex items-start gap-3">
+							<div class="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+								<svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
+								</svg>
+							</div>
+							<div>
+								<div class="font-semibold text-neutral text-sm">Flexibel & skalierbar</div>
+								<div class="text-neutral/60 text-xs mt-0.5">Von Einzelstücken bis Großserien</div>
+							</div>
+						</div>
+						<div class="flex items-start gap-3">
+							<div class="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+								<svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+								</svg>
+							</div>
+							<div>
+								<div class="font-semibold text-neutral text-sm">4,9 ★ auf Google</div>
+								<div class="text-neutral/60 text-xs mt-0.5">Hunderte zufriedene Kunden</div>
+							</div>
+						</div>
+					</div>
+					<a href="/ueber-uns" class="btn btn-outline btn-primary gap-2">
+						Mehr über uns erfahren
+						<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+						</svg>
+					</a>
+				</div>
+				<div class="relative">
+					<img
+						src="/images/dienstleistungen/stickerei/selini-shirt print raum mit maschinen.webp"
+						alt="Selini-Shirt Produktionshalle"
+						class="w-full rounded-2xl shadow-2xl object-cover aspect-[4/3]"
+						loading="lazy"
+					/>
+					<div class="absolute -bottom-6 -left-6 bg-base-100 rounded-2xl shadow-xl p-4 border border-base-300/20">
+						<div class="flex items-center gap-3">
+							<div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+								<svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+								</svg>
+							</div>
+							<div>
+								<div class="font-bold text-neutral text-sm">Berlin</div>
+								<div class="text-neutral/60 text-xs">Ihre Druckerei vor Ort</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Referenzen Marquee -->
+	<ReferenzenMarquee />
 
 	<!-- CTA Section -->
 	<section class="bg-gradient-to-br from-primary/5 via-base-100 to-secondary/5 py-24">

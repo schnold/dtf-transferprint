@@ -411,7 +411,7 @@ const formatPrice = (price: number) => {
 		outline-color: var(--color-accent) !important;
 	}
 
-	/* Shipping profile radio buttons - dark gray fill with green click animation */
+	/* Shipping profile radio buttons - match checkout: black dot (secondary) when selected */
 	#shipping-profiles-container .radio:checked,
 	#shipping-profiles-container .radio-primary:checked {
 		border-color: var(--color-secondary) !important;
@@ -421,7 +421,7 @@ const formatPrice = (price: number) => {
 
 	#shipping-profiles-container .radio:checked::before,
 	#shipping-profiles-container .radio-primary:checked::before {
-		background-color: #4a4a4a !important;
+		background-color: var(--color-secondary) !important;
 		transition: background-color 0.3s ease;
 	}
 
@@ -433,7 +433,7 @@ const formatPrice = (price: number) => {
 
 	#shipping-profiles-container .radio:checked:hover::before,
 	#shipping-profiles-container .radio-primary:checked:hover::before {
-		background-color: #404040 !important;
+		background-color: var(--color-secondary-dark) !important;
 	}
 
 	/* Green animation on click/active state */

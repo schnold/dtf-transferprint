@@ -176,8 +176,11 @@ try {
                   <textarea name="shortDescription" required class="textarea textarea-bordered w-full" rows="3" placeholder="Kurzbeschreibung"></textarea>
                 </div>
                 <div class="form-control">
-                  <label class="label"><span class="label-text">Vollstaendige Beschreibung <span class="text-error">*</span></span></label>
-                  <textarea name="description" required class="textarea textarea-bordered w-full" rows="6" placeholder="Vollstaendige Beschreibung"></textarea>
+                  <label class="label">
+                    <span class="label-text">Über dieses Produkt <span class="text-error">*</span></span>
+                    <span class="label-text-alt text-base-content/50">Wird auf der Produktseite als „Über dieses Produkt" angezeigt</span>
+                  </label>
+                  <textarea name="description" required class="textarea textarea-bordered w-full" rows="6" placeholder="Detaillierte Produktbeschreibung..."></textarea>
                 </div>
               </div>
             </div>
@@ -199,30 +202,100 @@ try {
 
       <div id="pricing-panel" class="tab-panel p-6 hidden">
         <div class="max-w-7xl mx-auto space-y-6">
-          <div class="card-modern"><div class="card-body p-6 grid grid-cols-1 lg:grid-cols-3 gap-4">
-            <div class="form-control">
-              <label class="label"><span class="label-text">Grundpreis <span class="text-error">*</span></span></label>
-              <input type="number" name="basePrice" step="0.01" required class="input input-bordered" placeholder="Grundpreis" />
-            </div>
-            <div class="form-control">
-              <label class="label"><span class="label-text">Vergleichspreis</span></label>
-              <input type="number" name="compareAtPrice" step="0.01" class="input input-bordered" placeholder="Vergleichspreis (optional)" />
-            </div>
-            <div class="form-control">
-              <label class="label"><span class="label-text">Berechnungsmethode</span></label>
-              <select name="priceCalculationMethod" class="select select-bordered"><option value="per_piece">Pro Stueck</option><option value="per_meter">Pro Meter</option><option value="per_area">Pro Flaeche (m2)</option></select>
-            </div>
-          </div></div>
           <div class="card-modern">
             <div class="card-body p-6">
-              <div class="flex justify-between items-center mb-4"><h3 class="text-xl font-bold">Preisstaffeln</h3><button type="button" id="addTierBtn" class="btn btn-primary btn-sm">Hinzufuegen</button></div>
+              <h3 class="text-xl font-bold text-base-content mb-6 flex items-center gap-2">
+                <div class="w-1 h-6 bg-primary rounded-full"></div>
+                Grundpreise
+              </h3>
+              <div class="grid grid-cols-1 lg:grid-cols-3 gap-x-4 gap-y-4">
+                <div class="form-control">
+                  <div class="mb-2">
+                    <label class="text-sm font-medium text-base-content">Grundpreis <span class="text-error">*</span></label>
+                  </div>
+                  <div class="join w-full">
+                    <input type="number" name="basePrice" step="0.01" required class="input input-bordered focus:input-primary join-item flex-1 font-bold" placeholder="0.00" />
+                    <span class="btn btn-neutral join-item">€</span>
+                  </div>
+                </div>
+                <div class="form-control">
+                  <div class="mb-2">
+                    <label class="text-sm font-medium text-base-content">Vergleichspreis <span class="text-xs text-base-content/50">(Optional)</span></label>
+                  </div>
+                  <div class="join w-full">
+                    <input type="number" name="compareAtPrice" step="0.01" class="input input-bordered focus:input-primary join-item flex-1" placeholder="UVP" />
+                    <span class="btn btn-neutral join-item">€</span>
+                  </div>
+                </div>
+                <div class="form-control">
+                  <div class="mb-2">
+                    <label class="text-sm font-medium text-base-content">Berechnungsmethode</label>
+                  </div>
+                  <select name="priceCalculationMethod" class="select select-bordered focus:select-primary">
+                    <option value="per_piece">Pro Stück</option>
+                    <option value="per_meter">Pro Meter</option>
+                    <option value="per_area">Pro Fläche (m²)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card bg-base-100 shadow-lg border-2 border-secondary/10 hover:border-secondary/30">
+            <div class="card-body">
+              <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-6">
+                <div>
+                  <div class="flex items-center gap-3 mb-2">
+                    <div class="badge badge-secondary badge-lg">
+                      <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/>
+                      </svg>
+                    </div>
+                    <h2 class="card-title text-2xl">Preisstaffeln</h2>
+                    <span class="badge badge-accent" id="tierCountBadge">1 Staffeln</span>
+                  </div>
+                  <p class="text-sm text-base-content/60 mt-1">Die erste Staffel ist der Grundpreis (0% Rabatt). Weitere Staffeln berechnen sich automatisch. Jede Staffel gilt ab der Mindestmenge und ist unbegrenzt.</p>
+                </div>
+                <button type="button" id="addTierBtn" class="btn btn-primary gap-2 shadow-md hover:shadow-lg transition-all">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                  </svg>
+                  Staffel hinzufügen
+                </button>
+              </div>
+              <div class="divider divider-secondary"></div>
               <div id="priceTiersContainer" class="space-y-3">
-                <div class="tier-row card bg-base-100 border border-base-300/50"><div class="card-body p-4 grid grid-cols-1 md:grid-cols-4 gap-3">
-                  <input type="number" name="tier_minQty[]" value="0" required class="input input-bordered input-sm" />
-                  <input type="number" name="tier_discount[]" value="0" step="0.01" required class="input input-bordered input-sm" />
-                  <input type="number" name="tier_price[]" value="14.99" step="0.01" required class="input input-bordered input-sm" />
-                  <div class="join w-full"><input type="number" name="tier_order[]" value="1" required class="input input-bordered input-sm join-item flex-1" /><button type="button" class="btn btn-error btn-sm join-item remove-tier">X</button></div>
-                </div></div>
+                <div class="tier-row card bg-base-100 border border-base-300/50 shadow-sm rounded-xl hover:shadow-md">
+                  <div class="card-body p-4">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+                      <div class="form-control">
+                        <div class="mb-1"><label class="text-xs font-medium text-base-content">Min. Menge</label></div>
+                        <input type="number" name="tier_minQty[]" value="0" required class="input input-bordered input-sm" />
+                      </div>
+                      <div class="form-control">
+                        <div class="mb-1"><label class="text-xs font-medium text-base-content">Rabatt %</label></div>
+                        <input type="number" name="tier_discount[]" value="0" step="0.01" required class="input input-bordered input-sm" />
+                      </div>
+                      <div class="form-control">
+                        <div class="mb-1">
+                          <label class="text-xs font-medium text-base-content">Preis (€)</label>
+                          <p class="text-xs text-base-content/50">Auto-berechnet</p>
+                        </div>
+                        <input type="number" name="tier_price[]" value="14.99" step="0.01" required class="input input-bordered input-sm bg-base-200" readonly />
+                      </div>
+                      <div class="form-control">
+                        <div class="mb-1"><label class="text-xs font-medium text-base-content">Reihenfolge</label></div>
+                        <div class="join w-full">
+                          <input type="number" name="tier_order[]" value="1" required class="input input-bordered input-sm join-item flex-1" />
+                          <button type="button" class="btn btn-error btn-sm join-item remove-tier">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -253,29 +326,245 @@ try {
       </div>
 
       <div id="dtf-panel" class="tab-panel p-6 hidden">
-        <div class="card-modern"><div class="card-body p-6 space-y-4">
-          <label class="flex items-center gap-3"><input type="checkbox" name="isBlockout" class="toggle toggle-primary" /><span>Blockout-Produkt</span></label>
-          <label class="flex items-center gap-3"><input type="checkbox" id="acceptsFileUpload" name="acceptsFileUpload" class="toggle toggle-secondary" /><span>Datei-Upload erlauben</span></label>
-          <label class="flex items-center gap-3"><input type="checkbox" name="requiresInquiry" class="toggle toggle-accent" /><span>Nur Anfrage</span></label>
-          <div id="fileUploadSettings" class="hidden grid grid-cols-1 md:grid-cols-2 gap-4">
-            <input type="number" name="maxFileSizeMb" value="255" class="input input-bordered" placeholder="Max. Dateigroesse MB" />
-            <input type="text" name="allowedFileTypes" value="PDF" class="input input-bordered" placeholder="Erlaubte Dateitypen" />
-            <input type="number" name="requiredDpi" value="300" class="input input-bordered" min="72" max="600" placeholder="Min. DPI (nur PNG)" />
-            <input type="number" name="requiredMinWidth" class="input input-bordered" min="1" placeholder="Min. Breite px (optional, nur PNG)" />
-            <input type="number" name="requiredMinHeight" class="input input-bordered" min="1" placeholder="Min. Hoehe px (optional, nur PNG)" />
-            <input type="number" name="maxWidthMm" value="560" class="input input-bordered" placeholder="Max. Breite mm" />
-            <input type="number" name="minHeightMm" value="100" class="input input-bordered" placeholder="Min. Hoehe mm" />
-            <input type="number" name="maxHeightMm" value="5000" class="input input-bordered" placeholder="Max. Hoehe mm" />
+        <div class="space-y-6">
+          <div class="card bg-gradient-to-br from-base-100 to-base-200/30 border border-base-300/30 shadow-md rounded-xl">
+            <div class="card-body">
+              <h2 class="card-title text-lg mb-4 text-base-content">Typ Konfiguration</h2>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="form-control">
+                  <label class="label cursor-pointer justify-start gap-3 p-4 bg-base-100 rounded-xl border border-base-300/50 hover:bg-base-200/80 hover:border-base-300 shadow-sm">
+                    <input type="checkbox" name="isBlockout" class="toggle toggle-primary" />
+                    <div class="flex-1">
+                      <span class="label-text font-semibold">Blockout-Produkt</span>
+                      <p class="text-xs text-base-content/60 mt-1">Spezieller Blockout-DTF-Transfer</p>
+                    </div>
+                  </label>
+                </div>
+                <div class="form-control">
+                  <div class="mb-2">
+                    <label class="text-sm font-medium text-base-content">Drucktechnologie</label>
+                  </div>
+                  <input type="text" name="printTechnology" value="DTF" class="input input-bordered focus:input-primary" />
+                </div>
+              </div>
+            </div>
           </div>
-          <input type="text" name="printTechnology" value="DTF" class="input input-bordered" placeholder="Drucktechnologie" />
-        </div></div>
+
+          <div class="card bg-gradient-to-br from-base-100 to-base-200/30 border border-base-300/30 shadow-md rounded-xl">
+            <div class="card-body">
+              <h2 class="card-title text-lg mb-4 text-base-content">Datei-Upload & Anfrage-Einstellungen</h2>
+              <div class="form-control mb-4">
+                <label class="label cursor-pointer justify-start gap-3 p-4 bg-base-100 rounded-lg border border-base-300 hover:bg-base-200">
+                  <input type="checkbox" id="acceptsFileUpload" name="acceptsFileUpload" class="toggle toggle-secondary" />
+                  <div class="flex-1">
+                    <span class="label-text font-semibold">Datei-Upload erlauben</span>
+                    <p class="text-xs text-base-content/60 mt-1">Kunden können Design-Dateien hochladen</p>
+                  </div>
+                </label>
+              </div>
+
+              <div class="form-control mb-4">
+                <label class="label cursor-pointer justify-start gap-3 p-4 bg-base-100 rounded-lg border border-base-300 hover:bg-base-200">
+                  <input type="checkbox" name="requiresInquiry" class="toggle toggle-accent" />
+                  <div class="flex-1">
+                    <span class="label-text font-semibold">Nur Anfrage (kein direkter Kauf)</span>
+                    <p class="text-xs text-base-content/60 mt-1">Anstelle von Kaufen-Button wird ein Anfrageformular angezeigt</p>
+                  </div>
+                </label>
+              </div>
+
+              <div id="fileUploadSettings" class="hidden space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-4">
+                  <div class="form-control">
+                    <div class="mb-2">
+                      <label class="text-sm font-medium text-base-content">Max. Dateigröße (MB)</label>
+                    </div>
+                    <input type="number" name="maxFileSizeMb" value="255" class="input input-bordered focus:input-primary" />
+                  </div>
+                  <div class="form-control">
+                    <div class="mb-2">
+                      <label class="text-sm font-medium text-base-content">Erlaubte Dateitypen</label>
+                      <p class="text-xs text-base-content/50 mt-0.5">Kommagetrennte Liste von Dateierweiterungen</p>
+                    </div>
+                    <input type="text" name="allowedFileTypes" value="PDF" class="input input-bordered focus:input-primary" placeholder="PDF, PNG, JPG" />
+                  </div>
+                </div>
+
+                <div class="divider">Abmessungen</div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-x-4 gap-y-4">
+                  <div class="form-control">
+                    <div class="mb-2">
+                      <label class="text-sm font-medium text-base-content">Max. Breite (mm)</label>
+                    </div>
+                    <input type="number" name="maxWidthMm" value="560" class="input input-bordered focus:input-primary" placeholder="560" />
+                  </div>
+                  <div class="form-control">
+                    <div class="mb-2">
+                      <label class="text-sm font-medium text-base-content">Min. Höhe (mm)</label>
+                    </div>
+                    <input type="number" name="minHeightMm" value="100" class="input input-bordered focus:input-primary" placeholder="100" />
+                  </div>
+                  <div class="form-control">
+                    <div class="mb-2">
+                      <label class="text-sm font-medium text-base-content">Max. Höhe (mm)</label>
+                    </div>
+                    <input type="number" name="maxHeightMm" value="5000" class="input input-bordered focus:input-primary" placeholder="5000" />
+                  </div>
+                </div>
+
+                <div class="divider mt-6 mb-4">
+                  <span class="text-sm font-semibold text-base-content/70">Qualitätsanforderungen</span>
+                </div>
+
+                <div class="alert alert-info shadow-sm mb-4">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                  <div>
+                    <p class="text-sm font-medium">Diese Einstellungen definieren die Mindestanforderungen für hochgeladene Dateien.</p>
+                    <p class="text-xs mt-1">Kunden erhalten automatische Warnungen, wenn ihre Dateien die Anforderungen nicht erfüllen.</p>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-x-4 gap-y-4">
+                  <div class="form-control">
+                    <div class="mb-2">
+                      <label class="text-sm font-medium text-base-content flex items-center gap-2">
+                        Erforderliche DPI
+                        <div class="tooltip" data-tip="Mindest-DPI für PNG-Dateien. Empfohlen: 300 DPI für beste Druckqualität">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-base-content/50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                        </div>
+                      </label>
+                      <p class="text-xs text-base-content/50 mt-0.5">Standard: 300 DPI</p>
+                    </div>
+                    <input type="number" name="requiredDpi" value="300" class="input input-bordered focus:input-primary" min="72" max="600" placeholder="300" />
+                  </div>
+                  <div class="form-control">
+                    <div class="mb-2">
+                      <label class="text-sm font-medium text-base-content flex items-center gap-2">
+                        Min. Breite (Pixel)
+                        <div class="tooltip" data-tip="Minimale Breite in Pixeln für PNG-Dateien. Leer lassen für keine Einschränkung">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-base-content/50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                        </div>
+                      </label>
+                      <p class="text-xs text-base-content/50 mt-0.5">Optional (nur PNG)</p>
+                    </div>
+                    <input type="number" name="requiredMinWidth" class="input input-bordered focus:input-primary" min="1" placeholder="z.B. 1200" />
+                  </div>
+                  <div class="form-control">
+                    <div class="mb-2">
+                      <label class="text-sm font-medium text-base-content flex items-center gap-2">
+                        Min. Höhe (Pixel)
+                        <div class="tooltip" data-tip="Minimale Höhe in Pixeln für PNG-Dateien. Leer lassen für keine Einschränkung">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-base-content/50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                        </div>
+                      </label>
+                      <p class="text-xs text-base-content/50 mt-0.5">Optional (nur PNG)</p>
+                    </div>
+                    <input type="number" name="requiredMinHeight" class="input input-bordered focus:input-primary" min="1" placeholder="z.B. 800" />
+                  </div>
+                </div>
+
+                <div class="bg-base-200/50 rounded-lg p-4 border border-base-300/50 mt-4">
+                  <h4 class="text-sm font-semibold mb-2 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Vorschau der Anforderungen
+                  </h4>
+                  <div class="text-xs space-y-1 text-base-content/70">
+                    <p>• <strong>Akzeptierte Formate:</strong> <span id="preview-formats">PDF</span></p>
+                    <p>• <strong>Minimale DPI:</strong> <span id="preview-dpi">300</span> DPI (nur PNG)</p>
+                    <p id="preview-width-row" class="hidden">
+                      • <strong>Minimale Breite:</strong> <span id="preview-width">-</span> px (nur PNG)
+                    </p>
+                    <p id="preview-height-row" class="hidden">
+                      • <strong>Minimale Höhe:</strong> <span id="preview-height">-</span> px (nur PNG)
+                    </p>
+                    <p class="text-warning mt-2 flex items-center gap-1">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                      </svg>
+                      Kunden erhalten Warnungen, wenn ihre Dateien diese Anforderungen nicht erfüllen
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div id="seo-panel" class="tab-panel p-6 hidden">
-        <div class="card-modern"><div class="card-body p-6 space-y-4">
-          <input type="text" name="metaTitle" class="input input-bordered" placeholder="Meta-Titel (optional)" maxlength="60" />
-          <textarea name="metaDescription" class="textarea textarea-bordered" rows="4" placeholder="Meta-Beschreibung (optional)" maxlength="160"></textarea>
-        </div></div>
+      <div id="seo-panel" class="tab-panel p-8 hidden">
+        <div class="card bg-base-100 shadow-lg border-2 border-success/10 hover:border-success/30">
+          <div class="card-body">
+            <div class="flex items-center gap-3 mb-6">
+              <div class="badge badge-success badge-lg">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z" clip-rule="evenodd"/>
+                </svg>
+              </div>
+              <h2 class="card-title text-2xl text-base-content">SEO-Optimierung</h2>
+              <span class="badge badge-info gap-2">
+                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                </svg>
+                Google Search
+              </span>
+            </div>
+            <div class="divider divider-success my-2"></div>
+            <div class="space-y-4 mt-4">
+              <div class="form-control">
+                <div class="mb-2 flex items-center justify-between">
+                  <label class="text-sm font-medium text-base-content flex items-center gap-2">
+                    <svg class="w-4 h-4 text-success" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                    </svg>
+                    Meta-Titel <span class="text-xs text-base-content/50">(Optional)</span>
+                  </label>
+                  <span class="badge badge-success badge-sm" id="metaTitleCount">0/60 Zeichen</span>
+                </div>
+                <input type="text" name="metaTitle" id="metaTitleInput" class="input input-bordered focus:input-primary" placeholder="Leer lassen, um Produktnamen zu verwenden" maxlength="60" />
+                <p class="text-xs text-base-content/50 mt-1">Anzeige in Browser-Tabs und Suchergebnissen</p>
+              </div>
+
+              <div class="form-control">
+                <div class="mb-2 flex items-center justify-between">
+                  <label class="text-sm font-medium text-base-content flex items-center gap-2">
+                    <svg class="w-4 h-4 text-success" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clip-rule="evenodd"/>
+                    </svg>
+                    Meta-Beschreibung <span class="text-xs text-base-content/50">(Optional)</span>
+                  </label>
+                  <span class="badge badge-success badge-sm" id="metaDescCount">0/160 Zeichen</span>
+                </div>
+                <textarea name="metaDescription" id="metaDescInput" class="textarea textarea-bordered focus:textarea-primary resize-none" rows="4" placeholder="Leer lassen, um Kurzbeschreibung zu verwenden" maxlength="160"></textarea>
+                <p class="text-xs text-base-content/50 mt-1">Erscheint in Suchergebnissen als Vorschautext</p>
+              </div>
+
+              <div class="divider">SEO-Vorschau</div>
+
+              <div class="alert alert-info shadow-md">
+                <div class="flex-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current flex-shrink-0 w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                  <div>
+                    <h3 class="font-bold">Automatische Fallback-Werte</h3>
+                    <div class="text-sm mt-1">SEO-Felder sind optional. Wenn leer gelassen, werden automatisch Produktname und Kurzbeschreibung verwendet.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div id="specs-panel" class="tab-panel p-6 hidden">
@@ -341,6 +630,64 @@ try {
     if (settings) settings.classList.toggle('hidden', !e.target.checked);
   });
 
+  // Update requirements preview in real-time
+  const updateRequirementsPreview = () => {
+    const allowedFileTypes = document.querySelector('[name="allowedFileTypes"]')?.value || 'PDF';
+    const requiredDpi = document.querySelector('[name="requiredDpi"]')?.value || '300';
+    const requiredMinWidth = document.querySelector('[name="requiredMinWidth"]')?.value;
+    const requiredMinHeight = document.querySelector('[name="requiredMinHeight"]')?.value;
+
+    const previewFormats = document.getElementById('preview-formats');
+    const previewDpi = document.getElementById('preview-dpi');
+    const previewWidth = document.getElementById('preview-width');
+    const previewHeight = document.getElementById('preview-height');
+    const previewWidthRow = document.getElementById('preview-width-row');
+    const previewHeightRow = document.getElementById('preview-height-row');
+
+    if (previewFormats) previewFormats.textContent = allowedFileTypes.toUpperCase();
+    if (previewDpi) previewDpi.textContent = requiredDpi;
+
+    if (previewWidth && requiredMinWidth) {
+      previewWidth.textContent = requiredMinWidth;
+      previewWidthRow?.classList.remove('hidden');
+    } else {
+      previewWidthRow?.classList.add('hidden');
+    }
+    if (previewHeight && requiredMinHeight) {
+      previewHeight.textContent = requiredMinHeight;
+      previewHeightRow?.classList.remove('hidden');
+    } else {
+      previewHeightRow?.classList.add('hidden');
+    }
+  };
+
+  document.querySelector('[name="allowedFileTypes"]')?.addEventListener('input', updateRequirementsPreview);
+  document.querySelector('[name="requiredDpi"]')?.addEventListener('input', updateRequirementsPreview);
+  document.querySelector('[name="requiredMinWidth"]')?.addEventListener('input', updateRequirementsPreview);
+  document.querySelector('[name="requiredMinHeight"]')?.addEventListener('input', updateRequirementsPreview);
+
+  // SEO character counters
+  const metaTitleInput = document.getElementById('metaTitleInput');
+  const metaTitleCount = document.getElementById('metaTitleCount');
+  const metaDescInput = document.getElementById('metaDescInput');
+  const metaDescCount = document.getElementById('metaDescCount');
+
+  metaTitleInput?.addEventListener('input', () => {
+    const len = metaTitleInput.value.length;
+    if (metaTitleCount) {
+      metaTitleCount.textContent = `${len}/60 Zeichen`;
+      metaTitleCount.className = `badge badge-sm ${len > 50 ? 'badge-warning' : 'badge-success'}`;
+    }
+  });
+
+  metaDescInput?.addEventListener('input', () => {
+    const len = metaDescInput.value.length;
+    if (metaDescCount) {
+      metaDescCount.textContent = `${len}/160 Zeichen`;
+      metaDescCount.className = `badge badge-sm ${len > 140 ? 'badge-warning' : 'badge-success'}`;
+    }
+  });
+
   function calculateTierPrice(discountPercent, basePrice) {
     const discount = parseFloat(discountPercent) || 0;
     const base = parseFloat(basePrice) || 0;
@@ -364,21 +711,63 @@ try {
     });
   });
 
+  function updateTierCountBadge() {
+    const count = document.querySelectorAll('.tier-row').length;
+    const badge = document.getElementById('tierCountBadge');
+    if (badge) badge.textContent = `${count} Staffeln`;
+  }
+
   let tierCount = document.querySelectorAll('.tier-row').length;
   document.getElementById('addTierBtn')?.addEventListener('click', () => {
     tierCount++;
     const container = document.getElementById('priceTiersContainer');
     const basePrice = parseFloat(document.querySelector('[name="basePrice"]')?.value) || 0;
     const tier = document.createElement('div');
-    tier.className = 'tier-row card bg-base-100 border border-base-300/50';
-    tier.innerHTML = `<div class="card-body p-4 grid grid-cols-1 md:grid-cols-4 gap-3"><input type="number" name="tier_minQty[]" value="${tierCount * 5}" required class="input input-bordered input-sm" /><input type="number" name="tier_discount[]" value="10" step="0.01" required class="input input-bordered input-sm" /><input type="number" name="tier_price[]" value="${calculateTierPrice(10, basePrice)}" step="0.01" required class="input input-bordered input-sm bg-base-200" readonly /><div class="join w-full"><input type="number" name="tier_order[]" value="${tierCount}" required class="input input-bordered input-sm join-item flex-1" /><button type="button" class="btn btn-error btn-sm join-item remove-tier">X</button></div></div>`;
+    tier.className = 'tier-row card bg-base-100 border border-base-300/50 shadow-sm rounded-xl hover:shadow-md';
+    tier.innerHTML = `
+      <div class="card-body p-4">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+          <div class="form-control">
+            <div class="mb-1"><label class="text-xs font-medium text-base-content">Min. Menge</label></div>
+            <input type="number" name="tier_minQty[]" value="${tierCount * 5}" required class="input input-bordered input-sm" />
+          </div>
+          <div class="form-control">
+            <div class="mb-1"><label class="text-xs font-medium text-base-content">Rabatt %</label></div>
+            <input type="number" name="tier_discount[]" value="10" step="0.01" required class="input input-bordered input-sm" />
+          </div>
+          <div class="form-control">
+            <div class="mb-1">
+              <label class="text-xs font-medium text-base-content">Preis (€)</label>
+              <p class="text-xs text-base-content/50">Auto-berechnet</p>
+            </div>
+            <input type="number" name="tier_price[]" value="${calculateTierPrice(10, basePrice)}" step="0.01" required class="input input-bordered input-sm bg-base-200" readonly />
+          </div>
+          <div class="form-control">
+            <div class="mb-1"><label class="text-xs font-medium text-base-content">Reihenfolge</label></div>
+            <div class="join w-full">
+              <input type="number" name="tier_order[]" value="${tierCount}" required class="input input-bordered input-sm join-item flex-1" />
+              <button type="button" class="btn btn-error btn-sm join-item remove-tier">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
     container?.appendChild(tier);
+    updateTierCountBadge();
   });
   document.addEventListener('click', (e) => {
     if (e.target.closest('.remove-tier')) {
       const tiers = document.querySelectorAll('.tier-row');
-      if (tiers.length > 1) e.target.closest('.tier-row')?.remove();
-      else showToast('Mindestens eine Preisstaffel ist erforderlich', 'error');
+      if (tiers.length > 1) {
+        e.target.closest('.tier-row')?.remove();
+        updateTierCountBadge();
+      } else {
+        showToast('Mindestens eine Preisstaffel ist erforderlich', 'error');
+      }
     }
   });
 
@@ -449,8 +838,12 @@ try {
             <label class="label"><span class="label-text text-sm">Ordnung</span></label>
             <input type="number" class="input input-bordered input-sm spec-order" value="${order}" />
           </div>
-          <div class="col-span-2 md:col-span-1">
-            <button type="button" class="btn btn-error btn-sm remove-spec w-full">x</button>
+          <div class="col-span-2 md:col-span-1 flex items-end">
+            <button type="button" class="btn btn-error btn-sm btn-square remove-spec w-full">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
           </div>
         </div>
       </div>
