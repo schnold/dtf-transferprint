@@ -148,7 +148,7 @@ const EMAIL_STYLES = `
     }
 
     .footer a {
-      color: #EBF222;
+      color: #166534;
       text-decoration: none;
     }
 
@@ -168,7 +168,7 @@ const EMAIL_STYLES = `
     }
 
     .link {
-      color: #EBF222;
+      color: #166534;
       text-decoration: none;
     }
 
